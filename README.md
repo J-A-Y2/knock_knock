@@ -24,7 +24,7 @@
 
 **정원석**
 
-- Back-End
+- Front-End
 - email
 - Github: <!-- [@minluna](https://github.com/minluna) -->
 
