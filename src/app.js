@@ -1,6 +1,14 @@
 import express from "express";
+import specs from "./swagger/swagger.js";
+import swaggerUi from "swagger-ui-express";
 
 const app = express();
+
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(specs, { explorer: true })
+);
 
 // 기본 페이지
 app.get("/", (req, res) => {
