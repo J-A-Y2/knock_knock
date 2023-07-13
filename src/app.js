@@ -1,8 +1,18 @@
 import express from "express";
 import specs from "./swagger/swagger.js";
 import swaggerUi from "swagger-ui-express";
+import { sequelize } from "./models/index.js";
 
 const app = express();
+
+sequelize
+  .sync({ force: false })
+  .then(() => {
+    console.log("데이터베이스 연결 성공");
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
 app.use(
   "/api-docs",
