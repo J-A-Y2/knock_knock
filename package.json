@@ -2,7 +2,7 @@
   "name": "3team",
   "packageManager": "yarn@3.6.1",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon --exec babel-node --experimental-json-modules index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

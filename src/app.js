@@ -1,11 +1,11 @@
 import express from "express";
 import specs from "./swagger/swagger.js";
 import swaggerUi from "swagger-ui-express";
-import { sequelize } from "./models/index.js";
+import db from "./models/index.js";
 
 const app = express();
 
-sequelize
+db.sequelize
   .sync({ force: true })
   .then(() => {
     console.log("데이터베이스 연결 성공");
