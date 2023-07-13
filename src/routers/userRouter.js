@@ -21,7 +21,7 @@ const userRouter = Router();
  */
 
 // 회원가입
-userRouter.post("/register", userAuthController.register);
+userRouter.post("/register");
 
 /**
  * @swagger
@@ -42,7 +42,7 @@ userRouter.post("/register", userAuthController.register);
  */
 
 // 로그인
-userRouter.post("/login", userAuthController.login);
+userRouter.post("/login");
 
 /**
  * @swagger
@@ -64,7 +64,7 @@ userRouter.post("/login", userAuthController.login);
 
 
 // 로그인 검증
-userRouter.get("/isLogin", userAuthController.isLogin);
+userRouter.get("/isLogin");
 
 /**
  * @swagger
@@ -85,7 +85,7 @@ userRouter.get("/isLogin", userAuthController.isLogin);
  */
 
 //전체 유저 수 불러오기
-userRouter.get("/userCount", userAuthController.getCount);
+userRouter.get("/userCount");
 
 /**
  * @swagger
@@ -106,7 +106,7 @@ userRouter.get("/userCount", userAuthController.getCount);
  */
 
 // 유저 정보 불러오기
-userRouter.get("/:userId",userAuthController.getInfo);
+userRouter.get("/:userId");
 
 
 /**
@@ -129,7 +129,7 @@ userRouter.get("/:userId",userAuthController.getInfo);
 
 
 // 유저 정보 수정하기(별명, 설명)
-userRouter.put("/:userId",userAuthController.setInfo);
+userRouter.put("/:userId");
 
 /**
  * @swagger
@@ -152,6 +152,6 @@ userRouter.put("/:userId",userAuthController.setInfo);
 
 
 // 유저 정보 삭제하기
-userRouter.delete("/:userId", userAuthController.delInfo);
+userRouter.delete("/:userId");
 
 export { userRouter };

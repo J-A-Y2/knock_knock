@@ -38,6 +38,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mysql2", "npm:3.5.1"],\
             ["nodemon", "npm:3.0.1"],\
             ["sequelize", "virtual:e94b6a29c80fbdd35e8b7b27d4fa86ae04a8eeab5c48711538d94b1497c1280ed77fa70fa911019c99e9c4e5bccd1706ba6fcb9daff09eaa7a6fde97ef314d58#npm:6.32.1"],\
+            ["sequelize-auto", "virtual:e94b6a29c80fbdd35e8b7b27d4fa86ae04a8eeab5c48711538d94b1497c1280ed77fa70fa911019c99e9c4e5bccd1706ba6fcb9daff09eaa7a6fde97ef314d58#npm:0.8.8"],\
             ["sequelize-cli", "npm:6.6.1"],\
             ["swagger-jsdoc", "npm:6.2.8"],\
             ["swagger-ui-express", "virtual:e94b6a29c80fbdd35e8b7b27d4fa86ae04a8eeab5c48711538d94b1497c1280ed77fa70fa911019c99e9c4e5bccd1706ba6fcb9daff09eaa7a6fde97ef314d58#npm:5.0.0"]\
@@ -60,6 +61,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mysql2", "npm:3.5.1"],\
             ["nodemon", "npm:3.0.1"],\
             ["sequelize", "virtual:e94b6a29c80fbdd35e8b7b27d4fa86ae04a8eeab5c48711538d94b1497c1280ed77fa70fa911019c99e9c4e5bccd1706ba6fcb9daff09eaa7a6fde97ef314d58#npm:6.32.1"],\
+            ["sequelize-auto", "virtual:e94b6a29c80fbdd35e8b7b27d4fa86ae04a8eeab5c48711538d94b1497c1280ed77fa70fa911019c99e9c4e5bccd1706ba6fcb9daff09eaa7a6fde97ef314d58#npm:0.8.8"],\
             ["sequelize-cli", "npm:6.6.1"],\
             ["swagger-jsdoc", "npm:6.2.8"],\
             ["swagger-ui-express", "virtual:e94b6a29c80fbdd35e8b7b27d4fa86ae04a8eeab5c48711538d94b1497c1280ed77fa70fa911019c99e9c4e5bccd1706ba6fcb9daff09eaa7a6fde97ef314d58#npm:5.0.0"]\
@@ -5793,6 +5795,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["reserved-words", [\
+        ["npm:0.1.2", {\
+          "packageLocation": "./.yarn/cache/reserved-words-npm-0.1.2-eed4b16ca9-72e80f71dc.zip/node_modules/reserved-words/",\
+          "packageDependencies": [\
+            ["reserved-words", "npm:0.1.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["resolve", [\
         ["patch:resolve@npm%3A1.22.3#~builtin<compat/resolve>::version=1.22.3&hash=c3c19d", {\
           "packageLocation": "./.yarn/cache/resolve-patch-bb62d3c3c5-ad59734723.zip/node_modules/resolve/",\
@@ -5997,6 +6008,32 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             "snowflake-sdk",\
             "sqlite3",\
             "tedious"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["sequelize-auto", [\
+        ["npm:0.8.8", {\
+          "packageLocation": "./.yarn/cache/sequelize-auto-npm-0.8.8-0dfc3e0b5a-1b4daeef10.zip/node_modules/sequelize-auto/",\
+          "packageDependencies": [\
+            ["sequelize-auto", "npm:0.8.8"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:e94b6a29c80fbdd35e8b7b27d4fa86ae04a8eeab5c48711538d94b1497c1280ed77fa70fa911019c99e9c4e5bccd1706ba6fcb9daff09eaa7a6fde97ef314d58#npm:0.8.8", {\
+          "packageLocation": "./.yarn/__virtual__/sequelize-auto-virtual-04522df0a1/0/cache/sequelize-auto-npm-0.8.8-0dfc3e0b5a-1b4daeef10.zip/node_modules/sequelize-auto/",\
+          "packageDependencies": [\
+            ["sequelize-auto", "virtual:e94b6a29c80fbdd35e8b7b27d4fa86ae04a8eeab5c48711538d94b1497c1280ed77fa70fa911019c99e9c4e5bccd1706ba6fcb9daff09eaa7a6fde97ef314d58#npm:0.8.8"],\
+            ["@types/sequelize", null],\
+            ["lodash", "npm:4.17.21"],\
+            ["mkdirp", "npm:1.0.4"],\
+            ["reserved-words", "npm:0.1.2"],\
+            ["sequelize", "virtual:e94b6a29c80fbdd35e8b7b27d4fa86ae04a8eeab5c48711538d94b1497c1280ed77fa70fa911019c99e9c4e5bccd1706ba6fcb9daff09eaa7a6fde97ef314d58#npm:6.32.1"],\
+            ["yargs", "npm:16.2.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/sequelize",\
+            "sequelize"\
           ],\
           "linkType": "HARD"\
         }]\

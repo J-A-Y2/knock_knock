@@ -1,14 +1,14 @@
 import { Router } from "express";
 
-const messageRouter = Router();
+const postParticipationRouter = Router();
 
 /**
  * @swagger
  *  /post:
  *    post:
  *      tags:
- *      - message
- *      description: 쪽지 작성하기
+ *      - post
+ *      description: 게시글 작성하기
  *      produces:
  *      - application/json
  *      parameters:
@@ -17,8 +17,8 @@ const messageRouter = Router();
  *          required: false
  *      responses:
  *       200:
- *        description: 쪽지 작성 성공
+ *        description: 게시글 작성 성공
  */
 
 // 게시글 작성
-messageRouter.post("/post");
+postParticipationRouter.post("/post");
