@@ -4,7 +4,7 @@ CREATE DATABASE knock_db;
 USE knock_db;
 DROP TABLE IF EXISTS users;
 CREATE TABLE users(
-	userId 		INT 		 NOT NULL AUTO_INCREMENT,
+	userId 			INT 		 NOT NULL AUTO_INCREMENT,
 	email 			VARCHAR(40)  NOT NULL,
 	userName 		CHAR(5) 	 NOT NULL,
 	nickname 		VARCHAR(15)  NOT NULL,
@@ -50,5 +50,5 @@ CREATE TABLE comments (
 	createdAt		DATETIME		NOT NULL,
 PRIMARY KEY(commentId),
 FOREIGN KEY(postId) REFERENCES posts(postId),
-FOREIGN KEY(userId) REFERENCES usrs(userId)   
+FOREIGN KEY(userId) REFERENCES users(userId)   
 );
