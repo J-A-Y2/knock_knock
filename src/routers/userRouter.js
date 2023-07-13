@@ -12,60 +12,146 @@ const userRouter = Router();
  *      produces:
  *      - application/json
  *      parameters:
- *        - in: query
- *          name: category
+ *        - in: body
+ *          name: body
  *          required: false
- *          schema:
- *            type: integer
- *            description: 카테고리
  *      responses:
  *       200:
  *        description: 유저 회원가입 성공
  */
+
 // 회원가입
-userRouter.post(
-  "/register",
-  RegisterValidationRules,
-  register_validate,
-  userAuthController.register
-);
+userRouter.post("/register", userAuthController.register);
+
+/**
+ * @swagger
+ *  /login:
+ *    post:
+ *      tags:
+ *      - user
+ *      description: 로그인 하기
+ *      produces:
+ *      - application/json
+ *      parameters:
+ *        - in: body
+ *          name: body
+ *          required: false
+ *      responses:
+ *       200:
+ *        description: 유저 로그인 성공
+ */
 
 // 로그인
-userRouter.post("/login", loginVas, login_validate, userAuthController.login);
-lidationRule;
-// 로그인 검증
-userRouter.get("/isLogin", login_required, userAuthController.isLogin);
+userRouter.post("/login", userAuthController.login);
 
-// 유저 실적 보여주기
-userRouter.get("/point", login_required, userAuthController.getPoint);
+/**
+ * @swagger
+ *  /isLogin:
+ *    get:
+ *      tags:
+ *      - user
+ *      description: 로그인 검증하기
+ *      produces:
+ *      - application/json
+ *      parameters:
+ *        - in: body
+ *          name: category
+ *          required: false
+ *      responses:
+ *       200:
+ *        description: 로그인 검증 성공
+ */
+
+
+// 로그인 검증
+userRouter.get("/isLogin", userAuthController.isLogin);
+
+/**
+ * @swagger
+ *  /userCount:
+ *    get:
+ *      tags:
+ *      - user
+ *      description: 전체 유저 수 불러오기
+ *      produces:
+ *      - application/json
+ *      parameters:
+ *        - in: body
+ *          name: category
+ *          required: false
+ *      responses:
+ *       200:
+ *        description: 전체 유저 수 불러오기 성공
+ */
 
 //전체 유저 수 불러오기
-userRouter.get("/userCount", login_required, userAuthController.getCount);
+userRouter.get("/userCount", userAuthController.getCount);
+
+/**
+ * @swagger
+ *  /:userId:
+ *    get:
+ *      tags:
+ *      - user
+ *      description: 유저 정보 불러오기
+ *      produces:
+ *      - application/json
+ *      parameters:
+ *        - in: body
+ *          name: category
+ *          required: false
+ *      responses:
+ *       200:
+ *        description: 유저 정보 불러오기 성공
+ */
 
 // 유저 정보 불러오기
-userRouter.get(
-  "/:userId",
-  login_required,
-  userParams_validate,
-  userAuthController.getInfo
-);
+userRouter.get("/:userId",userAuthController.getInfo);
+
+
+/**
+ * @swagger
+ *  /:userId:
+ *    put:
+ *      tags:
+ *      - user
+ *      description: 유저 정보 수정하기
+ *      produces:
+ *      - application/json
+ *      parameters:
+ *        - in: body
+ *          name: category
+ *          required: false
+ *      responses:
+ *       200:
+ *        description: 유저 회원가입 성공
+ */
+
 
 // 유저 정보 수정하기(별명, 설명)
-userRouter.put(
-  "/:userId",
-  login_required,
-  upload.single("image"),
-  SetUserValidationRules,
-  setUser_validate,
-  userAuthController.setInfo
-);
+userRouter.put("/:userId",userAuthController.setInfo);
+
+/**
+ * @swagger
+ *  /:userId:
+ *    delete:
+ *      tags:
+ *      - user
+ *      description: 유저 정보 삭제하기
+ *      produces:
+ *      - application/json
+ *      parameters:
+ *        - in: body
+ *          name: category
+ *          required: false
+ *      responses:
+ *       200:
+ *        description: 유저 정보 삭제 성공
+ */
+
+
 
 // 유저 정보 삭제하기
-userRouter.delete(
-  "/:userId",
-  login_required,
-  userParams_validate,
-  userAuthController.delInfo
-);
+userRouter.delete("/:userId", userAuthController.delInfo);
 
 export { userRouter };
