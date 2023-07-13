@@ -4,7 +4,7 @@ const options = {
   swaggerDefinition: {
     openapi: "3.0.0",
     info: {
-      title: "KNOK KNOK API",
+      title: "KNOCK KNOCK API",
       version: "1.0.0",
       description: "a Rest api using swagger and express.",
     },
