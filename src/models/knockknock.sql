@@ -7,7 +7,7 @@ CREATE TABLE users(
 	userId 			INT 		 NOT NULL AUTO_INCREMENT,
 	email 			VARCHAR(40)  NOT NULL,
 	userName 		CHAR(5) 	 NOT NULL,
-	nickname 		VARCHAR(15)  NOT NULL,
+	nickName 		VARCHAR(15)  NOT NULL,
 	userPassword 	VARCHAR(40)  NOT NULL,
 	gender 			CHAR(1) 	 NOT NULL,
 	birthday 		CHAR(8) 	 NOT NULL,
@@ -19,8 +19,8 @@ CREATE TABLE users(
 	hobby 			VARCHAR(250) NOT NULL,
 	personality 	VARCHAR(250) NOT NULL,
 	ideal 			VARCHAR(250) NOT NULL,
-	introduce VARCHAR(250) NULL,
-	isDeleted BOOLEAN NOT NULL DEFAULT FALSE,
+	introduce 		VARCHAR(250) NULL,
+	isDeleted 		BOOLEAN      NOT NULL DEFAULT FALSE,
 PRIMARY KEY (userId)
 );
 
