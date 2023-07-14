@@ -80,10 +80,12 @@ const User = (sequelize, DataTypes) => {
       underscored: false,
       modelName: "User",
       tableName: "users",
-      paranoid: true,
+      paranoid: false,
     }
   );
-  User.associate = (db) => {};
+  User.associate = (db) => {
+    db.User.hasMany(db.Comment, { foreignKey: "userId", sourceKey: "userId" });
+  };
 
   return User;
 };
