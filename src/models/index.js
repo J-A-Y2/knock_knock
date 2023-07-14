@@ -1,10 +1,10 @@
 import Sequelize from "sequelize";
 import Config from "../config/config.js";
 import User from "./user.js";
-const env = process.env.NODE_ENV || "development";
-const config = Config[env];
-const db = {};
 
+const config = Config;
+const db = {};
+console.log("index.js의 config", config);
 const sequelize = new Sequelize(
   config.username,
   config.password,

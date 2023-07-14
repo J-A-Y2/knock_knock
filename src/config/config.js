@@ -10,5 +10,5 @@ const config = {
   port: process.env.DB_PORT,
   dialect: "mysql",
 };
-
+console.log(config);
 export default config;
