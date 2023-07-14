@@ -14,21 +14,7 @@ const sequelize = new Sequelize(
 );
 
 db.User = User(sequelize, Sequelize);
-Object.keys(db).forEach((modelName) => {
-  // associate 호출
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
-});
-
 db.Post = Post(sequelize, Sequelize);
-Object.keys(db).forEach((modelName) => {
-  // associate 호출
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
-});
-
 db.Comment = Comment(sequelize, Sequelize);
 Object.keys(db).forEach((modelName) => {
   // associate 호출
@@ -40,4 +26,4 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-export { config, db };
+export { db };

@@ -55,7 +55,7 @@ const Post = (sequelize, DataTypes) => {
   );
   Post.associate = (db) => {
     db.Post.hasMany(db.Comment, { foreignKey: "postId", sourceKey: "postId" }); // foreignKey는 Post모델의 postId, sourceKey는 User 모델의 postId
-    db.Post.belongs(db.User, { foreignKey: "userId", targetKey: "userId" }); // foreignKey는 Post모델의 userId, targetKey는 User 모델의 userId
+    db.Post.belongsTo(db.User, { foreignKey: "userId", targetKey: "userId" }); // foreignKey는 Post모델의 userId, targetKey는 User 모델의 userId
   };
 
   return Post;

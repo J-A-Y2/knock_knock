@@ -1,3 +1,5 @@
+import Post from "post.js";
+
 const User = (sequelize, DataTypes) => {
   const User = sequelize.define(
     "User",
@@ -84,7 +86,7 @@ const User = (sequelize, DataTypes) => {
     }
   );
   User.associate = (db) => {
-    // db.User.hasMany(db.Post, { foreignKey: "userId", sourceKey: "userId" }); // foreignKey는 Post모델의 userId, sourceKey는 User 모델의 userId
+    db.User.hasMany(db.Post, { foreignKey: "userId", sourceKey: "userId" }); // foreignKey는 Post모델의 userId, sourceKey는 User 모델의 userId
   };
 
   return User;
