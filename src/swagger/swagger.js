@@ -4,17 +4,17 @@ const options = {
   swaggerDefinition: {
     openapi: "3.0.0",
     info: {
-      title: "KNOK KNOK API",
+      title: "KNOCK KNOCK API",
       version: "1.0.0",
       description: "a Rest api using swagger and express.",
     },
     servers: [
       {
-        url: "http://localhost:4000",
+        url: "http://localhost:5001",
       },
     ],
   },
-  apis: ["./routers/*.js", "./swagger/*"],
+  apis: ["src/routers/*.js", "src/swagger/*"],
 };
 
 const specs = swaggerJSDoc(options);
