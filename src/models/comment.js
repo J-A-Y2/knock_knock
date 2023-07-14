@@ -21,9 +21,11 @@ const Comment = (sequelize, DataTypes) => {
       paranoid: false,
     }
   );
-  Comment.associate = (db) => {};
+  Comment.associate = (db) => {
+    db.Comment.belongs(db.Post, { foreignKey: "postId", targetKey: "postId" }); // foreignKey는 Post모델의 postId, targetKey는 User 모델의 postId
+  };
 
   return Comment;
 };
 
-export default User;
+export default Comment;
