@@ -1,16 +1,17 @@
 import Sequelize from "sequelize";
-import Config from "../config/config.js";
+import { config } from "../config/config.js";
 import User from "./user.js";
+import Post from "./post.js";
+import Comment from "./comment.js";
+import dotenv from "dotenv";
 
-const config = Config;
 const db = {};
-console.log("index.js의 config", config);
+
 const sequelize = new Sequelize(
+  config.database,
   config.username,
   config.password,
-  config.database,
-  config,
-  { dialect: "mysql", host: config.host, port: 3306 }
+  { host: config.host, port: config.port, dialect: config.dialect }
 );
 
 db.User = User(sequelize, Sequelize);
