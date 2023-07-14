@@ -1,7 +1,7 @@
-DROP DATABASE IF EXISTS knock_db;
-CREATE DATABASE knock_db;
+DROP DATABASE IF EXISTS knockknock;
+CREATE DATABASE knockknock;
 
-USE knock_db;
+USE knockknock;
 DROP TABLE IF EXISTS users;
 CREATE TABLE users(
 	userId 			INT 		 NOT NULL AUTO_INCREMENT,

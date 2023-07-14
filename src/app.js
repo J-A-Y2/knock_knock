@@ -1,12 +1,14 @@
 import express from "express";
 import specs from "./swagger/swagger.js";
 import swaggerUi from "swagger-ui-express";
-import db from "./models/index.js";
+import dotenv from "dotenv";
+import { db } from "./models/index.js";
 
 const app = express();
 
+dotenv.config();
 db.sequelize
-  .sync({ force: true })
+  .sync({ force: false })
   .then(() => {
     console.log("데이터베이스 연결 성공");
   })
