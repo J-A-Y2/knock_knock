@@ -62,7 +62,6 @@ userRouter.post("/login");
  *        description: 로그인 검증 성공
  */
 
-
 // 로그인 검증
 userRouter.get("/isLogin");
 
@@ -108,7 +107,6 @@ userRouter.get("/userCount");
 // 유저 정보 불러오기
 userRouter.get("/:userId");
 
-
 /**
  * @swagger
  *  /:userId:
@@ -126,7 +124,6 @@ userRouter.get("/:userId");
  *       200:
  *        description: 유저 회원가입 성공
  */
-
 
 // 유저 정보 수정하기(별명, 설명)
 userRouter.put("/:userId");
@@ -148,8 +145,6 @@ userRouter.put("/:userId");
  *       200:
  *        description: 유저 정보 삭제 성공
  */
-
-
 
 // 유저 정보 삭제하기
 userRouter.delete("/:userId");
