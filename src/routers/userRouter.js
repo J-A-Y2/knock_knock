@@ -67,11 +67,11 @@ userRouter.get("/isLogin");
 
 /**
  * @swagger
- *  /userCount:
+ *  /:
  *    get:
  *      tags:
  *      - user
- *      description: 전체 유저 수 불러오기
+ *      description: 개인 유저 정보 불러오기
  *      produces:
  *      - application/json
  *      parameters:
@@ -80,11 +80,11 @@ userRouter.get("/isLogin");
  *          required: false
  *      responses:
  *       200:
- *        description: 전체 유저 수 불러오기 성공
+ *        description: 전체 유저 정보 불러오기 성공
  */
 
-//전체 유저 수 불러오기
-userRouter.get("/userCount");
+// 네트워크페이지 - 유저 정보 불러오기
+userRouter.get("/users");
 
 /**
  * @swagger
@@ -92,7 +92,7 @@ userRouter.get("/userCount");
  *    get:
  *      tags:
  *      - user
- *      description: 유저 정보 불러오기
+ *      description: 개인 유저 정보 불러오기
  *      produces:
  *      - application/json
  *      parameters:
@@ -101,7 +101,7 @@ userRouter.get("/userCount");
  *          required: false
  *      responses:
  *       200:
- *        description: 유저 정보 불러오기 성공
+ *        description: 개인 유저 정보 불러오기 성공
  */
 
 // 유저 정보 불러오기
