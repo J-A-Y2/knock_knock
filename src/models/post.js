@@ -53,7 +53,9 @@ const Post = (sequelize, DataTypes) => {
       paranoid: false,
     }
   );
-  Post.associate = (db) => {};
+  Post.associate = (db) => {
+    db.Post.belongs(db.User, { foreignKey: "userId", targetKey: "userId" }); // targetKey는 User 모델의 userId
+  };
 
   return Post;
 };

@@ -84,7 +84,7 @@ const User = (sequelize, DataTypes) => {
     }
   );
   User.associate = (db) => {
-    db.User.hasMany(db.Comment, { foreignKey: "userId", sourceKey: "userId" });
+    db.User.hasMany(db.Comment, { foreignKey: "userId", sourceKey: "userId" }); // sourceKey는 User의 userId
   };
 
   return User;
