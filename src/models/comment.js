@@ -9,7 +9,7 @@ const Comment = (sequelize, DataTypes) => {
       },
       commentContent: {
         type: DataTypes.STRING(40),
-        allowNull: ture,
+        allowNull: true,
       },
     },
     {

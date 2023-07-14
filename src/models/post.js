@@ -8,8 +8,8 @@ const Post = (sequelize, DataTypes) => {
         primaryKey: true,
       },
       profileImage: {
-        type: DataTypes.STRING(40),
-        allowNull: ture,
+        type: DataTypes.BLOB,
+        allowNull: true,
       },
       postType: {
         type: DataTypes.STRING(5),
@@ -36,7 +36,7 @@ const Post = (sequelize, DataTypes) => {
         allowNull: false,
       },
       postContent: {
-        type: DataTypes.BLOB,
+        type: DataTypes.STRING(200),
         allowNull: true,
       },
       isCompleted: {
@@ -54,8 +54,8 @@ const Post = (sequelize, DataTypes) => {
     }
   );
   Post.associate = (db) => {
-    // db.Post.hasMany(db.Comment, { foreignKey: "postId", sourceKey: "postId" }); // foreignKey는 Post모델의 postId, sourceKey는 User 모델의 postId
-    // db.Post.belongs(db.User, { foreignKey: "userId", targetKey: "userId" }); // foreignKey는 Post모델의 userId, targetKey는 User 모델의 userId
+    db.Post.hasMany(db.Comment, { foreignKey: "postId", sourceKey: "postId" }); // foreignKey는 Post모델의 postId, sourceKey는 User 모델의 postId
+    db.Post.belongs(db.User, { foreignKey: "userId", targetKey: "userId" }); // foreignKey는 Post모델의 userId, targetKey는 User 모델의 userId
   };
 
   return Post;

@@ -3,7 +3,6 @@ import { config } from "../config/config.js";
 import User from "./user.js";
 import Post from "./post.js";
 import Comment from "./comment.js";
-import dotenv from "dotenv";
 
 const db = {};
 
@@ -22,7 +21,23 @@ Object.keys(db).forEach((modelName) => {
   }
 });
 
+db.Post = Post(sequelize, Sequelize);
+Object.keys(db).forEach((modelName) => {
+  // associate 호출
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
+
+db.Comment = Comment(sequelize, Sequelize);
+Object.keys(db).forEach((modelName) => {
+  // associate 호출
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-export default { config, db };
+export { config, db };
