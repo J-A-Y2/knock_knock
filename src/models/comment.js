@@ -26,6 +26,11 @@ const Comment = (sequelize, DataTypes) => {
       foreignKey: "postId",
       targetKey: "postId",
     }); // foreignKey는 Post모델의 postId, targetKey는 User 모델의 postId
+
+    db.Comment.belongsTo(db.User, {
+      foreignKey: "userId",
+      targetKey: "userId",
+    }); // foreignKey는 Comment모델의 userId, targetKey는 User 모델의 userId
   };
 
   return Comment;
