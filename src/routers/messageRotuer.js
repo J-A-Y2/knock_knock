@@ -2,23 +2,17 @@ import { Router } from "express";
 
 const messageRouter = Router();
 
-/**
- * @swagger
- *  /post:
- *    post:
- *      tags:
- *      - message
- *      description: 쪽지 작성하기
- *      produces:
- *      - application/json
- *      parameters:
- *        - in: body
- *          name: body
- *          required: false
- *      responses:
- *       200:
- *        description: 쪽지 작성 성공
- */
+// 쪽지 작성
+messageRouter.post("/");
 
-// 게시글 작성
-messageRouter.post("/post");
+// 전체 쪽지 조회
+messageRouter.get("/");
+
+// 개별 쪽지 조회
+messageRouter.get("/:messageId");
+
+// 쪽지 삭제
+messageRouter.delete("/:messageId");
+
+// 쪽지 확인
+messageRouter.get("/isRead");
