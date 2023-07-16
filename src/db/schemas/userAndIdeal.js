@@ -25,7 +25,7 @@ const UserAndIdeal = (sequelize, DataTypes) => {
     db.UserAndIdeal.belongsTo(db.Ideal, {
       foreignKey: "idealId",
       targetKey: "idealId",
-    }); // foreignKey는 UserAndIdeal 모델의 hobbyId, targetKey는 Ideal 모델의 hobbyId
+    }); // foreignKey는 UserAndIdeal 모델의 idealId, targetKey는 Ideal 모델의 idealId
   };
 
   return UserAndIdeal;

@@ -8,6 +8,9 @@ import Participant from "./participant.js";
 import Hobby from "./hobby.js";
 import Ideal from "./ideal.js";
 import Personality from "./personality.js";
+import UserAndHobby from "./userAndHobby.js";
+import UserAndIdeal from "./userAndIdeal.js";
+import UserAndPersonality from "./userAndPersonality.js";
 
 const db = {};
 
@@ -26,6 +29,9 @@ db.Participant = Participant(sequelize, Sequelize);
 db.Hobby = Hobby(sequelize, Sequelize);
 db.Ideal = Ideal(sequelize, Sequelize);
 db.Personality = Personality(sequelize, Sequelize);
+db.UserAndHobby = UserAndHobby(sequelize, Sequelize);
+db.UserAndIdeal = UserAndIdeal(sequelize, Sequelize);
+db.UserAndPersonality = UserAndPersonality(sequelize, Sequelize);
 
 // 각 모델들을 돌면서 모델간의 관계를 정의하는 함수를 동작시킴.
 Object.keys(db).forEach((modelName) => {
