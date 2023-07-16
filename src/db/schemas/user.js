@@ -89,6 +89,9 @@ const User = (sequelize, DataTypes) => {
     db.User.hasMany(db.Message, { foreignKey: "sendId" }); // foreignKey는 Message모델의 sendId, sourceKey는 User 모델의 userId
     db.User.hasMany(db.Message, { foreignKey: "receiveId" }); // foreignKey는 Message모델의 recieveId, sourceKey는 User 모델의 userId
     db.User.hasMany(db.Participant, { foreignKey: "userId" }); // foreignKey는 Participant모델의 userId, sourceKey는 User 모델의 userId
+    db.User.hasMany(db.UserAndHobby, { foreignKey: "userId" }); // foreignKey는 UserAndHobby모델의 userId, sourceKey는 User 모델의 userId
+    db.User.hasMany(db.UserAndIdeal, { foreignKey: "userId" }); // foreignKey는 UserAndIdeal모델의 userId, sourceKey는 User 모델의 userId
+    db.User.hasMany(db.UserAndPersonality, { foreignKey: "userId" }); // foreignKey는 UserAndPersonality모델의 userId, sourceKey는 User 모델의 userId
   };
 
   return User;

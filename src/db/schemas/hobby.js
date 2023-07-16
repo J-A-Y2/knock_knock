@@ -23,9 +23,9 @@ const Hobby = (sequelize, DataTypes) => {
   );
   Hobby.associate = (db) => {
     db.Hobby.hasMany(db.UserAndHobby, {
-      foreignKey: "userAndHobbyId",
+      foreignKey: "hobbyId",
       sourceKey: "hobbyId",
-    }); // foreignKey는 UserAndHobby모델의 userAndHobbyId, sourceKey는 Hobby 모델의 hobbyId
+    }); // foreignKey는 UserAndHobby모델의 hobbyId, sourceKey는 Hobby 모델의 hobbyId
   };
 
   return Hobby;
