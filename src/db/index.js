@@ -1,16 +1,16 @@
 import Sequelize from "sequelize";
-import { config } from "../../config/config.js";
-import User from "./user.js";
-import Post from "./post.js";
-import Comment from "./comment.js";
-import Message from "./message.js";
-import Participant from "./participant.js";
-import Hobby from "./hobby.js";
-import Ideal from "./ideal.js";
-import Personality from "./personality.js";
-import UserAndHobby from "./userAndHobby.js";
-import UserAndIdeal from "./userAndIdeal.js";
-import UserAndPersonality from "./userAndPersonality.js";
+import { config } from "../config/config.js";
+import User from "./schemas/user.js";
+import Post from "./schemas/post.js";
+import Comment from "./schemas/comment.js";
+import Message from "./schemas/message.js";
+import Participant from "./schemas/participant.js";
+import Hobby from "./schemas/hobby.js";
+import Ideal from "./schemas/ideal.js";
+import Personality from "./schemas/personality.js";
+import UserAndHobby from "./schemas/userAndHobby.js";
+import UserAndIdeal from "./schemas/userAndIdeal.js";
+import UserAndPersonality from "./schemas/userAndPersonality.js";
 
 const db = {};
 
