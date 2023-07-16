@@ -4,7 +4,7 @@ import User from "./user.js";
 import Post from "./post.js";
 import Comment from "./comment.js";
 import Message from "./message.js";
-import Participant from "./participants.js";
+import Participant from "./participant.js";
 
 const db = {};
 

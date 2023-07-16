@@ -8,7 +8,7 @@ const app = express();
 
 dotenv.config();
 db.sequelize
-  .sync({ force: false })
+  .sync({ force: true }) // true이면 테이블 모두 삭제 후 생성, false이면 테이블 그대로 유지
   .then(() => {
     console.log("데이터베이스 연결 성공");
   })
