@@ -7,10 +7,6 @@ const UserAndHobby = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
     },
     {
       sequelize,
