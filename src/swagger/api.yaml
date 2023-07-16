@@ -5,6 +5,8 @@ tags:
     description: 게시글 라우터 모음
   - name: comment
     description: 댓글 라우터 모음
+  - name: message
+    description: 메세지 라우터 모음
 
 paths:
   /register:
@@ -12,7 +14,6 @@ paths:
       tags:
         - user
       description: 유저 회원가입하기
-      # operationId:
 
       parameters:
         deprecated: true
@@ -86,7 +87,7 @@ paths:
         "405":
           description: Invalid input
 
-  /user/current:
+  /users/current:
     get:
       tags:
         - user
@@ -503,6 +504,264 @@ paths:
                     type: integer
                   user_id:
                     type: integer
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: User not found
+
+  /comments:
+    post:
+      tags:
+        - comment
+      description: 댓글 작성하기
+
+      requestbody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                post_id:
+                  type: integer
+                content:
+                  type: string
+        required: true
+
+      responses:
+        "200":
+          description: 댓글 작성 성공.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  post_id:
+                    type: integer
+                  user_id:
+                    type: integer
+                  content:
+                    type: string
+                  nickname:
+                    type: string
+                  createcAt:
+                    type: datetime
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: User not found
+
+  /comments/:commentId:
+    put:
+      tags:
+        - comment
+      description: 댓글 수정 하기
+
+      parameters:
+        - name: commentid
+          in: path
+          description: 댓글 고유 아이디
+          required: true
+
+      requestbody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+        required: true
+
+      responses:
+        "200":
+          description: 댓글 수정 성공.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  comment_id:
+                    type: integer
+                  post_id:
+                    type: integer
+                  user_id:
+                    type: integer
+                  content:
+                    type: string
+                  nickname:
+                    type: string
+                  updateAt:
+                    type: datetime
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: User not found
+
+    delete:
+      tags:
+        - comment
+      description: 댓글 삭제 하기
+
+      parameters:
+        - name: commentid
+          in: path
+          description: 댓글 고유 아이디
+          required: true
+
+      responses:
+        "200":
+          description: 댓글 삭제 성공.
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: User not found
+
+  /comments/:postId:
+    get:
+      tags:
+        - comment
+      description: 댓글 불러오기
+
+      parameters:
+        - name: postid
+          in: path
+          description: 게시글 고유 아이디
+          required: true
+
+      responses:
+        "200":
+          description: 댓글 수정 성공.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  comment_id:
+                    type: integer
+                  post_id:
+                    type: integer
+                  user_id:
+                    type: integer
+                  content:
+                    type: string
+                  nickname:
+                    type: string
+                  createAt:
+                    type: datetime
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: User not found
+
+  /messages:
+    post:
+      tags:
+        - message
+      description: 쪽지 작성 하기
+
+      requestbody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                receive_id:
+                  type: integer
+                content:
+                  type: string
+        required: true
+
+      responses:
+        "200":
+          description: 쪽지 작성 성공.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message_id:
+                    type: integer
+                  send_id:
+                    type: integer
+                  receive_id:
+                    type: integer
+                  content:
+                    type: string
+                  createAt:
+                    type: datetime
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: User not found
+
+    get:
+      tags:
+        - message
+      description: 전체 쪽지 불러 오기
+
+      responses:
+        "200":
+          description: 전체 쪽지 불러오기 성공.
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: User not found
+
+  /messages/:messageId:
+    delete:
+      tags:
+        - message
+      description: 쪽지 삭제 하기
+
+      parameters:
+        - name: messageid
+          in: path
+          description: 쪽지 고유 아이디
+          required: true
+
+      responses:
+        "200":
+          description: 쪽지 삭제 성공.
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: User not found
+
+    get:
+      tags:
+        - message
+      description: 개별 쪽지 확인 하기
+
+      responses:
+        "200":
+          description: 쪽지 작성 성공.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message_id:
+                    type: integer
+                  send_id:
+                    type: integer
+                  content:
+                    type: string
+                  createAt:
+                    type: datetime
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: User not found
+
+  /messages/isRead:
+    get:
+      tags:
+        - message
+      description: 쪽지 확인 여부 검사하기
+
+      responses:
+        "200":
+          description: 쪽지 작성 성공.
         "400":
           description: Invalid ID supplied
         "404":
