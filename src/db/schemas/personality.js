@@ -22,10 +22,10 @@ const Personality = (sequelize, DataTypes) => {
     }
   );
   Personality.associate = (db) => {
-    db.Personality.hasMany(db.UserAndPersonality, {
-      foreignKey: "personalityId",
-      sourceKey: "personalityId",
-    }); // foreignKey는 UserAndPersonality모델의 personalityId, sourceKey는 Personality 모델의 personalityId
+    // db.Personality.hasMany(db.UserAndPersonality, {
+    //   foreignKey: "personalityId",
+    //   sourceKey: "personalityId",
+    // }); // foreignKey는 UserAndPersonality모델의 personalityId, sourceKey는 Personality 모델의 personalityId
   };
 
   return Personality;
