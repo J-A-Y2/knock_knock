@@ -21,7 +21,12 @@ const Ideal = (sequelize, DataTypes) => {
       paranoid: false,
     }
   );
-  Ideal.associate = (db) => {};
+  Ideal.associate = (db) => {
+    db.Ideal.hasMany(db.UserAndIdeal, {
+      foreignKey: "idealId",
+      sourceKey: "idealId",
+    }); // foreignKey는 UserAndIdeal모델의 idealId, sourceKey는 Ideal 모델의 idealId
+  };
 
   return Ideal;
 };
