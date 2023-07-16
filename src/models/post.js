@@ -47,7 +47,7 @@ const Post = (sequelize, DataTypes) => {
     {
       sequelize,
       timestamps: true,
-      underscored: false,
+      underscored: true,
       modelName: "Post",
       tableName: "posts",
       paranoid: false,
