@@ -2,13 +2,13 @@ const UserAndHobby = (sequelize, DataTypes) => {
   const UserAndHobby = sequelize.define(
     "UserAndHobby",
     {
-      hobbyId: {
+      userAndHobbyId: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
       },
-      hobbyType: {
-        type: DataTypes.STRING(15),
+      createdAt: {
+        type: DataTypes.DATE,
         allowNull: false,
       },
     },
