@@ -16,7 +16,7 @@ const User = (sequelize, DataTypes) => {
         type: DataTypes.STRING(5),
         allowNull: false,
       },
-      nickName: {
+      nickname: {
         type: DataTypes.STRING(15),
         allowNull: false,
       },
@@ -77,15 +77,18 @@ const User = (sequelize, DataTypes) => {
     {
       sequelize,
       timestamps: true,
-      underscored: false,
+      underscored: true,
       modelName: "User",
       tableName: "users",
       paranoid: false,
     }
   );
   User.associate = (db) => {
-    db.User.hasMany(db.Post, { foreignKey: "userId", sourceKey: "userId" }); // foreignKey는 Post모델의 userId, sourceKey는 User 모델의 userId
-    db.User.hasMany(db.Comment, { foreignKey: "userId", sourceKey: "userId" }); // foreignKey는 Comment모델의 userId, sourceKey는 User 모델의 userId
+    db.User.hasMany(db.Post, { foreignKey: "userId" }); // foreignKey는 Post모델의 userId, sourceKey는 User 모델의 userId
+    db.User.hasMany(db.Comment, { foreignKey: "userId" }); // foreignKey는 Comment모델의 userId, sourceKey는 User 모델의 userId
+    db.User.hasMany(db.Message, { foreignKey: "sendId" }); // foreignKey는 Message모델의 sendId, sourceKey는 User 모델의 userId
+    db.User.hasMany(db.Message, { foreignKey: "receiveId" }); // foreignKey는 Message모델의 recieveId, sourceKey는 User 모델의 userId
+    db.User.hasMany(db.Participant, { foreignKey: "userId" }); // foreignKey는 Participant모델의 userId, sourceKey는 User 모델의 userId
   };
 
   return User;
