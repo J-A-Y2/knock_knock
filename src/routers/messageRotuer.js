@@ -16,3 +16,5 @@ messageRouter.delete("/:messageId");
 
 // 쪽지 확인
 messageRouter.get("/isRead");
+
+export { messageRouter };

@@ -29,6 +29,7 @@ postRouter.post("/:postId/allow");
 // 신청 거절
 postRouter.delete("/:postId/delete");
 
+export { postRouter };
 // 포스트 테이블 -> 포스트의 id -> 신청하기
 // -> 누른 유저의 id 이것을 테이블 저장해 -> 신청인원 리스트 테이블 -> 수락
 // -> 모집 테이블 -> 모집인원 = 유저수 -> 모집완료 반환( true or false)
