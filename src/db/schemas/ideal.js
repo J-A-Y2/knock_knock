@@ -23,9 +23,9 @@ const Ideal = (sequelize, DataTypes) => {
   );
   Ideal.associate = (db) => {
     db.Ideal.hasMany(db.UserAndIdeal, {
-      foreignKey: "idealId",
+      foreignKey: "userAndIdealId",
       sourceKey: "idealId",
-    }); // foreignKey는 UserAndIdeal모델의 idealId, sourceKey는 Ideal 모델의 idealId
+    }); // foreignKey는 UserAndIdeal모델의 userAndIdealId, sourceKey는 Ideal 모델의 idealId
   };
 
   return Ideal;
