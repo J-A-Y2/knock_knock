@@ -15,7 +15,7 @@ const Message = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      recieveId: {
+      receiveId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
@@ -39,10 +39,9 @@ const Message = (sequelize, DataTypes) => {
       foreignKey: "sendId",
       targetKey: "userId",
     });
-
-    // foreignKey는 Message모델의 recieveId, targetKey는 User 모델의 userId
+    // foreignKey는 Message모델의 receiveId, targetKey는 User 모델의 userId
     db.Message.belongsTo(db.User, {
-      foreignKey: "recieveId",
+      foreignKey: "receiveId",
       targetKey: "userId",
     });
   };

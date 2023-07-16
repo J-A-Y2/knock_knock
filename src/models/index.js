@@ -3,6 +3,8 @@ import { config } from "../config/config.js";
 import User from "./user.js";
 import Post from "./post.js";
 import Comment from "./comment.js";
+import Message from "./message.js";
+import Participant from "./participants.js";
 
 const db = {};
 
@@ -16,6 +18,8 @@ const sequelize = new Sequelize(
 db.User = User(sequelize, Sequelize);
 db.Post = Post(sequelize, Sequelize);
 db.Comment = Comment(sequelize, Sequelize);
+db.Message = Message(sequelize, Sequelize);
+db.Participant = Participant(sequelize, Sequelize);
 
 // 각 모델들을 돌면서 모델간의 관계를 정의하는 함수를 동작시킴.
 Object.keys(db).forEach((modelName) => {
