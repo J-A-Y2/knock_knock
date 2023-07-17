@@ -46,23 +46,23 @@ const User = (sequelize, DataTypes) => {
             },
             religion: {
                 type: DataTypes.STRING(10),
-                allowNull: false,
+                allowNull: true,
             },
             height: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
+                allowNull: true,
             },
             hobby: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             personality: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             ideal: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             introduce: {
                 type: DataTypes.STRING,

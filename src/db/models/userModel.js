@@ -1,13 +1,5 @@
 import { User } from '../index.js';
-
-class UserModel {
-    static async create({ newUser }) {
-        const createNewUser = await User.create(newUser);
-        return createNewUser;
-    }
-}
-
-export { UserModel };
+import { db } from '../index.js';
 
 // {
 //   userId,
@@ -29,8 +21,21 @@ export { UserModel };
 // }
 
 const UserModel = {
+    create: async function ({ userName, email, userPassword, nickname, gender, birthday, job }) {
+        console.log(userName, email, userPassword, nickname, gender, birthday, job);
+        const createNewUser = await User.create({
+            userName: userName,
+            email: email,
+            userPassword: userPassword,
+            nickname: nickname,
+            gender: gender,
+            birthday: birthday,
+            job: job,
+        });
+        return createNewUser;
+    },
     findByEmail: async function (email) {
-        const user = await db.findOne({
+        const user = await User.findOne({
             where: {
                 email: email,
                 isDeleted: null,
