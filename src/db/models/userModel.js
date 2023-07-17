@@ -18,14 +18,12 @@ const UserModel = {
         }
     },
     findByEmail: async function (email) {
-        console.log('email', email);
         const user = await db.User.findOne({
             where: {
                 email: email,
                 isDeleted: 0,
             },
         });
-        console.log(user);
 
         return user;
     },
