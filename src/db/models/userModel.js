@@ -21,6 +21,7 @@ const UserModel = {
                 isDeleted: 0,
             },
         });
+
         return user;
     },
 };
