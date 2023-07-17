@@ -1,33 +1,33 @@
-import { Router } from "express";
+import { Router } from 'express';
 
 const postRouter = Router();
 
 // 게시글 작성
-postRouter.post("/");
+postRouter.post('/');
 
 // 전체 게시글 시간순 조회
-postRouter.get("/");
+postRouter.get('/');
 
 // 게시글 개별 조회
-postRouter.get("/:postId");
+postRouter.get('/:postId');
 
 // 게시글 수정
-postRouter.put("/:postId");
+postRouter.put('/:postId');
 
 // 게시글 삭제
-postRouter.delete("/:postId");
+postRouter.delete('/:postId');
 
 // 참여 신청
-postRouter.post("/:postId/participants");
+postRouter.post('/:postId/participants');
 
 // 신청자 조회
-postRouter.get("/:postId/userList");
+postRouter.get('/:postId/userList');
 
 // 신청 수락
-postRouter.post("/:postId/allow");
+postRouter.post('/:postId/allow');
 
 // 신청 거절
-postRouter.delete("/:postId/delete");
+postRouter.delete('/:postId/delete');
 
 export { postRouter };
 // 포스트 테이블 -> 포스트의 id -> 신청하기

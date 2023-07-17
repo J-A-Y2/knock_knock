@@ -1,27 +1,27 @@
-import { Router } from "express";
-import { userService } from "../services/userService";
+import { Router } from 'express';
+import { userController } from '../controllers/userController.js';
 
 const userRouter = Router();
 
 // 회원가입
-userRouter.post("/register");
+userRouter.post('/register', userController.register);
 
 // 로그인
-userRouter.post("/login");
+userRouter.post('/login');
 
 // 로그인 검증
-userRouter.get("/isLogin");
+userRouter.get('/isLogin');
 
 // 네트워크페이지 - 유저 정보 불러오기
-userRouter.get("/users");
+userRouter.get('/users');
 
 // 유저 정보 불러오기
-userRouter.get("/:userId");
+userRouter.get('/:userId');
 
 // 유저 정보 수정하기(별명, 설명)
-userRouter.put("/:userId");
+userRouter.put('/:userId');
 
 // 유저 정보 삭제하기
-userRouter.delete("/:userId");
+userRouter.delete('/:userId');
 
 export { userRouter };

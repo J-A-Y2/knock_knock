@@ -1,20 +1,20 @@
-import swaggerJSDoc from "swagger-jsdoc";
+import swaggerJSDoc from 'swagger-jsdoc';
 
 const options = {
-  swaggerDefinition: {
-    openapi: "3.0.0",
-    info: {
-      title: "KNOCK KNOCK API",
-      version: "1.0.0",
-      description: "a Rest api using swagger and express.",
+    swaggerDefinition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'KNOCK KNOCK API',
+            version: '1.0.0',
+            description: 'a Rest api using swagger and express.',
+        },
+        servers: [
+            {
+                url: 'http://localhost:5001',
+            },
+        ],
     },
-    servers: [
-      {
-        url: "http://localhost:5001",
-      },
-    ],
-  },
-  apis: ["src/routers/*.js", "src/swagger/*"],
+    apis: ['src/routers/*.js', 'src/swagger/*'],
 };
 
 const specs = swaggerJSDoc(options);
