@@ -20,16 +20,15 @@ const UserModel = {
         }
     },
 
-    findByEmail: async function (email) {
+    findByEmail: async function ({ email }) {
         try {
             const user = await db.User.findOne({
-                attributes: ['email'],
+                attributes: ['email', 'userPassword'],
                 where: {
-                    email: email,
+                    email: { [Op.eq]: email },
                     isDeleted: 0,
                 },
             });
-
             return user;
         } catch (error) {
             console.error(error);
