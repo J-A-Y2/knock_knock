@@ -77,7 +77,7 @@ const User = (sequelize, DataTypes) => {
         {
             sequelize,
             timestamps: true,
-            underscored: true,
+            underscored: false,
             modelName: 'User',
             tableName: 'users',
             paranoid: false,

@@ -6,29 +6,27 @@ import { db } from '../db/index.js';
 import { UserModel } from '../db/models/userModel.js';
 
 const userService = {
-    createUser: async function ({ userName, email, userPassword, nickname, gender, birthday, job }) {
+    createUser: async function ({ user_name, email, user_password, nickname, gender, birthday, job }) {
         try {
             // await db.query('START TRANSACTION');
 
             // 이메일 중복 확인
             //const user = await UserModel.findByEmail(email);
-            console.log(0);
             // if (user) {
             //     throw new error('이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요.');
             // }
 
             // 비밀번호 암호화
-            const hashedPassword = await bcrypt.hash(userPassword, parseInt(process.env.PW_HASH_COUNT));
+            const hashedPassword = await bcrypt.hash(user_password, parseInt(process.env.PW_HASH_COUNT));
             await UserModel.create({
-                userName,
+                user_name,
                 email,
-                userPassword: hashedPassword,
+                user_password: hashedPassword,
                 nickname,
                 gender,
                 birthday,
                 job,
             });
-
             // await mysqlDB.query('COMMIT');
 
             return {
@@ -40,7 +38,7 @@ const userService = {
             if (error instanceof ConflictError) {
                 throw error;
             } else {
-                throw new BadRequestError('회원가입에 실패했습니다.');
+                throw new Error('회원가입에 실패했습니다.');
             }
         }
     },

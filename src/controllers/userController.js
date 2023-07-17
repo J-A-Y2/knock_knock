@@ -4,12 +4,12 @@ import { statusCode } from '../utils/statusCode.js';
 const userController = {
     register: async function (req, res, next) {
         try {
-            const { userName, email, userPassword, nickname, gender, birthday, job } = req.body;
+            const { user_name, email, user_password, nickname, gender, birthday, job } = req.body;
 
             const createUser = await userService.createUser({
-                userName,
+                user_name,
                 email,
-                userPassword,
+                user_password,
                 nickname,
                 gender,
                 birthday,

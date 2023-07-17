@@ -1,41 +1,25 @@
-import { User } from '../index.js';
 import { db } from '../index.js';
 
-// {
-//   userId,
-//     email,
-//     userName,
-//     userPassword,
-//     nickname,
-//     gender,
-//     birthday,
-//     job,
-//     profileImage,
-//     mbti,
-//     religion,
-//     height,
-//     hobby,
-//     personality,
-//     ideal,
-//     introduce;
-// }
-
 const UserModel = {
-    create: async function ({ userName, email, userPassword, nickname, gender, birthday, job }) {
-        console.log(userName, email, userPassword, nickname, gender, birthday, job);
-        const createNewUser = await User.create({
-            userName: userName,
-            email: email,
-            userPassword: userPassword,
-            nickname: nickname,
-            gender: gender,
-            birthday: birthday,
-            job: job,
-        });
-        return createNewUser;
+    create: async function ({ user_name, email, user_password, nickname, gender, birthday, job }) {
+        try {
+            const createNewUser = await db.User.create({
+                userName: user_name,
+                email: email,
+                userPassword: user_password,
+                nickname: nickname,
+                gender: gender,
+                birthday: birthday,
+                job: job,
+            });
+            return createNewUser;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
     },
     findByEmail: async function (email) {
-        const user = await User.findOne({
+        const user = await db.User.findOne({
             where: {
                 email: email,
                 isDeleted: null,
