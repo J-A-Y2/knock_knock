@@ -25,7 +25,7 @@ const userController = {
     login: async function (req, res, next) {
         try {
             const { email, userPassword } = req.body;
-            const loginUser = await userService.getUser({ email, password });
+            const loginUser = await userService.getUser({ email, userPassword });
 
             statusCode.setResponseCode200(res);
 

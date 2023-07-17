@@ -1,4 +1,5 @@
 import { db } from '../index.js';
+import { Op } from 'sequelize';
 
 const UserModel = {
     create: async function ({ username, email, userPassword, nickname, gender, birthday, job }) {
@@ -15,19 +16,25 @@ const UserModel = {
             return createNewUser;
         } catch (err) {
             console.log(err);
+            throw new Error('user를 생성하는 데 실패했습니다.');
         }
     },
-    findByEmail: async function (email) {
-        console.log('email', email);
-        const user = await db.User.findOne({
-            where: {
-                email: email,
-                isDeleted: 0,
-            },
-        });
-        console.log(user);
 
-        return user;
+    findByEmail: async function (email) {
+        try {
+            const user = await db.User.findOne({
+                attributes: ['email'],
+                where: {
+                    email: email,
+                    isDeleted: 0,
+                },
+            });
+
+            return user;
+        } catch (error) {
+            console.error(error);
+            throw new Error('user를 검색하는 데 실패했습니다.');
+        }
     },
 };
 
