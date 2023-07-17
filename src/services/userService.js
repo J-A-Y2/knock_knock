@@ -45,7 +45,7 @@ const userService = {
     getUser: async function ({ email, userPassword }) {
         try {
             // await db.beginTransaction();
-            const user = await UserModel.findByEmail({ email });
+            const user = await UserModel.findByEmail(email);
 
             if (!user) {
                 throw new NotFoundError('가입 내역이 없는 이메일입니다. 다시 한 번 확인해 주세요');
@@ -56,9 +56,6 @@ const userService = {
             }
 
             const correctPasswordHash = user.userPassword;
-            console.log('user', user);
-            console.log('userPassword', userPassword);
-            console.log('correctPasswordHash', correctPasswordHash);
             const isPasswordCorrect = await bcrypt.compare(userPassword, correctPasswordHash);
 
             if (!isPasswordCorrect) {
