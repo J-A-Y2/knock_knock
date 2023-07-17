@@ -1,13 +1,16 @@
 import { Router } from 'express';
 import { userController } from '../controllers/userController.js';
+import { loginValidate, loginValidationRules } from '../middlewares/loginValidate.js';
+
+import { RegisterValidationRules, registerValidate } from '../middlewares/registerValidate.js';
 
 const userRouter = Router();
 
 // 회원가입
-userRouter.post('/register', userController.register);
+userRouter.post('/register', RegisterValidationRules, registerValidate, userController.register);
 
 // 로그인
-userRouter.post('/login', userController.login);
+userRouter.post('/login', loginValidationRules, loginValidate, userController.login);
 
 // 로그인 검증
 userRouter.get('/isLogin');

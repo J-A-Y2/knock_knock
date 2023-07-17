@@ -22,7 +22,7 @@ passport.use(
     }),
 );
 
-function login_required(req, res, next) {
+function loginRequired(req, res, next) {
     passport.authenticate('jwt', { session: false }, (err, userId) => {
         if (err) {
             throw new InternalServerError('서버 오류가 발생했습니다. 다시 시도해주세요.');
@@ -37,4 +37,4 @@ function login_required(req, res, next) {
     })(req, res, next);
 }
 
-export { login_required };
+export { loginRequired };

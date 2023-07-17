@@ -36,6 +36,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["cors", "npm:2.8.5"],\
             ["dotenv", "npm:16.3.1"],\
             ["express", "npm:4.18.2"],\
+            ["express-validator", "npm:7.0.1"],\
             ["jsonwebtoken", "npm:9.0.1"],\
             ["mysql2", "npm:3.5.1"],\
             ["nodemon", "npm:3.0.1"],\
@@ -65,6 +66,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["cors", "npm:2.8.5"],\
             ["dotenv", "npm:16.3.1"],\
             ["express", "npm:4.18.2"],\
+            ["express-validator", "npm:7.0.1"],\
             ["jsonwebtoken", "npm:9.0.1"],\
             ["mysql2", "npm:3.5.1"],\
             ["nodemon", "npm:3.0.1"],\
@@ -3946,6 +3948,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["type-is", "npm:1.6.18"],\
             ["utils-merge", "npm:1.0.1"],\
             ["vary", "npm:1.1.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["express-validator", [\
+        ["npm:7.0.1", {\
+          "packageLocation": "./.yarn/cache/express-validator-npm-7.0.1-cd576fda4a-34431c1065.zip/node_modules/express-validator/",\
+          "packageDependencies": [\
+            ["express-validator", "npm:7.0.1"],\
+            ["lodash", "npm:4.17.21"],\
+            ["validator", "npm:13.9.0"]\
           ],\
           "linkType": "HARD"\
         }]\
