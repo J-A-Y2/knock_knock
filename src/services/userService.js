@@ -6,7 +6,7 @@ import { db } from '../db/index.js';
 import { UserModel } from '../db/models/userModel.js';
 
 const userService = {
-    createUser: async function ({ user_name, email, user_password, nickname, gender, birthday, job }) {
+    createUser: async function ({ username, email, userPassword, nickname, gender, birthday, job }) {
         try {
             // await db.query('START TRANSACTION');
 
@@ -17,11 +17,11 @@ const userService = {
             // }
 
             // 비밀번호 암호화
-            const hashedPassword = await bcrypt.hash(user_password, parseInt(process.env.PW_HASH_COUNT));
+            const hashedPassword = await bcrypt.hash(userPassword, parseInt(process.env.PW_HASH_COUNT));
             await UserModel.create({
-                user_name,
+                username,
                 email,
-                user_password: hashedPassword,
+                userPassword: hashedPassword,
                 nickname,
                 gender,
                 birthday,
@@ -45,17 +45,18 @@ const userService = {
     getUser: async function ({ email, password }) {
         try {
             // await db.beginTransaction();
-            const user = await User.findByEmail(email);
+            const user = await UserModel.findByEmail(email);
 
             if (!user) {
                 throw new NotFoundError('가입 내역이 없는 이메일입니다. 다시 한 번 확인해 주세요');
             }
 
-            if (user.is_deleted === true) {
+            if (user.isDeleted === true) {
                 throw new BadRequestError('이미 탈퇴한 회원입니다.');
             }
 
-            const correctPasswordHash = user.user_password;
+            const correctPasswordHash = user.userPassword;
+            console.log(correctPasswordHash);
             const isPasswordCorrect = await bcrypt.compare(password, correctPasswordHash);
 
             if (!isPasswordCorrect) {
@@ -65,7 +66,7 @@ const userService = {
             const secretKey = process.env.JWT_SECRET_KEY || 'jwt-secret-key';
             const token = jwt.sign(
                 {
-                    userId: user.user_id,
+                    userId: user.userId,
                     email: user.email,
                     name: user.nickname,
                 },
@@ -77,7 +78,7 @@ const userService = {
             return {
                 message: '로그인에 성공했습니다.',
                 token,
-                userId: user.user_id,
+                userId: user.userId,
             };
         } catch (error) {
             // await db.rollback();
