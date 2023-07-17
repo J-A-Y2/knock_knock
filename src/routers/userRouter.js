@@ -7,7 +7,7 @@ const userRouter = Router();
 userRouter.post('/register', userController.register);
 
 // 로그인
-userRouter.post('/login');
+userRouter.post('/login', userController.login);
 
 // 로그인 검증
 userRouter.get('/isLogin');

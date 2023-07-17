@@ -42,4 +42,4 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize; // 세션과
 db.Sequelize = Sequelize; // Class를 db에 추가
 
-export { db, User };
+export { db, sequelize };

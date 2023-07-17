@@ -2,6 +2,7 @@ import express from 'express';
 import specs from './swagger/swagger.js';
 import swaggerUi from 'swagger-ui-express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import { db } from './db/index.js';
 import { userRouter } from './routers/userRouter.js';
 import { postRouter } from './routers/postRouter.js';
@@ -10,6 +11,12 @@ import { commentRouter } from './routers/commentRouter.js';
 
 const app = express();
 
+// CORS 에러 방지
+app.use(cors());
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
 app.use('/comments', commentRouter);
@@ -17,7 +24,7 @@ app.use('/messages', messageRouter);
 
 dotenv.config();
 db.sequelize
-    .sync({ force: true }) // true이면 테이블 모두 삭제 후 생성, false이면 테이블 그대로 유지
+    .sync({ force: false }) // true이면 테이블 모두 삭제 후 생성, false이면 테이블 그대로 유지
     .then(() => {
         console.log('데이터베이스 연결 성공');
     })
