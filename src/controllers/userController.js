@@ -77,24 +77,25 @@ const userController = {
     },
     update: async function (req, res, next) {
         try {
-            const userId = req.currentUserId;
+            const { userId } = req.params;
 
-            const { nickname, profileImage, mbti, religion, height, hobby, personality, ideal, introduce } = req.body;
-            const updatedUser = await userService.updateUser({
-                updatedUser: {
-                    nickname,
-                    profileImage,
-                    mbti,
-                    religion,
-                    height,
-                    hobby,
-                    personality,
-                    ideal,
-                    introduce,
-                },
-            });
+            const updatedData = req.body;
+            const updatedUser = await userService.updateUser({ userId, updatedData });
+
             statusCode.setResponseCode200(res);
-            return res.send(createUser.message);
+            return res.send(updatedUser.message);
+        } catch (error) {
+            next(error);
+        }
+    },
+    delete: async function (req, res, next) {
+        try {
+            const { userId } = req.params;
+
+            await userService.deleteUser(userId);
+
+            statusCode.setResponseCode200(res);
+            return res.send({ message: 'The member has been successfully withdrawn.' });
         } catch (error) {
             next(error);
         }

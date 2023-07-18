@@ -25,11 +25,11 @@ const UserModel = {
         });
         return user;
     },
-    update: async function ({ updatedUser }) {
+    updateUser: async function ({ userId, updatedUser }) {
         const updateUser = await db.User.update({ updatedUser });
         return updateUser;
     },
-    delete: async function (userId) {
+    deleteUser: async function (userId) {
         const deleteUser = await db.User.destroy({
             where: {
                 userId: userId,

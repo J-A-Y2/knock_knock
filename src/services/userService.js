@@ -117,7 +117,7 @@ const userService = {
             throw error;
         }
     },
-    updateUser: async function (userId) {
+    updateUser: async function ({ userId, updatedData }) {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
