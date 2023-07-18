@@ -92,10 +92,10 @@ const userController = {
         try {
             const { userId } = req.params;
 
-            await userService.deleteUser(userId);
+            const deletedUser = await userService.deleteUser(userId);
 
             statusCode.setResponseCode200(res);
-            return res.send({ message: 'The member has been successfully withdrawn.' });
+            return res.send(deletedUser.message);
         } catch (error) {
             next(error);
         }
