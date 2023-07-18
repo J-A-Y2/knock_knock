@@ -4,9 +4,10 @@ import { loginRequired } from '../middlewares/loginRequired.js';
 import { createPostValidate, createPostValidationRules } from '../middlewares/createPostValidate.js';
 
 const postRouter = Router();
+postRouter.use(loginRequired);
 
 // 게시글 작성
-postRouter.post('/', createPostValidationRules, createPostValidate, loginRequired, postController.createPost);
+postRouter.post('/', createPostValidationRules, createPostValidate, postController.createPost);
 
 // 전체 게시글 시간순 조회
 postRouter.get('/');

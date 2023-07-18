@@ -32,6 +32,14 @@ const postService = {
             }
         }
     },
+    getAllPosts: async function () {
+        try {
+            const posts = await PostModel.getAllPosts();
+            return { message: '게시글 전체 조회를 성공했습니다.', posts };
+        } catch (error) {
+            if (error) instanceof 
+        }
+    },
 };
 
 export { postService };
