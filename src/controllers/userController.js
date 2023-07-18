@@ -90,7 +90,7 @@ const userController = {
     },
     delete: async function (req, res, next) {
         try {
-            const { userId } = req.params;
+            const userId = req.params;
 
             const deletedUser = await userService.deleteUser(userId);
 
