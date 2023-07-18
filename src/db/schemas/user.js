@@ -80,7 +80,7 @@ const User = (sequelize, DataTypes) => {
             underscored: false,
             modelName: 'User',
             tableName: 'users',
-            paranoid: ture,
+            paranoid: true,
         },
     );
     User.associate = db => {
