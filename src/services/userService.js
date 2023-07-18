@@ -52,6 +52,11 @@ const userService = {
             if (user.isDeleted === true) {
                 throw new BadRequestError('이미 탈퇴한 회원입니다.');
             }
+
+            console.log('email', email);
+            console.log('password', password);
+            console.log('user.userPassword', user.userPassword);
+
             const correctPasswordHash = user.userPassword;
             const isPasswordCorrect = await bcrypt.compare(password, correctPasswordHash);
 

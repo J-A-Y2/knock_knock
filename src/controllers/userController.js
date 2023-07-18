@@ -49,8 +49,8 @@ const userController = {
 
     login: async function (req, res, next) {
         try {
-            const { email, userPassword } = req.body;
-            const loginUser = await userService.getUser({ email, userPassword });
+            const { email, password } = req.body;
+            const loginUser = await userService.getUser({ email, password });
 
             statusCode.setResponseCode200(res);
 
