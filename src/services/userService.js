@@ -2,32 +2,26 @@ import dotenv from 'dotenv';
 import bcrypt, { hash } from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { ConflictError, BadRequestError, NotFoundError, UnauthorizedError } from '../middlewares/errorMiddleware.js';
-import { UserModel } from '../db/models/userModel.js';
+import { UserModel } from '../db/models/UserModel.js';
 import { db } from '../db/index.js';
 
 const userService = {
-    createUser: async function ({ username, email, userPassword, nickname, gender, birthday, job }) {
+    createUser: async function ({ newUser }) {
+        let transaction;
         try {
-            let transaction = await db.sequelize.transaction();
+            transaction = await db.sequelize.transaction();
 
             //이메일 중복 확인
-            const user = await UserModel.findByEmail(email);
+            const user = await UserModel.findByEmail(newUser.email);
 
             if (user) {
-                throw new Error('이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요.');
+                throw new ConflictError('이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요.');
             }
 
             // 비밀번호 암호화
-            const hashedPassword = await bcrypt.hash(userPassword, parseInt(process.env.PW_HASH_COUNT));
-            await UserModel.create({
-                username,
-                email,
-                userPassword: hashedPassword,
-                nickname,
-                gender,
-                birthday,
-                job,
-            });
+            const hashedPassword = await bcrypt.hash(newUser.userPassword, parseInt(process.env.PW_HASH_COUNT));
+            newUser.userPassword = hashedPassword;
+            await UserModel.create({ newUser });
             await transaction.commit();
 
             return {
@@ -46,8 +40,9 @@ const userService = {
         }
     },
     getUser: async function ({ email, password }) {
+        let transaction;
         try {
-            let transaction = await db.sequelize.transaction();
+            transaction = await db.sequelize.transaction();
             const user = await UserModel.findByEmail(email);
 
             if (!user) {
