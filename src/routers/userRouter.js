@@ -22,9 +22,9 @@ userRouter.get('/users');
 userRouter.get('/:userId');
 
 // 유저 정보 수정하기(별명, 설명)
-userRouter.put('/:userId');
+userRouter.put('/:userId', loginRequired);
 
 // 유저 정보 삭제하기
-userRouter.delete('/:userId');
+userRouter.delete('/:userId', loginRequired);
 
 export { userRouter };

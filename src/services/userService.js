@@ -101,7 +101,7 @@ const userService = {
             const user = UserModel.findById(userId);
 
             if (!user) {
-                throw new ConflictError('요청한 사용자의 정보를 찾을 수 없습니다.');
+                throw new ConflictError('사용자의 정보를 찾을 수 없습니다.');
             }
             await transaction.commit();
             return {
@@ -110,6 +110,42 @@ const userService = {
                 email: user.email,
                 nickname: user.nickname,
             };
+        } catch (error) {
+            if (transaction) {
+                await transaction.rollback();
+            }
+            throw error;
+        }
+    },
+    updateUser: async function (userId) {
+        let transaction;
+        try {
+            transaction = await db.sequelize.transaction();
+            const user = await UserModel.findById(userId);
+
+            if (!user) {
+                throw new ConflictError('사용자의 정보를 찾을 수 없습니다.');
+            }
+        } catch (error) {}
+    },
+    deleteUser: async function (userId) {
+        let transaction;
+        try {
+            transaction = await db.sequelize.transaction();
+            const user = await UserModel.findById(userId);
+
+            if (!user) {
+                throw new ConflictError('사용자의 정보를 찾을 수 없습니다.');
+            }
+
+            // softdelete 삭제하는 기능
+            await user.update({
+                isDeleted: 1,
+                deledtedAt: new Date(),
+            });
+
+            await transaction.commit();
+            return { message: '회원 성공적으로 탈퇴하였습니다.' };
         } catch (error) {
             if (transaction) {
                 await transaction.rollback();
