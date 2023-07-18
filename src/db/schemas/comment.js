@@ -15,7 +15,7 @@ const Comment = (sequelize, DataTypes) => {
         {
             sequelize,
             timestamps: true,
-            underscored: true,
+            underscored: false,
             modelName: 'Comment',
             tableName: 'comments',
             paranoid: false,
