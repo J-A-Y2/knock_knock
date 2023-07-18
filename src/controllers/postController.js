@@ -19,10 +19,13 @@ const postController = {
     },
     getAllPosts: async function (req, res, next) {
         try {
-            const posts = await postService.getAllPosts();
+            const page = parseInt(req.query.page || 1);
+            const perPage = parseInt(req.query.perPage || 1);
+
+            const posts = await postService.getAllPosts({ page, perPage });
 
             statusCode.setResponseCode200(res);
-            res.send({ message: posts.message, postList: posts.posts });
+            res.send({ message: posts.message, allPostCount: posts.total, currentPage: page, postList: posts.posts });
         } catch (error) {
             next(error);
         }
