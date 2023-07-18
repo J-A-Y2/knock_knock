@@ -24,7 +24,7 @@ const Post = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             people: {
-                type: DataTypes.STRING(1),
+                type: DataTypes.INTEGER,
                 allowNull: false,
             },
             place: {
@@ -40,7 +40,7 @@ const Post = (sequelize, DataTypes) => {
                 allowNull: true,
             },
             isCompleted: {
-                type: DataTypes.STRING(4),
+                type: DataTypes.BOOLEAN,
                 allowNull: true,
             },
         },

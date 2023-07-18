@@ -89,11 +89,28 @@ const userService = {
             }
         }
     },
-    loginCheck: async function ({ usreId }) {
+    loginCheck: async function (userId) {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
-        } catch (error) {}
+            const user = UserModel.findById(userId);
+
+            if (!user) {
+                throw new ConflictError('요청한 사용자의 정보를 찾을 수 없습니다.');
+            }
+            await transaction.commit();
+            return {
+                message: '정상적인 유저입니다.',
+                userId: user.userId,
+                email: user.email,
+                nickname: user.nickname,
+            };
+        } catch (error) {
+            if (transaction) {
+                await transaction.rollback();
+            }
+            throw error;
+        }
     },
 };
 

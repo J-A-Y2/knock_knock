@@ -16,6 +16,15 @@ const UserModel = {
 
         return user;
     },
+    findById: async function (userId) {
+        const user = await db.User.findOne({
+            where: {
+                userId: userId,
+                isDeleted: 0,
+            },
+        });
+        return user;
+    },
     update: async function ({ nickname, profileImage, mbti, religion, height, hobby, personality, ideal, introduce }) {
         const updateUser = await db.User.update({
             nickname: nickname,
