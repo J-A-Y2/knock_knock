@@ -4,10 +4,40 @@ import { statusCode } from '../utils/statusCode.js';
 const userController = {
     register: async function (req, res, next) {
         try {
-            const { username, email, userPassword, nickname, gender, birthday, job } = req.body;
+            const {
+                username,
+                email,
+                userPassword,
+                nickname,
+                gender,
+                birthday,
+                job,
+                mbti,
+                religion,
+                height,
+                hobby,
+                personality,
+                ideal,
+                introduce,
+            } = req.body;
 
             const createUser = await userService.createUser({
-                newUser: { username, email, userPassword, nickname, gender, birthday, job },
+                newUser: {
+                    username,
+                    email,
+                    userPassword,
+                    nickname,
+                    gender,
+                    birthday,
+                    job,
+                    mbti,
+                    religion,
+                    height,
+                    hobby,
+                    personality,
+                    ideal,
+                    introduce,
+                },
             });
 
             statusCode.setResponseCode201(res);
