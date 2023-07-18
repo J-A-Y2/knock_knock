@@ -21,14 +21,14 @@ const Post = (sequelize, DataTypes) => {
             },
             postImage: {
                 type: DataTypes.BLOB,
-                allowNull: false,
+                allowNull: true,
             },
             people: {
-                type: DataTypes.STRING(1),
+                type: DataTypes.INTEGER,
                 allowNull: false,
             },
             place: {
-                type: DataTypes.STRING(8),
+                type: DataTypes.STRING(30),
                 allowNull: false,
             },
             meetingTime: {
@@ -40,14 +40,15 @@ const Post = (sequelize, DataTypes) => {
                 allowNull: true,
             },
             isCompleted: {
-                type: DataTypes.STRING(4),
-                allowNull: true,
+                type: DataTypes.BOOLEAN,
+                allowNull: false,
+                defaultValue: false,
             },
         },
         {
             sequelize,
             timestamps: true,
-            underscored: true,
+            underscored: false,
             modelName: 'Post',
             tableName: 'posts',
             paranoid: false,
