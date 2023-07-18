@@ -75,6 +75,30 @@ const userController = {
             next(error);
         }
     },
+    update: async function (req, res, next) {
+        try {
+            const userId = req.currentUserId;
+
+            const { nickname, profileImage, mbti, religion, height, hobby, personality, ideal, introduce } = req.body;
+            const updatedUser = await userService.updateUser({
+                updatedUser: {
+                    nickname,
+                    profileImage,
+                    mbti,
+                    religion,
+                    height,
+                    hobby,
+                    personality,
+                    ideal,
+                    introduce,
+                },
+            });
+            statusCode.setResponseCode200(res);
+            return res.send(createUser.message);
+        } catch (error) {
+            next(error);
+        }
+    },
 };
 
 export { userController };

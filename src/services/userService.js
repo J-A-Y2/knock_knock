@@ -126,6 +126,21 @@ const userService = {
             if (!user) {
                 throw new ConflictError('사용자의 정보를 찾을 수 없습니다.');
             }
+
+            const updatedUser = await user.update({
+                nickname: nickname,
+                profileImage: profileImage,
+                mbti: mbti,
+                religion: religion,
+                height: height,
+                hobby: hobby,
+                personality: personality,
+                ideal: ideal,
+                introduce: introduce,
+            });
+
+            await transaction.commit();
+            return updatedUser;
         } catch (error) {}
     },
     deleteUser: async function (userId) {
