@@ -167,20 +167,47 @@ paths:
             tags:
                 - user
             description: 유저 정보 조회하기.
-            parameters:
-                in: quey
-                description: 유저 아이디
-                required: true
-                style: from
-                explode: true
-                schema:
-                    array
-                    items:
-                        type: string
+
             responses:
                 '200':
                     description: 유저 조회 성공!
-
+                    content:
+                        application/json:
+                            schema:
+                            type: object
+                            properties:
+                                userId:
+                                    type: string
+                                email:
+                                    type: string
+                                username:
+                                    type: string
+                                nickname:
+                                    type: string
+                                gender:
+                                    type: string
+                                birthday:
+                                    type: string
+                                job:
+                                    type: string
+                                region:
+                                    type: string
+                                profileImage:
+                                    type: string
+                                mbti:
+                                    type: string
+                                religion:
+                                    type: string
+                                height:
+                                    type: string
+                                hobby:
+                                    type: string
+                                personality:
+                                    type: string
+                                ideal:
+                                    type: string
+                                introduce:
+                                    type: string
 
                 '400':
                     description: Invalid tag value
@@ -210,7 +237,7 @@ paths:
             tags:
                 - user
             description: 유저 정보 수정하기
-            
+
             parameters:
                 deprecated: true
 
