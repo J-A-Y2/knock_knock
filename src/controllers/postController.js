@@ -50,7 +50,7 @@ const postController = {
             const post = await postService.setPost({ userId, postId, toUpdate });
 
             statusCode.setResponseCode200(res);
-            res.send({ message: post.message });
+            res.send(post.message);
         } catch (error) {
             next(error);
         }
