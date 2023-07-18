@@ -78,7 +78,17 @@ const userController = {
             next(error);
         }
     },
-    getUserInfo: async (req, res, next) => {},
+    getUserInfo: async (req, res, next) => {
+        try {
+            const userId = req.params;
+            const user = await userService.getUserById(userId);
+
+            statusCode.setResponseCode200(res);
+            return res.send({ message: user.message });
+        } catch (error) {
+            next(error);
+        }
+    },
     update: async (req, res, next) => {
         try {
             const { userId } = req.params;

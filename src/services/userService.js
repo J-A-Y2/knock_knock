@@ -7,7 +7,7 @@ import { db } from '../db/index.js';
 
 const userService = {
     // 유저 생성
-    createUser: async function ({ newUser }) {
+    createUser: async ({ newUser }) => {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
@@ -40,8 +40,8 @@ const userService = {
             }
         }
     },
-    //유저 조회
-    getUser: async function ({ email, password }) {
+    //유저 로그인
+    getUser: async ({ email, password }) => {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
@@ -93,7 +93,7 @@ const userService = {
         }
     },
     // 유저 로그인 확인
-    loginCheck: async function (userId) {
+    loginCheck: async userId => {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
@@ -109,6 +109,24 @@ const userService = {
                 email: user.email,
                 nickname: user.nickname,
             };
+        } catch (error) {
+            if (transaction) {
+                await transaction.rollback();
+            }
+            throw error;
+        }
+    },
+    getUserById: async ({ userId }) => {
+        let transaction;
+        try {
+            transaction = await db.sequelize.transaction();
+            const user = await UserModel.findById(userId);
+
+            if (!user) {
+                throw new ConflictError('사용자의 정보를 찾을 수 없습니다.');
+            }
+
+            await UserModel.find;
         } catch (error) {
             if (transaction) {
                 await transaction.rollback();
@@ -140,7 +158,7 @@ const userService = {
         }
     },
     // 유저 정보 삭제
-    deleteUser: async function ({ userId }) {
+    deleteUser: async ({ userId }) => {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
