@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import { userController } from '../controllers/userController.js';
 import { loginValidate, loginValidationRules } from '../middlewares/loginValidate.js';
-
 import { RegisterValidationRules, registerValidate } from '../middlewares/registerValidate.js';
 
 const userRouter = Router();
