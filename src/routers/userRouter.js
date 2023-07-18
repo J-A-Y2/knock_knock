@@ -16,7 +16,7 @@ userRouter.post('/login', loginValidationRules, loginValidate, userController.lo
 userRouter.get('/isLogin', loginRequired, userController.isLogin);
 
 // 네트워크페이지 - 유저 정보 불러오기
-userRouter.get('/users');
+userRouter.get('/users', loginRequired, userController.getUserInfo);
 
 // 유저 정보 불러오기
 userRouter.get('/:userId');

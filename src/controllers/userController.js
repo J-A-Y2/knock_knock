@@ -2,7 +2,7 @@ import { userService } from '../services/userService.js';
 import { statusCode } from '../utils/statusCode.js';
 
 const userController = {
-    register: async function (req, res, next) {
+    register: async (req, res, next) => {
         try {
             const {
                 username,
@@ -13,6 +13,7 @@ const userController = {
                 birthday,
                 job,
                 region,
+                profileImage,
                 mbti,
                 religion,
                 height,
@@ -32,6 +33,7 @@ const userController = {
                     birthday,
                     job,
                     region,
+                    profileImage,
                     mbti,
                     religion,
                     height,
@@ -48,7 +50,7 @@ const userController = {
         }
     },
 
-    login: async function (req, res, next) {
+    login: async (req, res, next) => {
         try {
             const { email, password } = req.body;
             const loginUser = await userService.getUser({ email, password });
@@ -60,7 +62,7 @@ const userController = {
             next(error);
         }
     },
-    isLogin: async function (req, res, next) {
+    isLogin: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
             const checkUser = await userService.loginCheck({ userId });
@@ -76,7 +78,8 @@ const userController = {
             next(error);
         }
     },
-    update: async function (req, res, next) {
+    getUserInfo: async (req, res, next) => {},
+    update: async (req, res, next) => {
         try {
             const { userId } = req.params;
             const updateData = req.body;
@@ -89,7 +92,7 @@ const userController = {
             next(error);
         }
     },
-    delete: async function (req, res, next) {
+    delete: async (req, res, next) => {
         try {
             const { userId } = req.params;
 
