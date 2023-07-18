@@ -15,6 +15,16 @@ const UserModel = {
 
         return user;
     },
+    findById: async function (userId) {
+        const user = await db.User.findOne({
+            where: {
+                userId: userId,
+                isDeleted: 0,
+            },
+        });
+
+        return user;
+    },
 };
 
 export { UserModel };
