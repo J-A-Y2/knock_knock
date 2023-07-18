@@ -4,7 +4,7 @@ import { UserModel } from '../db/models/UserModel.js';
 import { UnauthorizedError, NotFoundError, InternalServerError } from '../middlewares/errorMiddleware.js';
 
 const commentService = {
-    createComment: async function ({ newComment, userId }) {
+    createComment: async function ({ userId, postId, commentId, content }) {
         try {
             transaction = await db.sequelize.transaction();
 
@@ -14,7 +14,7 @@ const commentService = {
                 throw new UnauthorizedError('잘못된 또는 만료된 토큰입니다.');
             }
 
-            await CommentModel.create({ newComment });
+            await CommentModel.create({ postId, commentId, content });
 
             await transaction.commit();
 
