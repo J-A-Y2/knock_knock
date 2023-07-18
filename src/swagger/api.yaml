@@ -9,7 +9,7 @@ tags:
       description: 메세지 라우터 모음
 
 paths:
-    /register:
+    /users/register:
         post:
             tags:
                 - user
@@ -24,11 +24,19 @@ paths:
                         schema:
                             type: object
                             properties:
+                                username:
+                                    type: string
                                 email:
                                     type: string
                                 nickname:
                                     type: string
-                                password:
+                                userPassword:
+                                    type: string
+                                gender:
+                                    type: string
+                                birthday:
+                                    type: string
+                                job:
                                     type: string
                 required: true
 
@@ -40,11 +48,19 @@ paths:
                             schema:
                             type: object
                             properties:
+                                username:
+                                    type: string
                                 email:
                                     type: string
                                 nickname:
                                     type: string
-                                password:
+                                userPassword:
+                                    type: string
+                                gender:
+                                    type: string
+                                birthday:
+                                    type: string
+                                job:
                                     type: string
 
                 '400':
@@ -54,7 +70,7 @@ paths:
                 '405':
                     description: Validation exception
 
-    /login:
+    /users/login:
         post:
             tags:
                 - user
