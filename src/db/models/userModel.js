@@ -26,7 +26,6 @@ const UserModel = {
         return user;
     },
     update: async function ({ userId, updateData }) {
-        console.log('모델에 있는 updateUser얌!!', updateData);
         const updatedUser = await db.User.update(updateData, {
             where: {
                 userId: userId,
@@ -35,13 +34,19 @@ const UserModel = {
         });
         return updatedUser;
     },
-    delete: async function (userId) {
-        const deleteUser = await db.User.destroy({
-            where: {
-                userId: userId,
-                isDeleted: 0,
+    delete: async function ({ userId }) {
+        const deleteUser = await db.User.update(
+            {
+                isDeleted: 1,
+                deletedAt: new Date(),
             },
-        });
+            {
+                where: {
+                    userId: userId,
+                    isDeleted: 0,
+                },
+            },
+        );
         return deleteUser;
     },
 };

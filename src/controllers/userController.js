@@ -77,9 +77,8 @@ const userController = {
     update: async function (req, res, next) {
         try {
             const { userId } = req.params;
-
             const updateData = req.body;
-            console.log('userController에 updateData가 들어왔다!!: ', updateData);
+
             const updatedUser = await userService.updateUser({ userId, updateData });
 
             statusCode.setResponseCode200(res);
@@ -90,9 +89,9 @@ const userController = {
     },
     delete: async function (req, res, next) {
         try {
-            const userId = req.params;
-
-            const deletedUser = await userService.deleteUser(userId);
+            const { userId } = req.params;
+            console.log('유저컨트롤러에 있는 userId:', userId);
+            const deletedUser = await userService.deleteUser({ userId });
 
             statusCode.setResponseCode200(res);
             return res.send(deletedUser.message);

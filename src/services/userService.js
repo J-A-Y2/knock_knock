@@ -126,7 +126,7 @@ const userService = {
             if (!user) {
                 throw new ConflictError('사용자의 정보를 찾을 수 없습니다.');
             }
-            console.log('userService에 updateData 들어왔당!!!: ', updateData);
+
             await UserModel.update({ userId, updateData });
 
             await transaction.commit();
@@ -140,21 +140,19 @@ const userService = {
         }
     },
     // 유저 정보 삭제
-    deleteUser: async function (userId) {
+    deleteUser: async function ({ userId }) {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
+            console.log('유저서비스에 있는 userId:', userId);
             const user = await UserModel.findById(userId);
-
+            console.log('유저 서비스에 있는 user:', user);
             if (!user) {
                 throw new ConflictError('사용자의 정보를 찾을 수 없습니다.');
             }
 
             // softdelete 삭제하는 기능
-            await user.update({
-                isDeleted: 1,
-                deledtedAt: new Date(),
-            });
+            await UserModel.delete({ userId });
 
             await transaction.commit();
             return { message: '회원 성공적으로 탈퇴하였습니다.' };
