@@ -12,7 +12,17 @@ const postController = {
                 post: { postTitle, postContent, postType, people, place, meetingTime },
             });
             statusCode.setResponseCode201(res);
-            res.send({ message: createPost.message });
+            res.send(createPost.message);
+        } catch (error) {
+            next(error);
+        }
+    },
+    getAllPosts: async function (req, res, next) {
+        try {
+            posts = await postService.getAllPosts();
+
+            statusCode.setResponseCode200(res);
+            res.send({ message: posts.message, postList: posts.posts });
         } catch (error) {
             next(error);
         }
