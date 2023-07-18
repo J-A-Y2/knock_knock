@@ -1,6 +1,6 @@
 import { db } from '../db/index.js';
 import { CommentModel } from '../db/models/CommentModel.js';
-import { userModel } from '../db/models/userModel.js';
+import { userModel } from '../db/models/UserModel.js';
 import { UnauthorizedError, NotFoundError, InternalServerError } from '../middlewares/errorMiddleware.js';
 
 const commentService = {

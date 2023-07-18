@@ -25,7 +25,7 @@ const UserModel = {
         });
         return user;
     },
-    updateUser: async function ({ userId, updatedUser }) {
+    updateUser: async function ({ updatedUser }) {
         const updateUser = await db.User.update({ updatedUser });
         return updateUser;
     },
