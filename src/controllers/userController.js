@@ -81,10 +81,10 @@ const userController = {
     getUserInfo: async (req, res, next) => {
         try {
             const userId = req.params;
-            const user = await userService.getUserById(userId);
+            await userService.getUserById({ userId });
 
             statusCode.setResponseCode200(res);
-            return res.send({ message: user.message });
+            return res.send({ message: '회원 정보 조회 성공!' });
         } catch (error) {
             next(error);
         }

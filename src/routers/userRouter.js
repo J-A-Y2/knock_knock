@@ -19,7 +19,7 @@ userRouter.get('/isLogin', loginRequired, userController.isLogin);
 userRouter.get('/users', loginRequired, userController.getUserInfo);
 
 // 유저 정보 불러오기
-userRouter.get('/:userId');
+userRouter.get('/:userId', loginRequired, userController.getUserInfo);
 
 // 유저 정보 수정하기(별명, 설명)
 userRouter.put('/:userId', loginRequired, userController.update);

@@ -93,14 +93,14 @@ const userService = {
         }
     },
     // 유저 로그인 확인
-    loginCheck: async userId => {
+    loginCheck: async ({ userId }) => {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
             const user = UserModel.findById(userId);
 
             if (!user) {
-                throw new ConflictError('회원의 정보를 찾을 수 없습니다.');
+                throw new NotFoundError('회원의 정보를 찾을 수 없습니다.');
             }
             await transaction.commit();
             return {
@@ -116,6 +116,7 @@ const userService = {
             throw error;
         }
     },
+    // 유저 정보 조회
     getUserById: async ({ userId }) => {
         let transaction;
         try {
@@ -123,10 +124,11 @@ const userService = {
             const user = await UserModel.findById(userId);
 
             if (!user) {
-                throw new ConflictError('사용자의 정보를 찾을 수 없습니다.');
+                throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
-            await UserModel.find;
+            await transaction.commit();
+            return user;
         } catch (error) {
             if (transaction) {
                 await transaction.rollback();
@@ -142,7 +144,7 @@ const userService = {
             const user = await UserModel.findById(userId);
 
             if (!user) {
-                throw new ConflictError('사용자의 정보를 찾을 수 없습니다.');
+                throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
             await UserModel.update({ userId, updateData });
@@ -166,7 +168,7 @@ const userService = {
             const user = await UserModel.findById(userId);
 
             if (!user) {
-                throw new ConflictError('사용자의 정보를 찾을 수 없습니다.');
+                throw new NotFoundError('사용자의 정보를 찾을 수 없습니다.');
             }
 
             // softdelete 삭제하는 기능
