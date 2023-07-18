@@ -36,14 +36,28 @@ const postService = {
         try {
             const offset = (page - 1) * perPage;
             const limit = perPage;
-
             const { total, posts } = await PostModel.getAllPosts({ offset, limit });
-            console.log(total);
 
             return { message: '게시글 전체 조회를 성공했습니다.', total, posts };
         } catch (error) {
             if (error) {
                 throw new InternalServerError('게시물 전체 조회를 실패했습니다.');
+            }
+        }
+    },
+    getPost: async function (postId) {
+        try {
+            const post = await PostModel.getPostById(postId);
+
+            if (!post) {
+                throw new NotFoundError('해당 id의 게시글을 찾을 수 없습니다.');
+            }
+            return { message: '게시글 조회를 성공했습니다.', post };
+        } catch (error) {
+            if (error instanceof NotFoundError) {
+                throw error;
+            } else {
+                throw new InternalServerError('게시물 조회를 실패했습니다.');
             }
         }
     },

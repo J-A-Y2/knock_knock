@@ -9,6 +9,14 @@ const PostModel = {
         const { count, rows: posts } = await db.Post.findAndCountAll({ offset, limit });
         return { total: count, posts };
     },
+    getPostById: async function (postId) {
+        const post = await db.Post.findOne({
+            where: {
+                postId: postId,
+            },
+        });
+        return post;
+    },
 };
 
 export { PostModel };

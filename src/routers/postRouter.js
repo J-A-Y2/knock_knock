@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { postController } from '../controllers/postController.js';
 import { loginRequired } from '../middlewares/loginRequired.js';
+import { postParamsValidate } from '../middlewares/postParamsValidate.js';
+import { getPostValidate } from '../middlewares/getPostValidate.js';
 import { createPostValidate, createPostValidationRules } from '../middlewares/createPostValidate.js';
 
 const postRouter = Router();
@@ -10,10 +12,10 @@ postRouter.use(loginRequired);
 postRouter.post('/', createPostValidationRules, createPostValidate, postController.createPost);
 
 // 전체 게시글 시간순 조회
-postRouter.get('/', postController.getAllPosts);
+postRouter.get('/', getPostValidate, postController.getAllPosts);
 
 // 게시글 개별 조회
-postRouter.get('/:postId');
+postRouter.get('/:postId', postParamsValidate, postController.getPost);
 
 // 게시글 수정
 postRouter.put('/:postId');
