@@ -38,6 +38,8 @@ paths:
                                     type: string
                                 job:
                                     type: string
+                                region:
+                                    type: string
                                 mbti:
                                     type: string
                                 religion:
@@ -187,10 +189,25 @@ paths:
                         schema:
                             type: object
                             properties:
-                                user_name:
+                                nickname:
                                     type: string
-                                password:
+                                profileImage:
                                     type: string
+                                mbti:
+                                    type: string
+                                religion:
+                                    type: string
+                                height:
+                                    type: string
+                                hobby:
+                                    type: string
+                                personality:
+                                    type: string
+                                ideal:
+                                    type: string
+                                indtroduce:
+                                    type: string
+
                 required: true
 
             responses:

@@ -36,8 +36,12 @@ const User = (sequelize, DataTypes) => {
                 type: DataTypes.STRING(20),
                 allowNull: false,
             },
+            region: {
+                type: DataTypes.STRING(20),
+                allowNull: false,
+            },
             profileImage: {
-                type: DataTypes.BLOB,
+                type: DataTypes.STRING(2000),
                 allowNull: true,
             },
             mbti: {

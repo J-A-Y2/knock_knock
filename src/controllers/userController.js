@@ -12,6 +12,7 @@ const userController = {
                 gender,
                 birthday,
                 job,
+                region,
                 mbti,
                 religion,
                 height,
@@ -30,6 +31,7 @@ const userController = {
                     gender,
                     birthday,
                     job,
+                    region,
                     mbti,
                     religion,
                     height,
@@ -90,7 +92,7 @@ const userController = {
     delete: async function (req, res, next) {
         try {
             const { userId } = req.params;
-            console.log('유저컨트롤러에 있는 userId:', userId);
+
             const deletedUser = await userService.deleteUser({ userId });
 
             statusCode.setResponseCode200(res);

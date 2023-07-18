@@ -144,9 +144,9 @@ const userService = {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
-            console.log('유저서비스에 있는 userId:', userId);
+
             const user = await UserModel.findById(userId);
-            console.log('유저 서비스에 있는 user:', user);
+
             if (!user) {
                 throw new ConflictError('사용자의 정보를 찾을 수 없습니다.');
             }
@@ -155,7 +155,7 @@ const userService = {
             await UserModel.delete({ userId });
 
             await transaction.commit();
-            return { message: '회원 성공적으로 탈퇴하였습니다.' };
+            return { message: '회원이 성공적으로 탈퇴하였습니다.' };
         } catch (error) {
             if (transaction) {
                 await transaction.rollback();
