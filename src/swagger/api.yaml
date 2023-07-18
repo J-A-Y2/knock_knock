@@ -163,6 +163,28 @@ paths:
                     description: Invalid status value
 
     /users/:userId:
+        get:
+            tags:
+                - user
+            description: 유저 정보 조회하기.
+            parameters:
+                in: quey
+                description: 유저 아이디
+                required: true
+                style: from
+                explode: true
+                schema:
+                    array
+                    items:
+                        type: string
+            responses:
+                '200':
+                    description: 유저 조회 성공!
+
+
+                '400':
+                    description: Invalid tag value
+
         delete:
             tags:
                 - user
@@ -188,6 +210,9 @@ paths:
             tags:
                 - user
             description: 유저 정보 수정하기
+            
+            parameters:
+                deprecated: true
 
             requestbody:
                 content:
@@ -256,6 +281,8 @@ paths:
 
                 '404':
                     description: Pet not found
+                '405':
+                    description: Validation exception
 
     /users/isLogin:
         get:
