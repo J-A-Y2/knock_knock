@@ -1,7 +1,7 @@
 import { PostModel } from '../db/models/postModel.js';
 import { UserModel } from '../db/models/UserModel.js';
 import { db } from '../db/index.js';
-import { InternalServerError, UnauthorizedError } from '../middlewares/errorMiddleware.js';
+import { InternalServerError, NotFoundError, UnauthorizedError } from '../middlewares/errorMiddleware.js';
 
 const postService = {
     createPost: async function ({ userId, post }) {
@@ -35,9 +35,12 @@ const postService = {
     getAllPosts: async function () {
         try {
             const posts = await PostModel.getAllPosts();
+            console.log(posts);
             return { message: '게시글 전체 조회를 성공했습니다.', posts };
         } catch (error) {
-            if (error) instanceof 
+            if (error) {
+                throw new InternalServerError('게시물 전체 조회를 실패했습니다.');
+            }
         }
     },
 };

@@ -10,7 +10,7 @@ postRouter.use(loginRequired);
 postRouter.post('/', createPostValidationRules, createPostValidate, postController.createPost);
 
 // 전체 게시글 시간순 조회
-postRouter.get('/');
+postRouter.get('/', postController.getAllPosts);
 
 // 게시글 개별 조회
 postRouter.get('/:postId');

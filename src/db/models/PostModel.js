@@ -2,12 +2,13 @@ import { db } from '../index.js';
 
 const PostModel = {
     create: async function ({ newPost }) {
-        try {
-            const createNewPost = await db.Post.create(newPost);
-            return createNewPost;
-        } catch (error) {
-            console.log('modelErr', error);
-        }
+        const createNewPost = await db.Post.create(newPost);
+        return createNewPost;
+    },
+    getAllPosts: async function () {
+        const posts = await db.Post.findAll();
+        console.log('model', posts);
+        return posts;
     },
 };
 
