@@ -97,7 +97,7 @@ const userService = {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
-            const user = UserModel.findById(userId);
+            const user = await UserModel.findById(userId);
 
             if (!user) {
                 throw new NotFoundError('회원의 정보를 찾을 수 없습니다.');
@@ -126,9 +126,27 @@ const userService = {
             if (!user) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
-
+            console.log('유저서비스 user', user);
             await transaction.commit();
-            return user;
+            return {
+                message: '회원정보 조회 성공!',
+                userId: user.userId,
+                email: user.email,
+                username: user.username,
+                nickname: user.nickname,
+                gender: user.gender,
+                birthday: user.birthday,
+                job: user.job,
+                region: user.region,
+                profileImage: user.profileImage,
+                mbti: user.mbti,
+                religion: user.religion,
+                height: user.height,
+                hobby: user.hooby,
+                personality: user.perosnality,
+                ideal: user.ideal,
+                introduce: user.introduce,
+            };
         } catch (error) {
             if (transaction) {
                 await transaction.rollback();

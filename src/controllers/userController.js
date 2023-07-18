@@ -80,11 +80,31 @@ const userController = {
     },
     getUserInfo: async (req, res, next) => {
         try {
-            const userId = req.params;
-            await userService.getUserById({ userId });
+            const { userId } = req.params;
+            const getUser = await userService.getUserById({ userId });
 
             statusCode.setResponseCode200(res);
-            return res.send({ message: '회원 정보 조회 성공!' });
+            return res.send({
+                message: getUser.message,
+                user: {
+                    userId: getUser.userId,
+                    email: getUser.email,
+                    username: getUser.username,
+                    nickname: getUser.nickname,
+                    gender: getUser.gender,
+                    birthday: getUser.birthday,
+                    job: getUser.job,
+                    region: getUser.region,
+                    profileImage: getUser.profileImage,
+                    mbti: getUser.mbti,
+                    religion: getUser.religion,
+                    height: getUser.height,
+                    hobby: getUser.hobby,
+                    personality: getUser.personality,
+                    ideal: getUser.ideal,
+                    introduce: getUser.introduce,
+                },
+            });
         } catch (error) {
             next(error);
         }
