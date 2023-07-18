@@ -22,6 +22,7 @@ const userController = {
             next(error);
         }
     },
+
     login: async function (req, res, next) {
         try {
             const { email, userPassword } = req.body;

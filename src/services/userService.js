@@ -94,6 +94,7 @@ const userService = {
             }
         }
     },
+    updateUser: async function () {},
 };
 
 export { userService };

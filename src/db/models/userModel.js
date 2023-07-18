@@ -39,7 +39,7 @@ const UserModel = {
         return updateUser;
     },
     delete: async function (userId) {
-        const deleteUser = await db.User.destory({
+        const deleteUser = await db.User.destroy({
             where: {
                 userId: userId,
                 isDeleted: 0,
