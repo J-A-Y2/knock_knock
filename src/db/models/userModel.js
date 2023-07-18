@@ -5,6 +5,7 @@ const UserModel = {
         const createNewUser = await db.User.create(newUser);
         return createNewUser;
     },
+
     findByEmail: async function (email) {
         const user = await db.User.findOne({
             where: {
@@ -22,8 +23,20 @@ const UserModel = {
                 isDeleted: 0,
             },
         });
-
         return user;
+    },
+    updateUser: async function ({ userId, updatedUser }) {
+        const updateUser = await db.User.update({ updatedUser });
+        return updateUser;
+    },
+    deleteUser: async function (userId) {
+        const deleteUser = await db.User.destroy({
+            where: {
+                userId: userId,
+                isDeleted: 0,
+            },
+        });
+        return deleteUser;
     },
 };
 

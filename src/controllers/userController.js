@@ -46,6 +46,7 @@ const userController = {
             next(error);
         }
     },
+
     login: async function (req, res, next) {
         try {
             const { email, password } = req.body;
@@ -54,6 +55,47 @@ const userController = {
             statusCode.setResponseCode200(res);
 
             return res.send({ message: loginUser.message, token: loginUser.token, userId: loginUser.userId });
+        } catch (error) {
+            next(error);
+        }
+    },
+    isLogin: async function (req, res, next) {
+        try {
+            const userId = req.currentUserId;
+            const checkUser = await userService.loginCheck({ userId });
+
+            statusCode.setResponseCode200(res);
+            return res.send({
+                message: checkUser.message,
+                userId: checkUser.userId,
+                email: checkUser.email,
+                nickname: checkUser.nickname,
+            });
+        } catch (error) {
+            next(error);
+        }
+    },
+    update: async function (req, res, next) {
+        try {
+            const { userId } = req.params;
+
+            const updatedData = req.body;
+            const updatedUser = await userService.updateUser({ userId, updatedData });
+
+            statusCode.setResponseCode200(res);
+            return res.send(updatedUser.message);
+        } catch (error) {
+            next(error);
+        }
+    },
+    delete: async function (req, res, next) {
+        try {
+            const userId = req.params;
+
+            const deletedUser = await userService.deleteUser(userId);
+
+            statusCode.setResponseCode200(res);
+            return res.send(deletedUser.message);
         } catch (error) {
             next(error);
         }
