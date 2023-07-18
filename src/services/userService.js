@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import bcrypt, { hash } from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { ConflictError, BadRequestError, NotFoundError, UnauthorizedError } from '../middlewares/errorMiddleware.js';
-import { UserModel } from '../db/models/userModel.js';
+import { UserModel } from '../db/models/UserModel.js';
 import { db } from '../db/index.js';
 
 const userService = {
