@@ -1,31 +1,27 @@
 import { db } from '../index.js';
 
 const UserModel = {
-    create: async function ({ username, email, userPassword, nickname, gender, birthday, job }) {
-        try {
-            const createNewUser = await db.User.create({
-                username: username,
-                email: email,
-                userPassword: userPassword,
-                nickname: nickname,
-                gender: gender,
-                birthday: birthday,
-                job: job,
-            });
-            return createNewUser;
-        } catch (err) {
-            console.log(err);
-        }
+    create: async function ({ newUser }) {
+        const createNewUser = await db.User.create(newUser);
+        return createNewUser;
     },
     findByEmail: async function (email) {
-        console.log('email', email);
         const user = await db.User.findOne({
             where: {
                 email: email,
                 isDeleted: 0,
             },
         });
-        console.log(user);
+
+        return user;
+    },
+    findById: async function (userId) {
+        const user = await db.User.findOne({
+            where: {
+                userId: userId,
+                isDeleted: 0,
+            },
+        });
 
         return user;
     },

@@ -9,11 +9,11 @@ tags:
       description: 메세지 라우터 모음
 
 paths:
-    /register:
+    /users/register:
         post:
             tags:
                 - user
-            description: 유저 회원가입하기
+            description: 유저 회원가입하기. job까지 필수, 이후로 선택
 
             parameters:
                 deprecated: true
@@ -24,11 +24,33 @@ paths:
                         schema:
                             type: object
                             properties:
+                                username:
+                                    type: string
                                 email:
                                     type: string
                                 nickname:
                                     type: string
-                                password:
+                                userPassword:
+                                    type: string
+                                gender:
+                                    type: string
+                                birthday:
+                                    type: string
+                                job:
+                                    type: string
+                                mbti:
+                                    type: string
+                                religion:
+                                    type: string
+                                height:
+                                    type: string
+                                hobby:
+                                    type: string
+                                presonality:
+                                    type: string
+                                ideal:
+                                    type: string
+                                introduce:
                                     type: string
                 required: true
 
@@ -40,11 +62,33 @@ paths:
                             schema:
                             type: object
                             properties:
+                                username:
+                                    type: string
                                 email:
                                     type: string
                                 nickname:
                                     type: string
-                                password:
+                                userPassword:
+                                    type: string
+                                gender:
+                                    type: string
+                                birthday:
+                                    type: string
+                                job:
+                                    type: string
+                                mbti:
+                                    type: string
+                                religion:
+                                    type: string
+                                height:
+                                    type: string
+                                hobby:
+                                    type: string
+                                presonality:
+                                    type: string
+                                ideal:
+                                    type: string
+                                introduce:
                                     type: string
 
                 '400':
@@ -54,7 +98,7 @@ paths:
                 '405':
                     description: Validation exception
 
-    /login:
+    /users/login:
         post:
             tags:
                 - user
