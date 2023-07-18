@@ -89,7 +89,12 @@ const userService = {
             }
         }
     },
-    updateUser: async function () {},
+    loginCheck: async function ({ usreId }) {
+        let transaction;
+        try {
+            transaction = await db.sequelize.transaction();
+        } catch (error) {}
+    },
 };
 
 export { userService };

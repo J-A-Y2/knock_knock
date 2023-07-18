@@ -59,6 +59,22 @@ const userController = {
             next(error);
         }
     },
+    isLogin: async function (req, res, next) {
+        try {
+            const userId = req.currentUserId;
+            const checkUser = await userService.loginCheck({ userId });
+
+            statusCode.setResponseCode200(res);
+            return res.send({
+                message: checkUser.message,
+                userId: checkUser.userId,
+                email: checkUser.email,
+                nickname: checkUser.nickname,
+            });
+        } catch (error) {
+            next(error);
+        }
+    },
 };
 
 export { userController };
