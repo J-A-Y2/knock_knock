@@ -13,7 +13,7 @@ paths:
         post:
             tags:
                 - user
-            description: 유저 회원가입하기
+            description: 유저 회원가입하기. job까지 필수, 이후로 선택
 
             parameters:
                 deprecated: true
@@ -38,6 +38,20 @@ paths:
                                     type: string
                                 job:
                                     type: string
+                                mbti:
+                                    type: string
+                                religion:
+                                    type: string
+                                height:
+                                    type: string
+                                hobby:
+                                    type: string
+                                presonality:
+                                    type: string
+                                ideal:
+                                    type: string
+                                introduce:
+                                    type: string
                 required: true
 
             responses:
@@ -61,6 +75,20 @@ paths:
                                 birthday:
                                     type: string
                                 job:
+                                    type: string
+                                mbti:
+                                    type: string
+                                religion:
+                                    type: string
+                                height:
+                                    type: string
+                                hobby:
+                                    type: string
+                                presonality:
+                                    type: string
+                                ideal:
+                                    type: string
+                                introduce:
                                     type: string
 
                 '400':
