@@ -10,7 +10,7 @@ const CommentModel = {
 
     // 댓글 수정
     update: async function ({ postId, commentId, content }) {
-        const updateComment = await db.Comment.update({ conetent: content }, { where: id: commentId , postId: postId });
+        const updateComment = await db.Comment.update({});
 
         return updateComment;
     },
@@ -27,7 +27,6 @@ const CommentModel = {
         const getComment = await db.Comment.findAll(postId);
 
         return getComment;
-        
     },
 };
 
