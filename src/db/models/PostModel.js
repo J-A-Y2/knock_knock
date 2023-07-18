@@ -17,6 +17,15 @@ const PostModel = {
         });
         return post;
     },
+    update: async function ({ postId, fieldToUpdate, newValue }) {
+        const updatePost = await db.Post.update(
+            { [fieldToUpdate]: newValue },
+            {
+                where: { postId },
+            },
+        );
+        return updatePost;
+    },
 };
 
 export { PostModel };

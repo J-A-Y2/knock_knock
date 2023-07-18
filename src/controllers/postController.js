@@ -41,6 +41,20 @@ const postController = {
             next(error);
         }
     },
+    setPost: async function (req, res, next) {
+        try {
+            const userId = req.currentUserId;
+            const postId = req.params.postId;
+            const { postTitle, postContent, postType, people, place, meetingTime } = req.body;
+            const toUpdate = { postTitle, postContent, postType, people, place, meetingTime };
+            const post = await postService.setPost({ userId, postId, toUpdate });
+
+            statusCode.setResponseCode200(res);
+            res.send({ message: post.message });
+        } catch (error) {
+            next(error);
+        }
+    },
 };
 
 export { postController };

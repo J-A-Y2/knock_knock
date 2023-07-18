@@ -61,6 +61,49 @@ const postService = {
             }
         }
     },
+    setPost: async function ({ userId, postId, toUpdate }) {
+        let transaction;
+        try {
+            transaction = await db.sequelize.transaction();
+            let post = await PostModel.getPostById(postId);
+
+            if (!post) {
+                throw new NotFoundError('해당 id의 게시글을 찾을 수 없습니다.');
+            }
+
+            if (post.userId !== userId) {
+                throw new UnauthorizedError('수정 권한이 없습니다.');
+            }
+
+            const fieldsToUpdate = {
+                postTitle: 'postTitle',
+                postContent: 'postContent',
+                postType: 'postType',
+                people: 'people',
+                place: 'place',
+                meetingTime: 'meetingTime',
+            };
+            for (const [field, fieldToUpdate] of Object.entries(fieldsToUpdate)) {
+                if (toUpdate[field]) {
+                    const newValue = toUpdate[field];
+                    post = await PostModel.update({ postId, fieldToUpdate, newValue });
+                }
+            }
+            await transaction.commit();
+            return { message: '게시글 수정을 성공했습니다.' };
+        } catch (error) {
+            if (transaction) {
+                await transaction.rollback();
+            }
+            if (error instanceof UnauthorizedError) {
+                throw error;
+            } else if (error instanceof NotFoundError) {
+                throw error;
+            } else {
+                throw new InternalServerError('게시글 수정을 실패했습니다.');
+            }
+        }
+    },
 };
 
 export { postService };
