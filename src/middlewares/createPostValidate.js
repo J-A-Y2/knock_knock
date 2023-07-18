@@ -21,6 +21,7 @@ const createPostValidationRules = [
             if (!allowedPostTypes.includes(value)) {
                 throw new BadRequestError('유효하지 않은 모임 목적입니다.');
             }
+            return true;
         }),
     body('people').notEmpty().withMessage('모임 인원을 입력하세요.'),
     body('place').notEmpty().withMessage('모임 장소를 입력하세요.'),
