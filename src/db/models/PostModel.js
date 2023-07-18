@@ -7,7 +7,6 @@ const PostModel = {
     },
     getAllPosts: async function () {
         const posts = await db.Post.findAll();
-        console.log('model', posts);
         return posts;
     },
 };

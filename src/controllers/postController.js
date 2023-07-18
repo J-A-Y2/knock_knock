@@ -20,7 +20,6 @@ const postController = {
     getAllPosts: async function (req, res, next) {
         try {
             const posts = await postService.getAllPosts();
-            console.log(posts);
 
             statusCode.setResponseCode200(res);
             res.send({ message: posts.message, postList: posts.posts });
