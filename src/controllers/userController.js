@@ -7,13 +7,7 @@ const userController = {
             const { username, email, userPassword, nickname, gender, birthday, job } = req.body;
 
             const createUser = await userService.createUser({
-                username,
-                email,
-                userPassword,
-                nickname,
-                gender,
-                birthday,
-                job,
+                newUser: { username, email, userPassword, nickname, gender, birthday, job },
             });
 
             statusCode.setResponseCode201(res);
