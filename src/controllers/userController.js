@@ -39,7 +39,6 @@ const userController = {
                     introduce,
                 },
             });
-
             statusCode.setResponseCode201(res);
             return res.send(createUser.message);
         } catch (error) {
@@ -79,12 +78,12 @@ const userController = {
         try {
             const { userId } = req.params;
 
-            const updatedData = req.body;
-            console.log(updatedData);
-            const updatedUser = await userService.updateUser({ userId, updatedData });
+            const updateData = req.body;
+            console.log('userController에 updateData가 들어왔다!!: ', updateData);
+            const updatedUser = await userService.updateUser({ userId, updateData });
 
             statusCode.setResponseCode200(res);
-            return res.send(updatedUser.message);
+            return res.send({ message: updatedUser.message });
         } catch (error) {
             next(error);
         }

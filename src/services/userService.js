@@ -6,6 +6,7 @@ import { UserModel } from '../db/models/UserModel.js';
 import { db } from '../db/index.js';
 
 const userService = {
+    // 유저 생성
     createUser: async function ({ newUser }) {
         let transaction;
         try {
@@ -39,6 +40,7 @@ const userService = {
             }
         }
     },
+    //유저 조회
     getUser: async function ({ email, password }) {
         let transaction;
         try {
@@ -52,10 +54,6 @@ const userService = {
             if (user.isDeleted === true) {
                 throw new BadRequestError('이미 탈퇴한 회원입니다.');
             }
-
-            console.log('email', email);
-            console.log('password', password);
-            console.log('user.userPassword', user.userPassword);
 
             const correctPasswordHash = user.userPassword;
             const isPasswordCorrect = await bcrypt.compare(password, correctPasswordHash);
@@ -94,6 +92,7 @@ const userService = {
             }
         }
     },
+    // 유저 로그인 확인
     loginCheck: async function (userId) {
         let transaction;
         try {
@@ -101,7 +100,7 @@ const userService = {
             const user = UserModel.findById(userId);
 
             if (!user) {
-                throw new ConflictError('사용자의 정보를 찾을 수 없습니다.');
+                throw new ConflictError('회원의 정보를 찾을 수 없습니다.');
             }
             await transaction.commit();
             return {
@@ -117,7 +116,8 @@ const userService = {
             throw error;
         }
     },
-    updateUser: async function ({ userId, updatedData }) {
+    // 유저 정보 수정
+    updateUser: async function ({ userId, updateData }) {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
@@ -126,23 +126,20 @@ const userService = {
             if (!user) {
                 throw new ConflictError('사용자의 정보를 찾을 수 없습니다.');
             }
-
-            const updatedUser = await user.update({
-                nickname: nickname,
-                profileImage: profileImage,
-                mbti: mbti,
-                religion: religion,
-                height: height,
-                hobby: hobby,
-                personality: personality,
-                ideal: ideal,
-                introduce: introduce,
-            });
+            console.log('userService에 updateData 들어왔당!!!: ', updateData);
+            await UserModel.update({ userId, updateData });
 
             await transaction.commit();
-            return updatedUser;
-        } catch (error) {}
+
+            return { message: '회원 정보가 수정되었습니다.' };
+        } catch (error) {
+            if (transaction) {
+                await transaction.rollback();
+            }
+            throw error;
+        }
     },
+    // 유저 정보 삭제
     deleteUser: async function (userId) {
         let transaction;
         try {

@@ -25,16 +25,17 @@ const UserModel = {
         });
         return user;
     },
-    updateUser: async function ({ userId, updatedUser }) {
-        const updateUser = await db.User.update({
+    update: async function ({ userId, updateData }) {
+        console.log('모델에 있는 updateUser얌!!', updateData);
+        const updatedUser = await db.User.update(updateData, {
             where: {
                 userId: userId,
                 isDeleted: 0,
             },
         });
-        return updateUser;
+        return updatedUser;
     },
-    deleteUser: async function (userId) {
+    delete: async function (userId) {
         const deleteUser = await db.User.destroy({
             where: {
                 userId: userId,
