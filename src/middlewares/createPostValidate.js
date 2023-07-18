@@ -23,7 +23,15 @@ const createPostValidationRules = [
             }
             return true;
         }),
-    body('people').notEmpty().withMessage('모임 인원을 입력하세요.'),
+    body('people')
+        .notEmpty()
+        .withMessage('모임 인원을 입력하세요.')
+        .custom(value => {
+            if (value > 10) {
+                throw new BadRequestError('모임 인원은 10명 이하로 입력해야 합니다.');
+            }
+            return true;
+        }),
     body('place').notEmpty().withMessage('모임 장소를 입력하세요.'),
     body('meetingTime').notEmpty().withMessage('모임 시간을 입력하세요.'),
 ];

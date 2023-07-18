@@ -232,32 +232,77 @@ paths:
 
             responses:
                 '200':
-                    description: 게시글 불러오기 성공.
+                    description: 전체 게시글 불러오기 성공.
                     content:
                         application/json:
                             schema:
                                 type: object
                                 properties:
-                                    user_id:
-                                        type: int
-                                    content:
+                                    message:
                                         type: string
+                                    allPostCount:
+                                        type: integer
+                                    currentPage:
+                                        type: integer
+                                    postList:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                postId:
+                                                    type: integer
+                                                profileImage:
+                                                    type: string
+                                                    nullable: true
+                                                postType:
+                                                    type: string
+                                                postTitle:
+                                                    type: string
+                                                postImage:
+                                                    type: string
+                                                    nullable: true
+                                                people:
+                                                    type: integer
+                                                place:
+                                                    type: string
+                                                meetingTime:
+                                                    type: string
+                                                postContent:
+                                                    type: string
+                                                isCompleted:
+                                                    type: boolean
+                                                    default: false
+                                                createdAt:
+                                                    type: string
+                                                    format: date-time
+                                                updatedAt:
+                                                    type: string
+                                                    format: date-time
+                                                userId:
+                                                    type: integer
                     required: true
 
         post:
             tags:
                 - post
-            description: 게시글 작성하기
-
-            requestbody:
+            description: 게시글 작성하기. 제목 100자, 내용 200자, 인원 10명 이하, 장소 30자 이하
+            requestBody:
                 content:
                     application/json:
                         schema:
                             type: object
                             properties:
-                                user_id:
-                                    type: int
-                                content:
+                                postTitle:
+                                    type: string
+                                postContent:
+                                    type: string
+                                postType:
+                                    type: string
+                                people:
+                                    type: integer
+                                place:
+                                    type: string
+                                meetingTime:
                                     type: string
                 required: true
 
