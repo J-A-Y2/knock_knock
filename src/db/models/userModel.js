@@ -25,8 +25,13 @@ const UserModel = {
         });
         return user;
     },
-    updateUser: async function ({ updatedUser }) {
-        const updateUser = await db.User.update({ updatedUser });
+    updateUser: async function ({ userId, updatedUser }) {
+        const updateUser = await db.User.update({
+            where: {
+                userId: userId,
+                isDeleted: 0,
+            },
+        });
         return updateUser;
     },
     deleteUser: async function (userId) {

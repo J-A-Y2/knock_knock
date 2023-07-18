@@ -80,6 +80,7 @@ const userController = {
             const { userId } = req.params;
 
             const updatedData = req.body;
+            console.log(updatedData);
             const updatedUser = await userService.updateUser({ userId, updatedData });
 
             statusCode.setResponseCode200(res);

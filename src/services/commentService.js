@@ -1,6 +1,6 @@
 import { db } from '../db/index.js';
 import { CommentModel } from '../db/models/CommentModel.js';
-import { userModel } from '../db/models/UserModel.js';
+import { UserModel } from '../db/models/UserModel.js';
 import { UnauthorizedError, NotFoundError, InternalServerError } from '../middlewares/errorMiddleware.js';
 
 const commentService = {
@@ -8,7 +8,7 @@ const commentService = {
         try {
             transaction = await db.sequelize.transaction();
 
-            const user = await userModel.findById({ userId });
+            const user = await UserModel.findById({ userId });
 
             if (!user) {
                 throw new UnauthorizedError('잘못된 또는 만료된 토큰입니다.');
@@ -37,7 +37,7 @@ const commentService = {
         try {
             transaction = await db.sequelize.transaction();
 
-            const user = await userModel.findById({ userId });
+            const user = await UserModel.findById({ userId });
 
             if (!user) {
                 throw new UnauthorizedError('잘못된 또는 만료된 토큰입니다.');
@@ -75,7 +75,7 @@ const commentService = {
         try {
             transaction = await db.sequelize.transaction();
 
-            const user = await userModel.findById({ userId });
+            const user = await UserModel.findById({ userId });
 
             if (!user) {
                 throw new UnauthorizedError('잘못된 또는 만료된 토큰입니다.');
@@ -113,7 +113,7 @@ const commentService = {
         try {
             transaction = await db.sequelize.transaction();
 
-            const user = await userModel.findById({ userId });
+            const user = await UserModel.findById({ userId });
 
             if (!user) {
                 throw new UnauthorizedError('잘못된 또는 만료된 토큰입니다.');
