@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import bcrypt, { hash } from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { ConflictError, BadRequestError, NotFoundError, UnauthorizedError } from '../middlewares/errorMiddleware.js';
-import { UserModel } from '../db/models/UserModel.js';
+import { UserModel } from '../db/models/userModel.js';
 import { db } from '../db/index.js';
 
 const userService = {
@@ -52,6 +52,11 @@ const userService = {
             if (user.isDeleted === true) {
                 throw new BadRequestError('이미 탈퇴한 회원입니다.');
             }
+
+            console.log('email', email);
+            console.log('password', password);
+            console.log('user.userPassword', user.userPassword);
+
             const correctPasswordHash = user.userPassword;
             const isPasswordCorrect = await bcrypt.compare(password, correctPasswordHash);
 
@@ -87,6 +92,80 @@ const userService = {
             } else {
                 throw new UnauthorizedError('로그인에 실패하였습니다.');
             }
+        }
+    },
+    loginCheck: async function (userId) {
+        let transaction;
+        try {
+            transaction = await db.sequelize.transaction();
+            const user = UserModel.findById(userId);
+
+            if (!user) {
+                throw new ConflictError('사용자의 정보를 찾을 수 없습니다.');
+            }
+            await transaction.commit();
+            return {
+                message: '정상적인 유저입니다.',
+                userId: user.userId,
+                email: user.email,
+                nickname: user.nickname,
+            };
+        } catch (error) {
+            if (transaction) {
+                await transaction.rollback();
+            }
+            throw error;
+        }
+    },
+    updateUser: async function ({ userId, updatedData }) {
+        let transaction;
+        try {
+            transaction = await db.sequelize.transaction();
+            const user = await UserModel.findById(userId);
+
+            if (!user) {
+                throw new ConflictError('사용자의 정보를 찾을 수 없습니다.');
+            }
+
+            const updatedUser = await user.update({
+                nickname: nickname,
+                profileImage: profileImage,
+                mbti: mbti,
+                religion: religion,
+                height: height,
+                hobby: hobby,
+                personality: personality,
+                ideal: ideal,
+                introduce: introduce,
+            });
+
+            await transaction.commit();
+            return updatedUser;
+        } catch (error) {}
+    },
+    deleteUser: async function (userId) {
+        let transaction;
+        try {
+            transaction = await db.sequelize.transaction();
+            const user = await UserModel.findById(userId);
+
+            if (!user) {
+                throw new ConflictError('사용자의 정보를 찾을 수 없습니다.');
+            }
+
+            // softdelete 삭제하는 기능
+            await user.update({
+                isDeleted: 1,
+                deledtedAt: new Date(),
+            });
+
+            await transaction.commit();
+            return { message: '회원 성공적으로 탈퇴하였습니다.' };
+        } catch (error) {
+            if (transaction) {
+                await transaction.rollback();
+            }
+            throw error;
         }
     },
 };

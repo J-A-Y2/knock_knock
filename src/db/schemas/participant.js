@@ -19,7 +19,7 @@ const Participant = (sequelize, DataTypes) => {
         {
             sequelize,
             timestamps: false,
-            underscored: true,
+            underscored: false,
             modelName: 'Participant',
             tableName: 'participants',
             paranoid: false,

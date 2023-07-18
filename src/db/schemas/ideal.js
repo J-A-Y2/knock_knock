@@ -15,7 +15,7 @@ const Ideal = (sequelize, DataTypes) => {
         {
             sequelize,
             timestamps: false,
-            underscored: true,
+            underscored: false,
             modelName: 'Ideal',
             tableName: 'ideals',
             paranoid: false,
