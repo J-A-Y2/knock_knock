@@ -2,8 +2,7 @@ import { db } from '../index.js';
 
 const PostModel = {
     create: async ({ newPost }) => {
-        const createNewPost = await db.Post.create(newPost);
-        return createNewPost;
+        await db.Post.create(newPost);
     },
     getAllPosts: async ({ offset, limit }) => {
         const { count, rows: posts } = await db.Post.findAndCountAll({ offset, limit });
@@ -25,6 +24,11 @@ const PostModel = {
             },
         );
         return updatePost;
+    },
+    delete: async postId => {
+        await db.Post.destroy({
+            where: { post_id: postId },
+        });
     },
 };
 

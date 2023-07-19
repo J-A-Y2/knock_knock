@@ -22,7 +22,7 @@ postRouter.get('/:postId', postParamsValidate, postController.getPost);
 postRouter.put('/:postId', postParamsValidate, setPostValidationRules, setPostValidate, postController.setPost);
 
 // 게시글 삭제
-postRouter.delete('/:postId');
+postRouter.delete('/:postId', postController.deletePost);
 
 // 참여 신청
 postRouter.post('/:postId/participants', postController.participatePost);

@@ -54,6 +54,17 @@ const postController = {
             next(error);
         }
     },
+    deletePost: async (req, res, next) => {
+        try {
+            const userId = req.currentUserId;
+            const postId = req.params.postId;
+
+            const post = await postService.deletePost({ userId, postId });
+
+            statusCode.setResponseCode200(res);
+            res.send(post.message);
+        } catch (error) {}
+    },
     participatePost: async (req, res, next) => {
         try {
             const userId = req.currentUserId;

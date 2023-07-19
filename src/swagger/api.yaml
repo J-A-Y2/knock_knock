@@ -606,6 +606,13 @@ paths:
                     description: Invalid ID supplied
                 '404':
                     description: Order not found
+        put:
+            tags:
+                - post
+            description: 모임 신청 취소하기
+            responses:
+                '200':
+                    description: 모임 신청 취소 성공.
 
     /posts/:postId/userlist:
         get:
