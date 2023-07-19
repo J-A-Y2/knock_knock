@@ -7,7 +7,7 @@ const Post = (sequelize, DataTypes) => {
                 autoIncrement: true,
                 primaryKey: true,
             },
-            profileImage: {
+            profile_image: {
                 type: DataTypes.STRING,
                 allowNull: true,
             },
