@@ -375,29 +375,35 @@ paths:
                                         items:
                                             type: object
                                             properties:
-                                                postId:
+                                                post_id:
                                                     type: integer
-                                                profileImage:
+                                                profile_image:
                                                     type: string
                                                     nullable: true
-                                                postType:
+                                                post_type:
                                                     type: string
-                                                postTitle:
+                                                post_title:
                                                     type: string
-                                                postImage:
+                                                post_image:
                                                     type: string
                                                     nullable: true
-                                                people:
-                                                    type: integer
                                                 place:
                                                     type: string
-                                                meetingTime:
+                                                meeting_time:
                                                     type: string
-                                                postContent:
+                                                post_content:
                                                     type: string
-                                                isCompleted:
+                                                is_completed:
                                                     type: boolean
                                                     default: false
+                                                total_m:
+                                                    type: integer
+                                                total_f:
+                                                    type: integer
+                                                recruited_m:
+                                                    type: integer
+                                                recruited_f:
+                                                    type: integer
                                                 createdAt:
                                                     type: string
                                                     format: date-time
@@ -411,24 +417,26 @@ paths:
         post:
             tags:
                 - post
-            description: 게시글 작성하기. 제목 100자, 내용 200자, 인원 10명 이하, 장소 30자 이하
+            description: 게시글 작성하기. 제목 100자, 내용 200자, 인원 10명 이하, 장소 30자 이하, recruited_f/m은 default 0으로 들어감.
             requestBody:
                 content:
                     application/json:
                         schema:
                             type: object
                             properties:
-                                postTitle:
+                                post_title:
                                     type: string
-                                postContent:
+                                post_content:
                                     type: string
-                                postType:
+                                post_type:
                                     type: string
-                                people:
+                                total_m:
+                                    type: integer
+                                total_f:
                                     type: integer
                                 place:
                                     type: string
-                                meetingTime:
+                                meeting_time:
                                     type: string
                 required: true
 
@@ -459,35 +467,39 @@ paths:
                                     post:
                                         type: object
                                         properties:
-                                            postId:
+                                            post_id:
                                                 type: integer
-                                            profileImage:
+                                            profile_image:
                                                 type: string
                                                 nullable: true
-                                            postType:
+                                            post_type:
                                                 type: string
-                                            postTitle:
+                                            post_title:
                                                 type: string
-                                            postImage:
+                                            post_image:
                                                 type: string
                                                 nullable: true
-                                            people:
-                                                type: integer
                                             place:
                                                 type: string
-                                            meetingTime:
+                                            meeting_time:
                                                 type: string
-                                            postContent:
+                                            post_content:
                                                 type: string
-                                            isCompleted:
+                                            is_completed:
                                                 type: boolean
+                                            total_m:
+                                                type: integer
+                                            total_f:
+                                                type: integer
+                                            recruited_m: type:integer
+                                            recruited_f: type:integer
                                             createdAt:
                                                 type: string
                                                 format: date-time
                                             updatedAt:
                                                 type: string
                                                 format: date-time
-                                            userId:
+                                            user_id:
                                                 type: integer
                     required: true
         delete:
@@ -517,7 +529,7 @@ paths:
         put:
             tags:
                 - post
-            description: 게시글 수정하기. 수정할 항목만 넣어주면 됨.
+            description: 게시글 수정하기. 수정할 항목만 넣어주면 됨! total_m/f 수정할 때는 recruited_m/f 보다 큰 값이어야 함.
 
             parameters:
                 - name: postid
@@ -531,17 +543,19 @@ paths:
                         schema:
                             type: object
                             properties:
-                                postTitle:
+                                post_title:
                                     type: string
-                                postContent:
+                                post_content:
                                     type: string
-                                postType:
+                                post_type:
                                     type: string
-                                people:
+                                total_m:
+                                    type: integer
+                                total_f:
                                     type: integer
                                 place:
                                     type: string
-                                meetingTime:
+                                meeting_time:
                                     type: string
                 required: true
 
@@ -558,7 +572,7 @@ paths:
         post:
             tags:
                 - post
-            description: 모인 신청하기
+            description: 모임 신청하기
 
             parameters:
                 - name: postid
@@ -586,14 +600,14 @@ paths:
                                         type: false
                                     status:
                                         type: string
-                                    createcAt:
+                                    createdAt:
                                         type: datetime
                 '400':
                     description: Invalid ID supplied
                 '404':
                     description: Order not found
 
-    /posts/:postId/userList:
+    /posts/:postId/userlist:
         get:
             tags:
                 - post
