@@ -1,12 +1,19 @@
 import dotenv from 'dotenv';
 import bcrypt, { hash } from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { ConflictError, BadRequestError, NotFoundError, UnauthorizedError } from '../middlewares/errorMiddleware.js';
-import { UserModel } from '../db/models/userModel.js';
+import {
+    ConflictError,
+    BadRequestError,
+    NotFoundError,
+    UnauthorizedError,
+    InternalServerError,
+} from '../middlewares/errorMiddleware.js';
+import { UserModel } from '../db/models/UserModel.js';
 import { db } from '../db/index.js';
 
 const userService = {
-    createUser: async function ({ newUser }) {
+    // 유저 생성
+    createUser: async ({ newUser }) => {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
@@ -39,7 +46,8 @@ const userService = {
             }
         }
     },
-    getUser: async function ({ email, password }) {
+    //유저 로그인
+    getUser: async ({ email, password }) => {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
@@ -52,10 +60,6 @@ const userService = {
             if (user.isDeleted === true) {
                 throw new BadRequestError('이미 탈퇴한 회원입니다.');
             }
-
-            console.log('email', email);
-            console.log('password', password);
-            console.log('user.userPassword', user.userPassword);
 
             const correctPasswordHash = user.userPassword;
             const isPasswordCorrect = await bcrypt.compare(password, correctPasswordHash);
@@ -94,15 +98,17 @@ const userService = {
             }
         }
     },
-    loginCheck: async function (userId) {
+    // 유저 로그인 확인
+    loginCheck: async ({ userId }) => {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
-            const user = UserModel.findById(userId);
+            const user = await UserModel.findById(userId);
 
             if (!user) {
-                throw new ConflictError('사용자의 정보를 찾을 수 없습니다.');
+                throw new NotFoundError('회원의 정보를 찾을 수 없습니다.');
             }
+
             await transaction.commit();
             return {
                 message: '정상적인 유저입니다.',
@@ -117,55 +123,121 @@ const userService = {
             throw error;
         }
     },
-    updateUser: async function ({ userId, updatedData }) {
+    // 유저 정보 조회
+    getUserById: async ({ userId }) => {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
             const user = await UserModel.findById(userId);
 
             if (!user) {
-                throw new ConflictError('사용자의 정보를 찾을 수 없습니다.');
+                throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
-
-            const updatedUser = await user.update({
-                nickname: nickname,
-                profileImage: profileImage,
-                mbti: mbti,
-                religion: religion,
-                height: height,
-                hobby: hobby,
-                personality: personality,
-                ideal: ideal,
-                introduce: introduce,
-            });
-
+            console.log('유저서비스 user', user);
             await transaction.commit();
-            return updatedUser;
-        } catch (error) {}
-    },
-    deleteUser: async function (userId) {
-        let transaction;
-        try {
-            transaction = await db.sequelize.transaction();
-            const user = await UserModel.findById(userId);
-
-            if (!user) {
-                throw new ConflictError('사용자의 정보를 찾을 수 없습니다.');
-            }
-
-            // softdelete 삭제하는 기능
-            await user.update({
-                isDeleted: 1,
-                deledtedAt: new Date(),
-            });
-
-            await transaction.commit();
-            return { message: '회원 성공적으로 탈퇴하였습니다.' };
+            return {
+                message: '회원정보 조회 성공!',
+                userId: user.userId,
+                email: user.email,
+                username: user.username,
+                nickname: user.nickname,
+                gender: user.gender,
+                birthday: user.birthday,
+                job: user.job,
+                region: user.region,
+                profileImage: user.profileImage,
+                mbti: user.mbti,
+                religion: user.religion,
+                height: user.height,
+                hobby: user.hooby,
+                personality: user.perosnality,
+                ideal: user.ideal,
+                introduce: user.introduce,
+            };
         } catch (error) {
             if (transaction) {
                 await transaction.rollback();
             }
-            throw error;
+            if (error instanceof UnauthorizedError) {
+                throw error;
+            } else if (error instanceof NotFoundError) {
+                throw error;
+            } else {
+                throw new InternalServerError('회원 정보를 조회하는 데 실패했습니다.');
+            }
+        }
+    },
+    // 유저 정보 수정
+    updateUser: async function ({ userId, updateData }) {
+        let transaction;
+        try {
+            transaction = await db.sequelize.transaction();
+            const user = await UserModel.findById(userId);
+
+            if (!user) {
+                throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
+            }
+
+            await UserModel.update({ userId, updateData });
+            const updatedUser = await UserModel.findById(userId);
+
+            await transaction.commit();
+
+            return {
+                message: '회원 정보가 수정되었습니다.',
+                nickname: updatedUser.nickname,
+                job: updatedUser.job,
+                region: updatedUser.region,
+                profileImage: updatedUser.profileImage,
+                mbti: updatedUser.mbti,
+                religion: updatedUser.religion,
+                height: updatedUser.height,
+                hobby: updatedUser.hobby,
+                personality: updatedUser.personality,
+                ideal: updatedUser.ideal,
+                introduce: updatedUser.introduce,
+            };
+        } catch (error) {
+            if (transaction) {
+                await transaction.rollback();
+            }
+            if (error instanceof UnauthorizedError) {
+                throw error;
+            } else if (error instanceof NotFoundError) {
+                throw error;
+            } else {
+                throw new InternalServerError('회원 정보를 수정하는 데 실패했습니다.');
+            }
+        }
+    },
+    // 유저 정보 삭제
+    deleteUser: async ({ userId }) => {
+        let transaction;
+        try {
+            transaction = await db.sequelize.transaction();
+
+            const user = await UserModel.findById(userId);
+
+            if (!user) {
+                throw new NotFoundError('사용자의 정보를 찾을 수 없습니다.');
+            }
+
+            // softdelete로 삭제하는 기능
+            await UserModel.delete({ userId });
+
+            await transaction.commit();
+            return { message: '회원이 성공적으로 탈퇴하였습니다.' };
+        } catch (error) {
+            if (transaction) {
+                await transaction.rollback();
+            }
+            if (error instanceof UnauthorizedError) {
+                throw error;
+            } else if (error instanceof NotFoundError) {
+                throw error;
+            } else {
+                throw new InternalServerError('회원 탈퇴하는 데 실패했습니다.');
+            }
         }
     },
 };
