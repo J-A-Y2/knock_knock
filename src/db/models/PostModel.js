@@ -2,8 +2,12 @@ import { db } from '../index.js';
 
 const PostModel = {
     create: async ({ newPost }) => {
-        const createNewPost = await db.Post.create(newPost);
-        return createNewPost;
+        try {
+            const createNewPost = await db.Post.create(newPost);
+            return createNewPost;
+        } catch (e) {
+            console.log(e);
+        }
     },
     getAllPosts: async ({ offset, limit }) => {
         const { count, rows: posts } = await db.Post.findAndCountAll({ offset, limit });

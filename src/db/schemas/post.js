@@ -1,5 +1,3 @@
-import { INTEGER } from 'sequelize';
-
 const Post = (sequelize, DataTypes) => {
     const Post = sequelize.define(
         'Post',
@@ -24,10 +22,6 @@ const Post = (sequelize, DataTypes) => {
             postImage: {
                 type: DataTypes.STRING,
                 allowNull: true,
-            },
-            people: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
             },
             place: {
                 type: DataTypes.STRING(30),
