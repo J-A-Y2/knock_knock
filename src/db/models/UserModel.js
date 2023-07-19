@@ -1,15 +1,16 @@
 import { db } from '../index.js';
-import { Op } from 'sequelize';
+
 const UserModel = {
     create: async ({ newUser }) => {
         const createNewUser = await db.User.create(newUser);
         return createNewUser;
     },
+
     findByEmail: async email => {
         const user = await db.User.findOne({
             where: {
                 email: email,
-                isDeleted: 0,
+                is_deleted: 0,
             },
         });
 
@@ -19,7 +20,7 @@ const UserModel = {
         const user = await db.User.findOne({
             where: {
                 user_id: userId,
-                isDeleted: 0,
+                is_deleted: 0,
             },
         });
         return user;
