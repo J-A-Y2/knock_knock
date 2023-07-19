@@ -13,7 +13,9 @@ const jwtOptions = {
 passport.use(
     new JwtStrategy(jwtOptions, (jwtPayload, done) => {
         // JWT 토큰으로부터 추출한 userId를 검증하고, 검증 결과를 done 콜백 함수를 통해 전달
+        console.log(jwtPayload);
         const userId = jwtPayload.userId;
+        console.log('lR', userId);
         if (userId) {
             return done(null, userId);
         } else {
