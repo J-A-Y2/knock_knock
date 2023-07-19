@@ -4,7 +4,7 @@ import { db } from '../db/index.js';
 import { InternalServerError, NotFoundError, UnauthorizedError } from '../middlewares/errorMiddleware.js';
 
 const postService = {
-    createPost: async function ({ userId, post }) {
+    createPost: async ({ userId, post }) => {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
@@ -32,7 +32,7 @@ const postService = {
             }
         }
     },
-    getAllPosts: async function ({ page, perPage }) {
+    getAllPosts: async ({ page, perPage }) => {
         try {
             const offset = (page - 1) * perPage;
             const limit = perPage;
@@ -45,7 +45,7 @@ const postService = {
             }
         }
     },
-    getPost: async function (postId) {
+    getPost: async postId => {
         try {
             const post = await PostModel.getPostById(postId);
 
@@ -61,7 +61,7 @@ const postService = {
             }
         }
     },
-    setPost: async function ({ userId, postId, toUpdate }) {
+    setPost: async ({ userId, postId, toUpdate }) => {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
