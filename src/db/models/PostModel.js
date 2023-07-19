@@ -12,7 +12,7 @@ const PostModel = {
     getPostById: async postId => {
         const post = await db.Post.findOne({
             where: {
-                postId,
+                post_id: postId,
             },
         });
         return post;

@@ -1,5 +1,6 @@
 import { PostModel } from '../db/models/postModel.js';
 import { UserModel } from '../db/models/UserModel.js';
+import { ParticipantModel } from '../db/models/ParticipantModel.js';
 import { db } from '../db/index.js';
 import { InternalServerError, NotFoundError, UnauthorizedError } from '../middlewares/errorMiddleware.js';
 
@@ -101,6 +102,36 @@ const postService = {
                 throw error;
             } else {
                 throw new InternalServerError('게시글 수정을 실패했습니다.');
+            }
+        }
+    },
+    participatePost: async ({ userId, postId }) => {
+        try {
+            const user = await UserModel.findById(userId);
+            const userGender = user.gender;
+
+            const post = await PostModel.getPostById(postId);
+            console.log(post);
+            if (!post) {
+                throw new NotFoundError('해당 Id의 게시글을 찾을 수 없습니다.');
+            }
+            if (userGender === '여') {
+                if (post.recruited_f < post.total_f) {
+                    console.log('여');
+                    await ParticipantModel.participatePost({ userId, postId });
+                }
+            } else {
+                if (post.recruited_m < post.total_m) {
+                    console.log('남');
+                    await ParticipantModel.participatePost({ userId, postId });
+                }
+            }
+            return { message: '모임 참가에 성공했습니다.' };
+        } catch (error) {
+            if (error instanceof NotFoundError) {
+                throw error;
+            } else {
+                throw new InternalServerError('모임 참가에 실패했습니다.');
             }
         }
     },
