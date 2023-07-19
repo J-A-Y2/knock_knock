@@ -29,15 +29,19 @@ const User = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             birthday: {
-                type: DataTypes.STRING(8),
+                type: DataTypes.DATE,
                 allowNull: false,
             },
             job: {
                 type: DataTypes.STRING(20),
                 allowNull: false,
             },
+            region: {
+                type: DataTypes.STRING(20),
+                allowNull: false,
+            },
             profileImage: {
-                type: DataTypes.BLOB,
+                type: DataTypes.STRING(2000),
                 allowNull: true,
             },
             mbti: {
@@ -49,7 +53,7 @@ const User = (sequelize, DataTypes) => {
                 allowNull: true,
             },
             height: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.STRING,
                 allowNull: true,
             },
             hobby: {

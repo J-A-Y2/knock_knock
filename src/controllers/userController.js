@@ -2,7 +2,7 @@ import { userService } from '../services/userService.js';
 import { statusCode } from '../utils/statusCode.js';
 
 const userController = {
-    register: async function (req, res, next) {
+    register: async (req, res, next) => {
         try {
             const {
                 username,
@@ -12,6 +12,8 @@ const userController = {
                 gender,
                 birthday,
                 job,
+                region,
+                profileImage,
                 mbti,
                 religion,
                 height,
@@ -30,6 +32,8 @@ const userController = {
                     gender,
                     birthday,
                     job,
+                    region,
+                    profileImage,
                     mbti,
                     religion,
                     height,
@@ -39,7 +43,6 @@ const userController = {
                     introduce,
                 },
             });
-
             statusCode.setResponseCode201(res);
             return res.send(createUser.message);
         } catch (error) {
@@ -47,7 +50,7 @@ const userController = {
         }
     },
 
-    login: async function (req, res, next) {
+    login: async (req, res, next) => {
         try {
             const { email, password } = req.body;
             const loginUser = await userService.getUser({ email, password });
@@ -59,7 +62,7 @@ const userController = {
             next(error);
         }
     },
-    isLogin: async function (req, res, next) {
+    isLogin: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
             const checkUser = await userService.loginCheck({ userId });
@@ -75,24 +78,36 @@ const userController = {
             next(error);
         }
     },
-    update: async function (req, res, next) {
+    getUserInfo: async (req, res, next) => {
         try {
             const { userId } = req.params;
-
-            const updatedData = req.body;
-            const updatedUser = await userService.updateUser({ userId, updatedData });
+            const getUser = await userService.getUserById({ userId });
 
             statusCode.setResponseCode200(res);
-            return res.send(updatedUser.message);
+            return res.send(getUser);
         } catch (error) {
             next(error);
         }
     },
-    delete: async function (req, res, next) {
+    update: async (req, res, next) => {
         try {
-            const userId = req.params;
+            const userId = req.currentUserId;
 
-            const deletedUser = await userService.deleteUser(userId);
+            const updateData = req.body;
+
+            const updatedUser = await userService.updateUser({ userId, updateData });
+
+            statusCode.setResponseCode200(res);
+            return res.send(updatedUser);
+        } catch (error) {
+            next(error);
+        }
+    },
+    delete: async (req, res, next) => {
+        try {
+            const userId = req.currentUserId;
+
+            const deletedUser = await userService.deleteUser({ userId });
 
             statusCode.setResponseCode200(res);
             return res.send(deletedUser.message);
