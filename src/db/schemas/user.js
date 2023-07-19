@@ -53,7 +53,7 @@ const User = (sequelize, DataTypes) => {
                 allowNull: true,
             },
             height: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.STRING,
                 allowNull: true,
             },
             hobby: {
