@@ -516,15 +516,6 @@ paths:
             responses:
                 '200':
                     description: 게시글 삭제 성공.
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    post_id:
-                                        type: integer
-                                    content:
-                                        type: string
 
         put:
             tags:
@@ -562,7 +553,13 @@ paths:
             responses:
                 '200':
                     description: 게시글 수정을 성공했습니다.
-
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
                 '400':
                     description: Invalid ID supplied
                 '404':
@@ -588,20 +585,8 @@ paths:
                             schema:
                                 type: object
                                 properties:
-                                    post_id:
-                                        type: integer
-                                    participant_id:
-                                        type: integer
-                                    user_id:
-                                        type: integer
-                                    content:
+                                    message:
                                         type: string
-                                    canceled:
-                                        type: false
-                                    status:
-                                        type: string
-                                    createdAt:
-                                        type: datetime
                 '400':
                     description: Invalid ID supplied
                 '404':
@@ -613,7 +598,13 @@ paths:
             responses:
                 '200':
                     description: 모임 신청 취소 성공.
-
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
     /posts/:postId/userlist:
         get:
             tags:
@@ -634,10 +625,23 @@ paths:
                             schema:
                                 type: object
                                 properties:
-                                    post_id:
-                                        type: integer
-                                    user_id:
-                                        type: integer
+                                    message:
+                                        type: string
+                                    participantsList:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                participant_id:
+                                                    type: integer
+                                                canceled:
+                                                    type: string
+                                                status:
+                                                    type: string
+                                                user_id:
+                                                    type: integer
+                                                post_id:
+                                                    type: integer
                 '400':
                     description: Invalid ID supplied
                 '404':
