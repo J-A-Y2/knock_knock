@@ -4,25 +4,11 @@ const postController = {
     createPost: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
-            console.log(userId);
-
-            const { postTitle, postContent, postType, people, place, meetingTime, total_m, total_f, recruited_m, recruited_f } =
-                req.body;
+            const newPost = req.body;
 
             const createPost = await postService.createPost({
-                userId: userId,
-                post: {
-                    postTitle,
-                    postContent,
-                    postType,
-                    people,
-                    place,
-                    meetingTime,
-                    total_m,
-                    total_f,
-                    recruited_m,
-                    recruited_f,
-                },
+                userId,
+                newPost,
             });
             statusCode.setResponseCode201(res);
             res.send(createPost.message);
@@ -58,8 +44,8 @@ const postController = {
         try {
             const userId = req.currentUserId;
             const postId = req.params.postId;
-            const { postTitle, postContent, postType, people, place, meetingTime } = req.body;
-            const toUpdate = { post_title: postTitle, postContent, postType, people, place, meetingTime };
+            const toUpdate = req.body;
+            // const toUpdate = { post_title: postTitle, postContent, postType, people, place, meetingTime };
             const post = await postService.setPost({ userId, postId, toUpdate });
 
             statusCode.setResponseCode200(res);
