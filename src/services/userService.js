@@ -26,9 +26,10 @@ const userService = {
             }
 
             // 비밀번호 암호화
-            const hashedPassword = await bcrypt.hash(newUser.userPassword, parseInt(process.env.PW_HASH_COUNT));
-            newUser.userPassword = hashedPassword;
+            const hashedPassword = await bcrypt.hash(newUser.user_password, parseInt(process.env.PW_HASH_COUNT));
+            newUser.user_password = hashedPassword;
             await UserModel.create({ newUser });
+
             await transaction.commit();
 
             return {
@@ -46,6 +47,7 @@ const userService = {
             }
         }
     },
+
     //유저 로그인
     getUser: async ({ email, password }) => {
         let transaction;
@@ -57,11 +59,11 @@ const userService = {
                 throw new NotFoundError('가입 내역이 없는 이메일입니다. 다시 한 번 확인해 주세요');
             }
 
-            if (user.isDeleted === true) {
+            if (user.is_deleted === true) {
                 throw new BadRequestError('이미 탈퇴한 회원입니다.');
             }
 
-            const correctPasswordHash = user.userPassword;
+            const correctPasswordHash = user.user_password;
             const isPasswordCorrect = await bcrypt.compare(password, correctPasswordHash);
 
             if (!isPasswordCorrect) {
@@ -83,7 +85,7 @@ const userService = {
             return {
                 message: '로그인에 성공했습니다.',
                 token,
-                userId: user.userId,
+                userId: user.user_id,
             };
         } catch (error) {
             if (transaction) {
