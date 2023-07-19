@@ -27,7 +27,7 @@ const Message = (sequelize, DataTypes) => {
         {
             sequelize,
             timestamps: false,
-            underscored: false,
+            underscored: true,
             modelName: 'Message',
             tableName: 'messages',
             paranoid: false,

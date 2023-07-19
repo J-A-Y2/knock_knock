@@ -11,11 +11,15 @@ const Comment = (sequelize, DataTypes) => {
                 type: DataTypes.STRING(40),
                 allowNull: true,
             },
+            profileImage: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
         },
         {
             sequelize,
             timestamps: true,
-            underscored: false,
+            underscored: true,
             modelName: 'Comment',
             tableName: 'comments',
             paranoid: false,

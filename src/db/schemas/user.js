@@ -37,7 +37,7 @@ const User = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             profileImage: {
-                type: DataTypes.BLOB,
+                type: DataTypes.STRING,
                 allowNull: true,
             },
             mbti: {
@@ -77,7 +77,7 @@ const User = (sequelize, DataTypes) => {
         {
             sequelize,
             timestamps: true,
-            underscored: false,
+            underscored: true,
             modelName: 'User',
             tableName: 'users',
             paranoid: true,
