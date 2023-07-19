@@ -1,5 +1,5 @@
 import { db } from '../index.js';
-import { Op } from 'sequelize';
+
 const UserModel = {
     create: async ({ newUser }) => {
         const createNewUser = await db.User.create(newUser);
