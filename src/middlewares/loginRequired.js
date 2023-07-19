@@ -1,5 +1,4 @@
 import { UnauthorizedError, InternalServerError } from './errorMiddleware.js';
-
 import passport from 'passport';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 

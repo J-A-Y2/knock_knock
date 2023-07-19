@@ -107,25 +107,14 @@ const postService = {
     },
     participatePost: async ({ userId, postId }) => {
         try {
-            const user = await UserModel.findById(userId);
-            const userGender = user.gender;
-
+            // userId가 게시글 작성자의 id와 다른지 확인
+            // 게시글 작성할 때 작성자의 성별 -> recuitedF/M = 1
             const post = await PostModel.getPostById(postId);
-            console.log(post);
             if (!post) {
                 throw new NotFoundError('해당 Id의 게시글을 찾을 수 없습니다.');
             }
-            if (userGender === '여') {
-                if (post.recruited_f < post.total_f) {
-                    console.log('여');
-                    await ParticipantModel.participatePost({ userId, postId });
-                }
-            } else {
-                if (post.recruited_m < post.total_m) {
-                    console.log('남');
-                    await ParticipantModel.participatePost({ userId, postId });
-                }
-            }
+            await ParticipantModel.participatePost({ userId, postId });
+
             return { message: '모임 참가에 성공했습니다.' };
         } catch (error) {
             if (error instanceof NotFoundError) {

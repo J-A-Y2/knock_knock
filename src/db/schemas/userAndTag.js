@@ -19,8 +19,8 @@ const UserAndTag = (sequelize, DataTypes) => {
     );
     UserAndTag.associate = db => {
         db.UserAndTag.belongsTo(db.User, {
-            foreignKey: 'userId',
-            targetKey: 'userId',
+            foreignKey: 'user_id',
+            targetKey: 'user_id',
         }); // foreignKey는 Tag 모델의 userId, targetKey는 User 모델의 userId
         db.UserAndTag.belongsTo(db.Tag, {
             foreignKey: 'tagId',

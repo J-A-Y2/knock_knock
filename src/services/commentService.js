@@ -4,7 +4,8 @@ import { UserModel } from '../db/models/UserModel.js';
 import { UnauthorizedError, NotFoundError, InternalServerError } from '../middlewares/errorMiddleware.js';
 
 const commentService = {
-    createComment: async function ({ userId, postId, commentId, content }) {
+    createComment: async ({ userId, postId, content }) => {
+        let transaction;
         try {
             transaction = await db.sequelize.transaction();
 
@@ -14,7 +15,7 @@ const commentService = {
                 throw new UnauthorizedError('잘못된 또는 만료된 토큰입니다.');
             }
 
-            await CommentModel.create({ postId, commentId, content });
+            await CommentModel.create({ userId, postId, content });
 
             await transaction.commit();
 
@@ -23,7 +24,7 @@ const commentService = {
             };
         } catch (error) {
             if (transaction) {
-                await transaction.roolback();
+                await transaction.rollback();
             }
             if (error instanceof UnauthorizedError) {
                 throw error;
@@ -33,7 +34,8 @@ const commentService = {
         }
     },
 
-    updateComment: async function ({ userId, postId, commentId, content }) {
+    updateComment: async ({ userId, postId, commentId, content }) => {
+        let transaction;
         try {
             transaction = await db.sequelize.transaction();
 
@@ -58,7 +60,7 @@ const commentService = {
             };
         } catch (error) {
             if (transaction) {
-                await transaction.rollback;
+                await transaction.rollback();
             }
 
             if (error instanceof UnauthorizedError) {
@@ -71,7 +73,8 @@ const commentService = {
         }
     },
 
-    deleteComment: async function ({ userId, commentId }) {
+    deleteComment: async ({ userId, commentId }) => {
+        let transaction;
         try {
             transaction = await db.sequelize.transaction();
 
@@ -96,7 +99,7 @@ const commentService = {
             };
         } catch (error) {
             if (transaction) {
-                await transaction.rollback;
+                await transaction.rollback();
             }
 
             if (error instanceof UnauthorizedError) {
@@ -109,9 +112,12 @@ const commentService = {
         }
     },
 
-    getComment: async function ({ userId, postId }) {
+    getComment: async ({ userId, postId }) => {
+        let transaction;
         try {
             transaction = await db.sequelize.transaction();
+
+            let commentList = [];
 
             const user = await UserModel.findById({ userId });
 
@@ -124,21 +130,22 @@ const commentService = {
             if (!post) {
                 throw new NotFoundError('요청한 게시물의 정보를 찾을 수 없습니다.');
             }
-
+            // cursor == 0 이면, 처음으로 댓글 불러오기.
             if (cursor == 0) {
-                CommentList = await Comment.zeroComment({ postId });
+                commentList = await Comment.recentComment({ postId });
+
+                // cursor == -1 이면, 모든 댓글 불러오기 끝.
             } else if (cursor == -1) {
-                CommentList = ['전체 댓글 조회가 끝났습니다.', '전체 댓글 조회가 끝났습니다.'];
+                commentList = '전체 댓글 조회가 끝났습니다.';
             } else {
-                CommentList = await Comment.select({ postId, cursor });
+                commentList = await Comment.select({ postId, cursor });
             }
 
             await transaction.commit();
 
             return {
-                message: '게시글 총 댓글 불러오기에 성공하셨습니다.',
-                CommentListZero: CommentList[0],
-                CommentListOther: CommentList[1],
+                message: '게시글 댓글 불러오기에 성공하셨습니다.',
+                commentList,
             };
         } catch (error) {
             if (transaction) {
@@ -150,7 +157,7 @@ const commentService = {
             } else if (error instanceof NotFoundError) {
                 throw error;
             } else {
-                throw new InternalServerError('게시글 총 댓글 불러오기에 실패했습니다.');
+                throw new InternalServerError('게시글 댓글 불러오기에 실패했습니다.');
             }
         }
     },
