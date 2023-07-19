@@ -10,12 +10,12 @@ const Participant = (sequelize, DataTypes) => {
             canceled: {
                 type: DataTypes.BOOLEAN,
                 allowNull: true,
-                default: false,
+                defaultValue: false,
             },
             status: {
                 type: DataTypes.STRING(15),
                 allowNull: true,
-                default: 'pending',
+                defaultValue: 'pending',
             },
         },
         {

@@ -4,7 +4,8 @@ import { UserModel } from '../db/models/UserModel.js';
 import { UnauthorizedError, NotFoundError, InternalServerError } from '../middlewares/errorMiddleware.js';
 
 const commentService = {
-    createComment: async function ({ userId, postId, content }) {
+    createComment: async ({ userId, postId, content }) => {
+        let transaction;
         try {
             transaction = await db.sequelize.transaction();
 
@@ -14,7 +15,7 @@ const commentService = {
                 throw new UnauthorizedError('잘못된 또는 만료된 토큰입니다.');
             }
 
-            await CommentModel.create({ postId, commentId, content });
+            await CommentModel.create({ userId, postId, content });
 
             await transaction.commit();
 
@@ -23,7 +24,7 @@ const commentService = {
             };
         } catch (error) {
             if (transaction) {
-                await transaction.roolback();
+                await transaction.rollback();
             }
             if (error instanceof UnauthorizedError) {
                 throw error;
@@ -33,7 +34,8 @@ const commentService = {
         }
     },
 
-    updateComment: async function ({ userId, postId, commentId, content }) {
+    updateComment: async ({ userId, postId, commentId, content }) => {
+        let transaction;
         try {
             transaction = await db.sequelize.transaction();
 
@@ -58,7 +60,7 @@ const commentService = {
             };
         } catch (error) {
             if (transaction) {
-                await transaction.rollback;
+                await transaction.rollback();
             }
 
             if (error instanceof UnauthorizedError) {
@@ -71,7 +73,8 @@ const commentService = {
         }
     },
 
-    deleteComment: async function ({ userId, commentId }) {
+    deleteComment: async ({ userId, commentId }) => {
+        let transaction;
         try {
             transaction = await db.sequelize.transaction();
 
@@ -96,7 +99,7 @@ const commentService = {
             };
         } catch (error) {
             if (transaction) {
-                await transaction.rollback;
+                await transaction.rollback();
             }
 
             if (error instanceof UnauthorizedError) {
@@ -109,7 +112,8 @@ const commentService = {
         }
     },
 
-    getComment: async function ({ userId, postId }) {
+    getComment: async ({ userId, postId }) => {
+        let transaction;
         try {
             transaction = await db.sequelize.transaction();
 

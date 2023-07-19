@@ -2,7 +2,7 @@ import { commentService } from '../services/commentService.js';
 import { statusCode } from '../utils/statusCode.js';
 
 const commentController = {
-    create: async function (req, res, next) {
+    create: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
             const { postId, content } = req.body;
@@ -16,7 +16,7 @@ const commentController = {
         }
     },
 
-    update: async function (res, req, next) {
+    update: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
             const commentId = req.params.commentId;
@@ -31,7 +31,7 @@ const commentController = {
         }
     },
 
-    delete: async function (req, res, next) {
+    delete: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
             const commentId = req.params.commentId;
@@ -45,7 +45,7 @@ const commentController = {
         }
     },
 
-    getComment: async function (req, res, next) {
+    getComment: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
             const postId = req.query.postId;

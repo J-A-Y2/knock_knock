@@ -19,6 +19,7 @@ const PostModel = {
                 post_id: postId,
             },
         });
+        console.log(post);
         return post;
     },
     update: async ({ postId, fieldToUpdate, newValue }) => {

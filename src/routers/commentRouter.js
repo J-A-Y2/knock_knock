@@ -4,8 +4,10 @@ import { addCommentValidationRules, addComment_validate } from '../middlewares/c
 import { updateCommentValidationRules, updateComment_validate } from '../middlewares/setComment_validate.js';
 import { commentParams_validate } from '../middlewares/commentParams_validate.js';
 import { getComment_validate } from '../middlewares/getComment_validate.js';
+import { loginRequired } from '../middlewares/loginRequired.js';
 
 const commentRouter = Router();
+commentRouter.use(loginRequired);
 
 // 댓글 작성
 commentRouter.post('/', addCommentValidationRules, addComment_validate, commentController.create);
