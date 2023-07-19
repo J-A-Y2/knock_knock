@@ -84,27 +84,7 @@ const userController = {
             const getUser = await userService.getUserById({ userId });
 
             statusCode.setResponseCode200(res);
-            return res.send({
-                message: getUser.message,
-                user: {
-                    userId: getUser.userId,
-                    email: getUser.email,
-                    username: getUser.username,
-                    nickname: getUser.nickname,
-                    gender: getUser.gender,
-                    birthday: getUser.birthday,
-                    job: getUser.job,
-                    region: getUser.region,
-                    profileImage: getUser.profileImage,
-                    mbti: getUser.mbti,
-                    religion: getUser.religion,
-                    height: getUser.height,
-                    hobby: getUser.hobby,
-                    personality: getUser.personality,
-                    ideal: getUser.ideal,
-                    introduce: getUser.introduce,
-                },
-            });
+            return res.send({ getUser });
         } catch (error) {
             next(error);
         }
@@ -118,7 +98,7 @@ const userController = {
             const updatedUser = await userService.updateUser({ userId, updateData });
 
             statusCode.setResponseCode200(res);
-            return res.send({ message: updatedUser.message });
+            return res.send({ updatedUser });
         } catch (error) {
             next(error);
         }

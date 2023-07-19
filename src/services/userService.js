@@ -178,11 +178,24 @@ const userService = {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
-            await UserModel.update({ userId, updateData });
+            const updatedUser = await UserModel.update({ userId, updateData });
 
             await transaction.commit();
 
-            return { message: '회원 정보가 수정되었습니다.' };
+            return {
+                message: '회원 정보가 수정되었습니다.',
+                nickname: updatedUser.nickname,
+                job: updatedUser.job,
+                region: updatedUser.region,
+                profileImage: updatedUser.profileImage,
+                mbti: updatedUser.mbti,
+                religion: updatedUser.religion,
+                height: updatedUser.height,
+                hobby: updatedUser.hobby,
+                personality: updatedUser.personality,
+                ideal: updatedUser.ideal,
+                introduce: updatedUser.introduce,
+            };
         } catch (error) {
             if (transaction) {
                 await transaction.rollback();
