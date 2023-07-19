@@ -1,27 +1,31 @@
 import { Router } from 'express';
 import { postController } from '../controllers/postController.js';
 import { loginRequired } from '../middlewares/loginRequired.js';
+import { postParamsValidate } from '../middlewares/postParamsValidate.js';
+import { getPostValidate } from '../middlewares/getPostValidate.js';
+import { setPostValidationRules, setPostValidate } from '../middlewares/setPostValidate.js';
 import { createPostValidate, createPostValidationRules } from '../middlewares/createPostValidate.js';
 
 const postRouter = Router();
+postRouter.use(loginRequired);
 
 // 게시글 작성
-postRouter.post('/', createPostValidationRules, createPostValidate, loginRequired, postController.createPost);
+postRouter.post('/', createPostValidationRules, createPostValidate, postController.createPost);
 
 // 전체 게시글 시간순 조회
-postRouter.get('/');
+postRouter.get('/', getPostValidate, postController.getAllPosts);
 
 // 게시글 개별 조회
-postRouter.get('/:postId');
+postRouter.get('/:postId', postParamsValidate, postController.getPost);
 
 // 게시글 수정
-postRouter.put('/:postId');
+postRouter.put('/:postId', postParamsValidate, setPostValidationRules, setPostValidate, postController.setPost);
 
 // 게시글 삭제
 postRouter.delete('/:postId');
 
 // 참여 신청
-postRouter.post('/:postId/participants');
+postRouter.post('/:postId/participants', postController.participatePost);
 
 // 신청자 조회
 postRouter.get('/:postId/userList');

@@ -71,7 +71,7 @@ const userService = {
             const secretKey = process.env.JWT_SECRET_KEY || 'jwt-secret-key';
             const token = jwt.sign(
                 {
-                    userId: user.userId,
+                    userId: user.user_id,
                     email: user.email,
                     name: user.nickname,
                 },
