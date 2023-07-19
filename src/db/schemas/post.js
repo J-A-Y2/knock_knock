@@ -8,7 +8,7 @@ const Post = (sequelize, DataTypes) => {
                 primaryKey: true,
             },
             profileImage: {
-                type: DataTypes.BLOB,
+                type: DataTypes.STRING,
                 allowNull: true,
             },
             postType: {
@@ -20,7 +20,7 @@ const Post = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             postImage: {
-                type: DataTypes.BLOB,
+                type: DataTypes.STRING,
                 allowNull: true,
             },
             people: {
@@ -48,7 +48,7 @@ const Post = (sequelize, DataTypes) => {
         {
             sequelize,
             timestamps: true,
-            underscored: false,
+            underscored: true,
             modelName: 'Post',
             tableName: 'posts',
             paranoid: false,
