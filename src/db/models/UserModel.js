@@ -1,7 +1,7 @@
 import { db } from '../index.js';
-
+import { Op } from 'sequelize';
 const UserModel = {
-    create: async function ({ newUser }) {
+    create: async ({ newUser }) => {
         const createNewUser = await db.User.create(newUser);
         return createNewUser;
     },
@@ -16,26 +16,37 @@ const UserModel = {
 
         return user;
     },
-    findById: async function (userId) {
+    findById: async userId => {
         const user = await db.User.findOne({
             where: {
-                userId: userId,
+                user_id: userId,
                 isDeleted: 0,
             },
         });
         return user;
     },
-    updateUser: async function ({ userId, updatedUser }) {
-        const updateUser = await db.User.update({ updatedUser });
-        return updateUser;
-    },
-    deleteUser: async function (userId) {
-        const deleteUser = await db.User.destroy({
+    update: async ({ userId, updateData }) => {
+        const updatedUser = await db.User.update(updateData, {
             where: {
                 userId: userId,
                 isDeleted: 0,
             },
         });
+        return updatedUser;
+    },
+    delete: async ({ userId }) => {
+        const deleteUser = await db.User.update(
+            {
+                isDeleted: 1,
+                deletedAt: new Date(),
+            },
+            {
+                where: {
+                    userId: userId,
+                    isDeleted: 0,
+                },
+            },
+        );
         return deleteUser;
     },
 };
