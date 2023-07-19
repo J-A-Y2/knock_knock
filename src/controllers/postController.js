@@ -1,7 +1,7 @@
 import { statusCode } from '../utils/statusCode.js';
 import { postService } from '../services/postService.js';
 const postController = {
-    createPost: async function (req, res, next) {
+    createPost: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
 
@@ -17,7 +17,7 @@ const postController = {
             next(error);
         }
     },
-    getAllPosts: async function (req, res, next) {
+    getAllPosts: async (req, res, next) => {
         try {
             const page = parseInt(req.query.page || 1);
             const perPage = parseInt(req.query.perPage || 5);
@@ -30,7 +30,7 @@ const postController = {
             next(error);
         }
     },
-    getPost: async function (req, res, next) {
+    getPost: async (req, res, next) => {
         try {
             const postId = req.params.postId;
             const post = await postService.getPost(postId);
@@ -41,7 +41,7 @@ const postController = {
             next(error);
         }
     },
-    setPost: async function (req, res, next) {
+    setPost: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
             const postId = req.params.postId;

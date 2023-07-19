@@ -1,23 +1,23 @@
 import { db } from '../index.js';
 
 const PostModel = {
-    create: async function ({ newPost }) {
+    create: async ({ newPost }) => {
         const createNewPost = await db.Post.create(newPost);
         return createNewPost;
     },
-    getAllPosts: async function ({ offset, limit }) {
+    getAllPosts: async ({ offset, limit }) => {
         const { count, rows: posts } = await db.Post.findAndCountAll({ offset, limit });
         return { total: count, posts };
     },
-    getPostById: async function (postId) {
+    getPostById: async postId => {
         const post = await db.Post.findOne({
             where: {
-                postId: postId,
+                postId,
             },
         });
         return post;
     },
-    update: async function ({ postId, fieldToUpdate, newValue }) {
+    update: async ({ postId, fieldToUpdate, newValue }) => {
         const updatePost = await db.Post.update(
             { [fieldToUpdate]: newValue },
             {
