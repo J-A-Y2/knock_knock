@@ -28,7 +28,7 @@ postRouter.delete('/:postId');
 postRouter.post('/:postId/participants', postController.participatePost);
 
 // 신청자 조회
-postRouter.get('/:postId/userList');
+postRouter.get('/:postId/userlist');
 
 // 신청 수락
 postRouter.post('/:postId/allow');
