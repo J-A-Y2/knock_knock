@@ -189,7 +189,7 @@ paths:
                             type: object
                             properties:
                                 userId:
-                                    type: string
+                                    type: integer
                                 email:
                                     type: string
                                 username:
