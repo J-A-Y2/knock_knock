@@ -175,6 +175,7 @@ const userService = {
             const randomUsers = await db.User.findAll({
                 where: { isDeleted: 0 },
                 order: db.sequelize.random(),
+                limit: 6,
             });
 
             await transaction.commit();

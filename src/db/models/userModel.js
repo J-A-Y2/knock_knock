@@ -18,7 +18,7 @@ const UserModel = {
     findById: async userId => {
         const user = await db.User.findOne({
             where: {
-                userId: userId,
+                user_id: userId,
                 isDeleted: 0,
             },
         });
@@ -27,8 +27,8 @@ const UserModel = {
     update: async ({ userId, updateData }) => {
         const updatedUser = await db.User.update(updateData, {
             where: {
-                userId: userId,
-                isDeleted: 0,
+                user_id: userId,
+                is_deleted: 0,
             },
         });
         return updatedUser;
@@ -36,13 +36,13 @@ const UserModel = {
     delete: async ({ userId }) => {
         const deleteUser = await db.User.update(
             {
-                isDeleted: 1,
-                deletedAt: new Date(),
+                is_deleted: 1,
+                deleted_at: new Date(),
             },
             {
                 where: {
-                    userId: userId,
-                    isDeleted: 0,
+                    user_id: userId,
+                    is_deleted: 0,
                 },
             },
         );
