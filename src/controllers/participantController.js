@@ -14,5 +14,31 @@ const participantController = {
             next(error);
         }
     },
+    participateCancel: async (req, res, next) => {
+        try {
+            const userId = req.currentUserId;
+            const postId = req.params.postId;
+
+            const participant = await participantService.participateCancel({ userId, postId });
+
+            statusCode.setResponseCode201(res);
+            res.send(participant.message);
+        } catch (error) {
+            next(error);
+        }
+    },
+    getParticipants: async (req, res, next) => {
+        try {
+            const userId = req.currentUserId;
+            const postId = req.params.postId;
+
+            const participants = await participantService.getParticipants({ userId, postId });
+
+            statusCode.setResponseCode200(res);
+            res.send({ message: participants.message, participantsList: participants.participants });
+        } catch (error) {
+            next(error);
+        }
+    },
 };
 export { participantController };
