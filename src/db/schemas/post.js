@@ -7,19 +7,19 @@ const Post = (sequelize, DataTypes) => {
                 autoIncrement: true,
                 primaryKey: true,
             },
-            profileImage: {
+            profile_image: {
                 type: DataTypes.STRING,
                 allowNull: true,
             },
-            postType: {
+            post_type: {
                 type: DataTypes.STRING(5),
                 allowNull: false,
             },
-            postTitle: {
+            post_title: {
                 type: DataTypes.STRING(100),
                 allowNull: false,
             },
-            postImage: {
+            post_image: {
                 type: DataTypes.STRING,
                 allowNull: true,
             },
@@ -27,15 +27,15 @@ const Post = (sequelize, DataTypes) => {
                 type: DataTypes.STRING(30),
                 allowNull: false,
             },
-            meetingTime: {
+            meeting_time: {
                 type: DataTypes.STRING(20),
                 allowNull: false,
             },
-            postContent: {
+            post_content: {
                 type: DataTypes.STRING(200),
                 allowNull: true,
             },
-            isCompleted: {
+            is_completed: {
                 type: DataTypes.BOOLEAN,
                 allowNull: false,
                 defaultValue: false,
@@ -67,12 +67,12 @@ const Post = (sequelize, DataTypes) => {
         },
     );
     Post.associate = db => {
-        db.Post.hasMany(db.Comment, { foreignKey: 'post_id', sourceKey: 'post_id' }); // foreignKey는 Post모델의 postId, sourceKey는 User 모델의 postId
-        db.Post.belongsTo(db.User, { foreignKey: 'user_id', targetKey: 'user_id' }); // foreignKey는 Post모델의 userId, targetKey는 User 모델의 userId
+        db.Post.hasMany(db.Comment, { foreignKey: 'post_id', sourceKey: 'post_id' }); // foreignKey는 Post모델의 post_id, sourceKey는 User 모델의 post_id
+        db.Post.belongsTo(db.User, { foreignKey: 'user_id', targetKey: 'user_id' }); // foreignKey는 Post모델의 user_id, targetKey는 User 모델의 user_id
         db.Post.hasMany(db.Participant, {
             foreignKey: 'post_id',
             sourceKey: 'post_id',
-        }); // foreignKey는 Participant모델의 postId, sourceKey는 Post 모델의 postId
+        }); // foreignKey는 Participant모델의 post_id, sourceKey는 Post 모델의 post_id
     };
 
     return Post;
