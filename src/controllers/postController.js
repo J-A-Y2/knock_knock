@@ -63,7 +63,9 @@ const postController = {
 
             statusCode.setResponseCode200(res);
             res.send(post.message);
-        } catch (error) {}
+        } catch (error) {
+            next(error);
+        }
     },
     participatePost: async (req, res, next) => {
         try {
