@@ -84,7 +84,7 @@ const userController = {
             const getUser = await userService.getUserById({ userId });
 
             statusCode.setResponseCode200(res);
-            return res.send({ getUser });
+            return res.send(getUser);
         } catch (error) {
             next(error);
         }
@@ -98,7 +98,7 @@ const userController = {
             const updatedUser = await userService.updateUser({ userId, updateData });
 
             statusCode.setResponseCode200(res);
-            return res.send({ updatedUser });
+            return res.send(updatedUser);
         } catch (error) {
             next(error);
         }

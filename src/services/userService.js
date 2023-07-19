@@ -178,7 +178,8 @@ const userService = {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
-            const updatedUser = await UserModel.update({ userId, updateData });
+            await UserModel.update({ userId, updateData });
+            const updatedUser = await UserModel.findById(userId);
 
             await transaction.commit();
 
