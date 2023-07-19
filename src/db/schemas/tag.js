@@ -22,10 +22,14 @@ const Tag = (sequelize, DataTypes) => {
         },
     );
     Tag.associate = db => {
-        db.Tag.belongsTo(db.UserAndTag, {
-            foreignKey: 'userAndTagId',
-            targetKey: 'userAndTagId',
-        }); // foreignKey는 Tag 모델의 userAndTagId, targetKey는 UserAndTagId 모델의 userAndTagId
+        db.Tag.belongsTo(db.TagCategory, {
+            foreignKey: 'tagCategoryId',
+            targetKey: 'tagCategoryId',
+        }); // foreignKey는 Tag 모델의 tagCategoryId, targetKey는 TagCategory 모델의 tagCategoryId
+        db.Tag.hasToMany(db.UserAndTag, {
+            foreignKey: 'tagId',
+            sourceKey: 'tagId',
+        }); // foreignKey는 UserAndTag 모델의 tagId, sourceKey는 Tag 모델의 tagId
     };
 
     return Tag;
