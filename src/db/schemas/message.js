@@ -2,24 +2,24 @@ const Message = (sequelize, DataTypes) => {
     const Message = sequelize.define(
         'Message',
         {
-            messageId: {
+            message_id: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true,
             },
-            messageContent: {
+            message_content: {
                 type: DataTypes.STRING(40),
                 allowNull: false,
             },
-            sendId: {
+            send_id: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
             },
-            receiveId: {
+            receive_id: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
             },
-            createdAt: {
+            created_at: {
                 type: DataTypes.DATE,
                 allowNull: false,
             },
