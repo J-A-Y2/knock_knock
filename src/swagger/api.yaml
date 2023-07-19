@@ -139,7 +139,7 @@ paths:
                 '405':
                     description: Invalid input
 
-    /users/current:
+    /users/mypage:
         get:
             tags:
                 - user
@@ -211,7 +211,7 @@ paths:
 
                 '400':
                     description: Invalid tag value
-
+    /users/mypage/delete:
         delete:
             tags:
                 - user
@@ -233,6 +233,7 @@ paths:
                 '400':
                     description: Invalid tag value
 
+    /users/mypage/update:
         put:
             tags:
                 - user

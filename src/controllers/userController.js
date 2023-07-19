@@ -111,7 +111,7 @@ const userController = {
     },
     update: async (req, res, next) => {
         try {
-            const { userId } = req.params;
+            const { userId } = req.currentUserId;
             const updateData = req.body;
 
             const updatedUser = await userService.updateUser({ userId, updateData });
@@ -124,7 +124,7 @@ const userController = {
     },
     delete: async (req, res, next) => {
         try {
-            const { userId } = req.params;
+            const { userId } = req.currentUserId;
 
             const deletedUser = await userService.deleteUser({ userId });
 
