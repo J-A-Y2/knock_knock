@@ -24,18 +24,6 @@ postRouter.put('/:postId', postParamsValidate, setPostValidationRules, setPostVa
 // 게시글 삭제
 postRouter.delete('/:postId', postController.deletePost);
 
-// 참여 신청
-postRouter.post('/:postId/participants', postController.participatePost);
-
-// 신청자 조회
-postRouter.get('/:postId/userlist');
-
-// 신청 수락
-postRouter.post('/:postId/allow');
-
-// 신청 거절
-postRouter.delete('/:postId/delete');
-
 export { postRouter };
 // 포스트 테이블 -> 포스트의 id -> 신청하기
 // -> 누른 유저의 id 이것을 테이블 저장해 -> 신청인원 리스트 테이블 -> 수락
