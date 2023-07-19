@@ -5,8 +5,7 @@ const UserModel = {
         const createNewUser = await db.User.create(newUser);
         return createNewUser;
     },
-
-    findByEmail: async function (email) {
+    findByEmail: async email => {
         const user = await db.User.findOne({
             where: {
                 email: email,

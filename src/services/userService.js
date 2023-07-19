@@ -167,6 +167,36 @@ const userService = {
             }
         }
     },
+    // 유저를 랜덤하게 조회하기
+    getRandomUsers: async () => {
+        let transaction;
+        try {
+            transaction = await db.sequelize.transaction();
+            const randomUsers = await db.User.findAll({
+                where: { isDeleted: 0 },
+                order: db.sequelize.random(),
+            });
+
+            await transaction.commit();
+
+            return randomUsers.map(user => ({
+                userId: user.userId,
+                email: user.email,
+                username: user.username,
+            }));
+        } catch (error) {
+            if (transaction) {
+                await transaction.rollback();
+            }
+            if (error instanceof UnauthorizedError) {
+                throw error;
+            } else if (error instanceof NotFoundError) {
+                throw error;
+            } else {
+                throw new InternalServerError('회원 정보를 수정하는 데 실패했습니다.');
+            }
+        }
+    },
     // 유저 정보 수정
     updateUser: async function ({ userId, updateData }) {
         let transaction;
