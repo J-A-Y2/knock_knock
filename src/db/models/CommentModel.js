@@ -22,7 +22,7 @@ const CommentModel = {
         return deleteComment;
     },
 
-    // 댓글 불러오기
+    // 댓글 불러오기 (무한스크롤)
     select: async function ({ postId }) {
         const getComment = await db.Comment.findAll(postId);
 

@@ -1,22 +1,22 @@
 import { commentService } from '../services/commentService.js';
 import { statusCode } from '../utils/statusCode.js';
 
-class commentController {
-    static async create(req, res, next) {
+const commentController = {
+    create: async function (req, res, next) {
         try {
             const userId = req.currentUserId;
             const { postId, content } = req.body;
 
-            const createComment = await commentService.createComment({ newComment: { userId, postId, content } });
+            const createComment = await commentService.createComment({ userId, postId, content });
 
             statusCode.setResponseCode201(res);
             return res.send({ message: createComment.message });
         } catch (error) {
             next(error);
         }
-    }
+    },
 
-    static async update(req, res, next) {
+    update: async function (res, req, next) {
         try {
             const userId = req.currentUserId;
             const commentId = req.params.commentId;
@@ -29,9 +29,9 @@ class commentController {
         } catch (error) {
             next(error);
         }
-    }
+    },
 
-    static async delete(req, res, next) {
+    delete: async function (req, res, next) {
         try {
             const userId = req.currentUserId;
             const commentId = req.params.commentId;
@@ -43,9 +43,9 @@ class commentController {
         } catch (error) {
             next(error);
         }
-    }
+    },
 
-    static async getComment(req, res, next) {
+    getComment: async function (req, res, next) {
         try {
             const userId = req.currentUserId;
             const postId = req.query.postId;
@@ -56,13 +56,12 @@ class commentController {
             statusCode.setResponseCode200(res);
             return res.send({
                 message: getComment.message,
-                commentListZero: getComment.CommentListZero,
-                commentListOther: getComment.CommentListOther,
+                commentList: getComment.commentList,
             });
         } catch (error) {
             next(error);
         }
-    }
-}
+    },
+};
 
 export { commentController };
