@@ -51,10 +51,12 @@ const Post = (sequelize, DataTypes) => {
             recruited_m: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
+                defaultValue: 0,
             },
             recruited_f: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
+                defaultValue: 0,
             },
         },
         {

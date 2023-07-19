@@ -2,30 +2,25 @@ import { PostModel } from '../db/models/postModel.js';
 import { UserModel } from '../db/models/UserModel.js';
 import { ParticipantModel } from '../db/models/ParticipantModel.js';
 import { db } from '../db/index.js';
-import { InternalServerError, NotFoundError, UnauthorizedError } from '../middlewares/errorMiddleware.js';
+import { BadRequestError, InternalServerError, NotFoundError, UnauthorizedError } from '../middlewares/errorMiddleware.js';
 
 const postService = {
-    createPost: async ({ userId, post }) => {
-        let transaction;
+    createPost: async ({ userId, newPost }) => {
         try {
-            transaction = await db.sequelize.transaction();
-
             const user = await UserModel.findById(userId);
-
             if (!user) {
                 throw new UnauthorizedError('잘못된 토큰입니다.');
             }
-
-            await PostModel.create({ newPost: { userId, ...post } });
-
-            await transaction.commit();
+            const gender = user.gender;
+            if (gender === '여') {
+                newPost.recruited_f = 1;
+            } else {
+                newPost.recruited_m = 1;
+            }
+            await PostModel.create({ newPost: { user_id: userId, ...newPost } });
 
             return { message: '게시물 작성을 성공했습니다.' };
         } catch (error) {
-            if (transaction) {
-                await transaction.rollback();
-            }
-
             if (error instanceof UnauthorizedError) {
                 throw error;
             } else {
@@ -72,17 +67,24 @@ const postService = {
                 throw new NotFoundError('해당 id의 게시글을 찾을 수 없습니다.');
             }
 
-            if (post.userId !== userId) {
+            if (post.user_id !== userId) {
                 throw new UnauthorizedError('수정 권한이 없습니다.');
             }
 
+            if (toUpdate.total_m) {
+                if (post.recruited_m > toUpdate.total_m) {
+                    throw new BadRequestError('현재 모집된 인원보다 적게 수정할 수 없습니다.');
+                }
+            }
+
             const fieldsToUpdate = {
-                postTitle: 'postTitle',
-                postContent: 'postContent',
-                postType: 'postType',
-                people: 'people',
+                post_title: 'post_title',
+                post_content: 'post_content',
+                post_type: 'post_type',
                 place: 'place',
-                meetingTime: 'meetingTime',
+                total_m: 'total_m',
+                total_f: 'total_f',
+                meeting_time: 'meeting_time',
             };
             for (const [field, fieldToUpdate] of Object.entries(fieldsToUpdate)) {
                 if (toUpdate[field]) {
@@ -99,6 +101,8 @@ const postService = {
             if (error instanceof UnauthorizedError) {
                 throw error;
             } else if (error instanceof NotFoundError) {
+                throw error;
+            } else if (error instanceof BadRequestError) {
                 throw error;
             } else {
                 throw new InternalServerError('게시글 수정을 실패했습니다.');
