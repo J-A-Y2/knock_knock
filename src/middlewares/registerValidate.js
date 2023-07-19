@@ -3,7 +3,7 @@ import { BadRequestError } from './errorMiddleware.js';
 
 const RegisterValidationRules = [
     body('email').notEmpty().withMessage('이메일을 입력하세요.').isEmail().withMessage('유효한 이메일을 입력하세요.'),
-    body('userPassword')
+    body('user_password')
         .notEmpty()
         .withMessage('비밀번호를 입력하세요.')
         .isLength({ min: 8 })
@@ -20,7 +20,7 @@ const RegisterValidationRules = [
         .notEmpty()
         .withMessage('생년월일을 입력하세요.')
         .matches(/^\d{4}\d{2}\d{2}$/)
-        .withMessage('올바른 생년월일 형식(YYYYMMDD)을 입력하세요.'),
+        .withMessage('올바른 생년월일 형식(YYYY-MM-DD)을 입력하세요.'),
     body('job').notEmpty().withMessage('직업을 입력하세요.'),
     body('mbti')
         .optional()
