@@ -26,7 +26,7 @@ const Tag = (sequelize, DataTypes) => {
             foreignKey: 'tagCategoryId',
             targetKey: 'tagCategoryId',
         }); // foreignKey는 Tag 모델의 tagCategoryId, targetKey는 TagCategory 모델의 tagCategoryId
-        db.Tag.hasToMany(db.UserAndTag, {
+        db.Tag.hasMany(db.UserAndTag, {
             foreignKey: 'tagId',
             sourceKey: 'tagId',
         }); // foreignKey는 UserAndTag 모델의 tagId, sourceKey는 Tag 모델의 tagId

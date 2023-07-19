@@ -22,7 +22,7 @@ const TagCategory = (sequelize, DataTypes) => {
         },
     );
     TagCategory.associate = db => {
-        db.TagCategory.hasToMany(db.Tag, {
+        db.TagCategory.hasMany(db.Tag, {
             foreignKey: 'tagCategoryId',
             sourceKey: 'tagCategoryId',
         }); // foreignKey는 Tag 모델의 tagCategoryId, sourceKey는 TagCategory 모델의 tagCategoryId
