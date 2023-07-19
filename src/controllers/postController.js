@@ -12,7 +12,45 @@ const postController = {
                 post: { postTitle, postContent, postType, people, place, meetingTime },
             });
             statusCode.setResponseCode201(res);
-            res.send({ message: createPost.message });
+            res.send(createPost.message);
+        } catch (error) {
+            next(error);
+        }
+    },
+    getAllPosts: async function (req, res, next) {
+        try {
+            const page = parseInt(req.query.page || 1);
+            const perPage = parseInt(req.query.perPage || 5);
+
+            const posts = await postService.getAllPosts({ page, perPage });
+
+            statusCode.setResponseCode200(res);
+            res.send({ message: posts.message, allPostCount: posts.total, currentPage: page, postList: posts.posts });
+        } catch (error) {
+            next(error);
+        }
+    },
+    getPost: async function (req, res, next) {
+        try {
+            const postId = req.params.postId;
+            const post = await postService.getPost(postId);
+
+            statusCode.setResponseCode200(res);
+            res.send({ message: post.message, post: post.post });
+        } catch (error) {
+            next(error);
+        }
+    },
+    setPost: async function (req, res, next) {
+        try {
+            const userId = req.currentUserId;
+            const postId = req.params.postId;
+            const { postTitle, postContent, postType, people, place, meetingTime } = req.body;
+            const toUpdate = { postTitle, postContent, postType, people, place, meetingTime };
+            const post = await postService.setPost({ userId, postId, toUpdate });
+
+            statusCode.setResponseCode200(res);
+            res.send(post.message);
         } catch (error) {
             next(error);
         }
