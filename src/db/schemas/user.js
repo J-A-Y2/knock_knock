@@ -2,7 +2,7 @@ const User = (sequelize, DataTypes) => {
     const User = sequelize.define(
         'User',
         {
-            userId: {
+            user_id: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true,
@@ -41,7 +41,7 @@ const User = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             profileImage: {
-                type: DataTypes.STRING(2000),
+                type: DataTypes.STRING,
                 allowNull: true,
             },
             mbti: {
@@ -81,7 +81,7 @@ const User = (sequelize, DataTypes) => {
         {
             sequelize,
             timestamps: true,
-            underscored: false,
+            underscored: true,
             modelName: 'User',
             tableName: 'users',
             paranoid: true,

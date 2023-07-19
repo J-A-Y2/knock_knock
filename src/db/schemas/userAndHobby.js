@@ -19,8 +19,8 @@ const UserAndHobby = (sequelize, DataTypes) => {
     );
     UserAndHobby.associate = db => {
         db.UserAndHobby.belongsTo(db.User, {
-            foreignKey: 'userId',
-            targetKey: 'userId',
+            foreignKey: 'user_id',
+            targetKey: 'user_id',
         }); // foreignKey는 UserAndHobby 모델의 userId, targetKey는 User 모델의 userId
         db.UserAndHobby.belongsTo(db.Hobby, {
             foreignKey: 'hobbyId',

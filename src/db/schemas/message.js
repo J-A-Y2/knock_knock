@@ -27,7 +27,7 @@ const Message = (sequelize, DataTypes) => {
         {
             sequelize,
             timestamps: false,
-            underscored: false,
+            underscored: true,
             modelName: 'Message',
             tableName: 'messages',
             paranoid: false,
@@ -37,12 +37,12 @@ const Message = (sequelize, DataTypes) => {
         // foreignKey는 Message모델의 sendId, targetKey는 User 모델의 userId
         db.Message.belongsTo(db.User, {
             foreignKey: 'sendId',
-            targetKey: 'userId',
+            targetKey: 'user_id',
         });
         // foreignKey는 Message모델의 receiveId, targetKey는 User 모델의 userId
         db.Message.belongsTo(db.User, {
             foreignKey: 'receiveId',
-            targetKey: 'userId',
+            targetKey: 'user_id',
         });
     };
 

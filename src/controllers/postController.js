@@ -1,15 +1,28 @@
 import { statusCode } from '../utils/statusCode.js';
 import { postService } from '../services/postService.js';
 const postController = {
-    createPost: async function (req, res, next) {
+    createPost: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
+            console.log(userId);
 
-            const { postTitle, postContent, postType, people, place, meetingTime } = req.body;
+            const { postTitle, postContent, postType, people, place, meetingTime, total_m, total_f, recruited_m, recruited_f } =
+                req.body;
 
             const createPost = await postService.createPost({
-                userId,
-                post: { postTitle, postContent, postType, people, place, meetingTime },
+                userId: userId,
+                post: {
+                    postTitle,
+                    postContent,
+                    postType,
+                    people,
+                    place,
+                    meetingTime,
+                    total_m,
+                    total_f,
+                    recruited_m,
+                    recruited_f,
+                },
             });
             statusCode.setResponseCode201(res);
             res.send(createPost.message);
@@ -17,7 +30,7 @@ const postController = {
             next(error);
         }
     },
-    getAllPosts: async function (req, res, next) {
+    getAllPosts: async (req, res, next) => {
         try {
             const page = parseInt(req.query.page || 1);
             const perPage = parseInt(req.query.perPage || 5);
@@ -30,7 +43,7 @@ const postController = {
             next(error);
         }
     },
-    getPost: async function (req, res, next) {
+    getPost: async (req, res, next) => {
         try {
             const postId = req.params.postId;
             const post = await postService.getPost(postId);
@@ -41,16 +54,29 @@ const postController = {
             next(error);
         }
     },
-    setPost: async function (req, res, next) {
+    setPost: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
             const postId = req.params.postId;
             const { postTitle, postContent, postType, people, place, meetingTime } = req.body;
-            const toUpdate = { postTitle, postContent, postType, people, place, meetingTime };
+            const toUpdate = { post_title: postTitle, postContent, postType, people, place, meetingTime };
             const post = await postService.setPost({ userId, postId, toUpdate });
 
             statusCode.setResponseCode200(res);
             res.send(post.message);
+        } catch (error) {
+            next(error);
+        }
+    },
+    participatePost: async (req, res, next) => {
+        try {
+            const userId = req.currentUserId;
+            const postId = req.params.postId;
+
+            const participant = await postService.participatePost({ userId, postId });
+
+            statusCode.setResponseCode201(res);
+            res.send(participant.message);
         } catch (error) {
             next(error);
         }
