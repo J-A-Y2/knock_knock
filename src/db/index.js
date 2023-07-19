@@ -5,12 +5,9 @@ import Post from './schemas/post.js';
 import Comment from './schemas/comment.js';
 import Message from './schemas/message.js';
 import Participant from './schemas/participant.js';
-import Hobby from './schemas/hobby.js';
-import Ideal from './schemas/ideal.js';
-import Personality from './schemas/personality.js';
-import UserAndHobby from './schemas/userAndHobby.js';
-import UserAndIdeal from './schemas/userAndIdeal.js';
-import UserAndPersonality from './schemas/userAndPersonality.js';
+import Tag from './schemas/tag.js';
+import TagCategory from './schemas/tagCategory.js';
+import UserAndTag from './schemas/userAndTag.js';
 
 const db = {};
 
@@ -25,12 +22,9 @@ db.Post = Post(sequelize, Sequelize);
 db.Comment = Comment(sequelize, Sequelize);
 db.Message = Message(sequelize, Sequelize);
 db.Participant = Participant(sequelize, Sequelize);
-db.Hobby = Hobby(sequelize, Sequelize);
-db.Ideal = Ideal(sequelize, Sequelize);
-db.Personality = Personality(sequelize, Sequelize);
-db.UserAndHobby = UserAndHobby(sequelize, Sequelize);
-db.UserAndIdeal = UserAndIdeal(sequelize, Sequelize);
-db.UserAndPersonality = UserAndPersonality(sequelize, Sequelize);
+db.Tag = Tag(sequelize, Sequelize);
+db.TagCategory = TagCategory(sequelize, Sequelize);
+db.UserAndTag = UserAndTag(sequelize, Sequelize);
 
 // 각 모델들을 돌면서 모델간의 관계를 정의하는 함수를 동작시킴.
 Object.keys(db).forEach(modelName => {
