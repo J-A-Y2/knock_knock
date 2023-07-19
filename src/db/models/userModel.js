@@ -1,7 +1,7 @@
 import { db } from '../index.js';
 
 const UserModel = {
-    create: async function ({ newUser }) {
+    create: async ({ newUser }) => {
         const createNewUser = await db.User.create(newUser);
         return createNewUser;
     },
@@ -16,7 +16,7 @@ const UserModel = {
 
         return user;
     },
-    findById: async function (userId) {
+    findById: async userId => {
         const user = await db.User.findOne({
             where: {
                 userId: userId,
@@ -25,7 +25,7 @@ const UserModel = {
         });
         return user;
     },
-    update: async function ({ userId, updateData }) {
+    update: async ({ userId, updateData }) => {
         const updatedUser = await db.User.update(updateData, {
             where: {
                 userId: userId,
@@ -34,7 +34,7 @@ const UserModel = {
         });
         return updatedUser;
     },
-    delete: async function ({ userId }) {
+    delete: async ({ userId }) => {
         const deleteUser = await db.User.update(
             {
                 isDeleted: 1,
@@ -48,6 +48,14 @@ const UserModel = {
             },
         );
         return deleteUser;
+    },
+    practice: async ({}) => {
+        const practice = await db.User.update(
+            {},
+            {
+                where: { userId },
+            },
+        );
     },
 };
 

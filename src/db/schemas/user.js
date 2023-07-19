@@ -29,7 +29,7 @@ const User = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             birthday: {
-                type: DataTypes.STRING(8),
+                type: DataTypes.DATE,
                 allowNull: false,
             },
             job: {

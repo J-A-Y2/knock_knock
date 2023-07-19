@@ -1,7 +1,13 @@
 import dotenv from 'dotenv';
 import bcrypt, { hash } from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { ConflictError, BadRequestError, NotFoundError, UnauthorizedError } from '../middlewares/errorMiddleware.js';
+import {
+    ConflictError,
+    BadRequestError,
+    NotFoundError,
+    UnauthorizedError,
+    InternalServerError,
+} from '../middlewares/errorMiddleware.js';
 import { UserModel } from '../db/models/UserModel.js';
 import { db } from '../db/index.js';
 
@@ -102,6 +108,7 @@ const userService = {
             if (!user) {
                 throw new NotFoundError('회원의 정보를 찾을 수 없습니다.');
             }
+
             await transaction.commit();
             return {
                 message: '정상적인 유저입니다.',
@@ -151,7 +158,13 @@ const userService = {
             if (transaction) {
                 await transaction.rollback();
             }
-            throw error;
+            if (error instanceof UnauthorizedError) {
+                throw error;
+            } else if (error instanceof NotFoundError) {
+                throw error;
+            } else {
+                throw new InternalServerError('회원 정보를 조회하는 데 실패했습니다.');
+            }
         }
     },
     // 유저 정보 수정
@@ -174,7 +187,13 @@ const userService = {
             if (transaction) {
                 await transaction.rollback();
             }
-            throw error;
+            if (error instanceof UnauthorizedError) {
+                throw error;
+            } else if (error instanceof NotFoundError) {
+                throw error;
+            } else {
+                throw new InternalServerError('회원 정보를 수정하는 데 실패했습니다.');
+            }
         }
     },
     // 유저 정보 삭제
@@ -189,7 +208,7 @@ const userService = {
                 throw new NotFoundError('사용자의 정보를 찾을 수 없습니다.');
             }
 
-            // softdelete 삭제하는 기능
+            // softdelete로 삭제하는 기능
             await UserModel.delete({ userId });
 
             await transaction.commit();
@@ -198,7 +217,13 @@ const userService = {
             if (transaction) {
                 await transaction.rollback();
             }
-            throw error;
+            if (error instanceof UnauthorizedError) {
+                throw error;
+            } else if (error instanceof NotFoundError) {
+                throw error;
+            } else {
+                throw new InternalServerError('회원 탈퇴하는 데 실패했습니다.');
+            }
         }
     },
 };
