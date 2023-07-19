@@ -5,11 +5,12 @@ const postController = {
         try {
             const userId = req.currentUserId;
 
-            const { postTitle, postContent, postType, people, place, meetingTime } = req.body;
+            const { postTitle, postContent, postType, people, place, meetingTime, totalM, totalF, recruitedM, recruitedF } =
+                req.body;
 
             const createPost = await postService.createPost({
                 userId,
-                post: { postTitle, postContent, postType, people, place, meetingTime },
+                post: { postTitle, postContent, postType, people, place, meetingTime, totalM, totalF, recruitedM, recruitedF },
             });
             statusCode.setResponseCode201(res);
             res.send(createPost.message);
@@ -46,11 +47,24 @@ const postController = {
             const userId = req.currentUserId;
             const postId = req.params.postId;
             const { postTitle, postContent, postType, people, place, meetingTime } = req.body;
-            const toUpdate = { postTitle, postContent, postType, people, place, meetingTime };
+            const toUpdate = { post_title: postTitle, postContent, postType, people, place, meetingTime };
             const post = await postService.setPost({ userId, postId, toUpdate });
 
             statusCode.setResponseCode200(res);
             res.send(post.message);
+        } catch (error) {
+            next(error);
+        }
+    },
+    participatePost: async (req, res, next) => {
+        try {
+            const userId = req.currentUserId;
+            const postId = req.params.postId;
+
+            const participant = await postService.participatePost({ userId, postId });
+
+            statusCode.setResponseCode201(res);
+            res.send(participant.message);
         } catch (error) {
             next(error);
         }

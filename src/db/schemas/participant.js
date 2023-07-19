@@ -9,11 +9,13 @@ const Participant = (sequelize, DataTypes) => {
             },
             canceled: {
                 type: DataTypes.BOOLEAN,
-                allowNull: false,
+                allowNull: true,
+                default: false,
             },
             status: {
                 type: DataTypes.STRING(15),
-                allowNull: false,
+                allowNull: true,
+                default: 'pending',
             },
         },
         {
@@ -28,13 +30,13 @@ const Participant = (sequelize, DataTypes) => {
     Participant.associate = db => {
         // foreignKey는 Participant모델의 userId, targetKey는 User 모델의 userId
         db.Participant.belongsTo(db.User, {
-            foreignKey: 'userId',
-            targetKey: 'userId',
+            foreignKey: 'user_id',
+            targetKey: 'user_id',
         });
         // foreignKey는 Participant모델의 postId, targetKey는 Post 모델의 postId
         db.Participant.belongsTo(db.Post, {
-            foreignKey: 'postId',
-            targetKey: 'postId',
+            foreignKey: 'post_id',
+            targetKey: 'post_id',
         });
     };
 

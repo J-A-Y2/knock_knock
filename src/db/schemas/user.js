@@ -2,7 +2,7 @@ const User = (sequelize, DataTypes) => {
     const User = sequelize.define(
         'User',
         {
-            userId: {
+            user_id: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true,

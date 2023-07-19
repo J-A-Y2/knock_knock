@@ -25,7 +25,7 @@ postRouter.put('/:postId', postParamsValidate, setPostValidationRules, setPostVa
 postRouter.delete('/:postId');
 
 // 참여 신청
-postRouter.post('/:postId/participants');
+postRouter.post('/:postId/participants', postController.participatePost);
 
 // 신청자 조회
 postRouter.get('/:postId/userList');

@@ -19,7 +19,7 @@ const UserModel = {
     findById: async userId => {
         const user = await db.User.findOne({
             where: {
-                userId: userId,
+                user_id: userId,
                 isDeleted: 0,
             },
         });
