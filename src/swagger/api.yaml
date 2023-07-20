@@ -36,6 +36,7 @@ paths:
                                     type: string
                                 birthday:
                                     type: string
+                                    format: date
                                 job:
                                     type: string
                                 region:
@@ -84,6 +85,7 @@ paths:
                                     type: string
                                 birthday:
                                     type: string
+                                    format: date
                                 job:
                                     type: string
                                 region:
@@ -179,6 +181,11 @@ paths:
             tags:
                 - user
             description: 유저 정보 조회하기.
+            parameters:
+                - name: userId
+                in: path
+                description: 유저 고유 아이디
+                required: true
 
             responses:
                 '200':
@@ -189,7 +196,7 @@ paths:
                             type: object
                             properties:
                                 userId:
-                                    type: string
+                                    type: integer
                                 email:
                                     type: string
                                 username:
@@ -200,6 +207,7 @@ paths:
                                     type: string
                                 birthday:
                                     type: string
+                                    format: date
                                 job:
                                     type: string
                                 region:

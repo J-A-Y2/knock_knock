@@ -15,6 +15,9 @@ userRouter.post('/login', loginValidationRules, loginValidate, userController.lo
 // 로그인 검증
 userRouter.get('/isLogin', loginRequired, userController.isLogin);
 
+// 마이페이지 내 정보 불러오기
+userRouter.get('/mypage', loginRequired, userController.getUserInfo);
+
 // 네트워크페이지 - 유저 정보 불러오기
 userRouter.get('/users', loginRequired, userController.getUserInfo);
 
