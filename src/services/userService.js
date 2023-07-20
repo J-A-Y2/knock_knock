@@ -13,9 +13,7 @@ import { db } from '../db/index.js';
 const userService = {
     // 유저 생성
     createUser: async ({ newUser }) => {
-        let transaction;
         try {
-            transaction = await db.sequelize.transaction();
             const { hobby, personality, ideal, ...userInfo } = newUser;
 
             //이메일 중복 확인
@@ -31,30 +29,15 @@ const userService = {
 
             const createdUser = await UserModel.create(userInfo);
 
-            const bulkCreateTags = async tags => {
-                if (tags && tags.length > 0) {
-                    const newTags = tags.map(item => {
-                        return {
-                            tag_id: item,
-                            user_id: createdUser.user_id,
-                        };
-                    });
-
-                    await UserModel.bulkCreate(newTags, { transaction });
-                }
-            };
-            await UserModel.bulkCreateTags(hobby); // 회원-태그 테이블에 회원의 취미를 생성
-            await UserModel.bulkCreateTags(personality); // 회원-태그 테이블에 회원의 성격을 생성
-            await UserModel.bulkCreateTags(ideal); // 회원-태그 테이블에 회원의 성격을 생성
-
-            await transaction.commit();
+            await UserModel.bulkCreateTags(hobby, createdUser.user_id); // 회원-태그 테이블에 회원의 취미를 생성
+            await UserModel.bulkCreateTags(personality, createdUser.user_id); // 회원-태그 테이블에 회원의 성격을 생성
+            await UserModel.bulkCreateTags(ideal, createdUser.user_id); // 회원-태그 테이블에 회원의 성격을 생성
 
             return {
                 message: '회원가입에 성공했습니다.',
             };
         } catch (error) {
             if (transaction) {
-                await transaction.rollback();
             }
 
             if (error instanceof ConflictError) {
@@ -227,27 +210,10 @@ const userService = {
 
             // userId: 24, updateData는 hobby, personality, ideal 제외한 객체
             const updatedUser = await UserModel.update({ userId, updateData });
-            console.log('유저 서비스의 updatedUser', updatedUser);
 
-            // 기존 hobby, personality, ideal를 지우고 updateUserInfo의 hobby, personality, ideal 만들기
-            const bulkUpdateTags = async tags => {
-                if (tags && tags.length > 0) {
-                    const newTags = tags.map(tagId => {
-                        return {
-                            tag_id: tagId,
-                            user_id: userId,
-                        };
-                    });
-
-                    await UserModel.bulkCreate(newTags, {
-                        updateOnDuplicate: ['tag_id', 'user_id'],
-                        transaction,
-                    });
-                }
-            };
-            await bulkUpdateTags(hobby, user.user_id, transaction); // 회원-태그 테이블에서 회원의 취미를 수정
-            await bulkUpdateTags(personality, user.user_id, transaction); // 회원-태그 테이블에서 회원의 성격을 수정
-            await bulkUpdateTags(ideal, user.user_id, transaction); // 회원-태그 테이블에서 회원의 성격을 수정
+            await UserModel.bulkUpdateTags(hobby, user.user_id, transaction); // 회원-태그 테이블에서 회원의 취미를 수정
+            await UserModel.bulkUpdateTags(personality, user.user_id, transaction); // 회원-태그 테이블에서 회원의 성격을 수정
+            await UserModel.bulkUpdateTags(ideal, user.user_id, transaction); // 회원-태그 테이블에서 회원의 성격을 수정
 
             await transaction.commit();
 

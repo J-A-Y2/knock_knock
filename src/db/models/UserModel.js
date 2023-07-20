@@ -24,12 +24,21 @@ const UserModel = {
                     user_id: userId,
                 };
             });
-            await db.UserAndTag.bulkCreate(tags);
 
-            await db.UserAndTag.bulkCreate(newTags, {
-                updateOnDuplicate: ['tag_id', 'user_id'],
-                transaction,
-            });
+            for (const newTag of newTags) {
+                const [numOfAffectedRows] = await db.UserAndTag.update(newTag, {
+                    where: {
+                        tag_id: newTag.tag_id,
+                        user_id: newTag.user_id,
+                    },
+                    returning: true,
+                    transaction,
+                });
+
+                if (numOfAffectedRows === 0) {
+                    await db.UserAndTag.create(newTag, { transaction });
+                }
+            }
         }
     },
     findByEmail: async email => {
