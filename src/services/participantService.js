@@ -104,14 +104,15 @@ const participantService = {
         const transaction = await db.sequelize.transaction({ autocommit: false }); // 트랜잭션 생성
         try {
             const participation = await ParticipantModel.getParticipationById(participantId);
-            if (!participation.Post) {
-                throw new NotFoundError('해당 Id의 게시글을 찾을 수 없습니다.');
-            }
 
             let fieldToUpdate, newValue;
             if (!participation) {
                 throw new NotFoundError('해당 id의 참가 신청 정보를 찾을 수 없습니다.');
             } else {
+                if (!participation.Post) {
+                    throw new NotFoundError('해당 Id의 게시글을 찾을 수 없습니다.');
+                }
+
                 if (participation.canceled) {
                     throw new ConflictError('취소된 신청 정보입니다.');
                 }
@@ -139,6 +140,36 @@ const participantService = {
                 throw error;
             } else {
                 throw new InternalServerError('신청 수락에 실패했습니다.');
+            }
+        }
+    },
+    deny: async participantId => {
+        try {
+            const participation = await ParticipantModel.getParticipationById(participantId);
+
+            if (!participation) {
+                throw new NotFoundError('해당 id의 참가 신청 정보를 찾을 수 없습니다.');
+            } else {
+                if (!participation.Post) {
+                    throw new NotFoundError('해당 Id의 게시글을 찾을 수 없습니다.');
+                }
+
+                if (participation.canceled) {
+                    throw new ConflictError('취소된 신청 정보입니다.');
+                }
+
+                if (participation.status !== 'pending') {
+                    throw new ConflictError('이미 수락되었거나 거절된 유저입니다.');
+                }
+            }
+            await ParticipantModel.update({ participantId, updateField: 'status', newValue: 'rejected' });
+
+            return { message: '신청 거절을 성공하였습니다.' };
+        } catch (error) {
+            if (error instanceof NotFoundError || error instanceof ConflictError) {
+                throw error;
+            } else {
+                throw new InternalServerError('신청 거절을 실패했습니다.');
             }
         }
     },

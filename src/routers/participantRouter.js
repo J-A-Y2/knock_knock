@@ -17,10 +17,10 @@ participantRouter.put('/:postId/participants', postParamsValidate, participantCo
 participantRouter.get('/:postId/userlist', postParamsValidate, participantController.getParticipants);
 
 // 신청 수락
-participantRouter.post('/:participantId/allow', participantParamsValidate, participantController.allow);
+participantRouter.put('/:participantId/allow', participantParamsValidate, participantController.allow);
 
 // 신청 거절
-participantRouter.delete('/:participantId/deny', postParamsValidate, participantParamsValidate);
+participantRouter.put('/:participantId/deny', participantParamsValidate, participantController.deny);
 
 // 수락된 유저 조회
 participantRouter.get('/:postId/done', postParamsValidate);

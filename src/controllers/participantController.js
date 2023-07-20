@@ -52,5 +52,16 @@ const participantController = {
             next(error);
         }
     },
+    deny: async (req, res, next) => {
+        try {
+            const participantId = req.params.participantId;
+            const participant = await participantService.deny(participantId);
+
+            statusCode.setResponseCode200(res);
+            res.send({ message: participant.message });
+        } catch (error) {
+            next(error);
+        }
+    },
 };
 export { participantController };
