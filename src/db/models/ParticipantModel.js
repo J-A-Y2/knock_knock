@@ -35,6 +35,16 @@ const ParticipantModel = {
     getParticipationById: async participantId => {
         const participation = await db.Participant.findOne({
             where: { participant_id: participantId },
+            include: [
+                {
+                    model: db.Post,
+                    attributes: ['post_id', 'recruited_m', 'recruited_f'], // 가져올 필드 지정 (여기서는 post_id만 가져옴)
+                },
+                {
+                    model: db.User,
+                    attributes: ['gender'], // 가져올 필드 지정 (여기서는 gender만 가져옴)
+                },
+            ],
         });
         return participation;
     },

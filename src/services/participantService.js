@@ -1,6 +1,7 @@
 import { PostModel } from '../db/models/postModel.js';
 import { ParticipantModel } from '../db/models/ParticipantModel.js';
 import { ConflictError, InternalServerError, NotFoundError, UnauthorizedError } from '../middlewares/errorMiddleware.js';
+import { db } from '../db/index.js';
 
 const participantService = {
     participatePost: async ({ userId, postId }) => {
@@ -98,15 +99,16 @@ const participantService = {
             }
         }
     },
-    allow: async ({ postId, participantId }) => {
+    allow: async participantId => {
+        //const transaction = await db.sequelize.transaction();
+        const transaction = await db.sequelize.transaction({ autocommit: false }); // 트랜잭션 생성
         try {
-            const post = await PostModel.getPostById(postId);
-            if (!post) {
+            const participation = await ParticipantModel.getParticipationById(participantId);
+            if (!participation.Post) {
                 throw new NotFoundError('해당 Id의 게시글을 찾을 수 없습니다.');
             }
 
-            const participation = await ParticipantModel.getParticipationById(participantId);
-
+            let fieldToUpdate, newValue;
             if (!participation) {
                 throw new NotFoundError('해당 id의 참가 신청 정보를 찾을 수 없습니다.');
             } else {
@@ -117,12 +119,22 @@ const participantService = {
                 if (participation.status !== 'pending') {
                     throw new ConflictError('이미 수락되었거나 거절된 유저입니다.');
                 }
+                if (participation.User.gender === '여') {
+                    fieldToUpdate = 'recruited_f';
+                    newValue = participation.Post.recruited_f + 1;
+                } else {
+                    fieldToUpdate = 'recruited_m';
+                    newValue = participation.Post.recruited_m + 1;
+                }
             }
-
             await ParticipantModel.update({ participantId, updateField: 'status', newValue: 'accepted' });
+            await PostModel.update({ postId: participation.Post.post_id, fieldToUpdate, newValue });
+
+            await transaction.commit(); // 트랜잭션 커밋,,, 인데 PostModel이 정상적으로 안돌아가도 Participant 저장된 게 롤백이 안됨..
 
             return { message: '신청 수락을 성공하였습니다.' };
         } catch (error) {
+            await transaction.rollback();
             if (error instanceof NotFoundError || error instanceof ConflictError) {
                 throw error;
             } else {

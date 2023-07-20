@@ -42,10 +42,9 @@ const participantController = {
     },
     allow: async (req, res, next) => {
         try {
-            const postId = req.params.postId;
             const participantId = req.params.participantId;
 
-            const participant = await participantService.allow({ postId, participantId });
+            const participant = await participantService.allow(participantId);
 
             statusCode.setResponseCode200(res);
             res.send({ message: participant.message });
