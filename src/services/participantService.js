@@ -65,14 +65,13 @@ const participantService = {
                 throw new NotFoundError('해당 Id의 게시글을 찾을 수 없습니다.');
             }
             if (post.user_id !== userId) {
-                //conflictError인지 UnauthorizedError인지 고민..
-                throw new UnauthorizedError('참가자 리스트 조회 권한이 없습니다.');
+                throw new ConflictError('참가자 리스트 조회 권한이 없습니다.');
             }
 
             const { total, participants } = await ParticipantModel.getParticipants(postId);
             return { message: '참가자 리스트 조회를 성공했습니다.', total, participants };
         } catch (error) {
-            if (error instanceof NotFoundError) {
+            if (error instanceof NotFoundError || error instanceof ConflictError) {
                 throw error;
             } else {
                 throw new InternalServerError('참가자 리스트 불러오기에 실패했습니다.');
