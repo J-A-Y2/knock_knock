@@ -1,5 +1,4 @@
-import dotenv from 'dotenv';
-import bcrypt, { hash } from 'bcrypt';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {
     ConflictError,
@@ -25,12 +24,12 @@ const userService = {
             if (user) {
                 throw new ConflictError('이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요.');
             }
-            console.log('유저 서비스의 userInfo', userInfo);
+
             // 비밀번호 암호화
             const hashedPassword = await bcrypt.hash(userInfo.user_password, parseInt(process.env.PW_HASH_COUNT));
             userInfo.user_password = hashedPassword;
 
-            const CreatedUser = await UserModel.create(userInfo);
+            const createdUser = await UserModel.create(userInfo);
 
             // 회원의 취미를 회원-태그 테이블에 입력
             let newTags;
@@ -38,7 +37,7 @@ const userService = {
                 newTags = hobby.map(item => {
                     return {
                         tag_id: item,
-                        user_id: CreatedUser.user_id,
+                        user_id: createdUser.user_id,
                     };
                 });
             }
@@ -49,7 +48,7 @@ const userService = {
                 newTags = personality.map(item => {
                     return {
                         tag_id: item,
-                        user_id: CreatedUser.user_id,
+                        user_id: createdUser.user_id,
                     };
                 });
             }
@@ -60,7 +59,7 @@ const userService = {
                 newTags = ideal.map(item => {
                     return {
                         tag_id: item,
-                        user_id: CreatedUser.user_id,
+                        user_id: createdUser.user_id,
                     };
                 });
             }
@@ -201,8 +200,27 @@ const userService = {
             }
         }
     },
+    // 유저 랜덤으로 6명 네트워크페이지에 불러오기
+    getRandomUsers: async () => {
+        try {
+            const randomUsers = await db.User.findAll({
+                order: db.sequelize.random(),
+                limit: 6,
+            });
+
+            if (!randomUsers || randomUsers.length === 0) {
+                throw new NotFoundError('No users found.');
+            }
+            return {
+                message: '랜덤으로 유저 6명 조회하기 성공!',
+                randomUsers: randomUsers,
+            };
+        } catch (error) {
+            throw new BadRequestError('랜덤으로 유저들을 조회하는 데 실패했습니다.');
+        }
+    },
     // 유저 정보 수정
-    updateUser: async function ({ userId, updateData }) {
+    updateUser: async ({ userId, updateData }) => {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();

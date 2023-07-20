@@ -89,6 +89,16 @@ const userController = {
             next(error);
         }
     },
+    getRandomUsersInfo: async (req, res, next) => {
+        try {
+            const users = await userService.getRandomUsers();
+
+            statusCode.setResponseCode200(res);
+            return res.send(users);
+        } catch (error) {
+            next(error);
+        }
+    },
     getCurrentUserInfo: async (req, res, next) => {
         try {
             const { userId } = req.currentUserId;

@@ -19,7 +19,7 @@ userRouter.get('/isLogin', loginRequired, userController.isLogin);
 userRouter.get('/mypage', loginRequired, userController.getCurrentUserInfo);
 
 // 네트워크페이지 - 유저 정보 불러오기
-userRouter.get('/users', loginRequired, userController.getUserInfo);
+userRouter.get('/network', loginRequired, userController.getRandomUsersInfo);
 
 // 유저 정보 불러오기
 userRouter.get('/:userId', loginRequired, userController.getUserInfo);
