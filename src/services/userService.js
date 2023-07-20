@@ -31,8 +31,8 @@ const userService = {
             userInfo.user_password = hashedPassword;
 
             const CreatedUser = await UserModel.create(userInfo);
-            console.log('유저 서비스의 CreatedUser', CreatedUser);
 
+            // 회원의 취미를 회원-태그 테이블에 입력
             let newTags;
             if (hobby && hobby.length > 0) {
                 newTags = hobby.map(item => {
@@ -42,9 +42,9 @@ const userService = {
                     };
                 });
             }
-            console.log('hobby의 newTags', newTags);
             await UserModel.bulkCreate({ newTags });
 
+            // 회원의 성격을 회원-태그 테이블에 입력
             if (personality && personality.length > 0) {
                 newTags = personality.map(item => {
                     return {
@@ -53,9 +53,9 @@ const userService = {
                     };
                 });
             }
-
             await UserModel.bulkCreate({ newTags });
 
+            // 회원의 이상형을 회원-태그 테이블에 입력
             if (ideal && ideal.length > 0) {
                 newTags = ideal.map(item => {
                     return {
@@ -64,7 +64,6 @@ const userService = {
                     };
                 });
             }
-
             await UserModel.bulkCreate({ newTags });
 
             await transaction.commit();

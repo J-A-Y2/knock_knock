@@ -30,7 +30,7 @@ paths:
                                     type: string
                                 nickname:
                                     type: string
-                                userPassword:
+                                user_password:
                                     type: string
                                 gender:
                                     type: string
@@ -40,7 +40,7 @@ paths:
                                     type: string
                                 region:
                                     type: string
-                                profileImage:
+                                profile_image:
                                     type: string
                                 mbti:
                                     type: string
@@ -49,11 +49,11 @@ paths:
                                 height:
                                     type: string
                                 hobby:
-                                    type: string
+                                    type: array
                                 presonality:
-                                    type: string
+                                    type: array
                                 ideal:
-                                    type: string
+                                    type: array
                                 introduce:
                                     type: string
                 required: true
@@ -72,7 +72,7 @@ paths:
                                     type: string
                                 nickname:
                                     type: string
-                                userPassword:
+                                user_password:
                                     type: string
                                 gender:
                                     type: string
@@ -82,7 +82,7 @@ paths:
                                     type: string
                                 region:
                                     type: string
-                                profileImage:
+                                profile_image:
                                     type: string
                                 mbti:
                                     type: string
@@ -91,11 +91,11 @@ paths:
                                 height:
                                     type: string
                                 hobby:
-                                    type: string
+                                    type: array
                                 presonality:
-                                    type: string
+                                    type: array
                                 ideal:
-                                    type: string
+                                    type: array
                                 introduce:
                                     type: string
 
