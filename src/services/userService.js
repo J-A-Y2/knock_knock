@@ -17,6 +17,7 @@ const userService = {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
+            const { hobby, personality, ideal, ...userInfo } = newUser;
 
             //이메일 중복 확인
             const user = await UserModel.findByEmail(newUser.email);
@@ -28,7 +29,28 @@ const userService = {
             // 비밀번호 암호화
             const hashedPassword = await bcrypt.hash(newUser.user_password, parseInt(process.env.PW_HASH_COUNT));
             newUser.user_password = hashedPassword;
-            await UserModel.create({ newUser });
+
+            const CreatedUser = await UserModel.create({ userInfo });
+
+            console.log('유저 서비스 CreatedUser', CreatedUser);
+            if (hobby && hobby.length > 0) {
+                hobby.map(item => [item, CreatedUser.user_id]);
+            }
+            let newTags = hobby;
+            await UserModel.bulkCreate({ newTags });
+
+            if (personality && personality.length > 0) {
+                personality.map(item => [item, CreatedUser.user_id]);
+            }
+
+            newTags = personality;
+            await UserModel.bulkCreate({ newTags });
+
+            if (ideal && ideal.length > 0) {
+                ideal.map(item => [item, CreatedUser.user_id]);
+            }
+            newTags = ideal;
+            await UserModel.bulkCreate({ newTags });
 
             await transaction.commit();
 
@@ -91,9 +113,7 @@ const userService = {
             if (transaction) {
                 await transaction.rollback();
             }
-            if (error instanceof NotFoundError) {
-                throw error;
-            } else if (error instanceof UnauthorizedError) {
+            if (error instanceof NotFoundError || error instanceof UnauthorizedError) {
                 throw error;
             } else {
                 throw new UnauthorizedError('로그인에 실패하였습니다.');
@@ -160,9 +180,7 @@ const userService = {
             if (transaction) {
                 await transaction.rollback();
             }
-            if (error instanceof UnauthorizedError) {
-                throw error;
-            } else if (error instanceof NotFoundError) {
+            if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
                 throw error;
             } else {
                 throw new InternalServerError('회원 정보를 조회하는 데 실패했습니다.');
@@ -203,9 +221,7 @@ const userService = {
             if (transaction) {
                 await transaction.rollback();
             }
-            if (error instanceof UnauthorizedError) {
-                throw error;
-            } else if (error instanceof NotFoundError) {
+            if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
                 throw error;
             } else {
                 throw new InternalServerError('회원 정보를 수정하는 데 실패했습니다.');
@@ -233,9 +249,7 @@ const userService = {
             if (transaction) {
                 await transaction.rollback();
             }
-            if (error instanceof UnauthorizedError) {
-                throw error;
-            } else if (error instanceof NotFoundError) {
+            if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
                 throw error;
             } else {
                 throw new InternalServerError('회원 탈퇴하는 데 실패했습니다.');

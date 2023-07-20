@@ -30,15 +30,15 @@ const RegisterValidationRules = [
         .withMessage('4글자로 입력해주세요. ex) INFP'),
     body('religion').optional().notEmpty().withMessage('종교를 입력하세요.'),
     body('height').optional().notEmpty().withMessage('키를 입력하세요.'),
-    body('hobby').optional().notEmpty().withMessage('취미를 입력하세요.'),
+    // body('hobby').optional().notEmpty().withMessage('취미를 입력하세요.'),
     body('introduce')
         .optional()
         .notEmpty()
         .withMessage('자기 소개를 입력하세요.')
         .isLength({ max: 255 })
         .withMessage('255자까지만 입력 가능합니다.'),
-    body('ideal').optional().notEmpty().withMessage('이상형 태그를 선택하세요.'),
-    body('personality').optional().notEmpty().withMessage('나의 성격 태그를 선택하세요.'),
+    // body('ideal').optional().notEmpty().withMessage('이상형 태그를 선택하세요.'),
+    // body('personality').optional().notEmpty().withMessage('나의 성격 태그를 선택하세요.'),
     // body('imageUrl').notEmpty().withMessage('imageUrl을 확인하세요.'),
 ];
 
