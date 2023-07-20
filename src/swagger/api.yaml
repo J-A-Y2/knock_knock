@@ -193,11 +193,17 @@ paths:
                                 height:
                                     type: string
                                 hobby:
-                                    type: string
-                                personality:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
+                                presonality:
+                                    type: array
+                                    items:
+                                        type: integer
                                 ideal:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
                                 introduce:
                                     type: string
                 '400':
@@ -210,9 +216,9 @@ paths:
             description: 유저 정보 조회하기.
             parameters:
                 - name: userId
-                in: path
-                description: 유저 고유 아이디
-                required: true
+                  in: path
+                  description: 유저 고유 아이디
+                  required: true
 
             responses:
                 '200':
@@ -248,11 +254,17 @@ paths:
                                 height:
                                     type: string
                                 hobby:
-                                    type: string
-                                personality:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
+                                presonality:
+                                    type: array
+                                    items:
+                                        type: integer
                                 ideal:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
                                 introduce:
                                     type: string
 
@@ -311,11 +323,17 @@ paths:
                                 height:
                                     type: string
                                 hobby:
-                                    type: string
-                                personality:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
+                                presonality:
+                                    type: array
+                                    items:
+                                        type: integer
                                 ideal:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
                                 indtroduce:
                                     type: string
 
@@ -344,11 +362,17 @@ paths:
                                 height:
                                     type: string
                                 hobby:
-                                    type: string
-                                personality:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
+                                presonality:
+                                    type: array
+                                    items:
+                                        type: integer
                                 ideal:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
                                 indtroduce:
                                     type: string
 
