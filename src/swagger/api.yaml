@@ -209,7 +209,7 @@ paths:
                 '400':
                     description: Invalid status value
 
-    /users/:userId:
+    /users/{userId}:
         get:
             tags:
                 - user
