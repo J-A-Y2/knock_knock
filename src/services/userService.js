@@ -36,7 +36,7 @@ const userService = {
                     const newTags = tags.map(item => {
                         return {
                             tag_id: item,
-                            user_id: createdUser.userId,
+                            user_id: createdUser.user_id,
                         };
                     });
 
@@ -225,19 +225,29 @@ const userService = {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
             // userId: 24, updateData는 hobby, personality, ideal 제외한 객체
-            const updatedUser = await UserModel.update(updateData);
+            const updatedUser = await UserModel.update({ userId, updateData });
             console.log('유저 서비스의 updatedUser', updatedUser);
 
-            const bulkCreateTags = async tags => {
+            // 기존 hobby, personality, ideal를 지우고 updateUserInfo의 hobby, personality, ideal 만들기
+            const bulkCreateTags = async (tags, tagType) => {
                 if (tags && tags.length > 0) {
-                    const newTags = tags.map(item => {
+                    const newTags = tags.map(tagId => {
                         return {
-                            tag_id: item,
-                            user_id: updatedUser.userId,
+                            tag_id: tagId,
+                            user_id: userId,
                         };
                     });
 
-                    await db.UserAndTag.bulkCreate(newTags, [tag_id]);
+                    await UserModel.destroy({
+                        where: {
+                            user_id: userId,
+                            tag_id: newTags.map(tag => tag.tag_id),
+                            tag_type: tagType,
+                        },
+                        transaction,
+                    });
+
+                    await UserModel.bulkCreate(newTags, { transaction });
                 }
             };
             await bulkCreateTags(hobby); // 회원-태그 테이블에서 회원의 취미를 수정

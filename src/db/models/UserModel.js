@@ -6,7 +6,7 @@ const UserModel = {
         return createNewUser;
     },
     bulkCreate: async newTags => {
-        const createNewTags = db.UserAndTag.bulCreate(newTags);
+        const createNewTags = await db.UserAndTag.bulkCreate(newTags);
         return createNewTags;
     },
     findByEmail: async email => {
@@ -65,6 +65,15 @@ const UserModel = {
             },
         );
         return deleteUser;
+    },
+    destroy: async () => {
+        const destroyTags = await db.UserAndTag.destroy({
+            where: {
+                user_id: userId,
+                tag_id: newTags.map(tag => tag.tag_id),
+                tag_type: tagType,
+            },
+        });
     },
 };
 
