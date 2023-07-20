@@ -42,13 +42,32 @@ const participantController = {
     },
     allow: async (req, res, next) => {
         try {
-            const postId = req.params.postId;
             const participantId = req.params.participantId;
 
-            const participant = await participantService.allow({ postId, participantId });
+            const participant = await participantService.allow(participantId);
 
             statusCode.setResponseCode200(res);
             res.send({ message: participant.message });
+        } catch (error) {
+            next(error);
+        }
+    },
+    deny: async (req, res, next) => {
+        try {
+            const participantId = req.params.participantId;
+            const participant = await participantService.deny(participantId);
+
+            statusCode.setResponseCode200(res);
+            res.send({ message: participant.message });
+        } catch (error) {
+            next(error);
+        }
+    },
+    getAcceptedUsers: async (req, res, next) => {
+        try {
+            const postId = req.params.postId;
+
+            const participants = await participantService.getAcceptedUsers(postId);
         } catch (error) {
             next(error);
         }

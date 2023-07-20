@@ -8,7 +8,7 @@ const PostModel = {
         const { count, rows: posts } = await db.Post.findAndCountAll({ offset, limit });
         return { total: count, posts };
     },
-    getPostById: async ({ postId }) => {
+    getPostById: async postId => {
         const post = await db.Post.findOne({
             where: {
                 post_id: postId,
@@ -16,11 +16,12 @@ const PostModel = {
         });
         return post;
     },
-    update: async ({ postId, fieldToUpdate, newValue }) => {
+    update: async ({ transaction, postId, fieldToUpdate, newValue }) => {
         const updatePost = await db.Post.update(
             { [fieldToUpdate]: newValue },
             {
                 where: { post_id: postId },
+                transaction,
             },
         );
         return updatePost;
