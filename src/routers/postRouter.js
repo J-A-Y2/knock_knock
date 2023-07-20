@@ -22,19 +22,7 @@ postRouter.get('/:postId', postParamsValidate, postController.getPost);
 postRouter.put('/:postId', postParamsValidate, setPostValidationRules, setPostValidate, postController.setPost);
 
 // 게시글 삭제
-postRouter.delete('/:postId');
-
-// 참여 신청
-postRouter.post('/:postId/participants', postController.participatePost);
-
-// 신청자 조회
-postRouter.get('/:postId/userlist');
-
-// 신청 수락
-postRouter.post('/:postId/allow');
-
-// 신청 거절
-postRouter.delete('/:postId/delete');
+postRouter.delete('/:postId', postController.deletePost);
 
 export { postRouter };
 // 포스트 테이블 -> 포스트의 id -> 신청하기
