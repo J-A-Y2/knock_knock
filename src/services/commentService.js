@@ -74,7 +74,7 @@ const commentService = {
             }
             // cursor == 0 이면, 처음으로 댓글 불러오기.
             if (cursor == 0) {
-                commentList = await CommentModel.recentComment({ postId });
+                commentList = await CommentModel.recentComment(postId);
 
                 console.log('commentList:', commentList);
 

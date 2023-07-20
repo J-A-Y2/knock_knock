@@ -49,31 +49,20 @@ const CommentModel = {
     // 댓글 불러오기 (무한스크롤) 커서는 댓글의 아이디 값
     getComment: async ({ postId, cursor }) => {
         const getComment = await db.Comment.findAll({
-            attributes: [
-                'id',
-                'user_id',
-                [sequelize.literal('user.nickname'), 'nickname'],
-                [sequelize.literal('user_image.imageUrl'), 'imageUrl'],
-                'content',
-                'createdAt',
-            ],
-            include: [
-                {
-                    model: UserModel,
-                    attributes: ['nickname'],
-                },
-                {
-                    model: UserImageModel,
-                    attributes: ['imageUrl'],
-                },
-            ],
-            order: [['createdAt', 'DESC']],
+            attributes: ['comment_id', 'user_id', 'nickname', 'content', 'createdAt'],
             where: {
                 post_id: postId,
                 id: {
                     [Op.lt]: cursor,
                 },
             },
+            include: [
+                {
+                    model: db.User,
+                    attributes: ['nickname'],
+                },
+            ],
+            order: [['createdAt', 'DESC']],
             limit: 10,
         });
 
@@ -82,34 +71,23 @@ const CommentModel = {
 
     recentComment: async postId => {
         console.log(3);
-        const recentComenet = await db.Comment.findAll({
-            attributes: [
-                'id',
-                'user_id',
-                [sequelize.literal('user.nickname'), 'nickname'],
-                [sequelize.literal('user_image.imageUrl'), 'imageUrl'],
-                'content',
-                'createdAt',
-            ],
+        const recentComment = await db.Comment.findAll({
+            attributes: ['comment_id', 'user_id', [sequelize.literal('User.nickname'), 'nickname'], 'content', 'createdAt'],
+
             include: [
                 {
-                    model: UserModel,
-                    attributes: ['nickname'],
-                },
-                {
-                    model: UserImageModel,
-                    attributes: ['imageUrl'],
+                    model: db.User,
+                    attributes: [],
                 },
             ],
             where: {
                 post_id: postId,
-                is_deleted: 0,
-                limit: 10,
             },
-            order: [['createdAt', 'DESC']],
+            limit: 10,
+            order: [['created_at', 'DESC']],
         });
 
-        return [recentComenet];
+        return recentComment;
     },
 };
 
