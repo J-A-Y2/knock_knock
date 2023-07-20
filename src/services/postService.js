@@ -115,11 +115,10 @@ const postService = {
             if (!post) {
                 throw new NotFoundError('해당 id의 게시글을 찾을 수 없습니다.');
             }
-            console.log(post.user_id, userId);
 
             if (post.user_id !== userId) {
                 throw new UnauthorizedError('삭제 권한이 없습니다.');
-            } // 이 경우에 무한로딩,,,,, 일단 패스
+            }
 
             await PostModel.delete(postId);
             return { message: '게시글 삭제를 성공했습니다.' };
@@ -130,25 +129,6 @@ const postService = {
                 throw error;
             } else {
                 throw new InternalServerError('게시글 삭제를 실패했습니다.');
-            }
-        }
-    },
-    participatePost: async ({ userId, postId }) => {
-        try {
-            // userId가 게시글 작성자의 id와 다른지 확인
-            // 게시글 작성할 때 작성자의 성별 -> recuitedF/M = 1
-            const post = await PostModel.getPostById(postId);
-            if (!post) {
-                throw new NotFoundError('해당 Id의 게시글을 찾을 수 없습니다.');
-            }
-            await ParticipantModel.participatePost({ userId, postId });
-
-            return { message: '모임 참가에 성공했습니다.' };
-        } catch (error) {
-            if (error instanceof NotFoundError) {
-                throw error;
-            } else {
-                throw new InternalServerError('모임 참가에 실패했습니다.');
             }
         }
     },

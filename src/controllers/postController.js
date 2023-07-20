@@ -63,17 +63,6 @@ const postController = {
 
             statusCode.setResponseCode200(res);
             res.send(post.message);
-        } catch (error) {}
-    },
-    participatePost: async (req, res, next) => {
-        try {
-            const userId = req.currentUserId;
-            const postId = req.params.postId;
-
-            const participant = await postService.participatePost({ userId, postId });
-
-            statusCode.setResponseCode201(res);
-            res.send(participant.message);
         } catch (error) {
             next(error);
         }
