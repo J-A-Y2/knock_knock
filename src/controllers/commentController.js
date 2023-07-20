@@ -47,11 +47,12 @@ const commentController = {
 
     getComment: async (req, res, next) => {
         try {
-            const userId = req.currentUserId;
             const postId = req.query.postId;
             const cursor = req.query.cursor;
 
-            const getComment = await commentService.getComment({ userId, postId, cursor });
+            const getComment = await commentService.getComment({ postId, cursor });
+
+            console.log('getComment:', getComment);
 
             statusCode.setResponseCode200(res);
             return res.send({

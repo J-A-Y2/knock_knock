@@ -80,7 +80,8 @@ const CommentModel = {
         return getComment;
     },
 
-    recentComment: async () => {
+    recentComment: async postId => {
+        console.log(3);
         const recentComenet = await db.Comment.findAll({
             attributes: [
                 'id',
@@ -101,6 +102,7 @@ const CommentModel = {
                 },
             ],
             where: {
+                post_id: postId,
                 is_deleted: 0,
                 limit: 10,
             },

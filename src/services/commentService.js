@@ -1,5 +1,5 @@
-import { db } from '../db/index.js';
 import { CommentModel } from '../db/models/CommentModel.js';
+import { PostModel } from '../db/models/PostModel.js';
 import { NotFoundError, InternalServerError, UnauthorizedError } from '../middlewares/errorMiddleware.js';
 
 const commentService = {
@@ -65,20 +65,24 @@ const commentService = {
         try {
             let commentList = [];
 
-            const post = await PostModel.findById({ postId });
+            const post = await PostModel.getPostById({ postId });
+
+            console.log('post:', post);
 
             if (!post) {
                 throw new NotFoundError('요청한 게시물의 정보를 찾을 수 없습니다.');
             }
             // cursor == 0 이면, 처음으로 댓글 불러오기.
             if (cursor == 0) {
-                commentList = await Comment.recentComment({ postId });
+                commentList = await CommentModel.recentComment({ postId });
+
+                console.log('commentList:', commentList);
 
                 // cursor == -1 이면, 모든 댓글 불러오기 끝.
             } else if (cursor == -1) {
                 commentList = '전체 댓글 조회가 끝났습니다.';
             } else {
-                commentList = await Comment.select({ postId, cursor });
+                commentList = await CommentModel.getComment({ postId, cursor });
             }
 
             return {
@@ -87,7 +91,9 @@ const commentService = {
             };
         } catch (error) {
             if (error instanceof NotFoundError) {
-                throw new InternalServerError('게시글 댓글 불러오기에 실패했습니다.');
+                throw error;
+            } else {
+                new InternalServerError('게시글 댓글 불러오기에 실패했습니다.');
             }
         }
     },
