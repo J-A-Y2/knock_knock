@@ -16,7 +16,7 @@ const UserModel = {
             await db.UserAndTag.bulkCreate(newTags);
         }
     },
-    bulkUpdateTags: async (tags, userId) => {
+    bulkUpdateTags: async (tags, userId, transaction) => {
         if (tags && tags.length > 0) {
             const newTags = tags.map(tagId => {
                 return {
@@ -26,7 +26,7 @@ const UserModel = {
             });
             await db.UserAndTag.bulkCreate(tags);
 
-            await UserModel.bulkCreate(newTags, {
+            await db.UserAndTag.bulkCreate(newTags, {
                 updateOnDuplicate: ['tag_id', 'user_id'],
                 transaction,
             });

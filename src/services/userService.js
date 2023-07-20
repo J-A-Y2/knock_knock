@@ -245,9 +245,9 @@ const userService = {
                     });
                 }
             };
-            await bulkUpdateTags(hobby, user.user_id); // 회원-태그 테이블에서 회원의 취미를 수정
-            await bulkUpdateTags(personality, user.user_id); // 회원-태그 테이블에서 회원의 성격을 수정
-            await bulkUpdateTags(ideal, user.user_id); // 회원-태그 테이블에서 회원의 성격을 수정
+            await bulkUpdateTags(hobby, user.user_id, transaction); // 회원-태그 테이블에서 회원의 취미를 수정
+            await bulkUpdateTags(personality, user.user_id, transaction); // 회원-태그 테이블에서 회원의 성격을 수정
+            await bulkUpdateTags(ideal, user.user_id, transaction); // 회원-태그 테이블에서 회원의 성격을 수정
 
             await transaction.commit();
 
