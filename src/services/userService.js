@@ -31,39 +31,21 @@ const userService = {
 
             const createdUser = await UserModel.create(userInfo);
 
-            // 회원의 취미를 회원-태그 테이블에 입력
-            let newTags;
-            if (hobby && hobby.length > 0) {
-                newTags = hobby.map(item => {
-                    return {
-                        tag_id: item,
-                        user_id: createdUser.user_id,
-                    };
-                });
-            }
-            await UserModel.bulkCreate({ newTags });
+            const bulkCreateTags = async tags => {
+                if (tags && tags.length > 0) {
+                    const newTags = tags.map(item => {
+                        return {
+                            tag_id: item,
+                            user_id: createdUser.userId,
+                        };
+                    });
 
-            // 회원의 성격을 회원-태그 테이블에 입력
-            if (personality && personality.length > 0) {
-                newTags = personality.map(item => {
-                    return {
-                        tag_id: item,
-                        user_id: createdUser.user_id,
-                    };
-                });
-            }
-            await UserModel.bulkCreate({ newTags });
-
-            // 회원의 이상형을 회원-태그 테이블에 입력
-            if (ideal && ideal.length > 0) {
-                newTags = ideal.map(item => {
-                    return {
-                        tag_id: item,
-                        user_id: createdUser.user_id,
-                    };
-                });
-            }
-            await UserModel.bulkCreate({ newTags });
+                    await UserModel.bulkCreate(newTags, { transaction });
+                }
+            };
+            await bulkCreateTags(hobby); // 회원-태그 테이블에 회원의 취미를 생성
+            await bulkCreateTags(personality); // 회원-태그 테이블에 회원의 성격을 생성
+            await bulkCreateTags(ideal); // 회원-태그 테이블에 회원의 성격을 생성
 
             await transaction.commit();
 
@@ -208,31 +190,22 @@ const userService = {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
-            let randomUsers;
-            if (user.gender == '남') {
-                randomUsers = await db.User.findAll({
-                    where: {
-                        gender: '여',
-                    },
-                    order: db.sequelize.random(),
-                    limit: 6,
-                });
+            let genderToFind; // 로그인 유저가 남자면 여자를 보여기 그 반대도 마찬가지
+            if (user.gender === '남') {
+                genderToFind = '여';
             } else {
-                randomUsers = await db.User.findAll({
-                    where: {
-                        gender: '남',
-                    },
-                    order: db.sequelize.random(),
-                    limit: 6,
-                });
+                genderToFind = '남';
             }
+
+            const randomUsers = await UserModel.findRandomUsers(genderToFind, 6);
 
             if (!randomUsers || randomUsers.length === 0) {
                 throw new NotFoundError('No users found.');
             }
+
             return {
                 message: '랜덤으로 유저 6명 조회하기 성공!',
-                randomUsers: randomUsers,
+                randomUsers,
             };
         } catch (error) {
             throw new BadRequestError('랜덤으로 유저들을 조회하는 데 실패했습니다.');
@@ -260,11 +233,11 @@ const userService = {
                     const newTags = tags.map(item => {
                         return {
                             tag_id: item,
-                            user_id: userId,
+                            user_id: updatedUser.userId,
                         };
                     });
 
-                    await db.UserAndTag.bulkCreate(newTags, { transaction });
+                    await db.UserAndTag.bulkCreate(newTags, [tag_id]);
                 }
             };
             await bulkCreateTags(hobby); // 회원-태그 테이블에서 회원의 취미를 수정

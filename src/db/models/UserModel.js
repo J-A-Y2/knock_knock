@@ -5,8 +5,8 @@ const UserModel = {
         const createNewUser = await db.User.create(newUser);
         return createNewUser;
     },
-    bulkCreate: async ({ newTags }) => {
-        const createNewTags = await db.UserAndTag.bulkCreate(newTags);
+    bulkCreate: async newTags => {
+        const createNewTags = db.UserAndTag.bulCreate(newTags);
         return createNewTags;
     },
     findByEmail: async email => {
@@ -27,6 +27,17 @@ const UserModel = {
             },
         });
         return user;
+    },
+    findRandomUsers: async (gender, limit) => {
+        const randomUsers = await db.User.findAll({
+            where: {
+                gender,
+            },
+            order: db.sequelize.random(),
+            limit,
+        });
+
+        return randomUsers;
     },
     update: async ({ userId, updateData }) => {
         console.log('유저 모델에서 userId, updateData', userId, updateData);
