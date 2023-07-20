@@ -2,6 +2,8 @@ import { Router } from 'express';
 import { loginRequired } from '../middlewares/loginRequired.js';
 import { participantController } from '../controllers/participantController.js';
 import { postParamsValidate } from '../middlewares/postParamsValidate.js';
+import { participantParamsValidate } from '../middlewares/participantParamsValidate.js';
+
 const participantRouter = Router();
 participantRouter.use(loginRequired);
 
@@ -15,10 +17,15 @@ participantRouter.put('/:postId/participants', postParamsValidate, participantCo
 participantRouter.get('/:postId/userlist', postParamsValidate, participantController.getParticipants);
 
 // 신청 수락
-participantRouter.post('/:postId/:participantId/allow', postParamsValidate, participantController.allow);
+participantRouter.post(
+    '/:postId/:participantId/allow',
+    postParamsValidate,
+    participantParamsValidate,
+    participantController.allow,
+);
 
 // 신청 거절
-participantRouter.delete('/:postId/:participantId/deny', postParamsValidate);
+participantRouter.delete('/:postId/:participantId/deny', postParamsValidate, participantParamsValidate);
 
 // 수락된 유저 조회
 participantRouter.get('/:postId/done', postParamsValidate);
