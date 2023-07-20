@@ -50,10 +50,16 @@ paths:
                                     type: string
                                 hobby:
                                     type: array
+                                    items:
+                                        type: integer
                                 presonality:
                                     type: array
+                                    items:
+                                        type: integer
                                 ideal:
                                     type: array
+                                    items:
+                                        type: integer
                                 introduce:
                                     type: string
                 required: true
@@ -92,10 +98,16 @@ paths:
                                     type: string
                                 hobby:
                                     type: array
+                                    items:
+                                        type: integer
                                 presonality:
                                     type: array
+                                    items:
+                                        type: integer
                                 ideal:
                                     type: array
+                                    items:
+                                        type: integer
                                 introduce:
                                     type: string
 

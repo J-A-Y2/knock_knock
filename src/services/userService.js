@@ -173,7 +173,7 @@ const userService = {
             await transaction.commit();
             return {
                 message: '회원정보 조회 성공!',
-                user_id: user.user_id,
+                userId: user.user_id,
                 email: user.email,
                 username: user.username,
                 nickname: user.nickname,
@@ -181,7 +181,7 @@ const userService = {
                 birthday: user.birthday,
                 job: user.job,
                 region: user.region,
-                profileImage: user.profileImage,
+                profileImage: user.profile_image,
                 mbti: user.mbti,
                 religion: user.religion,
                 height: user.height,
