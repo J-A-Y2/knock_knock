@@ -5,7 +5,6 @@ import { db } from '../index.js';
 const CommentModel = {
     // 댓글 생성
     create: async ({ userId, postId, content }) => {
-        console.log({ userId, postId, content });
         const createComment = await db.Comment.create({ user_id: userId, post_id: postId, comment_content: content });
         return createComment;
     },
@@ -37,7 +36,6 @@ const CommentModel = {
 
     // 댓글 삭제
     delete: async ({ commentId }) => {
-        console.log({ commentId });
         const deleteComment = await db.Comment.destroy({
             where: {
                 comment_id: commentId,
@@ -49,13 +47,7 @@ const CommentModel = {
     // 댓글 불러오기 (무한스크롤) 커서는 댓글의 아이디 값
     getComment: async ({ postId, cursor }) => {
         const getComment = await db.Comment.findAll({
-            attributes: ['comment_id', 'user_id', 'nickname', 'content', 'createdAt'],
-            where: {
-                post_id: postId,
-                id: {
-                    [Op.lt]: cursor,
-                },
-            },
+            attributes: ['comment_id', 'user_id', 'comment_content', 'createdAt'],
             include: [
                 {
                     model: db.User,
@@ -63,6 +55,12 @@ const CommentModel = {
                 },
             ],
             order: [['createdAt', 'DESC']],
+            where: {
+                post_id: postId,
+                comment_id: {
+                    [Op.lt]: cursor,
+                },
+            },
             limit: 10,
         });
 
@@ -70,21 +68,20 @@ const CommentModel = {
     },
 
     recentComment: async postId => {
-        console.log(3);
         const recentComment = await db.Comment.findAll({
-            attributes: ['comment_id', 'user_id', [sequelize.literal('User.nickname'), 'nickname'], 'content', 'createdAt'],
-
+            attributes: ['comment_id', 'user_id', 'comment_content', 'createdAt'],
             include: [
                 {
                     model: db.User,
-                    attributes: [],
+                    attributes: ['nickname'],
                 },
             ],
             where: {
                 post_id: postId,
             },
             limit: 10,
-            order: [['created_at', 'DESC']],
+
+            order: [['createdAt', 'DESC']],
         });
 
         return recentComment;

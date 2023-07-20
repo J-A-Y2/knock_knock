@@ -67,16 +67,12 @@ const commentService = {
 
             const post = await PostModel.getPostById({ postId });
 
-            console.log('post:', post);
-
             if (!post) {
                 throw new NotFoundError('요청한 게시물의 정보를 찾을 수 없습니다.');
             }
             // cursor == 0 이면, 처음으로 댓글 불러오기.
             if (cursor == 0) {
                 commentList = await CommentModel.recentComment(postId);
-
-                console.log('commentList:', commentList);
 
                 // cursor == -1 이면, 모든 댓글 불러오기 끝.
             } else if (cursor == -1) {
