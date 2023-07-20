@@ -5,7 +5,10 @@ const UserModel = {
         const createNewUser = await db.User.create(newUser);
         return createNewUser;
     },
-
+    bulkCreate: async ({ newTags }) => {
+        const createNewTags = await db.User.bulkcreate(newTags);
+        return createNewTags;
+    },
     findByEmail: async email => {
         const user = await db.User.findOne({
             where: {
