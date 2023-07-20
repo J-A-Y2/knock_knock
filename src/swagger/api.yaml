@@ -168,10 +168,37 @@ paths:
                             type: object
                             properties:
                                 userId:
-                                    type: int
+                                    type: integer
                                 email:
                                     type: string
-                                user_image:
+                                username:
+                                    type: string
+                                nickname:
+                                    type: string
+                                gender:
+                                    type: string
+                                birthday:
+                                    type: string
+                                    format: date
+                                job:
+                                    type: string
+                                region:
+                                    type: string
+                                profileImage:
+                                    type: string
+                                mbti:
+                                    type: string
+                                religion:
+                                    type: string
+                                height:
+                                    type: string
+                                hobby:
+                                    type: string
+                                personality:
+                                    type: string
+                                ideal:
+                                    type: string
+                                introduce:
                                     type: string
                 '400':
                     description: Invalid status value

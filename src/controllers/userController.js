@@ -81,10 +81,21 @@ const userController = {
     getUserInfo: async (req, res, next) => {
         try {
             const { userId } = req.params;
-            const getUser = await userService.getUserById({ userId });
+            const user = await userService.getUserById({ userId });
 
             statusCode.setResponseCode200(res);
-            return res.send(getUser);
+            return res.send(user);
+        } catch (error) {
+            next(error);
+        }
+    },
+    getCurrentUserInfo: async (req, res, next) => {
+        try {
+            const { userId } = req.currentUserId;
+            const user = await userService.getUserById({ userId });
+
+            statusCode.setResponseCode200(res);
+            return res.send(user);
         } catch (error) {
             next(error);
         }
