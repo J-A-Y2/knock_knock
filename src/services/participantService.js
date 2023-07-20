@@ -100,7 +100,6 @@ const participantService = {
         }
     },
     allow: async participantId => {
-        //const transaction = await db.sequelize.transaction();
         const transaction = await db.sequelize.transaction({ autocommit: false }); // 트랜잭션 생성
         try {
             const participation = await ParticipantModel.getParticipationById(participantId);
@@ -122,14 +121,24 @@ const participantService = {
                 }
                 if (participation.User.gender === '여') {
                     fieldToUpdate = 'recruited_f';
-                    newValue = participation.Post.recruited_f + 1;
+
+                    if (participation.Post.recruited_f === participation.Post.total_f) {
+                        throw new ConflictError('더 이상 여성 유저의 신청을 수락할 수 없습니다.');
+                    } else {
+                        newValue = participation.Post.recruited_f + 1;
+                    }
                 } else {
                     fieldToUpdate = 'recruited_m';
-                    newValue = participation.Post.recruited_m + 1;
+                    if (participation.Post.recruited_m === participation.Post.total_m) {
+                        throw new ConflictError('더 이상 남성 유저의 신청을 수락할 수 없습니다.');
+                    } else {
+                        newValue = participation.Post.recruited_m + 1;
+                    }
                 }
             }
             await ParticipantModel.update({ transaction, participantId, updateField: 'status', newValue: 'accepted' });
             await PostModel.update({ transaction, postId: participation.Post.post_id, fieldToUpdate, newValue });
+
             await transaction.commit();
 
             return { message: '신청 수락을 성공하였습니다.' };

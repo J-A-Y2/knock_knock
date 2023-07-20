@@ -38,7 +38,7 @@ const ParticipantModel = {
             include: [
                 {
                     model: db.Post,
-                    attributes: ['post_id', 'recruited_m', 'recruited_f'], // 가져올 필드 지정 (여기서는 post_id만 가져옴)
+                    attributes: ['post_id', 'recruited_m', 'recruited_f', 'total_m', 'total_f'], // 가져올 필드 지정 (여기서는 post_id만 가져옴)
                 },
                 {
                     model: db.User,
