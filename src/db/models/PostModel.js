@@ -8,7 +8,7 @@ const PostModel = {
         const { count, rows: posts } = await db.Post.findAndCountAll({ offset, limit });
         return { total: count, posts };
     },
-    getPostById: async postId => {
+    getPostById: async ({ postId }) => {
         const post = await db.Post.findOne({
             where: {
                 post_id: postId,
