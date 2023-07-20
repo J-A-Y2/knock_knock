@@ -5,7 +5,6 @@ import { db } from '../index.js';
 const CommentModel = {
     // 댓글 생성
     create: async ({ userId, postId, content }) => {
-        console.log({ userId, postId, content });
         const createComment = await db.Comment.create({ user_id: userId, post_id: postId, comment_content: content });
         return createComment;
     },
@@ -37,7 +36,6 @@ const CommentModel = {
 
     // 댓글 삭제
     delete: async ({ commentId }) => {
-        console.log({ commentId });
         const deleteComment = await db.Comment.destroy({
             where: {
                 comment_id: commentId,
@@ -49,28 +47,17 @@ const CommentModel = {
     // 댓글 불러오기 (무한스크롤) 커서는 댓글의 아이디 값
     getComment: async ({ postId, cursor }) => {
         const getComment = await db.Comment.findAll({
-            attributes: [
-                'id',
-                'user_id',
-                [sequelize.literal('user.nickname'), 'nickname'],
-                [sequelize.literal('user_image.imageUrl'), 'imageUrl'],
-                'content',
-                'createdAt',
-            ],
+            attributes: ['comment_id', 'user_id', 'comment_content', 'createdAt'],
             include: [
                 {
-                    model: UserModel,
+                    model: db.User,
                     attributes: ['nickname'],
-                },
-                {
-                    model: UserImageModel,
-                    attributes: ['imageUrl'],
                 },
             ],
             order: [['createdAt', 'DESC']],
             where: {
                 post_id: postId,
-                id: {
+                comment_id: {
                     [Op.lt]: cursor,
                 },
             },
@@ -81,35 +68,23 @@ const CommentModel = {
     },
 
     recentComment: async postId => {
-        console.log(3);
-        const recentComenet = await db.Comment.findAll({
-            attributes: [
-                'id',
-                'user_id',
-                [sequelize.literal('user.nickname'), 'nickname'],
-                [sequelize.literal('user_image.imageUrl'), 'imageUrl'],
-                'content',
-                'createdAt',
-            ],
+        const recentComment = await db.Comment.findAll({
+            attributes: ['comment_id', 'user_id', 'comment_content', 'createdAt'],
             include: [
                 {
-                    model: UserModel,
+                    model: db.User,
                     attributes: ['nickname'],
-                },
-                {
-                    model: UserImageModel,
-                    attributes: ['imageUrl'],
                 },
             ],
             where: {
                 post_id: postId,
-                is_deleted: 0,
-                limit: 10,
             },
+            limit: 10,
+
             order: [['createdAt', 'DESC']],
         });
 
-        return [recentComenet];
+        return recentComment;
     },
 };
 

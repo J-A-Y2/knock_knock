@@ -52,8 +52,6 @@ const commentController = {
 
             const getComment = await commentService.getComment({ postId, cursor });
 
-            console.log('getComment:', getComment);
-
             statusCode.setResponseCode200(res);
             return res.send({
                 message: getComment.message,
