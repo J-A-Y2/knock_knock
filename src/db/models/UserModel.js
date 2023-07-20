@@ -1,12 +1,12 @@
 import { db } from '../index.js';
 
 const UserModel = {
-    create: async ({ newUser }) => {
+    create: async newUser => {
         const createNewUser = await db.User.create(newUser);
         return createNewUser;
     },
     bulkCreate: async ({ newTags }) => {
-        const createNewTags = await db.User.bulkcreate(newTags);
+        const createNewTags = await db.UserAndTag.bulkCreate(newTags);
         return createNewTags;
     },
     findByEmail: async email => {

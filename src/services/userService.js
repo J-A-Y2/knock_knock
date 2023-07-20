@@ -25,31 +25,46 @@ const userService = {
             if (user) {
                 throw new ConflictError('이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요.');
             }
-
+            console.log('유저 서비스의 userInfo', userInfo);
             // 비밀번호 암호화
-            const hashedPassword = await bcrypt.hash(newUser.user_password, parseInt(process.env.PW_HASH_COUNT));
-            newUser.user_password = hashedPassword;
+            const hashedPassword = await bcrypt.hash(userInfo.user_password, parseInt(process.env.PW_HASH_COUNT));
+            userInfo.user_password = hashedPassword;
 
-            const CreatedUser = await UserModel.create({ userInfo });
+            const CreatedUser = await UserModel.create(userInfo);
+            console.log('유저 서비스의 CreatedUser', CreatedUser);
 
-            console.log('유저 서비스 CreatedUser', CreatedUser);
+            let newTags;
             if (hobby && hobby.length > 0) {
-                hobby.map(item => [item, CreatedUser.user_id]);
+                newTags = hobby.map(item => {
+                    return {
+                        tag_id: item,
+                        user_id: CreatedUser.user_id,
+                    };
+                });
             }
-            let newTags = hobby;
+            console.log('hobby의 newTags', newTags);
             await UserModel.bulkCreate({ newTags });
 
             if (personality && personality.length > 0) {
-                personality.map(item => [item, CreatedUser.user_id]);
+                newTags = personality.map(item => {
+                    return {
+                        tag_id: item,
+                        user_id: CreatedUser.user_id,
+                    };
+                });
             }
 
-            newTags = personality;
             await UserModel.bulkCreate({ newTags });
 
             if (ideal && ideal.length > 0) {
-                ideal.map(item => [item, CreatedUser.user_id]);
+                newTags = ideal.map(item => {
+                    return {
+                        tag_id: item,
+                        user_id: CreatedUser.user_id,
+                    };
+                });
             }
-            newTags = ideal;
+
             await UserModel.bulkCreate({ newTags });
 
             await transaction.commit();
