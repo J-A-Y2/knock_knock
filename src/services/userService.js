@@ -82,7 +82,6 @@ const userService = {
             }
         }
     },
-
     //유저 로그인
     getUser: async ({ email, password }) => {
         let transaction;
@@ -244,14 +243,49 @@ const userService = {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
+            const { hobby, personality, ideal, ...updateUserInfo } = updateData;
             const user = await UserModel.findById(userId);
 
             if (!user) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
-            await UserModel.update({ userId, updateData });
+            await UserModel.update({ userId, updateUserInfo });
             const updatedUser = await UserModel.findById(userId);
+
+            // 회원의 취미를 회원-태그 테이블에 입력
+            let newTags;
+            if (hobby && hobby.length > 0) {
+                newTags = hobby.map(item => {
+                    return {
+                        tag_id: item,
+                        user_id: createdUser.user_id,
+                    };
+                });
+            }
+            await UserModel.bulkCreate({ newTags });
+
+            // 회원의 성격을 회원-태그 테이블에 입력
+            if (personality && personality.length > 0) {
+                newTags = personality.map(item => {
+                    return {
+                        tag_id: item,
+                        user_id: createdUser.user_id,
+                    };
+                });
+            }
+            await UserModel.bulkCreate({ newTags });
+
+            // 회원의 이상형을 회원-태그 테이블에 입력
+            if (ideal && ideal.length > 0) {
+                newTags = ideal.map(item => {
+                    return {
+                        tag_id: item,
+                        user_id: createdUser.user_id,
+                    };
+                });
+            }
+            await UserModel.bulkCreate({ newTags });
 
             await transaction.commit();
 
