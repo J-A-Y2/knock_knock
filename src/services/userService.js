@@ -201,12 +201,32 @@ const userService = {
         }
     },
     // 유저 랜덤으로 6명 네트워크페이지에 불러오기
-    getRandomUsers: async () => {
+    getRandomUsers: async userId => {
         try {
-            const randomUsers = await db.User.findAll({
-                order: db.sequelize.random(),
-                limit: 6,
-            });
+            const user = await UserModel.findById(userId);
+
+            if (!user) {
+                throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
+            }
+
+            let randomUsers;
+            if (user.gender == '남') {
+                randomUsers = await db.User.findAll({
+                    where: {
+                        gender: '여',
+                    },
+                    order: db.sequelize.random(),
+                    limit: 6,
+                });
+            } else {
+                randomUsers = await db.User.findAll({
+                    where: {
+                        gender: '남',
+                    },
+                    order: db.sequelize.random(),
+                    limit: 6,
+                });
+            }
 
             if (!randomUsers || randomUsers.length === 0) {
                 throw new NotFoundError('No users found.');

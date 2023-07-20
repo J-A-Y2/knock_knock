@@ -91,7 +91,8 @@ const userController = {
     },
     getRandomUsersInfo: async (req, res, next) => {
         try {
-            const users = await userService.getRandomUsers();
+            const userId = currentUserId;
+            const users = await userService.getRandomUsers(userId);
 
             statusCode.setResponseCode200(res);
             return res.send(users);
