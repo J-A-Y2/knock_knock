@@ -29,13 +29,16 @@ const UserModel = {
         return user;
     },
     update: async ({ userId, updateData }) => {
+        console.log('유저 모델에서 userId, updateData', userId, updateData);
         const updatedUser = await db.User.update(updateData, {
             where: {
                 user_id: userId,
                 is_deleted: 0,
             },
+            returning: true,
         });
-        return updatedUser;
+        console.log('유저 모델의 updatedUser', updatedUser);
+        return updatedUser[0];
     },
     delete: async ({ userId }) => {
         const deleteUser = await db.User.update(

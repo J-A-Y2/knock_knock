@@ -239,68 +239,55 @@ const userService = {
         }
     },
     // 유저 정보 수정
-    updateUser: async ({ userId, updateData }) => {
+    updateUser: async ({ userId, updateUserInfo }) => {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
-            const { hobby, personality, ideal, ...updateUserInfo } = updateData;
+
+            const { hobby, personality, ideal, ...updateData } = updateUserInfo;
+
             const user = await UserModel.findById(userId);
 
             if (!user) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
+            // userId: 24, updateData는 hobby, personality, ideal 제외한 객체
+            const updatedUser = await UserModel.update(updateData);
+            console.log('유저 서비스의 updatedUser', updatedUser);
 
-            const updatedUser = await UserModel.update({ userId, updateUserInfo });
+            const bulkCreateTags = async tags => {
+                if (tags && tags.length > 0) {
+                    const newTags = tags.map(item => {
+                        return {
+                            tag_id: item,
+                            user_id: userId,
+                        };
+                    });
 
-            // 회원의 취미를 회원-태그 테이블에 수정
-            let newTags;
-            if (hobby && hobby.length > 0) {
-                newTags = hobby.map(item => {
-                    return {
-                        tag_id: item,
-                        user_id: updatedUser.user_id,
-                    };
-                });
-            }
-            await UserModel.bulkCreate({ newTags });
-
-            // 회원의 성격을 회원-태그 테이블에 수정
-            if (personality && personality.length > 0) {
-                newTags = personality.map(item => {
-                    return {
-                        tag_id: item,
-                        user_id: updatedUser.user_id,
-                    };
-                });
-            }
-            await UserModel.bulkCreate({ newTags });
-
-            // 회원의 이상형을 회원-태그 테이블에 수정
-            if (ideal && ideal.length > 0) {
-                newTags = ideal.map(item => {
-                    return {
-                        tag_id: item,
-                        user_id: updatedUser.user_id,
-                    };
-                });
-            }
-            await UserModel.bulkCreate({ newTags });
+                    await db.UserAndTag.bulkCreate(newTags, { transaction });
+                }
+            };
+            await bulkCreateTags(hobby); // 회원-태그 테이블에서 회원의 취미를 수정
+            await bulkCreateTags(personality); // 회원-태그 테이블에서 회원의 성격을 수정
+            await bulkCreateTags(ideal); // 회원-태그 테이블에서 회원의 성격을 수정
 
             await transaction.commit();
 
             return {
                 message: '회원 정보가 수정되었습니다.',
-                nickname: updatedUser.nickname,
-                job: updatedUser.job,
-                region: updatedUser.region,
-                profileImage: updatedUser.profile_image,
-                mbti: updatedUser.mbti,
-                religion: updatedUser.religion,
-                height: updatedUser.height,
-                hobby,
-                personality,
-                ideal,
-                introduce: updatedUser.introduce,
+                updatedUser: {
+                    nickname: updatedUser.nickname,
+                    job: updatedUser.job,
+                    region: updatedUser.region,
+                    profileImage: updatedUser.profile_image,
+                    mbti: updatedUser.mbti,
+                    religion: updatedUser.religion,
+                    height: updatedUser.height,
+                    hobby,
+                    personality,
+                    ideal,
+                    introduce: updatedUser.introduce,
+                },
             };
         } catch (error) {
             if (transaction) {

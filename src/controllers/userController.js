@@ -115,9 +115,9 @@ const userController = {
         try {
             const userId = req.currentUserId;
 
-            const updateData = req.body;
+            const updateUserInfo = req.body;
 
-            const updatedUser = await userService.updateUser({ userId, updateData });
+            const updatedUser = await userService.updateUser({ userId, updateUserInfo });
 
             statusCode.setResponseCode200(res);
             return res.send(updatedUser);
