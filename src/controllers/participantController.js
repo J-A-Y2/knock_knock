@@ -63,5 +63,14 @@ const participantController = {
             next(error);
         }
     },
+    getAcceptedUsers: async (req, res, next) => {
+        try {
+            const postId = req.params.postId;
+
+            const participants = await participantService.getAcceptedUsers(postId);
+        } catch (error) {
+            next(error);
+        }
+    },
 };
 export { participantController };

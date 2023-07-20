@@ -725,7 +725,7 @@ paths:
                 '404':
                     description: User not found
 
-    /posts/:postId/done:
+    /posts/:postId/acceptedlist:
         get:
             tags:
                 - post

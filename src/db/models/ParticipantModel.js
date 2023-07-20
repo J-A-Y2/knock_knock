@@ -50,11 +50,12 @@ const ParticipantModel = {
     },
 
     // 참가 신청 변경
-    update: async ({ participantId, updateField, newValue }) => {
+    update: async ({ transaction, participantId, updateField, newValue }) => {
         await db.Participant.update(
             { [updateField]: newValue },
             {
                 where: { participant_id: participantId },
+                transaction,
             },
         );
     },

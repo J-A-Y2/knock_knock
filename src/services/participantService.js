@@ -128,10 +128,9 @@ const participantService = {
                     newValue = participation.Post.recruited_m + 1;
                 }
             }
-            await ParticipantModel.update({ participantId, updateField: 'status', newValue: 'accepted' });
-            await PostModel.update({ postId: participation.Post.post_id, fieldToUpdate, newValue });
-
-            await transaction.commit(); // 트랜잭션 커밋,,, 인데 PostModel이 정상적으로 안돌아가도 Participant 저장된 게 롤백이 안됨..
+            await ParticipantModel.update({ transaction, participantId, updateField: 'status', newValue: 'accepted' });
+            await PostModel.update({ transaction, postId: participation.Post.post_id, fieldToUpdate, newValue });
+            await transaction.commit();
 
             return { message: '신청 수락을 성공하였습니다.' };
         } catch (error) {
@@ -172,6 +171,11 @@ const participantService = {
                 throw new InternalServerError('신청 거절을 실패했습니다.');
             }
         }
+    },
+    getAcceptedUsers: async postId => {
+        try {
+            const participants = await ParticipantModel.getAcceptedUsers(postId);
+        } catch (error) {}
     },
 };
 export { participantService };
