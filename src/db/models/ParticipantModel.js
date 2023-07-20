@@ -31,10 +31,18 @@ const ParticipantModel = {
         return participation;
     },
 
+    // participantId로 참가 신청 정보 조회
+    getParticipationById: async participantId => {
+        const participation = await db.Participant.findOne({
+            where: { participant_id: participantId },
+        });
+        return participation;
+    },
+
     // 참가 신청 변경
-    participatePut: async ({ participantId, canceledValue }) => {
+    update: async ({ participantId, updateField, newValue }) => {
         await db.Participant.update(
-            { [`canceled`]: canceledValue },
+            { [updateField]: newValue },
             {
                 where: { participant_id: participantId },
             },

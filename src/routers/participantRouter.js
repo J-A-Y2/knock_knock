@@ -15,10 +15,10 @@ participantRouter.put('/:postId/participants', postParamsValidate, participantCo
 participantRouter.get('/:postId/userlist', postParamsValidate, participantController.getParticipants);
 
 // 신청 수락
-participantRouter.post('/:postId/allow', postParamsValidate);
+participantRouter.post('/:postId/:participantId/allow', postParamsValidate, participantController.allow);
 
 // 신청 거절
-participantRouter.delete('/:postId/delete', postParamsValidate);
+participantRouter.delete('/:postId/:participantId/deny', postParamsValidate);
 
 // 수락된 유저 조회
 participantRouter.get('/:postId/done', postParamsValidate);
