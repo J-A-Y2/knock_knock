@@ -5,9 +5,32 @@ const UserModel = {
         const createNewUser = await db.User.create(newUser);
         return createNewUser;
     },
-    bulkCreate: async newTags => {
-        const createNewTags = await db.UserAndTag.bulkCreate(newTags);
-        return createNewTags;
+    bulkCreateTags: async (tags, userId) => {
+        if (tags && tags.length > 0) {
+            const newTags = tags.map(tagId => {
+                return {
+                    tag_id: tagId,
+                    user_id: userId,
+                };
+            });
+            await db.UserAndTag.bulkCreate(newTags);
+        }
+    },
+    bulkUpdateTags: async (tags, userId) => {
+        if (tags && tags.length > 0) {
+            const newTags = tags.map(tagId => {
+                return {
+                    tag_id: tagId,
+                    user_id: userId,
+                };
+            });
+            await db.UserAndTag.bulkCreate(tags);
+
+            await UserModel.bulkCreate(newTags, {
+                updateOnDuplicate: ['tag_id', 'user_id'],
+                transaction,
+            });
+        }
     },
     findByEmail: async email => {
         const user = await db.User.findOne({

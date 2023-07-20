@@ -43,9 +43,9 @@ const userService = {
                     await UserModel.bulkCreate(newTags, { transaction });
                 }
             };
-            await bulkCreateTags(hobby); // 회원-태그 테이블에 회원의 취미를 생성
-            await bulkCreateTags(personality); // 회원-태그 테이블에 회원의 성격을 생성
-            await bulkCreateTags(ideal); // 회원-태그 테이블에 회원의 성격을 생성
+            await UserModel.bulkCreateTags(hobby); // 회원-태그 테이블에 회원의 취미를 생성
+            await UserModel.bulkCreateTags(personality); // 회원-태그 테이블에 회원의 성격을 생성
+            await UserModel.bulkCreateTags(ideal); // 회원-태그 테이블에 회원의 성격을 생성
 
             await transaction.commit();
 
@@ -224,12 +224,13 @@ const userService = {
             if (!user) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
+
             // userId: 24, updateData는 hobby, personality, ideal 제외한 객체
             const updatedUser = await UserModel.update({ userId, updateData });
             console.log('유저 서비스의 updatedUser', updatedUser);
 
             // 기존 hobby, personality, ideal를 지우고 updateUserInfo의 hobby, personality, ideal 만들기
-            const bulkCreateTags = async (tags, tagType) => {
+            const bulkUpdateTags = async tags => {
                 if (tags && tags.length > 0) {
                     const newTags = tags.map(tagId => {
                         return {
@@ -238,21 +239,15 @@ const userService = {
                         };
                     });
 
-                    await UserModel.destroy({
-                        where: {
-                            user_id: userId,
-                            tag_id: newTags.map(tag => tag.tag_id),
-                            tag_type: tagType,
-                        },
+                    await UserModel.bulkCreate(newTags, {
+                        updateOnDuplicate: ['tag_id', 'user_id'],
                         transaction,
                     });
-
-                    await UserModel.bulkCreate(newTags, { transaction });
                 }
             };
-            await bulkCreateTags(hobby); // 회원-태그 테이블에서 회원의 취미를 수정
-            await bulkCreateTags(personality); // 회원-태그 테이블에서 회원의 성격을 수정
-            await bulkCreateTags(ideal); // 회원-태그 테이블에서 회원의 성격을 수정
+            await bulkUpdateTags(hobby, user.user_id); // 회원-태그 테이블에서 회원의 취미를 수정
+            await bulkUpdateTags(personality, user.user_id); // 회원-태그 테이블에서 회원의 성격을 수정
+            await bulkUpdateTags(ideal, user.user_id); // 회원-태그 테이블에서 회원의 성격을 수정
 
             await transaction.commit();
 
