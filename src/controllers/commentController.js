@@ -37,8 +37,8 @@ const commentController = {
             const commentId = req.params.commentId;
 
             const deleteComment = await commentService.deleteComment({ userId, commentId });
-
             statusCode.setResponseCode200(res);
+
             return res.send({ message: deleteComment.message });
         } catch (error) {
             next(error);
