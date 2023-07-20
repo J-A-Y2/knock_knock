@@ -250,38 +250,37 @@ const userService = {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
-            await UserModel.update({ userId, updateUserInfo });
-            const updatedUser = await UserModel.findById(userId);
+            const updatedUser = await UserModel.update({ userId, updateUserInfo });
 
-            // 회원의 취미를 회원-태그 테이블에 입력
+            // 회원의 취미를 회원-태그 테이블에 수정
             let newTags;
             if (hobby && hobby.length > 0) {
                 newTags = hobby.map(item => {
                     return {
                         tag_id: item,
-                        user_id: createdUser.user_id,
+                        user_id: updatedUser.user_id,
                     };
                 });
             }
             await UserModel.bulkCreate({ newTags });
 
-            // 회원의 성격을 회원-태그 테이블에 입력
+            // 회원의 성격을 회원-태그 테이블에 수정
             if (personality && personality.length > 0) {
                 newTags = personality.map(item => {
                     return {
                         tag_id: item,
-                        user_id: createdUser.user_id,
+                        user_id: updatedUser.user_id,
                     };
                 });
             }
             await UserModel.bulkCreate({ newTags });
 
-            // 회원의 이상형을 회원-태그 테이블에 입력
+            // 회원의 이상형을 회원-태그 테이블에 수정
             if (ideal && ideal.length > 0) {
                 newTags = ideal.map(item => {
                     return {
                         tag_id: item,
-                        user_id: createdUser.user_id,
+                        user_id: updatedUser.user_id,
                     };
                 });
             }
@@ -294,13 +293,13 @@ const userService = {
                 nickname: updatedUser.nickname,
                 job: updatedUser.job,
                 region: updatedUser.region,
-                profileImage: updatedUser.profileImage,
+                profileImage: updatedUser.profile_image,
                 mbti: updatedUser.mbti,
                 religion: updatedUser.religion,
                 height: updatedUser.height,
-                hobby: updatedUser.hobby,
-                personality: updatedUser.personality,
-                ideal: updatedUser.ideal,
+                hobby,
+                personality,
+                ideal,
                 introduce: updatedUser.introduce,
             };
         } catch (error) {
