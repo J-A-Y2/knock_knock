@@ -4,7 +4,7 @@ const UserModel = {
     create: async newUser => {
         return await db.User.create(newUser);
     },
-    bulkCreateTags: async (tags, userId) => {
+    bulkCreateTags: async (tags, userId, transaction) => {
         if (tags && tags.length > 0) {
             const newTags = tags.map(tagId => {
                 return {
@@ -12,7 +12,7 @@ const UserModel = {
                     user_id: userId,
                 };
             });
-            await db.UserAndTag.bulkCreate(newTags);
+            await db.UserAndTag.bulkCreate(newTags, transaction);
         }
     },
     bulkUpdateTags: async (tagIds, userId, transaction) => {
