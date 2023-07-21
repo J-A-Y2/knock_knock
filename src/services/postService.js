@@ -34,16 +34,16 @@ const postService = {
     },
     getAllPosts: async ({ page, perPage, type }) => {
         try {
+            const offset = (page - 1) * perPage;
+            const limit = perPage;
             if (type) {
                 // 카테고리별 게시글 조회
-                const offset = (page - 1) * perPage;
-                const limit = perPage;
-                const { total, posts } = await PostModel.getAllPosts({ offset, limit, type });
+                const { total, posts } = await PostModel.getFilteredPosts({ offset, limit, type });
 
                 return { message: '카테고리별 게시글 조회를 성공했습니다.', total, posts };
             } else {
                 // 전체 게시글 조회
-                const { total, posts } = await PostModel.getAllPosts({ offset, limit, type });
+                const { total, posts } = await PostModel.getAllPosts({ offset, limit });
                 return { message: '게시글 전체 조회를 성공했습니다.', total, posts };
             }
         } catch (error) {

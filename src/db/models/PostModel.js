@@ -5,13 +5,17 @@ const PostModel = {
         const post = await db.Post.create(newPost);
         return post;
     },
-    getAllPosts: async ({ offset, limit, type }) => {
-        const whereCondition = {};
-        if (type) {
-            whereCondition.type = type;
-        }
+    getAllPosts: async ({ offset, limit }) => {
         const { count, rows: posts } = await db.Post.findAndCountAll({
-            where: whereCondition,
+            offset,
+            limit,
+            include: [{ model: db.User, attributes: ['nickname'] }],
+        });
+        return { total: count, posts };
+    },
+    getFilteredPosts: async ({ offset, limit, type }) => {
+        const { count, rows: posts } = await db.Post.findAndCountAll({
+            where: { post_type: type },
             offset,
             limit,
             include: [{ model: db.User, attributes: ['nickname'] }],
