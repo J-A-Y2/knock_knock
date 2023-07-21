@@ -183,6 +183,7 @@ const userService = {
                 nickname: user.nickname,
                 gender: user.gender,
                 birthday: user.birthday,
+                age: user.age,
                 job: user.job,
                 region: user.region,
                 profileImage: user.profile_image,
@@ -255,9 +256,10 @@ const userService = {
             if (hobby && hobby.length > 0) {
                 // 태그 카테고리와 일치하는 태그들 삭제
 
-                const tagCategoryId = UserModel.findByUserId(user.user_id);
+                const tagCategoryId = await UserModel.findByUserId(user.user_id);
                 console.log('유저 서비스 tagCategoryId: ', tagCategoryId);
-                await UserModel.deleteTags(user.user_id, tagCategoryId);
+
+                await UserModel.deleteTags(user.user_id, 1);
 
                 // 태그이름 배열을 태그아이디(정수) 배열로 변형, [(tagId,userId)] 형태로 변경
                 const newTags = await Promise.all(

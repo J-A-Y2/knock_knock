@@ -32,18 +32,16 @@ const UserModel = {
 
         return tagId;
     },
-    findByUserId: async () => {
-        return await db.UserAndTag.findAll({
-            where: {
-                user_id: user_id,
-            },
-            include: [
-                {
-                    model: db.Tag,
-                    attributes: ['tag_category_id'],
+    findByUserId: async userId => {
+        try {
+            return await db.UserAndTag.findAll({
+                where: {
+                    user_id: userId,
                 },
-            ],
-        });
+            });
+        } catch (error) {
+            console.error(error);
+        }
     },
     findByEmail: async email => {
         const user = await db.User.findOne({
