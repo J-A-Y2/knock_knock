@@ -200,7 +200,7 @@ const participantService = {
             }
 
             if (post.user_id !== userId) {
-                throw new ConflictError('참가자 리스트 조회 권한이 없습니다.');
+                throw new ConflictError('리스트 조회 권한이 없습니다.');
             }
 
             const acceptedUsers = await ParticipantModel.getAcceptedUsers(postId);
@@ -210,7 +210,7 @@ const participantService = {
             if (error instanceof NotFoundError || error instanceof ConflictError) {
                 throw error;
             } else {
-                throw new InternalServerError('참가자 리스트 불러오기에 실패했습니다.');
+                throw new InternalServerError('수락한 유저 리스트 불러오기에 실패했습니다.');
             }
         }
     },

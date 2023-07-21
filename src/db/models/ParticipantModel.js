@@ -61,10 +61,17 @@ const ParticipantModel = {
     },
     getAcceptedUsers: async postId => {
         const acceptedUsers = await db.Participant.findAll({
+            attributes: [],
             where: {
                 post_id: postId,
                 status: 'accepted',
             },
+            include: [
+                {
+                    model: db.User,
+                    attributes: ['nickname', 'gender', 'job'],
+                },
+            ],
         });
         return acceptedUsers;
     },
