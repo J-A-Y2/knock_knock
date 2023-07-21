@@ -1,6 +1,6 @@
 import { BadRequestError } from './errorMiddleware.js';
 
-const getComment_validate = (req, res, next) => {
+const getCommentValidate = (req, res, next) => {
     const postId = req.query.postId;
     const cursor = req.query.cursor;
 
@@ -15,4 +15,4 @@ const getComment_validate = (req, res, next) => {
     next();
 };
 
-export { getComment_validate };
+export { getCommentValidate };

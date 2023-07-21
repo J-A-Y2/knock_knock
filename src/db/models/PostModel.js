@@ -1,7 +1,7 @@
 import { db } from '../index.js';
 
 const PostModel = {
-    create: async ({ newPost }) => {
+    create: async newPost => {
         await db.Post.create(newPost);
     },
     getAllPosts: async ({ offset, limit }) => {
