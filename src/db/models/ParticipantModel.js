@@ -2,8 +2,8 @@ import { db } from '../index.js';
 
 const ParticipantModel = {
     // 참가 신청
-    participatePost: async ({ userId, postId }) => {
-        const createParticipant = await db.Participant.create({ user_id: userId, post_id: postId });
+    participatePost: async ({ transaction, userId, postId, status }) => {
+        const createParticipant = await db.Participant.create({ user_id: userId, post_id: postId, status }, { transaction });
         return createParticipant;
     },
 
@@ -38,11 +38,11 @@ const ParticipantModel = {
             include: [
                 {
                     model: db.Post,
-                    attributes: ['post_id', 'recruited_m', 'recruited_f', 'total_m', 'total_f'], // 가져올 필드 지정 (여기서는 post_id만 가져옴)
+                    attributes: ['post_id', 'recruited_m', 'recruited_f', 'total_m', 'total_f'],
                 },
                 {
                     model: db.User,
-                    attributes: ['gender'], // 가져올 필드 지정 (여기서는 gender만 가져옴)
+                    attributes: ['gender'],
                 },
             ],
         });

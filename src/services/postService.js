@@ -6,6 +6,7 @@ import { BadRequestError, InternalServerError, NotFoundError, UnauthorizedError 
 
 const postService = {
     createPost: async ({ userId, newPost }) => {
+        const transaction = await db.sequelize.transaction({ autocommit: false });
         try {
             const user = await UserModel.findById(userId);
             if (!user) {
@@ -17,10 +18,13 @@ const postService = {
             } else {
                 newPost.recruited_m = 1;
             }
-            await PostModel.create({ newPost: { user_id: userId, ...newPost } });
+            const post = await PostModel.create({ newPost: { transaction, user_id: userId, ...newPost } });
+            await ParticipantModel.participatePost({ transaction, userId, postId: post.post_id, status: 'accepted' });
+            await transaction.commit();
 
             return { message: '게시물 작성을 성공했습니다.' };
         } catch (error) {
+            await transaction.rollback();
             if (error instanceof UnauthorizedError) {
                 throw error;
             } else {
