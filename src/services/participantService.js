@@ -90,7 +90,7 @@ const participantService = {
             }
 
             const { total, participants } = await ParticipantModel.getParticipants(postId);
-            return { message: '참가자 리스트 조회를 성공했습니다.', total, participants };
+            return { message: '참가자 리스트 조회를 성공했습니다.', isFulled: post.is_completed, total, participants };
         } catch (error) {
             if (error instanceof NotFoundError || error instanceof ConflictError) {
                 throw error;
