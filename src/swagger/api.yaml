@@ -30,17 +30,18 @@ paths:
                                     type: string
                                 nickname:
                                     type: string
-                                userPassword:
+                                user_password:
                                     type: string
                                 gender:
                                     type: string
                                 birthday:
                                     type: string
+                                    format: date
                                 job:
                                     type: string
                                 region:
                                     type: string
-                                profileImage:
+                                profile_image:
                                     type: string
                                 mbti:
                                     type: string
@@ -49,11 +50,17 @@ paths:
                                 height:
                                     type: string
                                 hobby:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
                                 presonality:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
                                 ideal:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
                                 introduce:
                                     type: string
                 required: true
@@ -72,17 +79,18 @@ paths:
                                     type: string
                                 nickname:
                                     type: string
-                                userPassword:
+                                user_password:
                                     type: string
                                 gender:
                                     type: string
                                 birthday:
                                     type: string
+                                    format: date
                                 job:
                                     type: string
                                 region:
                                     type: string
-                                profileImage:
+                                profile_image:
                                     type: string
                                 mbti:
                                     type: string
@@ -91,11 +99,17 @@ paths:
                                 height:
                                     type: string
                                 hobby:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
                                 presonality:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
                                 ideal:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
                                 introduce:
                                     type: string
 
@@ -154,30 +168,7 @@ paths:
                             type: object
                             properties:
                                 userId:
-                                    type: int
-                                email:
-                                    type: string
-                                user_image:
-                                    type: string
-                '400':
-                    description: Invalid status value
-
-    /users/:userId:
-        get:
-            tags:
-                - user
-            description: 유저 정보 조회하기.
-
-            responses:
-                '200':
-                    description: 유저 조회 성공!
-                    content:
-                        application/json:
-                            schema:
-                            type: object
-                            properties:
-                                userId:
-                                    type: string
+                                    type: integer
                                 email:
                                     type: string
                                 username:
@@ -188,6 +179,7 @@ paths:
                                     type: string
                                 birthday:
                                     type: string
+                                    format: date
                                 job:
                                     type: string
                                 region:
@@ -201,11 +193,78 @@ paths:
                                 height:
                                     type: string
                                 hobby:
-                                    type: string
-                                personality:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
+                                presonality:
+                                    type: array
+                                    items:
+                                        type: integer
                                 ideal:
+                                    type: array
+                                    items:
+                                        type: integer
+                                introduce:
                                     type: string
+                '400':
+                    description: Invalid status value
+
+    /users/{userId}:
+        get:
+            tags:
+                - user
+            description: 유저 정보 조회하기.
+            parameters:
+                - name: userId
+                  in: path
+                  description: 유저 고유 아이디
+                  required: true
+
+            responses:
+                '200':
+                    description: 유저 조회 성공!
+                    content:
+                        application/json:
+                            schema:
+                            type: object
+                            properties:
+                                userId:
+                                    type: integer
+                                email:
+                                    type: string
+                                username:
+                                    type: string
+                                nickname:
+                                    type: string
+                                gender:
+                                    type: string
+                                birthday:
+                                    type: string
+                                    format: date
+                                job:
+                                    type: string
+                                region:
+                                    type: string
+                                profileImage:
+                                    type: string
+                                mbti:
+                                    type: string
+                                religion:
+                                    type: string
+                                height:
+                                    type: string
+                                hobby:
+                                    type: array
+                                    items:
+                                        type: integer
+                                presonality:
+                                    type: array
+                                    items:
+                                        type: integer
+                                ideal:
+                                    type: array
+                                    items:
+                                        type: integer
                                 introduce:
                                     type: string
 
@@ -264,11 +323,17 @@ paths:
                                 height:
                                     type: string
                                 hobby:
-                                    type: string
-                                personality:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
+                                presonality:
+                                    type: array
+                                    items:
+                                        type: integer
                                 ideal:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
                                 indtroduce:
                                     type: string
 
@@ -297,11 +362,17 @@ paths:
                                 height:
                                     type: string
                                 hobby:
-                                    type: string
-                                personality:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
+                                presonality:
+                                    type: array
+                                    items:
+                                        type: integer
                                 ideal:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
                                 indtroduce:
                                     type: string
 

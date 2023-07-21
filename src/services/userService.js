@@ -1,5 +1,4 @@
-import dotenv from 'dotenv';
-import bcrypt, { hash } from 'bcrypt';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {
     ConflictError,
@@ -14,9 +13,8 @@ import { db } from '../db/index.js';
 const userService = {
     // 유저 생성
     createUser: async ({ newUser }) => {
-        let transaction;
         try {
-            transaction = await db.sequelize.transaction();
+            const { hobby, personality, ideal, ...userInfo } = newUser;
 
             //이메일 중복 확인
             const user = await UserModel.findByEmail(newUser.email);
@@ -26,20 +24,19 @@ const userService = {
             }
 
             // 비밀번호 암호화
-            const hashedPassword = await bcrypt.hash(newUser.user_password, parseInt(process.env.PW_HASH_COUNT));
-            newUser.user_password = hashedPassword;
-            await UserModel.create({ newUser });
+            const hashedPassword = await bcrypt.hash(userInfo.user_password, parseInt(process.env.PW_HASH_COUNT));
+            userInfo.user_password = hashedPassword;
 
-            await transaction.commit();
+            const createdUser = await UserModel.create(userInfo);
+
+            await UserModel.bulkCreateTags(hobby, createdUser.user_id); // 회원-태그 테이블에 회원의 취미를 생성
+            await UserModel.bulkCreateTags(personality, createdUser.user_id); // 회원-태그 테이블에 회원의 성격을 생성
+            await UserModel.bulkCreateTags(ideal, createdUser.user_id); // 회원-태그 테이블에 회원의 성격을 생성
 
             return {
                 message: '회원가입에 성공했습니다.',
             };
         } catch (error) {
-            if (transaction) {
-                await transaction.rollback();
-            }
-
             if (error instanceof ConflictError) {
                 throw error;
             } else {
@@ -47,7 +44,6 @@ const userService = {
             }
         }
     },
-
     //유저 로그인
     getUser: async ({ email, password }) => {
         let transaction;
@@ -91,9 +87,7 @@ const userService = {
             if (transaction) {
                 await transaction.rollback();
             }
-            if (error instanceof NotFoundError) {
-                throw error;
-            } else if (error instanceof UnauthorizedError) {
+            if (error instanceof NotFoundError || error instanceof UnauthorizedError) {
                 throw error;
             } else {
                 throw new UnauthorizedError('로그인에 실패하였습니다.');
@@ -135,11 +129,11 @@ const userService = {
             if (!user) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
-            console.log('유저서비스 user', user);
+
             await transaction.commit();
             return {
                 message: '회원정보 조회 성공!',
-                userId: user.userId,
+                userId: user.user_id,
                 email: user.email,
                 username: user.username,
                 nickname: user.nickname,
@@ -147,7 +141,7 @@ const userService = {
                 birthday: user.birthday,
                 job: user.job,
                 region: user.region,
-                profileImage: user.profileImage,
+                profileImage: user.profile_image,
                 mbti: user.mbti,
                 religion: user.religion,
                 height: user.height,
@@ -160,52 +154,87 @@ const userService = {
             if (transaction) {
                 await transaction.rollback();
             }
-            if (error instanceof UnauthorizedError) {
-                throw error;
-            } else if (error instanceof NotFoundError) {
+            if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
                 throw error;
             } else {
                 throw new InternalServerError('회원 정보를 조회하는 데 실패했습니다.');
             }
         }
     },
-    // 유저 정보 수정
-    updateUser: async function ({ userId, updateData }) {
-        let transaction;
+    // 유저 랜덤으로 6명 네트워크페이지에 불러오기
+    getRandomUsers: async userId => {
         try {
-            transaction = await db.sequelize.transaction();
             const user = await UserModel.findById(userId);
 
             if (!user) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
-            await UserModel.update({ userId, updateData });
-            const updatedUser = await UserModel.findById(userId);
+            let genderToFind; // 로그인 유저가 남자면 여자를 보여기 그 반대도 마찬가지
+            if (user.gender === '남') {
+                genderToFind = '여';
+            } else {
+                genderToFind = '남';
+            }
+
+            const randomUsers = await UserModel.findRandomUsers(genderToFind, 6);
+
+            if (!randomUsers || randomUsers.length === 0) {
+                throw new NotFoundError('No users found.');
+            }
+
+            return {
+                message: '랜덤으로 유저 6명 조회하기 성공!',
+                randomUsers,
+            };
+        } catch (error) {
+            throw new BadRequestError('랜덤으로 유저들을 조회하는 데 실패했습니다.');
+        }
+    },
+    // 유저 정보 수정
+    updateUser: async ({ userId, updateUserInfo }) => {
+        let transaction;
+        try {
+            transaction = await db.sequelize.transaction();
+
+            const { hobby, personality, ideal, ...updateData } = updateUserInfo;
+
+            const user = await UserModel.findById(userId);
+
+            if (!user) {
+                throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
+            }
+
+            // userId: 24, updateData는 hobby, personality, ideal 제외한 객체
+            const updatedUser = await UserModel.update({ userId, updateData });
+
+            await UserModel.bulkUpdateTags(hobby, user.user_id, transaction); // 회원-태그 테이블에서 회원의 취미를 수정
+            await UserModel.bulkUpdateTags(personality, user.user_id, transaction); // 회원-태그 테이블에서 회원의 성격을 수정
+            await UserModel.bulkUpdateTags(ideal, user.user_id, transaction); // 회원-태그 테이블에서 회원의 성격을 수정
 
             await transaction.commit();
 
             return {
                 message: '회원 정보가 수정되었습니다.',
-                nickname: updatedUser.nickname,
-                job: updatedUser.job,
-                region: updatedUser.region,
-                profileImage: updatedUser.profileImage,
-                mbti: updatedUser.mbti,
-                religion: updatedUser.religion,
-                height: updatedUser.height,
-                hobby: updatedUser.hobby,
-                personality: updatedUser.personality,
-                ideal: updatedUser.ideal,
-                introduce: updatedUser.introduce,
+                updatedUser: {
+                    nickname: updatedUser.nickname,
+                    job: updatedUser.job,
+                    region: updatedUser.region,
+                    profileImage: updatedUser.profile_image,
+                    mbti: updatedUser.mbti,
+                    religion: updatedUser.religion,
+                    height: updatedUser.height,
+                    hobby,
+                    personality,
+                    ideal,
+                    introduce: updatedUser.introduce,
+                },
             };
         } catch (error) {
             if (transaction) {
                 await transaction.rollback();
             }
-            if (error instanceof UnauthorizedError) {
-                throw error;
-            } else if (error instanceof NotFoundError) {
+            if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
                 throw error;
             } else {
                 throw new InternalServerError('회원 정보를 수정하는 데 실패했습니다.');
@@ -233,9 +262,7 @@ const userService = {
             if (transaction) {
                 await transaction.rollback();
             }
-            if (error instanceof UnauthorizedError) {
-                throw error;
-            } else if (error instanceof NotFoundError) {
+            if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
                 throw error;
             } else {
                 throw new InternalServerError('회원 탈퇴하는 데 실패했습니다.');
