@@ -2,7 +2,6 @@ import { validationResult, body } from 'express-validator';
 import { BadRequestError } from './errorMiddleware.js';
 
 const updateCommentValidationRules = [
-    body('postId').notEmpty().withMessage('게시물 ID를 확인해주세요.'),
     body('content')
         .notEmpty()
         .withMessage('게시물 내용을 입력하세요.')
@@ -10,7 +9,7 @@ const updateCommentValidationRules = [
         .withMessage('게시물 내용은 최대 250글자까지 허용됩니다.'),
 ];
 
-const updateComment_validate = (req, res, next) => {
+const updateCommentValidate = (req, res, next) => {
     const commentId = req.params.commentId;
     if (!commentId || isNaN(commentId)) {
         throw new BadRequestError('댓글의 ID를 확인해주세요.');
@@ -24,4 +23,4 @@ const updateComment_validate = (req, res, next) => {
     next();
 };
 
-export { updateCommentValidationRules, updateComment_validate };
+export { updateCommentValidationRules, updateCommentValidate };
