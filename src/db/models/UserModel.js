@@ -33,7 +33,7 @@ const UserModel = {
                 tag_category_id: tagCategoryId,
             },
         });
-
+        console.log('유저모델의 tagId: ', tagId);
         return tagId;
     },
     findByEmail: async email => {

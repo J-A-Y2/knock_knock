@@ -35,20 +35,22 @@ const userService = {
             if (hobby && hobby.length > 0) {
                 // 태그이름 배열을 태그아이디(정수) 배열로 변경
                 const hobbyTagIds = await Promise.all(
-                    hobby.map(hobbyTagName => {
-                        const tagId = UserModel.findTagId(hobbyTagName, 1);
-                        return tagId;
+                    hobby.map(async hobbyTagName => {
+                        const tagId = await UserModel.findTagId(hobbyTagName, 1);
+                        return tagId.tag_id;
                     }),
                 );
+
                 // [(tagId,userId)] 형태로 변경
                 const newTags = await Promise.all(
-                    hobbyTagIds.map(tagId => {
+                    hobbyTagIds.map(async tagId => {
                         return {
                             tag_id: tagId,
                             user_id: createdUser.user_id,
                         };
                     }),
                 );
+
                 // userAndTags 테이블에 취미 데이터 생성
                 await UserModel.bulkCreateTags(newTags, transaction);
             }
@@ -57,14 +59,14 @@ const userService = {
             if (personality && personality.length > 0) {
                 // 태그이름 배열을 태그아이디(정수) 배열로 변형
                 const personalityTagIds = await Promise.all(
-                    personality.map(personalityTagName => {
-                        const tagId = UserModel.findTagId(personalityTagName, 2);
-                        return tagId;
+                    personality.map(async personalityTagName => {
+                        const tagId = await UserModel.findTagId(personalityTagName, 2);
+                        return tagId.tag_id;
                     }),
                 );
                 // [(tagId,userId)] 형태로 변경
                 const newTags = await Promise.all(
-                    personalityTagIds.map(tagId => {
+                    personalityTagIds.map(async tagId => {
                         return {
                             tag_id: tagId,
                             user_id: createdUser.user_id,
@@ -79,14 +81,14 @@ const userService = {
             if (ideal && ideal.length > 0) {
                 // 태그이름 배열을 태그아이디(정수) 배열로 변형
                 const idealTagIds = await Promise.all(
-                    ideal.map(idealTagName => {
-                        const tagId = UserModel.findTagId(idealTagName, 3);
-                        return tagId;
+                    ideal.map(async idealTagName => {
+                        const tagId = await UserModel.findTagId(idealTagName, 3);
+                        return tagId.tag_id;
                     }),
                 );
                 // [(tagId,userId)] 형태로 변경
                 const newTags = await Promise.all(
-                    idealTagIds.map(tagId => {
+                    idealTagIds.map(async tagId => {
                         return {
                             tag_id: tagId,
                             user_id: createdUser.user_id,
