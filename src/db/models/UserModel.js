@@ -11,7 +11,7 @@ const UserModel = {
         return await db.UserAndTag.destroy({
             include: [
                 {
-                    model: Tags,
+                    model: TagModel,
                     attributes: [],
                 },
             ],
@@ -62,7 +62,6 @@ const UserModel = {
         return randomUsers;
     },
     update: async ({ userId, updateData }) => {
-        console.log('유저 모델에서 userId, updateData', userId, updateData);
         const updatedUser = await db.User.update(updateData, {
             where: {
                 user_id: userId,
@@ -70,7 +69,7 @@ const UserModel = {
             },
             returning: true,
         });
-        console.log('유저 모델의 updatedUser', updatedUser);
+
         return updatedUser[0];
     },
     delete: async ({ userId }) => {
