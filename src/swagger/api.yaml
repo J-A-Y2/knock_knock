@@ -3,6 +3,8 @@ tags:
       description: 유저 라우터 모음
     - name: post
       description: 게시글 라우터 모음
+    - name: participation
+      description: 참가 라우터 모음
     - name: comment
       description: 댓글 라우터 모음
     - name: message
@@ -638,10 +640,10 @@ paths:
                 '404':
                     description: Order not found
 
-    /posts/:postId/participants:
+    /participants/:postId/participants:
         post:
             tags:
-                - post
+                - participation
             description: 모임 신청하기
 
             parameters:
@@ -678,10 +680,10 @@ paths:
                                 properties:
                                     message:
                                         type: string
-    /posts/:postId/userlist:
+    /participants/:postId/userlist:
         get:
             tags:
-                - post
+                - participation
             description: 신청자 조회하기
 
             parameters:
@@ -722,10 +724,10 @@ paths:
                 '404':
                     description: Order not found
 
-    /posts/:participantId/allow:
+    /participants/:participantId/allow:
         put:
             tags:
-                - post
+                - participation
             description: 신청인 수락하기
 
             parameters:
@@ -759,10 +761,10 @@ paths:
                 '404':
                     description: User not found
 
-    /posts/:participantId/deny:
+    /participants/:participantId/deny:
         put:
             tags:
-                - post
+                - participation
             description: 신청인 거절하기
 
             parameters:
@@ -796,10 +798,10 @@ paths:
                 '404':
                     description: User not found
 
-    /posts/:postId/acceptedlist:
+    /participants/:postId/acceptedlist:
         get:
             tags:
-                - post
+                - participation
             description: 수락된 유저 조회
 
             parameters:
