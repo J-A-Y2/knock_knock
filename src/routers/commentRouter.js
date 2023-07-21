@@ -10,7 +10,7 @@ const commentRouter = Router();
 commentRouter.use(loginRequired);
 
 // 댓글 작성
-commentRouter.post('/', addCommentValidationRules, addComment_validate, commentController.create);
+commentRouter.post('/:postId', addCommentValidationRules, addComment_validate, commentController.create);
 
 //댓글 수정
 commentRouter.put('/:postId/:commentId', updateCommentValidationRules, updateComment_validate, commentController.update);
