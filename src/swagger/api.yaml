@@ -420,7 +420,7 @@ paths:
                   type: integer
                   minimum: 1
                   default: 1
-                  required: true
+                  required: false
                 - name: perPage
                   in: query
                   description: 페이지 당 게시글 개수
@@ -428,7 +428,7 @@ paths:
                   type: integer
                   minimum: 1
                   default: 5
-                  required: true
+                  required: false
             responses:
                 '200':
                     description: 전체 게시글 불러오기 성공.
@@ -485,6 +485,11 @@ paths:
                                                     format: date-time
                                                 userId:
                                                     type: integer
+                                                User:
+                                                    type: object
+                                                    properties:
+                                                        nickname:
+                                                            type: string
                     required: true
 
         post:
