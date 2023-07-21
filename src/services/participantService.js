@@ -90,7 +90,7 @@ const participantService = {
             }
 
             const { total, participants } = await ParticipantModel.getParticipants(postId);
-            return { message: '참가자 리스트 조회를 성공했습니다.', total, participants };
+            return { message: '참가자 리스트 조회를 성공했습니다.', isFulled: post.is_completed, total, participants };
         } catch (error) {
             if (error instanceof NotFoundError || error instanceof ConflictError) {
                 throw error;
@@ -106,6 +106,7 @@ const participantService = {
             let recruited_f = participation.Post.recruited_f;
             let recruited_m = participation.Post.recruited_m;
             let fieldToUpdate, newValue;
+
             if (!participation) {
                 throw new NotFoundError('해당 id의 참가 신청 정보를 찾을 수 없습니다.');
             } else {
@@ -190,19 +191,28 @@ const participantService = {
             }
         }
     },
-    getAcceptedUsers: async postId => {
+    getAcceptedUsers: async ({ userId, postId }) => {
         try {
             const post = await PostModel.getPostById(postId);
+
             if (!post) {
                 throw new NotFoundError('해당 Id의 게시글을 찾을 수 없습니다.');
             }
+
             if (post.user_id !== userId) {
-                throw new ConflictError('참가자 리스트 조회 권한이 없습니다.');
+                throw new ConflictError('리스트 조회 권한이 없습니다.');
             }
 
             const acceptedUsers = await ParticipantModel.getAcceptedUsers(postId);
-            // return { message: }
-        } catch (error) {}
+
+            return { message: '수락한 유저 리스트 조회를 성공했습니다.', acceptedUsers };
+        } catch (error) {
+            if (error instanceof NotFoundError || error instanceof ConflictError) {
+                throw error;
+            } else {
+                throw new InternalServerError('수락한 유저 리스트 불러오기에 실패했습니다.');
+            }
+        }
     },
 };
 export { participantService };

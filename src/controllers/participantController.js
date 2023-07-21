@@ -71,10 +71,13 @@ const participantController = {
     },
     getAcceptedUsers: async (req, res, next) => {
         try {
+            const userId = req.currentUserId;
             const postId = req.params.postId;
 
-            const participants = await participantService.getAcceptedUsers(postId);
-            
+            const { message, acceptedUsers } = await participantService.getAcceptedUsers({ userId, postId });
+
+            statusCode.setResponseCode200(res);
+            res.send({ message, acceptedUsers });
         } catch (error) {
             next(error);
         }

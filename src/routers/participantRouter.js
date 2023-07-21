@@ -23,7 +23,7 @@ participantRouter.put('/:participantId/allow', participantParamsValidate, partic
 participantRouter.put('/:participantId/deny', participantParamsValidate, participantController.deny);
 
 // 수락된 유저 조회
-participantRouter.get('/:postId/acceptedlist', postParamsValidate);
+participantRouter.get('/:postId/acceptedlist', postParamsValidate, participantController.getAcceptedUsers);
 
 // 모집 완료
 participantRouter.put('/:postId/complete', postParamsValidate);

@@ -18,7 +18,14 @@ const ParticipantModel = {
     // 참가 신청자 리스트
     getParticipants: async postId => {
         const { count, rows: participants } = await db.Participant.findAndCountAll({
+            attributes: ['participant_id', 'canceled', 'status'],
             where: { post_id: postId, canceled: 0 },
+            include: [
+                {
+                    model: db.User,
+                    attributes: ['nickname', 'gender', 'age', 'job'],
+                },
+            ],
         });
         return { total: count, participants };
     },
@@ -61,10 +68,17 @@ const ParticipantModel = {
     },
     getAcceptedUsers: async postId => {
         const acceptedUsers = await db.Participant.findAll({
+            attributes: [],
             where: {
                 post_id: postId,
                 status: 'accepted',
             },
+            include: [
+                {
+                    model: db.User,
+                    attributes: ['nickname', 'gender', 'age', 'job'],
+                },
+            ],
         });
         return acceptedUsers;
     },

@@ -761,7 +761,7 @@ paths:
 
             responses:
                 '200':
-                    description: 신청자 조회 성공.
+                    description: 신청자 조회 성공. isFulled가 true면 모집 완료 / false면 모집 중
                     content:
                         application/json:
                             schema:
@@ -769,6 +769,8 @@ paths:
                                 properties:
                                     message:
                                         type: string
+                                    isFulled:
+                                        type: boolean
                                     total:
                                         type: integer
                                     participantsList:
@@ -885,10 +887,24 @@ paths:
                             schema:
                                 type: object
                                 properties:
-                                    post_id:
-                                        type: integer
-                                    user_id:
-                                        type: integer
+                                    message:
+                                        type: string
+                                    acceptedUsers:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                User:
+                                                    type: object
+                                                    properties:
+                                                        nickname:
+                                                            type: string
+                                                        gender:
+                                                            type: string
+                                                        age:
+                                                            type: integer
+                                                        job:
+                                                            type: integer
                 '400':
                     description: Invalid ID supplied
                 '404':
