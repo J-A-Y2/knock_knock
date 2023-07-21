@@ -38,6 +38,12 @@ const UserModel = {
                 where: {
                     user_id: userId,
                 },
+                include: [
+                    {
+                        model: db.Tag,
+                        attributes: ['tag_category_id'],
+                    },
+                ],
             });
         } catch (error) {
             console.error(error);
@@ -74,15 +80,19 @@ const UserModel = {
         return randomUsers;
     },
     update: async ({ userId, updateData }) => {
-        const updatedUser = await db.User.update(updateData, {
-            where: {
-                user_id: userId,
-                is_deleted: 0,
-            },
-            returning: true,
-        });
+        try {
+            const updatedUser = await db.User.update(updateData, {
+                where: {
+                    user_id: userId,
+                    is_deleted: 0,
+                },
+                returning: true,
+            });
 
-        return updatedUser[0];
+            return updatedUser[0];
+        } catch (error) {
+            console.error(error);
+        }
     },
     delete: async ({ userId }) => {
         const deleteUser = await db.User.update(
