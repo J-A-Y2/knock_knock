@@ -1,24 +1,24 @@
 import { Router } from 'express';
 import { commentController } from '../controllers/commentController.js';
-import { addCommentValidationRules, addComment_validate } from '../middlewares/commentVaildate.js';
-import { updateCommentValidationRules, updateComment_validate } from '../middlewares/setComment_validate.js';
-import { commentParams_validate } from '../middlewares/commentParams_validate.js';
-import { getComment_validate } from '../middlewares/getComment_validate.js';
+import { addCommentValidationRules, addCommentValidate } from '../middlewares/commentVaildate.js';
+import { updateCommentValidationRules, updateCommentValidate } from '../middlewares/updateCommentValidate.js';
+import { commentParamsValidate } from '../middlewares/commentParamsValidate.js';
+import { getCommentValidate } from '../middlewares/getCommentValidate.js';
 import { loginRequired } from '../middlewares/loginRequired.js';
 
 const commentRouter = Router();
 commentRouter.use(loginRequired);
 
 // 댓글 작성
-commentRouter.post('/:postId', addCommentValidationRules, addComment_validate, commentController.create);
+commentRouter.post('/:postId', addCommentValidationRules, addCommentValidate, commentController.create);
 
 //댓글 수정
-commentRouter.put('/:postId/:commentId', updateCommentValidationRules, updateComment_validate, commentController.update);
+commentRouter.put('/:postId/:commentId', updateCommentValidationRules, updateCommentValidate, commentController.update);
 
 // 개별 게시글 댓글 조회
-commentRouter.get('/', getComment_validate, commentController.getComment);
+commentRouter.get('/', getCommentValidate, commentController.getComment);
 
 // 댓글 삭제
-commentRouter.delete('/:commentId', commentParams_validate, commentController.delete);
+commentRouter.delete('/:commentId', commentParamsValidate, commentController.delete);
 
 export { commentRouter };

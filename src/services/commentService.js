@@ -7,10 +7,11 @@ const commentService = {
     createComment: async ({ userId, postId, content }) => {
         try {
             const participant = await ParticipantModel.getParticipationIdById({ userId, postId });
-            console.log(participant);
-
-            if (participant.status !== accepted) {
-                throw new UnauthorizedError('수락된 유저에게만 권한이 있습니다');
+            if (!participant) {
+                throw new NotFoundError('해당 id의 신청 정보가 없습니다. ');
+            }
+            if (participant.status !== 'accepted') {
+                throw new UnauthorizedError('신청이 수락된 유저에게만 권한이 있습니다');
             }
 
             await CommentModel.create({ userId, postId, content });
@@ -19,7 +20,7 @@ const commentService = {
                 message: '댓글 추가하기에 성공했습니다.',
             };
         } catch (error) {
-            if (error instanceof UnauthorizedError) {
+            if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
                 throw error;
             } else {
                 throw new InternalServerError('댓글 작성하기에 실패했습니다.');
@@ -77,15 +78,17 @@ const commentService = {
         }
     },
 
-    getComment: async ({ postId, cursor }) => {
+    getComment: async ({ userId, postId, cursor }) => {
         try {
             let commentList = [];
-
             const post = await PostModel.getPostById(postId);
             const participant = await ParticipantModel.getParticipationIdById({ userId, postId });
 
-            if (participant.status !== accepted) {
-                throw new UnauthorizedError('수락된 유저에게만 권한이 있습니다');
+            if (!participant) {
+                throw new NotFoundError('해당 id의 신청 정보가 없습니다. ');
+            }
+            if (participant.status !== 'accepted') {
+                throw new UnauthorizedError('신청이 수락된 유저에게만 권한이 있습니다');
             }
 
             if (!post) {
