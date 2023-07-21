@@ -32,6 +32,10 @@ const User = (sequelize, DataTypes) => {
                 type: DataTypes.DATEONLY,
                 allowNull: false,
             },
+            age: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+            },
             job: {
                 type: DataTypes.STRING(20),
                 allowNull: false,

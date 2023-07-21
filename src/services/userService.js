@@ -13,7 +13,9 @@ import { db } from '../db/index.js';
 const userService = {
     // 유저 생성
     createUser: async ({ newUser }) => {
+        let transaction;
         try {
+            transaction = await db.sequelize.transaction();
             const { hobby, personality, ideal, ...userInfo } = newUser;
 
             //이메일 중복 확인
@@ -29,14 +31,56 @@ const userService = {
 
             const createdUser = await UserModel.create(userInfo);
 
-            await UserModel.bulkCreateTags(hobby, createdUser.user_id); // 회원-태그 테이블에 회원의 취미를 생성
-            await UserModel.bulkCreateTags(personality, createdUser.user_id); // 회원-태그 테이블에 회원의 성격을 생성
-            await UserModel.bulkCreateTags(ideal, createdUser.user_id); // 회원-태그 테이블에 회원의 성격을 생성
+            // 취미 태그 생성
+            if (hobby && hobby.length > 0) {
+                // 태그이름 배열을 태그아이디(정수) 배열로 변경
+                const newTags = await Promise.all(
+                    hobby.map(async hobbyTagName => {
+                        const tagId = await UserModel.findTagId(hobbyTagName, 1);
+                        return { tag_id: tagId.tag_id, user_id: createdUser.user_id };
+                    }),
+                );
+
+                // userAndTags 테이블에 취미 데이터 생성
+                await UserModel.bulkCreateTags({ newTags, transaction });
+            }
+
+            // 성격 태그 생성
+            if (personality && personality.length > 0) {
+                // 태그이름 배열을 태그아이디(정수) 배열로 변형
+                const newTags = await Promise.all(
+                    personality.map(async personalityTagName => {
+                        const tagId = await UserModel.findTagId(personalityTagName, 2);
+                        return { tag_id: tagId.tag_id, user_id: createdUser.user_id };
+                    }),
+                );
+                // userAndTags 테이블에 성격 데이터 생성
+                await UserModel.bulkCreateTags({ newTags, transaction });
+            }
+
+            // 이상형 태그 생성
+            if (ideal && ideal.length > 0) {
+                // 태그이름 배열을 태그아이디(정수) 배열로 변경, [(tagId,userId)] 형태로 변경
+                const newTags = await Promise.all(
+                    ideal.map(async idealTagName => {
+                        const tagId = await UserModel.findTagId(idealTagName, 3);
+                        return { tag_id: tagId.tag_id, user_id: createdUser.user_id };
+                    }),
+                );
+
+                // userAndTags 테이블에 이상형 데이터 생성
+                await UserModel.bulkCreateTags({ newTags, transaction });
+            }
+
+            await transaction.commit();
 
             return {
                 message: '회원가입에 성공했습니다.',
             };
         } catch (error) {
+            if (transaction) {
+                await transaction.rollback();
+            }
             if (error instanceof ConflictError) {
                 throw error;
             } else {
@@ -205,12 +249,59 @@ const userService = {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
-            // userId: 24, updateData는 hobby, personality, ideal 제외한 객체
             const updatedUser = await UserModel.update({ userId, updateData });
 
-            await UserModel.bulkUpdateTags(hobby, user.user_id, transaction); // 회원-태그 테이블에서 회원의 취미를 수정
-            await UserModel.bulkUpdateTags(personality, user.user_id, transaction); // 회원-태그 테이블에서 회원의 성격을 수정
-            await UserModel.bulkUpdateTags(ideal, user.user_id, transaction); // 회원-태그 테이블에서 회원의 성격을 수정
+            // 취미 태그 수정
+            if (hobby && hobby.length > 0) {
+                // 태그 카테고리와 일치하는 태그들 삭제
+
+                const tagCategoryId = UserModel.findByUserId(user.user_id);
+
+                await UserModel.deleteTags(user.user_id, tagCategoryId);
+
+                // 태그이름 배열을 태그아이디(정수) 배열로 변형, [(tagId,userId)] 형태로 변경
+                const newTags = await Promise.all(
+                    hobby.map(async hobbyTagName => {
+                        const tagId = await UserModel.findTagId(hobbyTagName, 1);
+                        return { tag_id: tagId.tag_id, user_id: user.user_id };
+                    }),
+                );
+
+                // 수정할 태그들 userAndTags 테이블에 데이터 생성
+                await UserModel.bulkCreateTags({ newTags, transaction });
+            }
+
+            // 성격 태그 수정
+            if (personality && personality.length > 0) {
+                await UserModel.deleteTags(user.user_id, 2);
+
+                // 태그이름 배열을 태그아이디(정수) 배열로 변형, [(tagId,userId)] 형태로 변경
+                const newTags = await Promise.all(
+                    personality.map(async personalityTagName => {
+                        const tagId = await UserModel.findTagId(personalityTagName, 2);
+                        return { tag_id: tagId.tag_id, user_id: user.user_id };
+                    }),
+                );
+
+                // 수정할 태그들 userAndTags 테이블에 데이터 생성
+                await UserModel.bulkCreateTags({ newTags, transaction });
+            }
+
+            // 이상형 태그 수정
+            if (ideal && ideal.length > 0) {
+                await UserModel.deleteTags(user.user_id, 3);
+
+                // 태그이름 배열을 태그아이디(정수) 배열로 변형, [(tagId,userId)] 형태로 변경
+                const newTags = await Promise.all(
+                    ideal.map(async idealTagName => {
+                        const tagId = await UserModel.findTagId(idealTagName, 3);
+                        return { tag_id: tagId.tag_id, user_id: user.user_id };
+                    }),
+                );
+
+                // 수정할 태그들 userAndTags 테이블에 데이터 생성
+                await UserModel.bulkCreateTags({ newTags, transaction });
+            }
 
             await transaction.commit();
 
