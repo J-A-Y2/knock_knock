@@ -2,8 +2,7 @@ import { db } from '../index.js';
 
 const UserModel = {
     create: async newUser => {
-        const createNewUser = await db.User.create(newUser);
-        return createNewUser;
+        return await db.User.create(newUser);
     },
     bulkCreateTags: async (tags, userId) => {
         if (tags && tags.length > 0) {
@@ -42,8 +41,16 @@ const UserModel = {
                 }
             }
     },
+    deleteTags: async (userId, tagCategoryId) => {
+        return await db.UserAndTag.destroy({
+            where: {
+                user_id: userId,
+                tag_category_id: tagCategoryId,
+            },
+        });
+    },
     findTagId: async (tagname, tagCategoryId) => {
-        const tagId = await db.Tags.findAll({
+        const tagId = await db.Tag.findOne({
             where: {
                 tagname: tagname,
                 tag_category_id: tagCategoryId,

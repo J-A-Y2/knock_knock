@@ -205,9 +205,32 @@ const userService = {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
-            // userId: 24, updateData는 hobby, personality, ideal 제외한 객체
             const updatedUser = await UserModel.update({ userId, updateData });
+            if (hobby && hobby.length > 0) {
+                await UserModel.deleteTags(user.user_id, 1);
 
+                const hobbyTagIds = hobby.map(hobbyTagName => {
+                    UserModel.findTagId(hobbyTagName, 1);
+                });
+
+                await UserModel.bulkUpdateTags(1, hobbyTagIds, user.user_id, transaction);
+            }
+
+            if (personality && personality.length > 0) {
+                await UserModel.deleteTags(user.user_id, 2);
+            }
+            if (ideal && ideal.length > 0) {
+                await UserModel.deleteTags(user.user_id, 3);
+            }
+
+            if (tags && tags.length > 0) {
+                const newTags = tags.map(tagId => {
+                    return {
+                        tag_id: tagId,
+                        user_id: userId,
+                    };
+                });
+            }
             await UserModel.bulkUpdateTags(hobby, user.user_id, transaction); // 회원-태그 테이블에서 회원의 취미를 수정
             await UserModel.bulkUpdateTags(personality, user.user_id, transaction); // 회원-태그 테이블에서 회원의 성격을 수정
             await UserModel.bulkUpdateTags(ideal, user.user_id, transaction); // 회원-태그 테이블에서 회원의 성격을 수정
