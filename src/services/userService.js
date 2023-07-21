@@ -277,7 +277,7 @@ const userService = {
             }
 
             const updatedUser = await UserModel.update({ userId, updateData });
-
+            console.log('유저 서비스의 hobby ', hobby, 'personality: ', personality, 'ideal: ', ideal);
             // 취미 태그 수정
             if (hobby && hobby.length > 0) {
                 // 태그 카테고리와 일치하는 태그들 삭제
@@ -295,7 +295,7 @@ const userService = {
                     hobbyTagIds.map(async tagId => {
                         return {
                             tag_id: tagId,
-                            user_id: updatedUser.user_id,
+                            user_id: user.user_id,
                         };
                     }),
                 );
@@ -319,7 +319,7 @@ const userService = {
                     personalityTagIds.map(async tagId => {
                         return {
                             tag_id: tagId,
-                            user_id: updatedUser.user_id,
+                            user_id: user.user_id,
                         };
                     }),
                 );
@@ -343,7 +343,7 @@ const userService = {
                     idealTagIds.map(async tagId => {
                         return {
                             tag_id: tagId,
-                            user_id: updatedUser.user_id,
+                            user_id: user.user_id,
                         };
                     }),
                 );
