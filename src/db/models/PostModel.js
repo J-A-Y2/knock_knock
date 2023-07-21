@@ -16,11 +16,12 @@ const PostModel = {
         });
         return post;
     },
-    update: async ({ postId, fieldToUpdate, newValue }) => {
+    update: async ({ transaction, postId, fieldToUpdate, newValue }) => {
         const updatePost = await db.Post.update(
             { [fieldToUpdate]: newValue },
             {
                 where: { post_id: postId },
+                transaction,
             },
         );
         return updatePost;

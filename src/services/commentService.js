@@ -17,7 +17,7 @@ const commentService = {
 
     updateComment: async ({ userId, postId, commentId, content }) => {
         try {
-            const comment = await CommentModel.findById({ commentId });
+            const comment = await CommentModel.findByCommentId({ commentId });
 
             if (!comment) {
                 throw new NotFoundError('요청한 댓글의 정보를 찾을 수 없습니다.');

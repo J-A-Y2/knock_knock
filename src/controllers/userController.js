@@ -81,10 +81,32 @@ const userController = {
     getUserInfo: async (req, res, next) => {
         try {
             const { userId } = req.params;
-            const getUser = await userService.getUserById({ userId });
+            const user = await userService.getUserById({ userId });
 
             statusCode.setResponseCode200(res);
-            return res.send(getUser);
+            return res.send(user);
+        } catch (error) {
+            next(error);
+        }
+    },
+    getRandomUsersInfo: async (req, res, next) => {
+        try {
+            const userId = req.currentUserId;
+            const users = await userService.getRandomUsers(userId);
+
+            statusCode.setResponseCode200(res);
+            return res.send(users);
+        } catch (error) {
+            next(error);
+        }
+    },
+    getCurrentUserInfo: async (req, res, next) => {
+        try {
+            const { userId } = req.currentUserId;
+            const user = await userService.getUserById({ userId });
+
+            statusCode.setResponseCode200(res);
+            return res.send(user);
         } catch (error) {
             next(error);
         }
@@ -93,9 +115,9 @@ const userController = {
         try {
             const userId = req.currentUserId;
 
-            const updateData = req.body;
+            const updateUserInfo = req.body;
 
-            const updatedUser = await userService.updateUser({ userId, updateData });
+            const updatedUser = await userService.updateUser({ userId, updateUserInfo });
 
             statusCode.setResponseCode200(res);
             return res.send(updatedUser);

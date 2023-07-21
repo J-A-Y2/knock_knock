@@ -15,8 +15,11 @@ userRouter.post('/login', loginValidationRules, loginValidate, userController.lo
 // 로그인 검증
 userRouter.get('/isLogin', loginRequired, userController.isLogin);
 
-// 네트워크페이지 - 유저 정보 불러오기
-userRouter.get('/users', loginRequired, userController.getUserInfo);
+// 현재 로그인된 유저 정보 불러오기
+userRouter.get('/mypage', loginRequired, userController.getCurrentUserInfo);
+
+// 오늘의 낙낙(네트워크)페이지 - 랜덤으로 6명 유저 정보 불러오기
+userRouter.get('/network', loginRequired, userController.getRandomUsersInfo);
 
 // 유저 정보 불러오기
 userRouter.get('/:userId', loginRequired, userController.getUserInfo);

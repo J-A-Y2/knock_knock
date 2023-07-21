@@ -1,6 +1,7 @@
 import { PostModel } from '../db/models/postModel.js';
 import { ParticipantModel } from '../db/models/ParticipantModel.js';
 import { ConflictError, InternalServerError, NotFoundError, UnauthorizedError } from '../middlewares/errorMiddleware.js';
+import { db } from '../db/index.js';
 
 const participantService = {
     participatePost: async ({ userId, postId }) => {
@@ -98,18 +99,69 @@ const participantService = {
             }
         }
     },
-    allow: async ({ postId, participantId }) => {
+    allow: async participantId => {
+        const transaction = await db.sequelize.transaction({ autocommit: false }); // 트랜잭션 생성
         try {
-            const post = await PostModel.getPostById(postId);
-            if (!post) {
-                throw new NotFoundError('해당 Id의 게시글을 찾을 수 없습니다.');
-            }
+            const participation = await ParticipantModel.getParticipationById(participantId);
 
+            let fieldToUpdate, newValue;
+            if (!participation) {
+                throw new NotFoundError('해당 id의 참가 신청 정보를 찾을 수 없습니다.');
+            } else {
+                if (!participation.Post) {
+                    throw new NotFoundError('해당 Id의 게시글을 찾을 수 없습니다.');
+                }
+
+                if (participation.canceled) {
+                    throw new ConflictError('취소된 신청 정보입니다.');
+                }
+
+                if (participation.status !== 'pending') {
+                    throw new ConflictError('이미 수락되었거나 거절된 유저입니다.');
+                }
+                if (participation.User.gender === '여') {
+                    fieldToUpdate = 'recruited_f';
+
+                    if (participation.Post.recruited_f === participation.Post.total_f) {
+                        throw new ConflictError('더 이상 여성 유저의 신청을 수락할 수 없습니다.');
+                    } else {
+                        newValue = participation.Post.recruited_f + 1;
+                    }
+                } else {
+                    fieldToUpdate = 'recruited_m';
+                    if (participation.Post.recruited_m === participation.Post.total_m) {
+                        throw new ConflictError('더 이상 남성 유저의 신청을 수락할 수 없습니다.');
+                    } else {
+                        newValue = participation.Post.recruited_m + 1;
+                    }
+                }
+            }
+            await ParticipantModel.update({ transaction, participantId, updateField: 'status', newValue: 'accepted' });
+            await PostModel.update({ transaction, postId: participation.Post.post_id, fieldToUpdate, newValue });
+
+            await transaction.commit();
+
+            return { message: '신청 수락을 성공하였습니다.' };
+        } catch (error) {
+            await transaction.rollback();
+            if (error instanceof NotFoundError || error instanceof ConflictError) {
+                throw error;
+            } else {
+                throw new InternalServerError('신청 수락에 실패했습니다.');
+            }
+        }
+    },
+    deny: async participantId => {
+        try {
             const participation = await ParticipantModel.getParticipationById(participantId);
 
             if (!participation) {
                 throw new NotFoundError('해당 id의 참가 신청 정보를 찾을 수 없습니다.');
             } else {
+                if (!participation.Post) {
+                    throw new NotFoundError('해당 Id의 게시글을 찾을 수 없습니다.');
+                }
+
                 if (participation.canceled) {
                     throw new ConflictError('취소된 신청 정보입니다.');
                 }
@@ -118,17 +170,21 @@ const participantService = {
                     throw new ConflictError('이미 수락되었거나 거절된 유저입니다.');
                 }
             }
+            await ParticipantModel.update({ participantId, updateField: 'status', newValue: 'rejected' });
 
-            await ParticipantModel.update({ participantId, updateField: 'status', newValue: 'accepted' });
-
-            return { message: '신청 수락을 성공하였습니다.' };
+            return { message: '신청 거절을 성공하였습니다.' };
         } catch (error) {
             if (error instanceof NotFoundError || error instanceof ConflictError) {
                 throw error;
             } else {
-                throw new InternalServerError('신청 수락에 실패했습니다.');
+                throw new InternalServerError('신청 거절을 실패했습니다.');
             }
         }
+    },
+    getAcceptedUsers: async postId => {
+        try {
+            const participants = await ParticipantModel.getAcceptedUsers(postId);
+        } catch (error) {}
     },
 };
 export { participantService };
