@@ -21,7 +21,7 @@ app.use('/users', userRouter);
 app.use('/posts', postRouter);
 app.use('/comments', commentRouter);
 app.use('/messages', messageRouter);
-app.use('/posts', participantRouter);
+app.use('/participants', participantRouter);
 
 dotenv.config();
 db.sequelize
