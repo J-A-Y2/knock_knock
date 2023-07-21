@@ -25,7 +25,6 @@ const ParticipantModel = {
 
     // 현재 유저가 참가 신청한 모임 추출
     getParticipationIdById: async ({ userId, postId }) => {
-        console.log('model', { userId, postId });
         const participation = await db.Participant.findOne({
             where: { user_id: userId, post_id: postId },
         });
@@ -59,6 +58,15 @@ const ParticipantModel = {
                 transaction,
             },
         );
+    },
+    getAcceptedUsers: async postId => {
+        const acceptedUsers = await db.Participant.findAll({
+            where: {
+                post_id: postId,
+                status: 'accepted',
+            },
+        });
+        return acceptedUsers;
     },
 };
 
