@@ -3,6 +3,8 @@ tags:
       description: 유저 라우터 모음
     - name: post
       description: 게시글 라우터 모음
+    - name: participation
+      description: 참가 라우터 모음
     - name: comment
       description: 댓글 라우터 모음
     - name: message
@@ -30,17 +32,18 @@ paths:
                                     type: string
                                 nickname:
                                     type: string
-                                userPassword:
+                                user_password:
                                     type: string
                                 gender:
                                     type: string
                                 birthday:
                                     type: string
+                                    format: date
                                 job:
                                     type: string
                                 region:
                                     type: string
-                                profileImage:
+                                profile_image:
                                     type: string
                                 mbti:
                                     type: string
@@ -49,11 +52,17 @@ paths:
                                 height:
                                     type: string
                                 hobby:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
                                 presonality:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
                                 ideal:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
                                 introduce:
                                     type: string
                 required: true
@@ -72,17 +81,18 @@ paths:
                                     type: string
                                 nickname:
                                     type: string
-                                userPassword:
+                                user_password:
                                     type: string
                                 gender:
                                     type: string
                                 birthday:
                                     type: string
+                                    format: date
                                 job:
                                     type: string
                                 region:
                                     type: string
-                                profileImage:
+                                profile_image:
                                     type: string
                                 mbti:
                                     type: string
@@ -91,11 +101,17 @@ paths:
                                 height:
                                     type: string
                                 hobby:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
                                 presonality:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
                                 ideal:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
                                 introduce:
                                     type: string
 
@@ -154,30 +170,7 @@ paths:
                             type: object
                             properties:
                                 userId:
-                                    type: int
-                                email:
-                                    type: string
-                                user_image:
-                                    type: string
-                '400':
-                    description: Invalid status value
-
-    /users/:userId:
-        get:
-            tags:
-                - user
-            description: 유저 정보 조회하기.
-
-            responses:
-                '200':
-                    description: 유저 조회 성공!
-                    content:
-                        application/json:
-                            schema:
-                            type: object
-                            properties:
-                                userId:
-                                    type: string
+                                    type: integer
                                 email:
                                     type: string
                                 username:
@@ -188,6 +181,7 @@ paths:
                                     type: string
                                 birthday:
                                     type: string
+                                    format: date
                                 job:
                                     type: string
                                 region:
@@ -201,11 +195,78 @@ paths:
                                 height:
                                     type: string
                                 hobby:
-                                    type: string
-                                personality:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
+                                presonality:
+                                    type: array
+                                    items:
+                                        type: integer
                                 ideal:
+                                    type: array
+                                    items:
+                                        type: integer
+                                introduce:
                                     type: string
+                '400':
+                    description: Invalid status value
+
+    /users/{userId}:
+        get:
+            tags:
+                - user
+            description: 유저 정보 조회하기.
+            parameters:
+                - name: userId
+                  in: path
+                  description: 유저 고유 아이디
+                  required: true
+
+            responses:
+                '200':
+                    description: 유저 조회 성공!
+                    content:
+                        application/json:
+                            schema:
+                            type: object
+                            properties:
+                                userId:
+                                    type: integer
+                                email:
+                                    type: string
+                                username:
+                                    type: string
+                                nickname:
+                                    type: string
+                                gender:
+                                    type: string
+                                birthday:
+                                    type: string
+                                    format: date
+                                job:
+                                    type: string
+                                region:
+                                    type: string
+                                profileImage:
+                                    type: string
+                                mbti:
+                                    type: string
+                                religion:
+                                    type: string
+                                height:
+                                    type: string
+                                hobby:
+                                    type: array
+                                    items:
+                                        type: integer
+                                presonality:
+                                    type: array
+                                    items:
+                                        type: integer
+                                ideal:
+                                    type: array
+                                    items:
+                                        type: integer
                                 introduce:
                                     type: string
 
@@ -264,11 +325,17 @@ paths:
                                 height:
                                     type: string
                                 hobby:
-                                    type: string
-                                personality:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
+                                presonality:
+                                    type: array
+                                    items:
+                                        type: integer
                                 ideal:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
                                 indtroduce:
                                     type: string
 
@@ -297,11 +364,17 @@ paths:
                                 height:
                                     type: string
                                 hobby:
-                                    type: string
-                                personality:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
+                                presonality:
+                                    type: array
+                                    items:
+                                        type: integer
                                 ideal:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: integer
                                 indtroduce:
                                     type: string
 
@@ -375,29 +448,35 @@ paths:
                                         items:
                                             type: object
                                             properties:
-                                                postId:
+                                                post_id:
                                                     type: integer
-                                                profileImage:
+                                                profile_image:
                                                     type: string
                                                     nullable: true
-                                                postType:
+                                                post_type:
                                                     type: string
-                                                postTitle:
+                                                post_title:
                                                     type: string
-                                                postImage:
+                                                post_image:
                                                     type: string
                                                     nullable: true
-                                                people:
-                                                    type: integer
                                                 place:
                                                     type: string
-                                                meetingTime:
+                                                meeting_time:
                                                     type: string
-                                                postContent:
+                                                post_content:
                                                     type: string
-                                                isCompleted:
+                                                is_completed:
                                                     type: boolean
                                                     default: false
+                                                total_m:
+                                                    type: integer
+                                                total_f:
+                                                    type: integer
+                                                recruited_m:
+                                                    type: integer
+                                                recruited_f:
+                                                    type: integer
                                                 createdAt:
                                                     type: string
                                                     format: date-time
@@ -411,24 +490,26 @@ paths:
         post:
             tags:
                 - post
-            description: 게시글 작성하기. 제목 100자, 내용 200자, 인원 10명 이하, 장소 30자 이하
+            description: 게시글 작성하기. 제목 100자, 내용 200자, 인원 10명 이하, 장소 30자 이하, recruited_f/m은 default 0으로 들어감.
             requestBody:
                 content:
                     application/json:
                         schema:
                             type: object
                             properties:
-                                postTitle:
+                                post_title:
                                     type: string
-                                postContent:
+                                post_content:
                                     type: string
-                                postType:
+                                post_type:
                                     type: string
-                                people:
+                                total_m:
+                                    type: integer
+                                total_f:
                                     type: integer
                                 place:
                                     type: string
-                                meetingTime:
+                                meeting_time:
                                     type: string
                 required: true
 
@@ -459,35 +540,41 @@ paths:
                                     post:
                                         type: object
                                         properties:
-                                            postId:
+                                            post_id:
                                                 type: integer
-                                            profileImage:
+                                            profile_image:
                                                 type: string
                                                 nullable: true
-                                            postType:
+                                            post_type:
                                                 type: string
-                                            postTitle:
+                                            post_title:
                                                 type: string
-                                            postImage:
+                                            post_image:
                                                 type: string
                                                 nullable: true
-                                            people:
-                                                type: integer
                                             place:
                                                 type: string
-                                            meetingTime:
+                                            meeting_time:
                                                 type: string
-                                            postContent:
+                                            post_content:
                                                 type: string
-                                            isCompleted:
+                                            is_completed:
                                                 type: boolean
+                                            total_m:
+                                                type: integer
+                                            total_f:
+                                                type: integer
+                                            recruited_m:
+                                                type: integer
+                                            recruited_f:
+                                                type: integer
                                             createdAt:
                                                 type: string
                                                 format: date-time
                                             updatedAt:
                                                 type: string
                                                 format: date-time
-                                            userId:
+                                            user_id:
                                                 type: integer
                     required: true
         delete:
@@ -504,20 +591,11 @@ paths:
             responses:
                 '200':
                     description: 게시글 삭제 성공.
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    post_id:
-                                        type: integer
-                                    content:
-                                        type: string
 
         put:
             tags:
                 - post
-            description: 게시글 수정하기. 수정할 항목만 넣어주면 됨.
+            description: 게시글 수정하기. 수정할 항목만 넣어주면 됨! total_m/f 수정할 때는 recruited_m/f 보다 큰 값이어야 함.
 
             parameters:
                 - name: postid
@@ -531,34 +609,42 @@ paths:
                         schema:
                             type: object
                             properties:
-                                postTitle:
+                                post_title:
                                     type: string
-                                postContent:
+                                post_content:
                                     type: string
-                                postType:
+                                post_type:
                                     type: string
-                                people:
+                                total_m:
+                                    type: integer
+                                total_f:
                                     type: integer
                                 place:
                                     type: string
-                                meetingTime:
+                                meeting_time:
                                     type: string
                 required: true
 
             responses:
                 '200':
                     description: 게시글 수정을 성공했습니다.
-
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
                 '400':
                     description: Invalid ID supplied
                 '404':
                     description: Order not found
 
-    /posts/:postId/participants:
+    /participants/:postId/participants:
         post:
             tags:
-                - post
-            description: 모인 신청하기
+                - participation
+            description: 모임 신청하기
 
             parameters:
                 - name: postid
@@ -574,29 +660,30 @@ paths:
                             schema:
                                 type: object
                                 properties:
-                                    post_id:
-                                        type: integer
-                                    participant_id:
-                                        type: integer
-                                    user_id:
-                                        type: integer
-                                    content:
+                                    message:
                                         type: string
-                                    canceled:
-                                        type: false
-                                    status:
-                                        type: string
-                                    createcAt:
-                                        type: datetime
                 '400':
                     description: Invalid ID supplied
                 '404':
                     description: Order not found
-
-    /posts/:postId/userList:
-        get:
+        put:
             tags:
                 - post
+            description: 모임 신청 취소하기
+            responses:
+                '200':
+                    description: 모임 신청 취소 성공.
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+    /participants/:postId/userlist:
+        get:
+            tags:
+                - participation
             description: 신청자 조회하기
 
             parameters:
@@ -613,25 +700,40 @@ paths:
                             schema:
                                 type: object
                                 properties:
-                                    post_id:
+                                    message:
+                                        type: string
+                                    total:
                                         type: integer
-                                    user_id:
-                                        type: integer
+                                    participantsList:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                participant_id:
+                                                    type: integer
+                                                canceled:
+                                                    type: string
+                                                status:
+                                                    type: string
+                                                user_id:
+                                                    type: integer
+                                                post_id:
+                                                    type: integer
                 '400':
                     description: Invalid ID supplied
                 '404':
                     description: Order not found
 
-    /posts/:postId/allow:
+    /participants/:participantId/allow:
         put:
             tags:
-                - post
+                - participation
             description: 신청인 수락하기
 
             parameters:
-                - name: postid
+                - name: participantId
                   in: path
-                  description: 게시글 고유 아이디
+                  description: 참가 신청 고유 아이디
                   required: true
 
             requestbody:
@@ -652,35 +754,23 @@ paths:
                             schema:
                                 type: object
                                 properties:
-                                    post_id:
-                                        type: integer
-                                    participant_id:
-                                        type: integer
-                                    user_id:
-                                        type: integer
-                                    content:
+                                    message:
                                         type: string
-                                    canceled:
-                                        type: false
-                                    status:
-                                        type: string
-                                    createcAt:
-                                        type: datetime
                 '400':
                     description: Invalid ID supplied
                 '404':
                     description: User not found
 
-    /posts/:postId/deny:
+    /participants/:participantId/deny:
         put:
             tags:
-                - post
+                - participation
             description: 신청인 거절하기
 
             parameters:
-                - name: postid
+                - name: participantId
                   in: path
-                  description: 게시글 고유 아이디
+                  description: 참가 신청 고유 아이디
                   required: true
 
             requestbody:
@@ -701,29 +791,17 @@ paths:
                             schema:
                                 type: object
                                 properties:
-                                    post_id:
-                                        type: integer
-                                    participant_id:
-                                        type: integer
-                                    user_id:
-                                        type: integer
-                                    content:
+                                    message:
                                         type: string
-                                    canceled:
-                                        type: false
-                                    status:
-                                        type: string
-                                    createcAt:
-                                        type: datetime
                 '400':
                     description: Invalid ID supplied
                 '404':
                     description: User not found
 
-    /posts/:postId/done:
+    /participants/:postId/acceptedlist:
         get:
             tags:
-                - post
+                - participation
             description: 수락된 유저 조회
 
             parameters:

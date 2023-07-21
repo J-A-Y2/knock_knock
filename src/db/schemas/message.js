@@ -2,24 +2,24 @@ const Message = (sequelize, DataTypes) => {
     const Message = sequelize.define(
         'Message',
         {
-            messageId: {
+            message_id: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true,
             },
-            messageContent: {
+            message_content: {
                 type: DataTypes.STRING(40),
                 allowNull: false,
             },
-            sendId: {
+            send_id: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
             },
-            receiveId: {
+            receive_id: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
             },
-            createdAt: {
+            created_at: {
                 type: DataTypes.DATE,
                 allowNull: false,
             },
@@ -34,14 +34,14 @@ const Message = (sequelize, DataTypes) => {
         },
     );
     Message.associate = db => {
-        // foreignKey는 Message모델의 sendId, targetKey는 User 모델의 userId
+        // foreignKey는 Message모델의 send_id, targetKey는 User 모델의 user_id
         db.Message.belongsTo(db.User, {
-            foreignKey: 'sendId',
+            foreignKey: 'send_id',
             targetKey: 'user_id',
         });
-        // foreignKey는 Message모델의 receiveId, targetKey는 User 모델의 userId
+        // foreignKey는 Message모델의 receive_id, targetKey는 User 모델의 user_id
         db.Message.belongsTo(db.User, {
-            foreignKey: 'receiveId',
+            foreignKey: 'receive_id',
             targetKey: 'user_id',
         });
     };

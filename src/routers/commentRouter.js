@@ -15,8 +15,8 @@ commentRouter.post('/', addCommentValidationRules, addComment_validate, commentC
 //댓글 수정
 commentRouter.put('/:commentId', updateCommentValidationRules, updateComment_validate, commentController.update);
 
-// 개별 댓글 조회
-commentRouter.get('/:postId', getComment_validate, commentController.getComment);
+// 개별 게시글 댓글 조회
+commentRouter.get('/', getComment_validate, commentController.getComment);
 
 // 댓글 삭제
 commentRouter.delete('/:commentId', commentParams_validate, commentController.delete);
