@@ -52,15 +52,15 @@ paths:
                                 hobby:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 presonality:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 ideal:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 introduce:
                                     type: string
                 required: true
@@ -101,15 +101,15 @@ paths:
                                 hobby:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 presonality:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 ideal:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 introduce:
                                     type: string
 
@@ -195,15 +195,15 @@ paths:
                                 hobby:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 presonality:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 ideal:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 introduce:
                                     type: string
                 '400':
@@ -256,15 +256,15 @@ paths:
                                 hobby:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 presonality:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 ideal:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 introduce:
                                     type: string
 
@@ -325,15 +325,15 @@ paths:
                                 hobby:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 presonality:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 ideal:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 indtroduce:
                                     type: string
 
@@ -364,15 +364,15 @@ paths:
                                 hobby:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 presonality:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 ideal:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 indtroduce:
                                     type: string
 
@@ -398,11 +398,11 @@ paths:
                             schema:
                                 type: object
                                 properties:
+                                    message:
+                                        type: string
                                     email:
                                         type: string
                                     nickname:
-                                        type: string
-                                    password:
                                         type: string
 
     /posts:
