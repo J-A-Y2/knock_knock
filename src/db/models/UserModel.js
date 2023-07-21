@@ -9,16 +9,16 @@ const UserModel = {
     },
     deleteTags: async (userId, tagCategoryId) => {
         return await db.UserAndTag.destroy({
-            include: [
-                {
-                    model: TagModel,
-                    attributes: [],
-                },
-            ],
             where: {
                 user_id: userId,
                 tag_category_id: tagCategoryId,
             },
+            include: [
+                {
+                    model: db.Tag,
+                    attributes: [],
+                },
+            ],
         });
     },
     findTagId: async (tagname, tagCategoryId) => {
