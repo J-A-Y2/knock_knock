@@ -29,9 +29,38 @@ const userService = {
 
             const createdUser = await UserModel.create(userInfo);
 
-            await UserModel.bulkCreateTags(hobby, createdUser.user_id); // 회원-태그 테이블에 회원의 취미를 생성
-            await UserModel.bulkCreateTags(personality, createdUser.user_id); // 회원-태그 테이블에 회원의 성격을 생성
-            await UserModel.bulkCreateTags(ideal, createdUser.user_id); // 회원-태그 테이블에 회원의 성격을 생성
+            // 취미 태그 생성
+            if (hobby && hobby.length > 0) {
+                // 태그이름 배열을 태그아이디(정수) 배열로 변형
+                const hobbyTagIds = hobby.map(hobbyTagName => {
+                    UserModel.findTagId(hobbyTagName, 1);
+                });
+
+                // userAndTags 테이블에 취미 데이터 생성
+                await UserModel.bulkCreateTags(hobbyTagIds, createdUser.user_id);
+            }
+
+            // 성격 태그 생성
+            if (personality && personality.length > 0) {
+                // 태그이름 배열을 태그아이디(정수) 배열로 변형
+                const personalityTagIds = personality.map(personalityTagName => {
+                    UserModel.findTagId(personalityTagName, 2);
+                });
+
+                // userAndTags 테이블에 취미 데이터 생성
+                await UserModel.bulkCreateTags(personality, createdUser.user_id);
+            }
+
+            // 이상형 태그 생성
+            if (ideal && ideal.length > 0) {
+                // 태그이름 배열을 태그아이디(정수) 배열로 변형
+                const idealTagIds = ideal.map(idealTagName => {
+                    UserModel.findTagId(idealTagName, 3);
+                });
+
+                // userAndTags 테이블에 취미 데이터 생성
+                await UserModel.bulkCreateTags(ideal, createdUser.user_id);
+            }
 
             return {
                 message: '회원가입에 성공했습니다.',
@@ -227,7 +256,7 @@ const userService = {
 
                 // 태그이름 배열을 태그아이디(정수) 배열로 변형
                 const personalityTagIds = personality.map(personalityTagName => {
-                    UserModel.findTagId(personalityTagName, 1);
+                    UserModel.findTagId(personalityTagName, 2);
                 });
 
                 // 수정할 태그들 userAndTags 테이블에 데이터 생성
@@ -240,7 +269,7 @@ const userService = {
 
                 // 태그이름 배열을 태그아이디(정수) 배열로 변형
                 const idealTagIds = ideal.map(idealTagName => {
-                    UserModel.findTagId(idealTagName, 1);
+                    UserModel.findTagId(idealTagName, 3);
                 });
 
                 // 수정할 태그들 userAndTags 테이블에 데이터 생성
