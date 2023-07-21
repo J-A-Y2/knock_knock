@@ -3,9 +3,7 @@ CREATE DATABASE knockknock;
 
 USE knockknock;
 
-SELECT userAndTags.user_and_tag_id, userAndTags.user_id, userAndTags.tag_id, 
-	   tagCategories.tag_category_id, tagCategories.tag_category_name, tags.tagname 
-	FROM userAndTags
+
 
 INSERT INTO tagCategories VALUES(NULL, '취미');
 INSERT INTO tagCategories VALUES(NULL, '성격');

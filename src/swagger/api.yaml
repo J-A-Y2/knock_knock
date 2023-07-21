@@ -54,15 +54,15 @@ paths:
                                 hobby:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 presonality:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 ideal:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 introduce:
                                     type: string
                 required: true
@@ -103,15 +103,15 @@ paths:
                                 hobby:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 presonality:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 ideal:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 introduce:
                                     type: string
 
@@ -197,15 +197,15 @@ paths:
                                 hobby:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 presonality:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 ideal:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 introduce:
                                     type: string
                 '400':
@@ -258,15 +258,15 @@ paths:
                                 hobby:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 presonality:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 ideal:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 introduce:
                                     type: string
 
@@ -327,15 +327,15 @@ paths:
                                 hobby:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 presonality:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 ideal:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 indtroduce:
                                     type: string
 
@@ -366,15 +366,15 @@ paths:
                                 hobby:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 presonality:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 ideal:
                                     type: array
                                     items:
-                                        type: integer
+                                        type: string
                                 indtroduce:
                                     type: string
 
@@ -400,12 +400,74 @@ paths:
                             schema:
                                 type: object
                                 properties:
+                                    message:
+                                        type: string
                                     email:
                                         type: string
                                     nickname:
                                         type: string
-                                    password:
-                                        type: string
+    /users/network:
+        get:
+            tags:
+                - user
+            description: 오늘의 낙낙(네트워크) 랜덤으로 6명 불러오기
+
+            responses:
+                '200':
+                    description: 랜덤 유저 6명 불러오기 성공!
+                    content:
+                        application/json:
+                            schema:
+                            type: object
+                            properties:
+                                message:
+                                    type: string
+                                randomUsers:
+                                    type: array
+                                    items:
+                                        type: object
+                                        properties:
+                                            userId:
+                                                type: integer
+                                            email:
+                                                type: string
+                                            username:
+                                                type: string
+                                            nickname:
+                                                type: string
+                                            gender:
+                                                type: string
+                                            birthday:
+                                                type: string
+                                                format: date
+                                            job:
+                                                type: string
+                                            region:
+                                                type: string
+                                            profileImage:
+                                                type: string
+                                            mbti:
+                                                type: string
+                                            religion:
+                                                type: string
+                                            height:
+                                                type: string
+                                            hobby:
+                                                type: array
+                                                items:
+                                                    type: string
+                                            presonality:
+                                                type: array
+                                                items:
+                                                    type: string
+                                            ideal:
+                                                type: array
+                                                items:
+                                                    type: string
+                                            introduce:
+                                                type: string
+                '400':
+                    description: Invalid value
 
     /posts:
         get:

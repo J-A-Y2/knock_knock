@@ -21,6 +21,7 @@ const RegisterValidationRules = [
         .withMessage('생년월일을 입력하세요.')
         .matches(/^\d{4}-\d{2}-\d{2}$/)
         .withMessage('올바른 생년월일 형식(YYYY-MM-DD)을 입력하세요.'),
+    body('age').isInt().withMessage('나이를 정수로 입력해주세요.'),
     body('job').notEmpty().withMessage('직업을 입력하세요.'),
     body('mbti')
         .optional()
@@ -30,30 +31,15 @@ const RegisterValidationRules = [
         .withMessage('4글자로 입력해주세요. ex) INFP'),
     body('religion').optional().notEmpty().withMessage('종교를 입력하세요.'),
     body('height').optional().notEmpty().withMessage('키를 입력하세요.'),
-    body('hobby')
-        .optional()
-        .isArray()
-        .withMessage('Hobby should be an array')
-        .custom(value => value.every(Number.isInteger))
-        .withMessage('취미 태그를 선택해주세요'),
-    body('personality')
-        .optional()
-        .isArray()
-        .withMessage('Personality should be an array')
-        .custom(value => value.every(Number.isInteger))
-        .withMessage('나의 성격 태그를 선택해주세요'),
-    body('ideal')
-        .optional()
-        .isArray()
-        .withMessage('Ideal should be an array')
-        .custom(value => value.every(Number.isInteger))
-        .withMessage('이상형 태그를 선택해주세요'),
+    body('hobby').optional().notEmpty().withMessage('취미 태그를 선택해주세요'),
+    body('personality').optional().notEmpty().withMessage('나의 성격 태그를 선택해주세요'),
+    body('ideal').optional().notEmpty().withMessage('이상형 태그를 선택해주세요'),
     body('introduce')
         .optional()
         .notEmpty()
-        .withMessage('Please enter a self-introduction.')
+        .withMessage('자기소개를 입력해주세요.')
         .isLength({ max: 255 })
-        .withMessage('You can only input up to 255 characters.'),
+        .withMessage('최대 255자만 입력 가능합니다'),
     // body('imageUrl').notEmpty().withMessage('imageUrl을 확인하세요.'),
 ];
 
