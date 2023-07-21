@@ -33,16 +33,24 @@ const userService = {
 
             // 취미 태그 생성
             if (hobby && hobby.length > 0) {
-                // 태그이름 배열을 태그아이디(정수) 배열로 변형
+                // 태그이름 배열을 태그아이디(정수) 배열로 변경
                 const hobbyTagIds = await Promise.all(
                     hobby.map(hobbyTagName => {
                         const tagId = UserModel.findTagId(hobbyTagName, 1);
                         return tagId;
                     }),
                 );
-
+                // [(tagId,userId)] 형태로 변경
+                const newTags = await Promise.all(
+                    hobbyTagIds.map(tagId => {
+                        return {
+                            tag_id: tagId,
+                            user_id: createdUser.user_id,
+                        };
+                    }),
+                );
                 // userAndTags 테이블에 취미 데이터 생성
-                await UserModel.bulkCreateTags(hobbyTagIds, createdUser.user_id, transaction);
+                await UserModel.bulkCreateTags(newTags, transaction);
             }
 
             // 성격 태그 생성
@@ -54,9 +62,17 @@ const userService = {
                         return tagId;
                     }),
                 );
-
+                // [(tagId,userId)] 형태로 변경
+                const newTags = await Promise.all(
+                    personalityTagIds.map(tagId => {
+                        return {
+                            tag_id: tagId,
+                            user_id: createdUser.user_id,
+                        };
+                    }),
+                );
                 // userAndTags 테이블에 취미 데이터 생성
-                await UserModel.bulkCreateTags(personalityTagIds, createdUser.user_id, transaction);
+                await UserModel.bulkCreateTags(newTags, transaction);
             }
 
             // 이상형 태그 생성
@@ -68,9 +84,17 @@ const userService = {
                         return tagId;
                     }),
                 );
-
+                // [(tagId,userId)] 형태로 변경
+                const newTags = await Promise.all(
+                    idealTagIds.map(tagId => {
+                        return {
+                            tag_id: tagId,
+                            user_id: createdUser.user_id,
+                        };
+                    }),
+                );
                 // userAndTags 테이블에 취미 데이터 생성
-                await UserModel.bulkCreateTags(idealTagIds, createdUser.user_id, transaction);
+                await UserModel.bulkCreateTags(newTags, transaction);
             }
 
             await transaction.commit();

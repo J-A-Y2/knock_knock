@@ -4,16 +4,8 @@ const UserModel = {
     create: async newUser => {
         return await db.User.create(newUser);
     },
-    bulkCreateTags: async (tags, userId, transaction) => {
-        if (tags && tags.length > 0) {
-            const newTags = tags.map(tagId => {
-                return {
-                    tag_id: tagId,
-                    user_id: userId,
-                };
-            });
-            await db.UserAndTag.bulkCreate(newTags, transaction);
-        }
+    bulkCreateTags: async (newTags, transaction) => {
+        return await db.UserAndTag.bulkCreate(newTags, transaction);
     },
     bulkUpdateTags: async (tagIds, userId, transaction) => {
         if (tagIds && tagIds.length > 0) {
