@@ -6,7 +6,11 @@ const PostModel = {
         return post;
     },
     getAllPosts: async ({ offset, limit }) => {
-        const { count, rows: posts } = await db.Post.findAndCountAll({ offset, limit });
+        const { count, rows: posts } = await db.Post.findAndCountAll({
+            offset,
+            limit,
+            include: [{ model: db.User, attributes: ['nickname'] }],
+        });
         return { total: count, posts };
     },
     getPostById: async postId => {
