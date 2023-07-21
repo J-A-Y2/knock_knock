@@ -16,30 +16,41 @@ const UserModel = {
             await db.UserAndTag.bulkCreate(newTags);
         }
     },
-    bulkUpdateTags: async (tags, userId, transaction) => {
-        if (tags && tags.length > 0) {
-            const newTags = tags.map(tagId => {
-                return {
-                    tag_id: tagId,
-                    user_id: userId,
-                };
-            });
-
-            for (const newTag of newTags) {
-                const [numOfAffectedRows] = await db.UserAndTag.update(newTag, {
-                    where: {
-                        tag_id: newTag.tag_id,
-                        user_id: newTag.user_id,
-                    },
-                    returning: true,
-                    transaction,
+    bulkUpdateTags: async (tagCategoryId, tags, userId, transaction) => {
+        for (const newTag of tags)
+            if (tags && tags.length > 0) {
+                const newTags = tags.map(tagId => {
+                    return {
+                        tag_id: tagId,
+                        user_id: userId,
+                    };
                 });
 
-                if (numOfAffectedRows === 0) {
-                    await db.UserAndTag.create(newTag, { transaction });
+                for (const newTag of newTags) {
+                    const [numOfAffectedRows] = await db.UserAndTag.update(newTag, {
+                        where: {
+                            tag_id: newTag.tag_id,
+                            user_id: newTag.user_id,
+                        },
+                        returning: true,
+                        transaction,
+                    });
+
+                    if (numOfAffectedRows === 0) {
+                        await db.UserAndTag.create(newTag, { transaction });
+                    }
                 }
             }
-        }
+    },
+    findTagId: async (tagname, tagCategoryId) => {
+        const tagId = await db.Tags.findAll({
+            where: {
+                tagname: tagname,
+                tag_category_id: tagCategoryId,
+            },
+        });
+
+        return tagId;
     },
     findByEmail: async email => {
         const user = await db.User.findOne({

@@ -37,9 +37,6 @@ const userService = {
                 message: '회원가입에 성공했습니다.',
             };
         } catch (error) {
-            if (transaction) {
-            }
-
             if (error instanceof ConflictError) {
                 throw error;
             } else {
