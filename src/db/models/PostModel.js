@@ -9,7 +9,7 @@ const PostModel = {
         const { count, rows: posts } = await db.Post.findAndCountAll({
             offset,
             limit,
-            include: [{ model: db.User, attributes: ['nickname'] }],
+            include: [{ model: db.User, attributes: ['nickname', 'profile_image'] }],
         });
         return { total: count, posts };
     },
@@ -18,7 +18,7 @@ const PostModel = {
             where: { post_type: type },
             offset,
             limit,
-            include: [{ model: db.User, attributes: ['nickname'] }],
+            include: [{ model: db.User, attributes: ['nickname', 'profile_image'] }],
         });
         return { total: count, posts };
     },
