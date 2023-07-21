@@ -286,7 +286,8 @@ const userService = {
                 // 태그이름 배열을 태그아이디(정수) 배열로 변형
                 const hobbyTagIds = await Promise.all(
                     hobby.map(async hobbyTagName => {
-                        await UserModel.findTagId(hobbyTagName, 1);
+                        const tagId = await UserModel.findTagId(hobbyTagName, 1);
+                        return tagId.tag_id;
                     }),
                 );
                 // [(tagId,userId)] 형태로 변경
@@ -309,7 +310,8 @@ const userService = {
                 // 태그이름 배열을 태그아이디(정수) 배열로 변형
                 const personalityTagIds = await Promise.all(
                     personality.map(async personalityTagName => {
-                        await UserModel.findTagId(personalityTagName, 2);
+                        const tagId = await UserModel.findTagId(personalityTagName, 2);
+                        return tagId.tag_id;
                     }),
                 );
                 // [(tagId,userId)] 형태로 변경
@@ -332,7 +334,8 @@ const userService = {
                 // 태그이름 배열을 태그아이디(정수) 배열로 변형
                 const idealTagIds = await Promise.all(
                     ideal.map(async idealTagName => {
-                        await UserModel.findTagId(idealTagName, 3);
+                        const tagId = await UserModel.findTagId(idealTagName, 3);
+                        return tagId.tag_id;
                     }),
                 );
                 // [(tagId,userId)] 형태로 변경
