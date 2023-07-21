@@ -60,6 +60,14 @@ const ParticipantModel = {
             },
         );
     },
+    getAcceptedUsers: async postId => {
+        console.log(postId);
+        const accpetedUsers = await db.Participant.findAll({
+            where: { post_id: postId, status: 'accepted' },
+        });
+
+        return accpetedUsers;
+    },
 };
 
 export { ParticipantModel };
