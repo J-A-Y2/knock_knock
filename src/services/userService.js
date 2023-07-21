@@ -284,12 +284,22 @@ const userService = {
                 await UserModel.deleteTags(user.user_id, 1);
 
                 // 태그이름 배열을 태그아이디(정수) 배열로 변형
-                const hobbyTagIds = hobby.map(hobbyTagName => {
-                    UserModel.findTagId(hobbyTagName, 1);
-                });
-
+                const hobbyTagIds = await Promise.all(
+                    hobby.map(async hobbyTagName => {
+                        await UserModel.findTagId(hobbyTagName, 1);
+                    }),
+                );
+                // [(tagId,userId)] 형태로 변경
+                const newTags = await Promise.all(
+                    hobbyTagIds.map(async tagId => {
+                        return {
+                            tag_id: tagId,
+                            user_id: updatedUser.user_id,
+                        };
+                    }),
+                );
                 // 수정할 태그들 userAndTags 테이블에 데이터 생성
-                await UserModel.bulkUpdateTags(hobbyTagIds, user.user_id, transaction);
+                await UserModel.bulkCreateTags({ newTags, transaction });
             }
 
             // 성격 태그 수정
@@ -297,12 +307,22 @@ const userService = {
                 await UserModel.deleteTags(user.user_id, 2);
 
                 // 태그이름 배열을 태그아이디(정수) 배열로 변형
-                const personalityTagIds = personality.map(personalityTagName => {
-                    UserModel.findTagId(personalityTagName, 2);
-                });
-
+                const personalityTagIds = await Promise.all(
+                    personality.map(async personalityTagName => {
+                        await UserModel.findTagId(personalityTagName, 2);
+                    }),
+                );
+                // [(tagId,userId)] 형태로 변경
+                const newTags = await Promise.all(
+                    personalityTagIds.map(async tagId => {
+                        return {
+                            tag_id: tagId,
+                            user_id: updatedUser.user_id,
+                        };
+                    }),
+                );
                 // 수정할 태그들 userAndTags 테이블에 데이터 생성
-                await UserModel.bulkUpdateTags(personalityTagIds, user.user_id, transaction);
+                await UserModel.bulkCreateTags({ newTags, transaction });
             }
 
             // 이상형 태그 수정
@@ -310,12 +330,22 @@ const userService = {
                 await UserModel.deleteTags(user.user_id, 3);
 
                 // 태그이름 배열을 태그아이디(정수) 배열로 변형
-                const idealTagIds = ideal.map(idealTagName => {
-                    UserModel.findTagId(idealTagName, 3);
-                });
-
+                const idealTagIds = await Promise.all(
+                    ideal.map(async idealTagName => {
+                        await UserModel.findTagId(idealTagName, 3);
+                    }),
+                );
+                // [(tagId,userId)] 형태로 변경
+                const newTags = await Promise.all(
+                    idealTagIds.map(async tagId => {
+                        return {
+                            tag_id: tagId,
+                            user_id: updatedUser.user_id,
+                        };
+                    }),
+                );
                 // 수정할 태그들 userAndTags 테이블에 데이터 생성
-                await UserModel.bulkUpdateTags(idealTagIds, user.user_id, transaction);
+                await UserModel.bulkCreateTags({ newTags, transaction });
             }
 
             await transaction.commit();

@@ -4,19 +4,8 @@ const UserModel = {
     create: async newUser => {
         return await db.User.create(newUser);
     },
-    bulkCreateTags: async (newTags, transaction) => {
-        return await db.UserAndTag.bulkCreate(newTags, transaction);
-    },
-    bulkUpdateTags: async (tagIds, userId, transaction) => {
-        if (tagIds && tagIds.length > 0) {
-            const newTags = tags.map(tagId => {
-                return {
-                    tag_id: tagId,
-                    user_id: userId,
-                };
-            });
-            await db.UserAndTag.bulkCreate(newTags, { transaction });
-        }
+    bulkCreateTags: async ({ newTags, transaction }) => {
+        return await db.UserAndTag.bulkCreate(newTags, { transaction });
     },
     deleteTags: async (userId, tagCategoryId) => {
         return await db.UserAndTag.destroy({
@@ -33,7 +22,7 @@ const UserModel = {
                 tag_category_id: tagCategoryId,
             },
         });
-        console.log('유저모델의 tagId: ', tagId);
+
         return tagId;
     },
     findByEmail: async email => {
