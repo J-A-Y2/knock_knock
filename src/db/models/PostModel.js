@@ -1,14 +1,14 @@
 import { db } from '../index.js';
 
 const PostModel = {
-    create: async ({ newPost }) => {
+    create: async newPost => {
         await db.Post.create(newPost);
     },
     getAllPosts: async ({ offset, limit }) => {
         const { count, rows: posts } = await db.Post.findAndCountAll({ offset, limit });
         return { total: count, posts };
     },
-    getPostById: async ({ postId }) => {
+    getPostById: async postId => {
         const post = await db.Post.findOne({
             where: {
                 post_id: postId,

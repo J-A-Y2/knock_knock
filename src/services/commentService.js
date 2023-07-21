@@ -65,7 +65,7 @@ const commentService = {
         try {
             let commentList = [];
 
-            const post = await PostModel.getPostById({ postId });
+            const post = await PostModel.getPostById(postId);
 
             if (!post) {
                 throw new NotFoundError('요청한 게시물의 정보를 찾을 수 없습니다.');

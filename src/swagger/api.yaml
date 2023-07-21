@@ -790,34 +790,22 @@ paths:
 
             responses:
                 '200':
-                    description: 댓글 작성 성공.
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    post_id:
-                                        type: integer
-                                    user_id:
-                                        type: integer
-                                    content:
-                                        type: string
-                                    nickname:
-                                        type: string
-                                    createcAt:
-                                        type: datetime
-                '400':
-                    description: Invalid ID supplied
-                '404':
-                    description: User not found
+                    description: 댓글 추가하기에 성공했습니다.
+                '500':
+                    description: '댓글 추가하기에 실패했습니다'
 
-    /comments/:commentId:
+    /comments/:postId/:commentId:
         put:
             tags:
                 - comment
             description: 댓글 수정 하기
 
             parameters:
+                - name: postId
+                  in: path
+                  description: 게시글 아이디
+                  required: true
+
                 - name: commentid
                   in: path
                   description: 댓글 고유 아이디
@@ -835,28 +823,11 @@ paths:
 
             responses:
                 '200':
-                    description: 댓글 수정 성공.
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    comment_id:
-                                        type: integer
-                                    post_id:
-                                        type: integer
-                                    user_id:
-                                        type: integer
-                                    content:
-                                        type: string
-                                    nickname:
-                                        type: string
-                                    updateAt:
-                                        type: datetime
-                '400':
-                    description: Invalid ID supplied
+                    description: 댓글 수정하기에 성공하셨습니다.
+                '500':
+                    description: 댓글 수정하기에 실패했습니다.
                 '404':
-                    description: User not found
+                    description: 요청한 댓글의 정보를 찾을 수 없습니다.
 
         delete:
             tags:
@@ -864,34 +835,45 @@ paths:
             description: 댓글 삭제 하기
 
             parameters:
-                - name: commentid
+                - name: commentId
                   in: path
                   description: 댓글 고유 아이디
                   required: true
 
             responses:
                 '200':
-                    description: 댓글 삭제 성공.
-                '400':
-                    description: Invalid ID supplied
+                    description: 댓글 삭제하기에 성공하셨습니다.
+                '401':
+                    description: 작성한 유저에게 권한이 있습니다.
                 '404':
-                    description: User not found
+                    description: 이미 삭제된 댓글입니다.
+                '500':
+                    description: 댓글 삭제하기에 실패했습니다.
 
     /comments/:postId:
         get:
             tags:
                 - comment
-            description: 댓글 불러오기
+            description: 댓글 불러오기 (커서기반 무한 스크롤)
 
             parameters:
-                - name: postid
-                  in: path
+                - name: postId
+                  schema:
+                      type: integer
+                  in: query
                   description: 게시글 고유 아이디
+                  required: true
+
+                - name: cursor
+                  schema:
+                      type: integer
+                  in: query
+                  description: 커서의 마지막 위치값, 댓글의 아이디
                   required: true
 
             responses:
                 '200':
-                    description: 댓글 수정 성공.
+                    description: 게시글 댓글 불러오기에 성공하셨습니다.
                     content:
                         application/json:
                             schema:
@@ -903,17 +885,16 @@ paths:
                                         type: integer
                                     user_id:
                                         type: integer
-                                    content:
+                                    comment_content:
                                         type: string
                                     nickname:
                                         type: string
                                     createAt:
                                         type: datetime
-                '400':
-                    description: Invalid ID supplied
+                '500':
+                    description: 게시글 댓글 불러오기에 실패했습니다.
                 '404':
-                    description: User not found
-
+                    description: 요청한 게시물의 정보를 찾을 수 없습니다.
     /messages:
         post:
             tags:

@@ -13,7 +13,7 @@ commentRouter.use(loginRequired);
 commentRouter.post('/', addCommentValidationRules, addComment_validate, commentController.create);
 
 //댓글 수정
-commentRouter.put('/:commentId', updateCommentValidationRules, updateComment_validate, commentController.update);
+commentRouter.put('/:postId/:commentId', updateCommentValidationRules, updateComment_validate, commentController.update);
 
 // 개별 댓글 조회
 commentRouter.get('/', getComment_validate, commentController.getComment);

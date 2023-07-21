@@ -5,7 +5,8 @@ const commentController = {
     create: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
-            const { postId, content } = req.body;
+            const postId = req.params.postId;
+            const { content } = req.body;
 
             const createComment = await commentService.createComment({ userId, postId, content });
 
@@ -19,8 +20,9 @@ const commentController = {
     update: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
+            const postId = req.params.postId;
             const commentId = req.params.commentId;
-            const { postId, content } = req.body;
+            const { content } = req.body;
 
             const updateComment = await commentService.updateComment({ userId, postId, commentId, content });
 
