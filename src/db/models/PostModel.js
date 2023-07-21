@@ -2,7 +2,8 @@ import { db } from '../index.js';
 
 const PostModel = {
     create: async ({ newPost }) => {
-        await db.Post.create(newPost);
+        const post = await db.Post.create(newPost);
+        return post;
     },
     getAllPosts: async ({ offset, limit }) => {
         const { count, rows: posts } = await db.Post.findAndCountAll({ offset, limit });
@@ -16,11 +17,12 @@ const PostModel = {
         });
         return post;
     },
-    update: async ({ postId, fieldToUpdate, newValue }) => {
+    update: async ({ transaction, postId, fieldToUpdate, newValue }) => {
         const updatePost = await db.Post.update(
             { [fieldToUpdate]: newValue },
             {
                 where: { post_id: postId },
+                transaction,
             },
         );
         return updatePost;

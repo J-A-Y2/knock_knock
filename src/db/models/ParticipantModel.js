@@ -2,8 +2,8 @@ import { db } from '../index.js';
 
 const ParticipantModel = {
     // 참가 신청
-    participatePost: async ({ userId, postId }) => {
-        const createParticipant = await db.Participant.create({ user_id: userId, post_id: postId });
+    participatePost: async ({ transaction, userId, postId, status }) => {
+        const createParticipant = await db.Participant.create({ user_id: userId, post_id: postId, status }, { transaction });
         return createParticipant;
     },
 
@@ -25,18 +25,38 @@ const ParticipantModel = {
 
     // 현재 유저가 참가 신청한 모임 추출
     getParticipationIdById: async ({ userId, postId }) => {
+        console.log('model', { userId, postId });
         const participation = await db.Participant.findOne({
             where: { user_id: userId, post_id: postId },
         });
         return participation;
     },
 
+    // participantId로 참가 신청 정보 조회
+    getParticipationById: async participantId => {
+        const participation = await db.Participant.findOne({
+            where: { participant_id: participantId },
+            include: [
+                {
+                    model: db.Post,
+                    attributes: ['post_id', 'recruited_m', 'recruited_f', 'total_m', 'total_f'],
+                },
+                {
+                    model: db.User,
+                    attributes: ['gender'],
+                },
+            ],
+        });
+        return participation;
+    },
+
     // 참가 신청 변경
-    participatePut: async ({ participantId, canceledValue }) => {
+    update: async ({ transaction, participantId, updateField, newValue }) => {
         await db.Participant.update(
-            { [`canceled`]: canceledValue },
+            { [updateField]: newValue },
             {
                 where: { participant_id: participantId },
+                transaction,
             },
         );
     },

@@ -35,7 +35,45 @@ const participantController = {
             const participants = await participantService.getParticipants({ userId, postId });
 
             statusCode.setResponseCode200(res);
-            res.send({ message: participants.message, participantsList: participants.participants });
+            res.send({ message: participants.message, total: participants.total, participantsList: participants });
+        } catch (error) {
+            next(error);
+        }
+    },
+    allow: async (req, res, next) => {
+        try {
+            const participantId = req.params.participantId;
+
+            const participant = await participantService.allow(participantId);
+
+            statusCode.setResponseCode200(res);
+            res.send({
+                message: participant.message,
+                totalM: participant.totalM,
+                totalF: participant.totalF,
+                recruitedM: participant.recruitedM,
+                recruitedF: participant.recruitedF,
+            });
+        } catch (error) {
+            next(error);
+        }
+    },
+    deny: async (req, res, next) => {
+        try {
+            const participantId = req.params.participantId;
+            const participant = await participantService.deny(participantId);
+
+            statusCode.setResponseCode200(res);
+            res.send({ message: participant.message });
+        } catch (error) {
+            next(error);
+        }
+    },
+    getAcceptedUsers: async (req, res, next) => {
+        try {
+            const postId = req.params.postId;
+
+            const participants = await participantService.getAcceptedUsers(postId);
         } catch (error) {
             next(error);
         }
