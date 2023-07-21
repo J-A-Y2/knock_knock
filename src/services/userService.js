@@ -206,34 +206,46 @@ const userService = {
             }
 
             const updatedUser = await UserModel.update({ userId, updateData });
+
+            // 취미 태그 수정
             if (hobby && hobby.length > 0) {
+                // 태그 카테고리와 일치하는 태그들 삭제
                 await UserModel.deleteTags(user.user_id, 1);
 
+                // 태그이름 배열을 태그아이디(정수) 배열로 변형
                 const hobbyTagIds = hobby.map(hobbyTagName => {
                     UserModel.findTagId(hobbyTagName, 1);
                 });
 
-                await UserModel.bulkUpdateTags(1, hobbyTagIds, user.user_id, transaction);
+                // 수정할 태그들 userAndTags 테이블에 데이터 생성
+                await UserModel.bulkUpdateTags(hobbyTagIds, user.user_id, transaction);
             }
 
+            // 성격 태그 수정
             if (personality && personality.length > 0) {
                 await UserModel.deleteTags(user.user_id, 2);
-            }
-            if (ideal && ideal.length > 0) {
-                await UserModel.deleteTags(user.user_id, 3);
+
+                // 태그이름 배열을 태그아이디(정수) 배열로 변형
+                const personalityTagIds = personality.map(personalityTagName => {
+                    UserModel.findTagId(personalityTagName, 1);
+                });
+
+                // 수정할 태그들 userAndTags 테이블에 데이터 생성
+                await UserModel.bulkUpdateTags(personalityTagIds, user.user_id, transaction);
             }
 
-            if (tags && tags.length > 0) {
-                const newTags = tags.map(tagId => {
-                    return {
-                        tag_id: tagId,
-                        user_id: userId,
-                    };
+            // 이상형 태그 수정
+            if (ideal && ideal.length > 0) {
+                await UserModel.deleteTags(user.user_id, 3);
+
+                // 태그이름 배열을 태그아이디(정수) 배열로 변형
+                const idealTagIds = ideal.map(idealTagName => {
+                    UserModel.findTagId(idealTagName, 1);
                 });
+
+                // 수정할 태그들 userAndTags 테이블에 데이터 생성
+                await UserModel.bulkUpdateTags(idealTagIds, user.user_id, transaction);
             }
-            await UserModel.bulkUpdateTags(hobby, user.user_id, transaction); // 회원-태그 테이블에서 회원의 취미를 수정
-            await UserModel.bulkUpdateTags(personality, user.user_id, transaction); // 회원-태그 테이블에서 회원의 성격을 수정
-            await UserModel.bulkUpdateTags(ideal, user.user_id, transaction); // 회원-태그 테이블에서 회원의 성격을 수정
 
             await transaction.commit();
 

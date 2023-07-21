@@ -15,31 +15,16 @@ const UserModel = {
             await db.UserAndTag.bulkCreate(newTags);
         }
     },
-    bulkUpdateTags: async (tagCategoryId, tags, userId, transaction) => {
-        for (const newTag of tags)
-            if (tags && tags.length > 0) {
-                const newTags = tags.map(tagId => {
-                    return {
-                        tag_id: tagId,
-                        user_id: userId,
-                    };
-                });
-
-                for (const newTag of newTags) {
-                    const [numOfAffectedRows] = await db.UserAndTag.update(newTag, {
-                        where: {
-                            tag_id: newTag.tag_id,
-                            user_id: newTag.user_id,
-                        },
-                        returning: true,
-                        transaction,
-                    });
-
-                    if (numOfAffectedRows === 0) {
-                        await db.UserAndTag.create(newTag, { transaction });
-                    }
-                }
-            }
+    bulkUpdateTags: async (tagIds, userId, transaction) => {
+        if (tagIds && tagIds.length > 0) {
+            const newTags = tags.map(tagId => {
+                return {
+                    tag_id: tagId,
+                    user_id: userId,
+                };
+            });
+            await db.UserAndTag.bulkCreate(newTags, { transaction });
+        }
     },
     deleteTags: async (userId, tagCategoryId) => {
         return await db.UserAndTag.destroy({
