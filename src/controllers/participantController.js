@@ -47,7 +47,13 @@ const participantController = {
             const participant = await participantService.allow(participantId);
 
             statusCode.setResponseCode200(res);
-            res.send({ message: participant.message });
+            res.send({
+                message: participant.message,
+                totalM: participant.totalM,
+                totalF: participant.totalF,
+                recruitedM: participant.recruitedM,
+                recruitedF: participant.recruitedF,
+            });
         } catch (error) {
             next(error);
         }

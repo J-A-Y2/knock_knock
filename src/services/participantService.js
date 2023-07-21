@@ -103,7 +103,8 @@ const participantService = {
         const transaction = await db.sequelize.transaction({ autocommit: false }); // 트랜잭션 생성
         try {
             const participation = await ParticipantModel.getParticipationById(participantId);
-
+            let recruited_f = participation.Post.recruited_f;
+            let recruited_m = participation.Post.recruited_m;
             let fieldToUpdate, newValue;
             if (!participation) {
                 throw new NotFoundError('해당 id의 참가 신청 정보를 찾을 수 없습니다.');
@@ -122,17 +123,19 @@ const participantService = {
                 if (participation.User.gender === '여') {
                     fieldToUpdate = 'recruited_f';
 
-                    if (participation.Post.recruited_f === participation.Post.total_f) {
+                    if (recruited_f === participation.Post.total_f) {
                         throw new ConflictError('더 이상 여성 유저의 신청을 수락할 수 없습니다.');
                     } else {
-                        newValue = participation.Post.recruited_f + 1;
+                        newValue = recruited_f + 1;
+                        recruited_f = newValue;
                     }
                 } else {
                     fieldToUpdate = 'recruited_m';
-                    if (participation.Post.recruited_m === participation.Post.total_m) {
+                    if (recruited_m === participation.Post.total_m) {
                         throw new ConflictError('더 이상 남성 유저의 신청을 수락할 수 없습니다.');
                     } else {
-                        newValue = participation.Post.recruited_m + 1;
+                        newValue = recruited_m + 1;
+                        recruited_m = newValue;
                     }
                 }
             }
@@ -141,7 +144,13 @@ const participantService = {
 
             await transaction.commit();
 
-            return { message: '신청 수락을 성공하였습니다.' };
+            return {
+                message: '신청 수락을 성공하였습니다.',
+                totalM: participation.Post.total_m,
+                totalF: participation.Post.total_f,
+                recruitedF: recruited_f,
+                recruitedM: recruited_m,
+            };
         } catch (error) {
             await transaction.rollback();
             if (error instanceof NotFoundError || error instanceof ConflictError) {
