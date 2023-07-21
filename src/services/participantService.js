@@ -192,7 +192,16 @@ const participantService = {
     },
     getAcceptedUsers: async postId => {
         try {
-            const participants = await ParticipantModel.getAcceptedUsers(postId);
+            const post = await PostModel.getPostById(postId);
+            if (!post) {
+                throw new NotFoundError('해당 Id의 게시글을 찾을 수 없습니다.');
+            }
+            if (post.user_id !== userId) {
+                throw new ConflictError('참가자 리스트 조회 권한이 없습니다.');
+            }
+
+            const acceptedUsers = await ParticipantModel.getAcceptedUsers(postId);
+            // return { message: }
         } catch (error) {}
     },
 };

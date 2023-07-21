@@ -74,6 +74,7 @@ const participantController = {
             const postId = req.params.postId;
 
             const participants = await participantService.getAcceptedUsers(postId);
+            
         } catch (error) {
             next(error);
         }
