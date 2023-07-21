@@ -9,7 +9,16 @@ const PostModel = {
         const { count, rows: posts } = await db.Post.findAndCountAll({
             offset,
             limit,
-            include: [{ model: db.User, attributes: ['nickname'] }],
+            include: [{ model: db.User, attributes: ['nickname', 'profile_image'] }],
+        });
+        return { total: count, posts };
+    },
+    getFilteredPosts: async ({ offset, limit, type }) => {
+        const { count, rows: posts } = await db.Post.findAndCountAll({
+            where: { post_type: type },
+            offset,
+            limit,
+            include: [{ model: db.User, attributes: ['nickname', 'profile_image'] }],
         });
         return { total: count, posts };
     },

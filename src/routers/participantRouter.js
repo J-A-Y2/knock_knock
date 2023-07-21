@@ -26,6 +26,6 @@ participantRouter.put('/:participantId/deny', participantParamsValidate, partici
 participantRouter.get('/:postId/acceptedlist', postParamsValidate, participantController.getAcceptedUsers);
 
 // 모집 완료
-participantRouter.put('/:postId/complete', postParamsValidate);
+// participantRouter.put('/:postId/complete', postParamsValidate);
 
 export { participantRouter };

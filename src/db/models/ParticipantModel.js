@@ -23,7 +23,7 @@ const ParticipantModel = {
             include: [
                 {
                     model: db.User,
-                    attributes: ['nickname', 'gender', 'age', 'job'],
+                    attributes: ['nickname', 'gender', 'age', 'job', 'profile_image'],
                 },
             ],
         });
@@ -76,7 +76,7 @@ const ParticipantModel = {
             include: [
                 {
                     model: db.User,
-                    attributes: ['nickname', 'gender', 'age', 'job'],
+                    attributes: ['nickname', 'gender', 'age', 'job', 'profile_image'],
                 },
             ],
         });

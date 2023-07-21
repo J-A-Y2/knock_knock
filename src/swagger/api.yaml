@@ -473,7 +473,7 @@ paths:
         get:
             tags:
                 - post
-            description: 전체 게시글 불러오기 (시간순)
+            description: 전체/카테고리별 게시글 불러오기 (시간순)
             parameters:
                 - name: page
                   in: query
@@ -490,6 +490,12 @@ paths:
                   type: integer
                   minimum: 1
                   default: 5
+                  required: false
+                - name: type
+                  in: query
+                  description: 카테고리명 (따옴표없이 넣을 수 있을까요)
+                  schema:
+                  type: string
                   required: false
             responses:
                 '200':
@@ -552,6 +558,9 @@ paths:
                                                     properties:
                                                         nickname:
                                                             type: string
+                                                        profile_image:
+                                                            type: string
+                                                            nullable: true
                     required: true
 
         post:
@@ -784,10 +793,20 @@ paths:
                                                     type: string
                                                 status:
                                                     type: string
-                                                user_id:
-                                                    type: integer
-                                                post_id:
-                                                    type: integer
+                                                User:
+                                                    type: object
+                                                    properties:
+                                                        nickname:
+                                                            type: string
+                                                        gender:
+                                                            type: string
+                                                        age:
+                                                            type: integer
+                                                        job:
+                                                            type: string
+                                                        profile_image:
+                                                            type: string
+
                 '400':
                     description: Invalid ID supplied
                 '404':
@@ -905,6 +924,8 @@ paths:
                                                             type: integer
                                                         job:
                                                             type: integer
+                                                        profile_image:
+                                                            type: string
                 '400':
                     description: Invalid ID supplied
                 '404':
