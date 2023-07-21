@@ -256,7 +256,7 @@ const userService = {
                 // 태그 카테고리와 일치하는 태그들 삭제
 
                 const tagCategoryId = UserModel.findByUserId(user.user_id);
-
+                console.log('유저 서비스 tagCategoryId: ', tagCategoryId);
                 await UserModel.deleteTags(user.user_id, tagCategoryId);
 
                 // 태그이름 배열을 태그아이디(정수) 배열로 변형, [(tagId,userId)] 형태로 변경
