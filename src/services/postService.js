@@ -32,13 +32,20 @@ const postService = {
             }
         }
     },
-    getAllPosts: async ({ page, perPage }) => {
+    getAllPosts: async ({ page, perPage, type }) => {
         try {
-            const offset = (page - 1) * perPage;
-            const limit = perPage;
-            const { total, posts } = await PostModel.getAllPosts({ offset, limit });
+            if (type) {
+                // 카테고리별 게시글 조회
+                const offset = (page - 1) * perPage;
+                const limit = perPage;
+                const { total, posts } = await PostModel.getAllPosts({ offset, limit, type });
 
-            return { message: '게시글 전체 조회를 성공했습니다.', total, posts };
+                return { message: '카테고리별 게시글 조회를 성공했습니다.', total, posts };
+            } else {
+                // 전체 게시글 조회
+                const { total, posts } = await PostModel.getAllPosts({ offset, limit, type });
+                return { message: '게시글 전체 조회를 성공했습니다.', total, posts };
+            }
         } catch (error) {
             if (error) {
                 throw new InternalServerError('게시물 전체 조회를 실패했습니다.');

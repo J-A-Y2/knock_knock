@@ -20,8 +20,9 @@ const postController = {
         try {
             const page = parseInt(req.query.page || 1);
             const perPage = parseInt(req.query.perPage || 5);
+            const type = req.query.type;
 
-            const posts = await postService.getAllPosts({ page, perPage });
+            const posts = await postService.getAllPosts({ page, perPage, type });
 
             statusCode.setResponseCode200(res);
             res.send({ message: posts.message, allPostCount: posts.total, currentPage: page, postList: posts.posts });
