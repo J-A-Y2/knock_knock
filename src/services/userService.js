@@ -52,7 +52,7 @@ const userService = {
                 );
 
                 // userAndTags 테이블에 취미 데이터 생성
-                await UserModel.bulkCreateTags(newTags, transaction);
+                await UserModel.bulkCreateTags({ newTags, transaction });
             }
 
             // 성격 태그 생성
@@ -73,8 +73,8 @@ const userService = {
                         };
                     }),
                 );
-                // userAndTags 테이블에 취미 데이터 생성
-                await UserModel.bulkCreateTags(newTags, transaction);
+                // userAndTags 테이블에 성격 데이터 생성
+                await UserModel.bulkCreateTags({ newTags, transaction });
             }
 
             // 이상형 태그 생성
@@ -95,8 +95,8 @@ const userService = {
                         };
                     }),
                 );
-                // userAndTags 테이블에 취미 데이터 생성
-                await UserModel.bulkCreateTags(newTags, transaction);
+                // userAndTags 테이블에 이상형 데이터 생성
+                await UserModel.bulkCreateTags({ newTags, transaction });
             }
 
             await transaction.commit();
