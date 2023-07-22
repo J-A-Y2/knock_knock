@@ -9,18 +9,18 @@ const UserModel = {
     },
     deleteTags: async (userId, tagCategoryId) => {
         try {
+            const tagsToDelete = await db.Tag.findAll({
+                where: { tag_category_id: tagCategoryId },
+                attributes: ['tag_id'],
+            });
+
+            const tagIdsToDelete = tagsToDelete.map(tag => tag.tag_id);
+
             const deleteTags = await db.UserAndTag.destroy({
                 where: {
                     user_id: userId,
+                    tag_id: tagIdsToDelete,
                 },
-                include: [
-                    {
-                        model: db.Tag,
-                        where: { tag_category_id: tagCategoryId },
-                        attributes: ['tag_id', 'tag_category_id'],
-                        required: true, // required: true는 조인된 모델의 필터링 조건이 필수적인 경우 사용되는 옵션.
-                    },
-                ],
             });
             return deleteTags;
         } catch (error) {

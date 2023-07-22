@@ -261,13 +261,13 @@ const userService = {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
-            // const updatedUser = await UserModel.update({ userId, updateData });
+            const updatedUser = await UserModel.update({ userId, updateData });
 
             // 취미 태그 수정
             if (hobby && hobby.length > 0) {
                 // 태그 카테고리와 일치하는 태그들 삭제
-                const findOne = await UserModel.deleteTags(user.user_id, 1);
-                console.log('유저 서비스 findOne : ', findOne.Tag.tag_category_id);
+                await UserModel.deleteTags(user.user_id, 1);
+
                 // 태그이름 배열을 태그아이디(정수) 배열로 변형, [(tagId,userId)] 형태로 변경
                 const newTags = await Promise.all(
                     hobby.map(async hobbyTagName => {
@@ -282,8 +282,8 @@ const userService = {
 
             // 성격 태그 수정
             if (personality && personality.length > 0) {
-                const findOne = await UserModel.deleteTags(user.user_id, 2);
-                console.log('유저 서비스 findOne : ', findOne.Tag.tag_category_id);
+                await UserModel.deleteTags(user.user_id, 2);
+
                 // 태그이름 배열을 태그아이디(정수) 배열로 변형, [(tagId,userId)] 형태로 변경
                 const newTags = await Promise.all(
                     personality.map(async personalityTagName => {
@@ -298,8 +298,8 @@ const userService = {
 
             // 이상형 태그 수정
             if (ideal && ideal.length > 0) {
-                const findOne = await UserModel.deleteTags(user.user_id, 3);
-                console.log('유저 서비스 findOne : ', findOne.Tag.tag_category_id);
+                await UserModel.deleteTags(user.user_id, 3);
+
                 // 태그이름 배열을 태그아이디(정수) 배열로 변형, [(tagId,userId)] 형태로 변경
                 const newTags = await Promise.all(
                     ideal.map(async idealTagName => {
