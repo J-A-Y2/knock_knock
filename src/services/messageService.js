@@ -23,6 +23,18 @@ const messageService = {
             }
         }
     },
+
+    getListChats: async userId => {
+        try {
+            const chats = await MessageModel.getUserChat(userId);
+
+            return {
+                message: '유저의 채팅 목록 불러오기에 성공했습니다.',
+            };
+        } catch (error) {
+            throw new InternalServerError('유저의 채팅 목록 불러오기에 실패 했습니다.');
+        }
+    },
 };
 
 export { messageService };
