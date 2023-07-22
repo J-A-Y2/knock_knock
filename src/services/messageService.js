@@ -24,3 +24,5 @@ const messageService = {
         }
     },
 };
+
+export { messageService };

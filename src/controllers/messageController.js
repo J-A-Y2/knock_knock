@@ -18,4 +18,19 @@ const messageController = {
             next(error);
         }
     },
+
+    getUserChats: async (req, res, next) => {
+        try {
+            const userId = req.currentUserId;
+
+            const getListChats = await messageService.getListChats(userId);
+
+            statusCode.setResponseCode201(res);
+            return res.send({ message: getListChats.message });
+        } catch (error) {
+            next(error);
+        }
+    },
 };
+
+export { messageController };
