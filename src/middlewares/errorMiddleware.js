@@ -42,7 +42,18 @@ function errorMiddleware(error, req, res, next) {
     // 터미널에 노란색으로 출력됨.
     console.log('\x1b[33m%s\x1b[0m', error);
 
-    const { statusCode, message } = error;
+    let message = 'Internal Server Error';
+    if (error instanceof BadRequestError) {
+        message = error.message;
+    } else if (error instanceof UnauthorizedError) {
+        message = error.message;
+    } else if (error instanceof NotFoundError) {
+        message = error.message;
+    } else if (error instanceof ConflictError) {
+        message = error.message;
+    }
+
+    const { statusCode = 500 } = error; // 위 에러를 모두 통과했으면 500 에러
 
     res.status(statusCode).send({ message });
 }
