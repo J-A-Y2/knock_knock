@@ -10,6 +10,10 @@ const PostModel = {
             offset,
             limit,
             include: [{ model: db.User, attributes: ['nickname', 'profile_image'] }],
+            order: [
+                ['createdAt', 'DESC'],
+                ['post_id', 'DESC'],
+            ],
         });
         return { total: count, posts };
     },
@@ -19,6 +23,10 @@ const PostModel = {
             offset,
             limit,
             include: [{ model: db.User, attributes: ['nickname', 'profile_image'] }],
+            order: [
+                ['createdAt', 'DESC'],
+                ['post_id', 'DESC'],
+            ],
         });
         return { total: count, posts };
     },
