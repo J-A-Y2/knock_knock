@@ -9,9 +9,10 @@ const UserModel = {
     },
     deleteTags: async (userId, tagCategoryId) => {
         try {
-            const deleteTags = await db.UserAndTag.findOne({
+            const deleteTags = await db.UserAndTag.destroy({
                 where: {
                     user_id: userId,
+                    tag_category_id: tagCategoryId,
                 },
                 include: [
                     {
