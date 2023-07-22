@@ -11,12 +11,8 @@ const Message = (sequelize, DataTypes) => {
                 type: DataTypes.STRING(40),
                 allowNull: false,
             },
-            send_id: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
-            },
-            receive_id: {
-                type: DataTypes.INTEGER,
+            members: {
+                type: DataTypes.ENUM,
                 allowNull: false,
             },
             created_at: {
@@ -36,12 +32,7 @@ const Message = (sequelize, DataTypes) => {
     Message.associate = db => {
         // foreignKey는 Message모델의 send_id, targetKey는 User 모델의 user_id
         db.Message.belongsTo(db.User, {
-            foreignKey: 'send_id',
-            targetKey: 'user_id',
-        });
-        // foreignKey는 Message모델의 receive_id, targetKey는 User 모델의 user_id
-        db.Message.belongsTo(db.User, {
-            foreignKey: 'receive_id',
+            foreignKey: 'members',
             targetKey: 'user_id',
         });
     };
