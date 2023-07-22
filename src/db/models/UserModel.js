@@ -12,12 +12,13 @@ const UserModel = {
             const deleteTags = await db.UserAndTag.destroy({
                 where: {
                     user_id: userId,
-                    tag_category_id: tagCategoryId,
                 },
                 include: [
                     {
                         model: db.Tag,
-                        attributes: ['tag_category_id'],
+                        where: { tag_category_id: tagCategoryId },
+                        attributes: ['tag_id', 'tag_category_id'],
+                        required: true, // required: true는 조인된 모델의 필터링 조건이 필수적인 경우 사용되는 옵션.
                     },
                 ],
             });
