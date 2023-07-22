@@ -266,11 +266,8 @@ const userService = {
             // 취미 태그 수정
             if (hobby && hobby.length > 0) {
                 // 태그 카테고리와 일치하는 태그들 삭제
-
-                const tagCategoryId = await UserModel.findByUserId(user.user_id);
-
-                await UserModel.deleteTags(user.user_id, 1);
-
+                const findOne = await UserModel.deleteTags(user.user_id, 1);
+                console.log('유저 서비스 findOne : ', findOne);
                 // 태그이름 배열을 태그아이디(정수) 배열로 변형, [(tagId,userId)] 형태로 변경
                 const newTags = await Promise.all(
                     hobby.map(async hobbyTagName => {

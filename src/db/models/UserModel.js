@@ -8,19 +8,22 @@ const UserModel = {
         return await db.UserAndTag.bulkCreate(newTags, { transaction });
     },
     deleteTags: async (userId, tagCategoryId) => {
-        const deleteTags = await db.UserAndTag.destroy({
-            where: {
-                user_id: userId,
-                tag_category_id: tagCategoryId,
-            },
-            include: [
-                {
-                    model: db.Tag,
-                    attributes: ['tag_category_id'],
+        try {
+            const deleteTags = await db.UserAndTag.findOne({
+                where: {
+                    user_id: userId,
                 },
-            ],
-        });
-        return deleteTags;
+                include: [
+                    {
+                        model: db.Tag,
+                        attributes: ['tag_category_id'],
+                    },
+                ],
+            });
+            return deleteTags;
+        } catch (error) {
+            console.error(error);
+        }
     },
     findTagId: async (tagname, tagCategoryId) => {
         const tagId = await db.Tag.findOne({

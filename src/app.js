@@ -9,6 +9,8 @@ import { postRouter } from './routers/postRouter.js';
 import { messageRouter } from './routers/messageRotuer.js';
 import { commentRouter } from './routers/commentRouter.js';
 import { participantRouter } from './routers/participantRouter.js';
+import { errorMiddleware } from './middlewares/errorMiddleware.js';
+
 const app = express();
 
 // CORS 에러 방지
@@ -39,5 +41,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true })
 app.get('/', (req, res) => {
     res.send('안녕하세요, 레이서 프로젝트 API 입니다.');
 });
+
+app.use(errorMiddleware);
 
 export { app };
