@@ -250,10 +250,9 @@ const userService = {
     // 유저 정보 수정
     updateUser: async ({ userId, updateUserInfo }) => {
         let transaction;
-        let isTransactionActive = false;
+
         try {
             transaction = await db.sequelize.transaction();
-            isTransactionActive = true;
 
             const { hobby, personality, ideal, ...updateData } = updateUserInfo;
 
@@ -286,7 +285,6 @@ const userService = {
             await TagsUpdate(personality, 2);
             await TagsUpdate(ideal, 3);
             await transaction.commit();
-            isTransactionActive = false;
 
             return {
                 message: '회원 정보가 수정되었습니다.',
@@ -306,7 +304,7 @@ const userService = {
                 },
             };
         } catch (error) {
-            if (isTransactionActive) {
+            if (transaction) {
                 await transaction.rollback();
             }
             if (error instanceof UnauthorizedError || error instanceof NotFoundError) {

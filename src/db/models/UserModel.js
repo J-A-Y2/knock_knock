@@ -23,16 +23,16 @@ const UserModel = {
                     },
                 ],
             });
-            console.log('userAndTags: ', userAndTags);
+
             const userAndTagIds = userAndTags.map(userAndTag => userAndTag.user_and_tag_id);
-            console.log('userAndTagIds: ', userAndTagIds);
+
             // UserAndTag 행들 삭제
             const deleteCount = await db.UserAndTag.destroy({
                 where: {
                     user_and_tag_id: userAndTagIds,
                 },
             });
-            console.log('deleteCount: ', deleteCount);
+
             return deleteCount;
         } catch (error) {
             console.error(error);
