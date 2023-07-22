@@ -42,46 +42,24 @@ const userService = {
 
             const createdUser = await UserModel.create(userInfo);
 
-            // 취미 태그 생성
-            if (hobby && hobby.length > 0) {
-                // 태그이름 배열을 태그아이디(정수) 배열로 변경
-                const newTags = await Promise.all(
-                    hobby.map(async hobbyTagName => {
-                        const tagId = await UserModel.findTagId(hobbyTagName, 1);
-                        return { tag_id: tagId.tag_id, user_id: createdUser.user_id };
-                    }),
-                );
+            const TagsCreate = async (tag, tagCategoryId) => {
+                // 태그 생성
+                if (tag && tag.length > 0) {
+                    // // 태그이름 배열을 태그아이디(정수) 배열로 변경, [(tagId,userId)] 형태로 변경
+                    const newTags = await Promise.all(
+                        tag.map(async TagName => {
+                            const tagId = await UserModel.findTagId(TagName, tagCategoryId);
+                            return { tag_id: tagId.tag_id, user_id: createdUser.user_id };
+                        }),
+                    );
+                    // userAndTags 테이블에 데이터 생성
+                    await UserModel.bulkCreateTags({ newTags, transaction });
+                }
+            };
 
-                // userAndTags 테이블에 취미 데이터 생성
-                await UserModel.bulkCreateTags({ newTags, transaction });
-            }
-
-            // 성격 태그 생성
-            if (personality && personality.length > 0) {
-                // 태그이름 배열을 태그아이디(정수) 배열로 변형
-                const newTags = await Promise.all(
-                    personality.map(async personalityTagName => {
-                        const tagId = await UserModel.findTagId(personalityTagName, 2);
-                        return { tag_id: tagId.tag_id, user_id: createdUser.user_id };
-                    }),
-                );
-                // userAndTags 테이블에 성격 데이터 생성
-                await UserModel.bulkCreateTags({ newTags, transaction });
-            }
-
-            // 이상형 태그 생성
-            if (ideal && ideal.length > 0) {
-                // 태그이름 배열을 태그아이디(정수) 배열로 변경, [(tagId,userId)] 형태로 변경
-                const newTags = await Promise.all(
-                    ideal.map(async idealTagName => {
-                        const tagId = await UserModel.findTagId(idealTagName, 3);
-                        return { tag_id: tagId.tag_id, user_id: createdUser.user_id };
-                    }),
-                );
-
-                // userAndTags 테이블에 이상형 데이터 생성
-                await UserModel.bulkCreateTags({ newTags, transaction });
-            }
+            await TagsCreate(hobby, 1);
+            await TagsCreate(personality, 2);
+            await TagsCreate(ideal, 3);
 
             await transaction.commit();
 
