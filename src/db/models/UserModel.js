@@ -9,20 +9,31 @@ const UserModel = {
     },
     deleteTags: async (userId, tagCategoryId) => {
         try {
-            const tagsToDelete = await db.Tag.findAll({
-                where: { tag_category_id: tagCategoryId },
-                attributes: ['tag_id'],
-            });
-
-            const tagIdsToDelete = tagsToDelete.map(tag => tag.tag_id);
-
-            const deleteTags = await db.UserAndTag.destroy({
+            // 모든 user_and_tag_id들을 찾아서 user_id, tag_category_id와 일치하는 데이터 삭제
+            const userAndTags = await db.UserAndTag.findAll({
                 where: {
                     user_id: userId,
-                    tag_id: tagIdsToDelete,
+                },
+                include: [
+                    {
+                        model: db.Tag,
+                        where: {
+                            tag_category_id: tagCategoryId,
+                        },
+                    },
+                ],
+            });
+            console.log('userAndTags: ', userAndTags);
+            const userAndTagIds = userAndTags.map(userAndTag => userAndTag.user_and_tag_id);
+            console.log('userAndTagIds: ', userAndTagIds);
+            // UserAndTag 행들 삭제
+            const deleteCount = await db.UserAndTag.destroy({
+                where: {
+                    user_and_tag_id: userAndTagIds,
                 },
             });
-            return deleteTags;
+            console.log('deleteCount: ', deleteCount);
+            return deleteCount;
         } catch (error) {
             console.error(error);
         }
@@ -91,10 +102,9 @@ const UserModel = {
                     user_id: userId,
                     is_deleted: 0,
                 },
-                returning: true,
             });
 
-            return updatedUser[0];
+            return updatedUser;
         } catch (error) {
             console.error(error);
         }
