@@ -107,7 +107,6 @@ const participantService = {
                 const personality = participant.User.UserAndTags.map(userAndTag => userAndTag.Tag.tagname);
                 return {
                     status: participant.status,
-                    user_id: participant.User.user_id,
                     nickname: participant.User.nickname,
                     gender: participant.User.gender,
                     age: participant.User.age,

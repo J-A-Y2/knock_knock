@@ -784,6 +784,7 @@ paths:
                                         type: string
                                     isFulled:
                                         type: boolean
+                                        description: 모집 완료 여부
                                     total:
                                         type: integer
                                     participantsList:
@@ -791,25 +792,23 @@ paths:
                                         items:
                                             type: object
                                             properties:
-                                                participant_id:
-                                                    type: integer
-                                                canceled:
-                                                    type: string
                                                 status:
                                                     type: string
-                                                User:
-                                                    type: object
-                                                    properties:
-                                                        nickname:
-                                                            type: string
-                                                        gender:
-                                                            type: string
-                                                        age:
-                                                            type: integer
-                                                        job:
-                                                            type: string
-                                                        profile_image:
-                                                            type: string
+                                                nickname:
+                                                    type: string
+                                                gender:
+                                                    type: string
+                                                age:
+                                                    type: integer
+                                                job:
+                                                    type: string
+                                                profile_image:
+                                                    type: string
+                                                personality:
+                                                    type: array
+                                                    items:
+                                                        type: string
+                                                        description: 성격
 
                 '400':
                     description: Invalid ID supplied
