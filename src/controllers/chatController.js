@@ -1,6 +1,3 @@
-// createChat
-//getUserChats
-//findChat
 import { chatService } from '../services/chatService.js';
 import { statusCode } from '../utils/statusCode.js';
 

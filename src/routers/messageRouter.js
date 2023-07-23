@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { messageController } from '../controllers/messageController';
+import { messageController } from '../controllers/messageController.js';
 
 const messageRouter = Router();
 
@@ -7,6 +7,6 @@ const messageRouter = Router();
 messageRouter.post('/', messageController.createMessage);
 
 // 전체 메세지 조회
-messageRouter.get('/', messageController.getMessage);
+messageRouter.get('/:chatId', messageController.getMessage);
 
 export { messageRouter };

@@ -6,7 +6,7 @@ import cors from 'cors';
 import { db } from './db/index.js';
 import { userRouter } from './routers/userRouter.js';
 import { postRouter } from './routers/postRouter.js';
-import { messageRouter } from './routers/messageRotuer.js';
+import { messageRouter } from './routers/messageRouter.js';
 import { commentRouter } from './routers/commentRouter.js';
 import { participantRouter } from './routers/participantRouter.js';
 import { chatRouter } from './routers/chatRouter.js';
