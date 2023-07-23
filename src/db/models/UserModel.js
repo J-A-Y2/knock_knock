@@ -8,19 +8,35 @@ const UserModel = {
         return await db.UserAndTag.bulkCreate(newTags, { transaction });
     },
     deleteTags: async (userId, tagCategoryId) => {
-        const deleteTags = await db.UserAndTag.destroy({
-            where: {
-                user_id: userId,
-                tag_category_id: tagCategoryId,
-            },
-            include: [
-                {
-                    model: db.Tag,
-                    attributes: ['tag_category_id'],
+        try {
+            // 모든 user_and_tag_id들을 찾아서 user_id, tag_category_id와 일치하는 데이터 삭제
+            const userAndTags = await db.UserAndTag.findAll({
+                where: {
+                    user_id: userId,
                 },
-            ],
-        });
-        return deleteTags;
+                include: [
+                    {
+                        model: db.Tag,
+                        where: {
+                            tag_category_id: tagCategoryId,
+                        },
+                    },
+                ],
+            });
+
+            const userAndTagIds = userAndTags.map(userAndTag => userAndTag.user_and_tag_id);
+
+            // UserAndTag 행들 삭제
+            const deleteCount = await db.UserAndTag.destroy({
+                where: {
+                    user_and_tag_id: userAndTagIds,
+                },
+            });
+
+            return deleteCount;
+        } catch (error) {
+            console.error(error);
+        }
     },
     findTagId: async (tagname, tagCategoryId) => {
         const tagId = await db.Tag.findOne({
@@ -93,10 +109,9 @@ const UserModel = {
                     user_id: userId,
                     is_deleted: 0,
                 },
-                returning: true,
             });
 
-            return updatedUser[0];
+            return updatedUser;
         } catch (error) {
             console.error(error);
         }
