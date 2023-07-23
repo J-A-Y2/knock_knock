@@ -17,17 +17,24 @@ const ParticipantModel = {
 
     // 참가 신청자 리스트
     getParticipants: async postId => {
-        const { count, rows: participants } = await db.Participant.findAndCountAll({
+        const { rows: participants } = await db.Participant.findAndCountAll({
             attributes: ['participant_id', 'canceled', 'status'],
             where: { post_id: postId, canceled: 0 },
             include: [
                 {
                     model: db.User,
-                    attributes: ['nickname', 'gender', 'age', 'job', 'profile_image'],
+                    attributes: ['user_id', 'nickname', 'gender', 'age', 'job', 'profile_image'],
+                    include: [
+                        {
+                            model: db.UserAndTag,
+                            attributes: ['user_id'],
+                            include: [{ model: db.Tag, attributes: ['tagname'], where: { tag_category_id: 2 } }],
+                        },
+                    ],
                 },
             ],
         });
-        return { total: count, participants };
+        return participants;
     },
 
     // 현재 유저가 참가 신청한 모임 추출

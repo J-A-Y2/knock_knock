@@ -32,10 +32,17 @@ const participantController = {
             const userId = req.currentUserId;
             const postId = req.params.postId;
 
-            const participants = await participantService.getParticipants({ userId, postId });
+            const { participantsList, message, isFulled } = await participantService.getParticipants({
+                userId,
+                postId,
+            });
 
             statusCode.setResponseCode200(res);
-            res.send({ message: participants.message, total: participants.total, participantsList: participants });
+            res.send({
+                message,
+                isFulled,
+                participantsList,
+            });
         } catch (error) {
             next(error);
         }
