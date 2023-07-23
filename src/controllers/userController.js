@@ -66,7 +66,7 @@ const userController = {
     },
     getCurrentUserInfo: async (req, res, next) => {
         try {
-            const { userId } = req.currentUserId;
+            const userId = req.currentUserId;
             const user = await userService.getUserById({ userId });
 
             statusCode.setResponseCode200(res);
