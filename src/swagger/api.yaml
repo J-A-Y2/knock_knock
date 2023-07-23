@@ -167,47 +167,51 @@ paths:
                     content:
                         application/json:
                             schema:
-                            type: object
-                            properties:
-                                userId:
-                                    type: integer
-                                email:
-                                    type: string
-                                username:
-                                    type: string
-                                nickname:
-                                    type: string
-                                gender:
-                                    type: string
-                                birthday:
-                                    type: string
-                                    format: date
-                                job:
-                                    type: string
-                                region:
-                                    type: string
-                                profileImage:
-                                    type: string
-                                mbti:
-                                    type: string
-                                religion:
-                                    type: string
-                                height:
-                                    type: string
-                                hobby:
-                                    type: array
-                                    items:
+                                type: object
+                                properties:
+                                    message:
                                         type: string
-                                presonality:
-                                    type: array
-                                    items:
+                                    userId:
+                                        type: integer
+                                    email:
                                         type: string
-                                ideal:
-                                    type: array
-                                    items:
+                                    username:
                                         type: string
-                                introduce:
-                                    type: string
+                                    nickname:
+                                        type: string
+                                    gender:
+                                        type: string
+                                    birthday:
+                                        type: string
+                                        format: date
+                                    age:
+                                        type: integer
+                                    job:
+                                        type: string
+                                    region:
+                                        type: string
+                                    profileImage:
+                                        type: string
+                                    mbti:
+                                        type: string
+                                    religion:
+                                        type: string
+                                    height:
+                                        type: string
+                                    hobby:
+                                        type: array
+                                        items:
+                                            type: string
+                                    presonality:
+                                        type: array
+                                        items:
+                                            type: string
+                                    ideal:
+                                        type: array
+                                        items:
+                                            type: string
+                                    introduce:
+                                        type: string
                 '400':
                     description: Invalid status value
 
@@ -228,47 +232,47 @@ paths:
                     content:
                         application/json:
                             schema:
-                            type: object
-                            properties:
-                                userId:
-                                    type: integer
-                                email:
-                                    type: string
-                                username:
-                                    type: string
-                                nickname:
-                                    type: string
-                                gender:
-                                    type: string
-                                birthday:
-                                    type: string
-                                    format: date
-                                job:
-                                    type: string
-                                region:
-                                    type: string
-                                profileImage:
-                                    type: string
-                                mbti:
-                                    type: string
-                                religion:
-                                    type: string
-                                height:
-                                    type: string
-                                hobby:
-                                    type: array
-                                    items:
+                                type: object
+                                properties:
+                                    userId:
+                                        type: integer
+                                    email:
                                         type: string
-                                presonality:
-                                    type: array
-                                    items:
+                                    username:
                                         type: string
-                                ideal:
-                                    type: array
-                                    items:
+                                    nickname:
                                         type: string
-                                introduce:
-                                    type: string
+                                    gender:
+                                        type: string
+                                    birthday:
+                                        type: string
+                                        format: date
+                                    job:
+                                        type: string
+                                    region:
+                                        type: string
+                                    profileImage:
+                                        type: string
+                                    mbti:
+                                        type: string
+                                    religion:
+                                        type: string
+                                    height:
+                                        type: string
+                                    hobby:
+                                        type: array
+                                        items:
+                                            type: string
+                                    presonality:
+                                        type: array
+                                        items:
+                                            type: string
+                                    ideal:
+                                        type: array
+                                        items:
+                                            type: string
+                                    introduce:
+                                        type: string
 
                 '400':
                     description: Invalid tag value
