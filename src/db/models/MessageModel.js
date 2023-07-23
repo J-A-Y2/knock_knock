@@ -1,23 +1,19 @@
 import { db } from '../index.js';
 
 const MessageModel = {
-    create: async ({ userId, anotherId }) => {
-        const createChat = await db.ChatRoom.create({ first_id: userId, second_id: anotherId });
-        return createChat;
+    createMessage: async ({ userId, chatId, content }) => {
+        const createMessage = await db.Message.create({ sender_id: userId, chat_id: chatId, message_content: content });
+
+        return createMessage;
     },
 
-    findChatRooms: async ({ userId, anotherId }) => {
-        const findChatRooms = await db.ChatRoom.findOne({ first_id: userId, second_id: anotherId });
-        return findChatRooms;
-    },
-
-    getUserChat: async userId => {
-        const getUserChat = await db.ChatRoom.findOne({
+    getAllMessage: async chatId => {
+        const getAllMessage = await db.Message.findOne({
             where: {
-                first_id: userId,
+                chat_id: chatId,
             },
         });
-        return getUserChat;
+        return getAllMessage;
     },
 };
 

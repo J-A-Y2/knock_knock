@@ -1,4 +1,3 @@
-import sequelize from 'sequelize';
 import { Op } from 'sequelize';
 import { db } from '../index.js';
 

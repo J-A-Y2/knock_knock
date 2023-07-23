@@ -5,28 +5,28 @@ import { messageService } from '../services/messageService.js';
 import { statusCode } from '../utils/statusCode.js';
 
 const messageController = {
-    createChat: async (req, res, next) => {
+    createMessage: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
-            const anotherId = req.body;
+            const { chatId, content } = req.body;
 
-            const createChat = await messageService.createChat({ userId, anotherId });
+            const createMessage = await messageService.createMessage({ userId, chatId, content });
 
             statusCode.setResponseCode201(res);
-            return res.send({ message: createChat.message });
+            return res.send({ message: createMessage.message });
         } catch (error) {
             next(error);
         }
     },
 
-    getUserChats: async (req, res, next) => {
+    getMessage: async (req, res, next) => {
         try {
-            const userId = req.currentUserId;
+            const chatId = req.params.chatId;
 
-            const getListChats = await messageService.getListChats(userId);
+            const getMessage = await messageService.getMessage(chatId);
 
             statusCode.setResponseCode201(res);
-            return res.send({ message: getListChats.message });
+            return res.send({ message: getMessage.message });
         } catch (error) {
             next(error);
         }

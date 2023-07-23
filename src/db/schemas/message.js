@@ -7,6 +7,10 @@ const Message = (sequelize, DataTypes) => {
                 autoIncrement: true,
                 primaryKey: true,
             },
+            sender_id: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
             message_content: {
                 type: DataTypes.STRING(40),
                 allowNull: false,

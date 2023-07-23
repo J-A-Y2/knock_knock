@@ -9,6 +9,8 @@ import { postRouter } from './routers/postRouter.js';
 import { messageRouter } from './routers/messageRotuer.js';
 import { commentRouter } from './routers/commentRouter.js';
 import { participantRouter } from './routers/participantRouter.js';
+import { chatRouter } from './routers/chatRouter.js';
+
 const app = express();
 
 // CORS 에러 방지
@@ -22,6 +24,7 @@ app.use('/posts', postRouter);
 app.use('/comments', commentRouter);
 app.use('/messages', messageRouter);
 app.use('/participants', participantRouter);
+app.user('/chats', chatRouter);
 
 dotenv.config();
 db.sequelize
