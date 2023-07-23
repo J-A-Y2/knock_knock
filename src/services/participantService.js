@@ -106,6 +106,7 @@ const participantService = {
             const participantsList = participants.map(participant => {
                 const personality = participant.User.UserAndTags.map(userAndTag => userAndTag.Tag.tagname);
                 return {
+                    userId: participant.User.user_id,
                     status: participant.status,
                     nickname: participant.User.nickname,
                     gender: participant.User.gender,
