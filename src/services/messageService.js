@@ -4,7 +4,7 @@ import { ConflictError, InternalServerError } from '../middlewares/errorMiddlewa
 const messageService = {
     createChat: async ({ userId, anotherId }) => {
         try {
-            const chat = await MessageModel.getMembers({ userId, anotherId });
+            const chat = await MessageModel.findChatRooms({ userId, anotherId });
 
             if (chat) {
                 throw new ConflictError('이미 존재하는 채팅 입니다.');
@@ -26,7 +26,7 @@ const messageService = {
 
     getListChats: async userId => {
         try {
-            const chats = await MessageModel.getUserChat(userId);
+            await MessageModel.getUserChat(userId);
 
             return {
                 message: '유저의 채팅 목록 불러오기에 성공했습니다.',

@@ -8,6 +8,7 @@ import Participant from './schemas/participant.js';
 import Tag from './schemas/tag.js';
 import TagCategory from './schemas/tagCategory.js';
 import UserAndTag from './schemas/userAndTag.js';
+import ChatRoom from './schemas/chatRoom.js';
 
 const db = {};
 
@@ -25,6 +26,7 @@ db.Participant = Participant(sequelize, Sequelize);
 db.Tag = Tag(sequelize, Sequelize);
 db.TagCategory = TagCategory(sequelize, Sequelize);
 db.UserAndTag = UserAndTag(sequelize, Sequelize);
+db.ChatRoom = ChatRoom(sequelize, Sequelize);
 
 // 각 모델들을 돌면서 모델간의 관계를 정의하는 함수를 동작시킴.
 Object.keys(db).forEach(modelName => {
