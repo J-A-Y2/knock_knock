@@ -176,18 +176,29 @@ const userService = {
     },
     // 유저 정보 조회
     getUserById: async ({ userId }) => {
-        let transaction;
         try {
-            transaction = await db.sequelize.transaction();
             const user = await UserModel.findById(userId);
 
             if (!user) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
-            await transaction.commit();
+            let hobby = [];
+            let personality = [];
+            let ideal = [];
+            for (const userAndTag of user.UserAndTags) {
+                if (userAndTag.Tag.tag_category_id === 1) {
+                    hobby.push(userAndTag.Tag.tagname);
+                } else if (userAndTag.Tag.tag_category_id === 2) {
+                    personality.push(userAndTag.Tag.tagname);
+                } else {
+                    ideal.push(userAndTag.Tag.tagname);
+                }
+            }
+
             return {
-                message: '회원정보 조회 성공!',
+                message: '회원 정보 조회를 성공했습니다.',
+                // user,
                 userId: user.user_id,
                 email: user.email,
                 username: user.username,
@@ -201,15 +212,12 @@ const userService = {
                 mbti: user.mbti,
                 religion: user.religion,
                 height: user.height,
-                hobby: user.hooby,
-                personality: user.perosnality,
-                ideal: user.ideal,
                 introduce: user.introduce,
+                hobby,
+                personality,
+                ideal,
             };
         } catch (error) {
-            if (transaction) {
-                await transaction.rollback();
-            }
             if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
                 throw error;
             } else {

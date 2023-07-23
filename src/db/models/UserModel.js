@@ -65,6 +65,13 @@ const UserModel = {
                 user_id: userId,
                 is_deleted: 0,
             },
+            include: [
+                {
+                    model: db.UserAndTag,
+                    attributes: ['user_id'],
+                    include: [{ model: db.Tag, attributes: ['tagname', 'tag_category_id'] }],
+                },
+            ],
         });
         return user;
     },
