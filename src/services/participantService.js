@@ -2,6 +2,7 @@ import { PostModel } from '../db/models/postModel.js';
 import { ParticipantModel } from '../db/models/ParticipantModel.js';
 import { ConflictError, InternalServerError, NotFoundError, UnauthorizedError } from '../middlewares/errorMiddleware.js';
 import { db } from '../db/index.js';
+import { UserModel } from '../db/models/UserModel.js';
 
 const participantService = {
     participatePost: async ({ userId, postId }) => {
@@ -82,6 +83,8 @@ const participantService = {
     getParticipants: async ({ userId, postId }) => {
         try {
             const post = await PostModel.getPostById(postId);
+            const user = await UserModel.findById(userId);
+
             if (!post) {
                 throw new NotFoundError('해당 Id의 게시글을 찾을 수 없습니다.');
             }
@@ -89,8 +92,31 @@ const participantService = {
                 throw new ConflictError('참가자 리스트 조회 권한이 없습니다.');
             }
 
-            const { total, participants } = await ParticipantModel.getParticipants(postId);
-            return { message: '참가자 리스트 조회를 성공했습니다.', isFulled: post.is_completed, total, participants };
+            const participants = await ParticipantModel.getParticipants(postId);
+            let hobby = [];
+            let ideal = [];
+            for (const userAndTag of user.UserAndTags) {
+                if (userAndTag.Tag.tag_category_id === 3) {
+                    ideal.push(userAndTag.Tag.tagname);
+                } else if (userAndTag.Tag.tag_category_id === 1) {
+                    hobby.push(userAndTag.Tag.tagname);
+                }
+            }
+
+            const participantsList = participants.map(participant => {
+                const personality = participant.User.UserAndTags.map(userAndTag => userAndTag.Tag.tagname);
+                return {
+                    status: participant.status,
+                    nickname: participant.User.nickname,
+                    gender: participant.User.gender,
+                    age: participant.User.age,
+                    job: participant.User.job,
+                    profile_image: participant.User.profile_image,
+                    personality,
+                };
+            });
+
+            return { message: '참가자 리스트 조회를 성공했습니다.', isFulled: post.is_completed, participantsList };
         } catch (error) {
             if (error instanceof NotFoundError || error instanceof ConflictError) {
                 throw error;
