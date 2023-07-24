@@ -7,14 +7,6 @@ const ParticipantModel = {
         return createParticipant;
     },
 
-    // 현재 유저가 postId에 해당하는 모임에 참여한 적이 있는지 검증
-    countParticipationByUserId: async ({ userId, postId }) => {
-        const { count } = await db.Participant.findAndCountAll({
-            where: { user_id: userId, post_id: postId },
-        });
-        return count;
-    },
-
     // 참가 신청자 리스트
     getParticipants: async postId => {
         const { rows: participants } = await db.Participant.findAndCountAll({
@@ -38,7 +30,7 @@ const ParticipantModel = {
     },
 
     // 현재 유저가 참가 신청한 모임 추출
-    getParticipationIdById: async ({ userId, postId }) => {
+    getParticipationByUserId: async ({ userId, postId }) => {
         const participation = await db.Participant.findOne({
             where: { user_id: userId, post_id: postId },
         });
@@ -52,7 +44,7 @@ const ParticipantModel = {
             include: [
                 {
                     model: db.Post,
-                    attributes: ['post_id', 'recruited_m', 'recruited_f', 'total_m', 'total_f'],
+                    attributes: ['post_id', 'user_id', 'recruited_m', 'recruited_f', 'total_m', 'total_f'],
                 },
                 {
                     model: db.User,

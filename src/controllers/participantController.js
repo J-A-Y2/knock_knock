@@ -50,8 +50,9 @@ const participantController = {
     allow: async (req, res, next) => {
         try {
             const participantId = req.params.participantId;
+            const userId = req.currentUserId;
 
-            const participant = await participantService.allow(participantId);
+            const participant = await participantService.allow({ participantId, userId });
 
             statusCode.setResponseCode200(res);
             res.send({
@@ -68,7 +69,8 @@ const participantController = {
     deny: async (req, res, next) => {
         try {
             const participantId = req.params.participantId;
-            const participant = await participantService.deny(participantId);
+            const userId = req.currentUserId;
+            const participant = await participantService.deny({ participantId, userId });
 
             statusCode.setResponseCode200(res);
             res.send({ message: participant.message });
