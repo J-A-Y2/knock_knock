@@ -16,8 +16,8 @@ const Image = (sequelize, DataTypes) => {
             sequelize,
             timestamps: true, // created_at, updated_at  true: 사용 할겁니다, false: 사용안할 겁니다.
             underscored: true,
-            modelName: 'Tag',
-            tableName: 'tags',
+            modelName: 'Image',
+            tableName: 'images',
             paranoid: true, // deleted_at  true: 사용 할겁니다, false: 사용안할 겁니다.
         },
     );

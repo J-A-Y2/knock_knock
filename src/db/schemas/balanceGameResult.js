@@ -8,8 +8,8 @@ const BalanceGameResult = (sequelize, DataTypes) => {
                 primaryKey: true,
             },
             result: {
-                type: DataTypes.ENUM(1, 2),
-                allowNull: false,
+                type: DataTypes.ENUM('left', 'right'),
+                allowNull: true,
             },
         },
         {
