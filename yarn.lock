@@ -10,10 +10,12 @@ __metadata:
   resolution: "3team@workspace:."
   dependencies:
     "@aws-sdk/client-s3": ^3.374.0
+    "@aws-sdk/s3-request-presigner": ^3.375.0
     "@babel/cli": ^7.22.9
     "@babel/core": ^7.22.9
     "@babel/node": ^7.22.6
     "@babel/preset-env": ^7.22.9
+    "@smithy/hash-stream-node": ^1.0.2
     aws-sdk: ^2.1420.0
     bcrypt: ^5.1.0
     cors: ^2.8.5
@@ -639,6 +641,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@aws-sdk/s3-request-presigner@npm:^3.375.0":
+  version: 3.375.0
+  resolution: "@aws-sdk/s3-request-presigner@npm:3.375.0"
+  dependencies:
+    "@aws-sdk/signature-v4-multi-region": 3.370.0
+    "@aws-sdk/types": 3.370.0
+    "@aws-sdk/util-format-url": 3.370.0
+    "@smithy/middleware-endpoint": ^1.0.2
+    "@smithy/protocol-http": ^1.1.0
+    "@smithy/smithy-client": ^1.0.3
+    "@smithy/types": ^1.1.0
+    tslib: ^2.5.0
+  checksum: 9bc2abd677474a1d115fad14d82a134909c53c2ce68551a66054dcb679c9bb9fd5d9d20e7bff5ffb7d13fb7d4bd564766a173d48601b364102d7b6a0dd0fe8f9
+  languageName: node
+  linkType: hard
+
 "@aws-sdk/signature-v4-multi-region@npm:3.370.0":
   version: 3.370.0
   resolution: "@aws-sdk/signature-v4-multi-region@npm:3.370.0"
@@ -697,6 +715,18 @@ __metadata:
     "@aws-sdk/types": 3.370.0
     tslib: ^2.5.0
   checksum: d351ad2fdc92bec16d0d925dbcfc3f38baed12a7984d70bf02ee2dfe4c3fd1a85f53e515f9751f31d1345fe0bdebd62be7cd08e405a31354db92312f0cc6282c
+  languageName: node
+  linkType: hard
+
+"@aws-sdk/util-format-url@npm:3.370.0":
+  version: 3.370.0
+  resolution: "@aws-sdk/util-format-url@npm:3.370.0"
+  dependencies:
+    "@aws-sdk/types": 3.370.0
+    "@smithy/querystring-builder": ^1.0.1
+    "@smithy/types": ^1.1.0
+    tslib: ^2.5.0
+  checksum: 756d5d323fb21605590438747f7959631f0c7e7f02de68c1bc983010889f7e94c132c28f647712b159911085e6d6d5efe4888a39fdf2ab19141df2ed37c41858
   languageName: node
   linkType: hard
 
@@ -2390,7 +2420,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smithy/hash-stream-node@npm:^1.0.1":
+"@smithy/hash-stream-node@npm:^1.0.1, @smithy/hash-stream-node@npm:^1.0.2":
   version: 1.0.2
   resolution: "@smithy/hash-stream-node@npm:1.0.2"
   dependencies:
@@ -2534,7 +2564,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smithy/querystring-builder@npm:^1.0.2":
+"@smithy/querystring-builder@npm:^1.0.1, @smithy/querystring-builder@npm:^1.0.2":
   version: 1.0.2
   resolution: "@smithy/querystring-builder@npm:1.0.2"
   dependencies:

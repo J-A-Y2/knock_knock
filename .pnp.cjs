@@ -29,10 +29,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["@aws-sdk/client-s3", "npm:3.374.0"],\
+            ["@aws-sdk/s3-request-presigner", "npm:3.375.0"],\
             ["@babel/cli", "virtual:e94b6a29c80fbdd35e8b7b27d4fa86ae04a8eeab5c48711538d94b1497c1280ed77fa70fa911019c99e9c4e5bccd1706ba6fcb9daff09eaa7a6fde97ef314d58#npm:7.22.9"],\
             ["@babel/core", "npm:7.22.9"],\
             ["@babel/node", "virtual:e94b6a29c80fbdd35e8b7b27d4fa86ae04a8eeab5c48711538d94b1497c1280ed77fa70fa911019c99e9c4e5bccd1706ba6fcb9daff09eaa7a6fde97ef314d58#npm:7.22.6"],\
             ["@babel/preset-env", "virtual:e94b6a29c80fbdd35e8b7b27d4fa86ae04a8eeab5c48711538d94b1497c1280ed77fa70fa911019c99e9c4e5bccd1706ba6fcb9daff09eaa7a6fde97ef314d58#npm:7.22.9"],\
+            ["@smithy/hash-stream-node", "npm:1.0.2"],\
             ["aws-sdk", "npm:2.1420.0"],\
             ["bcrypt", "npm:5.1.0"],\
             ["cors", "npm:2.8.5"],\
@@ -63,10 +65,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["3team", "workspace:."],\
             ["@aws-sdk/client-s3", "npm:3.374.0"],\
+            ["@aws-sdk/s3-request-presigner", "npm:3.375.0"],\
             ["@babel/cli", "virtual:e94b6a29c80fbdd35e8b7b27d4fa86ae04a8eeab5c48711538d94b1497c1280ed77fa70fa911019c99e9c4e5bccd1706ba6fcb9daff09eaa7a6fde97ef314d58#npm:7.22.9"],\
             ["@babel/core", "npm:7.22.9"],\
             ["@babel/node", "virtual:e94b6a29c80fbdd35e8b7b27d4fa86ae04a8eeab5c48711538d94b1497c1280ed77fa70fa911019c99e9c4e5bccd1706ba6fcb9daff09eaa7a6fde97ef314d58#npm:7.22.6"],\
             ["@babel/preset-env", "virtual:e94b6a29c80fbdd35e8b7b27d4fa86ae04a8eeab5c48711538d94b1497c1280ed77fa70fa911019c99e9c4e5bccd1706ba6fcb9daff09eaa7a6fde97ef314d58#npm:7.22.9"],\
+            ["@smithy/hash-stream-node", "npm:1.0.2"],\
             ["aws-sdk", "npm:2.1420.0"],\
             ["bcrypt", "npm:5.1.0"],\
             ["cors", "npm:2.8.5"],\
@@ -754,6 +758,23 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@aws-sdk/s3-request-presigner", [\
+        ["npm:3.375.0", {\
+          "packageLocation": "./.yarn/cache/@aws-sdk-s3-request-presigner-npm-3.375.0-345e821a61-9bc2abd677.zip/node_modules/@aws-sdk/s3-request-presigner/",\
+          "packageDependencies": [\
+            ["@aws-sdk/s3-request-presigner", "npm:3.375.0"],\
+            ["@aws-sdk/signature-v4-multi-region", "virtual:34211d8292235ea0edceeba984c2049b5a76eca5089129891648e02d5ca7d39e38b00a72bf39193ae525742b9796bcf145701f01da589ec2f9f31b831d5cbc70#npm:3.370.0"],\
+            ["@aws-sdk/types", "npm:3.370.0"],\
+            ["@aws-sdk/util-format-url", "npm:3.370.0"],\
+            ["@smithy/middleware-endpoint", "npm:1.0.3"],\
+            ["@smithy/protocol-http", "npm:1.1.1"],\
+            ["@smithy/smithy-client", "npm:1.0.4"],\
+            ["@smithy/types", "npm:1.1.1"],\
+            ["tslib", "npm:2.6.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@aws-sdk/signature-v4-multi-region", [\
         ["npm:3.370.0", {\
           "packageLocation": "./.yarn/cache/@aws-sdk-signature-v4-multi-region-npm-3.370.0-a63ab6a900-0c8ce6a70e.zip/node_modules/@aws-sdk/signature-v4-multi-region/",\
@@ -823,6 +844,19 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@aws-sdk/util-endpoints", "npm:3.370.0"],\
             ["@aws-sdk/types", "npm:3.370.0"],\
+            ["tslib", "npm:2.6.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@aws-sdk/util-format-url", [\
+        ["npm:3.370.0", {\
+          "packageLocation": "./.yarn/cache/@aws-sdk-util-format-url-npm-3.370.0-837aef4415-756d5d323f.zip/node_modules/@aws-sdk/util-format-url/",\
+          "packageDependencies": [\
+            ["@aws-sdk/util-format-url", "npm:3.370.0"],\
+            ["@aws-sdk/types", "npm:3.370.0"],\
+            ["@smithy/querystring-builder", "npm:1.0.2"],\
+            ["@smithy/types", "npm:1.1.1"],\
             ["tslib", "npm:2.6.0"]\
           ],\
           "linkType": "HARD"\

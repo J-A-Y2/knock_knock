@@ -4,6 +4,12 @@ const UserModel = {
     create: async newUser => {
         return await db.User.create(newUser);
     },
+    createProfileImage: async (profileImage, userId) => {
+        return await db.Image.create({
+            image_url: profileImage,
+            user_id: userId,
+        });
+    },
     bulkCreateTags: async ({ newTags, transaction }) => {
         return await db.UserAndTag.bulkCreate(newTags, { transaction });
     },
