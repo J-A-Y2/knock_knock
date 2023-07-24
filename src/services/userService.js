@@ -227,11 +227,45 @@ const userService = {
     },
     // 내가 작성한 게시글 불러오기
     getMyPosts: async ({ userId }) => {
-        const posts = await UserModel.findMyPosts(userId);
+        try {
+            const posts = await UserModel.findMyPosts(userId);
+            console.log('유저 서비스의 posts', posts);
+            if (!posts) {
+                throw new NotFoundError('내가 작성한 게시글을 찾을 수 없습니다.');
+            }
+
+            return {
+                message: '내가 작성한 게시글 조회 성공!',
+                posts,
+            };
+        } catch (error) {
+            if (error instanceof NotFoundError) {
+                throw error;
+            } else {
+                throw new InternalServerError('내가 참여한 게시글을 불러오기 실패했습니다.');
+            }
+        }
     },
     // 내가 참여한 게시글 불러오기
     getMyParticipants: async ({ userId }) => {
-        const participants = await UserModel.findMyParticipants(userId);
+        try {
+            const participants = await UserModel.findMyParticipants(userId);
+            console.log('유저 서비스의 participants', participants);
+            if (!participants) {
+                throw new NotFoundError('내가 작성한 게시글을 찾을 수 없습니다.');
+            }
+
+            return {
+                message: '내가 참여한 게시글 조회 성공!',
+                participants,
+            };
+        } catch (error) {
+            if (error instanceof NotFoundError) {
+                throw error;
+            } else {
+                throw new InternalServerError('내가 참여한 게시글을 불러오기 실패했습니다.');
+            }
+        }
     },
     // 유저 정보 수정
     updateUser: async ({ userId, updateUserInfo }) => {

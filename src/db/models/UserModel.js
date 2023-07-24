@@ -95,6 +95,22 @@ const UserModel = {
 
         return randomUsers;
     },
+    findMyPosts: async userId => {
+        await db.User.findAll({
+            where: {
+                user_id: userId,
+            },
+            include: [{ model: db.Post, attributes: [] }],
+        });
+    },
+    findMyParticipants: async userId => {
+        await db.User.findAll({
+            where: {
+                user_id: userId,
+            },
+            include: [{ model: db.Participant, attributes: [] }],
+        });
+    },
     // 유저 정보 업데이트
     update: async ({ userId, updateData }) => {
         try {

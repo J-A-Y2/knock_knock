@@ -15,14 +15,14 @@ userRouter.post('/login', loginValidationRules, loginValidate, userController.lo
 // 로그인 검증
 userRouter.get('/isLogin', loginRequired, userController.isLogin);
 
-// 현재 로그인된 유저 정보 불러오기
+// 현재 로그인한 유저 정보 불러오기
 userRouter.get('/mypage', loginRequired, userController.getCurrentUserInfo);
 
-// 현재 로그인된 유저가 작성한 게시글 모두 불러오기
-userRouter.get('/mypage', loginRequired, userController.getCurrentUserPosts);
+// 현재 로그인한 유저가 작성한 게시글 모두 불러오기
+userRouter.get('/mypage/posts', loginRequired, userController.getCurrentUserPosts);
 
-// 현재 로그인된 유저의 참여한 게시글 모두 불러오기
-userRouter.get('/mypage', loginRequired, userController.getCurrentUserParticipants);
+// 현재 로그인한 유저의 참여한 게시글 모두 불러오기
+userRouter.get('/mypage/participants', loginRequired, userController.getCurrentUserParticipants);
 
 // 오늘의 낙낙(네트워크)페이지 - 랜덤으로 6명 유저 정보 불러오기
 userRouter.get('/network', loginRequired, userController.getRandomUsersInfo);
