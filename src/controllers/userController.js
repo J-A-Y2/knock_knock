@@ -79,10 +79,12 @@ const userController = {
         try {
             const userId = req.currentUserId;
             const posts = await userService.getMyPosts({ userId });
+
+            statusCode.setResponseCode200(res);
+            return res.send(posts);
         } catch (error) {
             next(error);
         }
-        statusCode.setResponseCode200(res);
     },
     getCurrentUserParticipants: async (req, res, next) => {
         try {
@@ -90,6 +92,7 @@ const userController = {
             const participants = await userService.getMyParticipants({ userId });
 
             statusCode.setResponseCode200(res);
+            return res.send(participants);
         } catch (error) {
             next(error);
         }

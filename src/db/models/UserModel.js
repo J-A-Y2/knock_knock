@@ -95,6 +95,7 @@ const UserModel = {
 
         return randomUsers;
     },
+    // 유저 정보 업데이트
     update: async ({ userId, updateData }) => {
         try {
             const updatedUser = await db.User.update(updateData, {
@@ -109,6 +110,7 @@ const UserModel = {
             console.error(error);
         }
     },
+    // 유저 정보 삭제
     delete: async ({ userId }) => {
         const deleteUser = await db.User.update(
             {
@@ -123,15 +125,6 @@ const UserModel = {
             },
         );
         return deleteUser;
-    },
-    destroy: async () => {
-        const destroyTags = await db.UserAndTag.destroy({
-            where: {
-                user_id: userId,
-                tag_id: newTags.map(tag => tag.tag_id),
-                tag_type: tagType,
-            },
-        });
     },
 };
 

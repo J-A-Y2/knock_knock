@@ -226,9 +226,13 @@ const userService = {
         }
     },
     // 내가 작성한 게시글 불러오기
-    getMyPosts: async ({ userId }) => {},
+    getMyPosts: async ({ userId }) => {
+        const posts = await UserModel.findMyPosts(userId);
+    },
     // 내가 참여한 게시글 불러오기
-    getMyParticipants: async ({ userId }) => {},
+    getMyParticipants: async ({ userId }) => {
+        const participants = await UserModel.findMyParticipants(userId);
+    },
     // 유저 정보 수정
     updateUser: async ({ userId, updateUserInfo }) => {
         let transaction;
