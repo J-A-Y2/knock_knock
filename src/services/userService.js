@@ -229,7 +229,7 @@ const userService = {
     getMyPosts: async ({ userId }) => {
         try {
             const posts = await UserModel.findMyPosts(userId);
-            console.log('유저 서비스의 posts', posts, 'userId: ', userId);
+
             if (!posts) {
                 throw new NotFoundError('내가 작성한 게시글을 찾을 수 없습니다.');
             }
@@ -250,7 +250,7 @@ const userService = {
     getMyParticipants: async ({ userId }) => {
         try {
             const participants = await UserModel.findMyParticipants(userId);
-            console.log('유저 서비스의 participants', participants, 'userId: ', userId);
+
             if (!participants) {
                 throw new NotFoundError('내가 참여한 게시글을 찾을 수 없습니다.');
             }
