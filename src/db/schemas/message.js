@@ -27,7 +27,7 @@ const Message = (sequelize, DataTypes) => {
     );
     Message.associate = db => {
         // foreignKey는 Message모델의 send_id, targetKey는 User 모델의 user_id
-        db.Message.belongsTo(db.Chat, {
+        db.Message.belongsTo(db.ChatRoom, {
             foreignKey: 'chat_id',
             targetKey: 'chat_id',
         });

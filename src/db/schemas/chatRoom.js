@@ -2,7 +2,7 @@ const ChatRoom = (sequelize, DataTypes) => {
     const ChatRoom = sequelize.define(
         'ChatRoom',
         {
-            chat_room_id: {
+            chat_id: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true,
@@ -28,7 +28,7 @@ const ChatRoom = (sequelize, DataTypes) => {
     ChatRoom.associate = db => {
         db.ChatRoom.hasMany(db.Message, {
             foreignKey: 'chat_id',
-            sourceKey: 'message_id',
+            sourceKey: 'chat_id',
         });
     };
 
