@@ -9,7 +9,7 @@ import {
 } from '../middlewares/errorMiddleware.js';
 import { UserModel } from '../db/models/UserModel.js';
 import { db } from '../db/index.js';
-
+import { calculateKoreanAge } from '../utils/calculateKoreanAge.js';
 const userService = {
     // 유저 생성
     createUser: async ({ newUser }) => {
@@ -29,16 +29,7 @@ const userService = {
             const hashedPassword = await bcrypt.hash(userInfo.user_password, parseInt(process.env.PW_HASH_COUNT));
             userInfo.user_password = hashedPassword;
 
-            // birthday를 나이로 계산해서 데이터베이스에 넣기
-            const today = new Date();
-            const birthDate = new Date(userInfo.birthday);
-            let age = today.getFullYear() - birthDate.getFullYear() + 1;
-            const monthDiff = today.getMonth() - birthDate.getMonth();
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-                age -= 1;
-            }
-            // userInfo객체에 age값을 추가하기
-            userInfo.age = age;
+            userInfo.age = calculateKoreanAge(userInfo.birthday); // birthday로 한국 나이 계산하기
 
             const createdUser = await UserModel.create(userInfo);
 
