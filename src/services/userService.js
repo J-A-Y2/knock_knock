@@ -225,6 +225,10 @@ const userService = {
             throw new BadRequestError('랜덤으로 유저들을 조회하는 데 실패했습니다.');
         }
     },
+    // 내가 작성한 게시글 불러오기
+    getMyPosts: async ({ userId }) => {},
+    // 내가 참여한 게시글 불러오기
+    getMyParticipants: async ({ userId }) => {},
     // 유저 정보 수정
     updateUser: async ({ userId, updateUserInfo }) => {
         let transaction;
