@@ -3,37 +3,40 @@ import { userController } from '../controllers/userController.js';
 import { loginValidate, loginValidationRules } from '../middlewares/loginValidate.js';
 import { loginRequired } from '../middlewares/loginRequired.js';
 import { RegisterValidationRules, registerValidate } from '../middlewares/registerValidate.js';
+import { upload } from '../utils/upload.js';
 
 const userRouter = Router();
 
 // 회원가입
-userRouter.post('/register', RegisterValidationRules, registerValidate, userController.register);
+userRouter.post('/register', RegisterValidationRules, registerValidate, upload.single('image'), userController.register);
 
 // 로그인
 userRouter.post('/login', loginValidationRules, loginValidate, userController.login);
 
+userRouter.use(loginRequired);
+
 // 로그인 검증
-userRouter.get('/isLogin', loginRequired, userController.isLogin);
+userRouter.get('/isLogin', userController.isLogin);
 
 // 현재 로그인한 유저 정보 불러오기
-userRouter.get('/mypage', loginRequired, userController.getCurrentUserInfo);
+userRouter.get('/mypage', userController.getCurrentUserInfo);
 
 // 현재 로그인한 유저가 작성한 게시글 모두 불러오기
-userRouter.get('/mypage/posts', loginRequired, userController.getCurrentUserPosts);
+userRouter.get('/mypage/posts', userController.getCurrentUserPosts);
 
 // 현재 로그인한 유저의 참여한 게시글 모두 불러오기
-userRouter.get('/mypage/participants', loginRequired, userController.getCurrentUserParticipants);
+userRouter.get('/mypage/participants', userController.getCurrentUserParticipants);
 
 // 오늘의 낙낙(네트워크)페이지 - 랜덤으로 6명 유저 정보 불러오기
-userRouter.get('/network', loginRequired, userController.getRandomUsersInfo);
+userRouter.get('/network', userController.getRandomUsersInfo);
 
 // 유저 정보 불러오기
-userRouter.get('/:userId', loginRequired, userController.getUserInfo);
+userRouter.get('/:userId', userController.getUserInfo);
 
 // 유저 정보 수정하기(별명, 설명)
-userRouter.put('/mypage/update', loginRequired, userController.update);
+userRouter.put('/mypage/update', upload.single('image'), userController.update);
 
 // 유저 정보 삭제하기
-userRouter.delete('/mypage/delete', loginRequired, userController.delete);
+userRouter.delete('/mypage/delete', userController.delete);
 
 export { userRouter };
