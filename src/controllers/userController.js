@@ -75,6 +75,25 @@ const userController = {
             next(error);
         }
     },
+    getCurrentUserPosts: async (req, res, next) => {
+        try {
+            const userId = req.currentUserId;
+            const posts = await userService.getMyPosts({ userId });
+        } catch (error) {
+            next(error);
+        }
+        statusCode.setResponseCode200(res);
+    },
+    getCurrentUserParticipants: async (req, res, next) => {
+        try {
+            const userId = req.currentUserId;
+            const participants = await userService.getMyParticipants({ userId });
+
+            statusCode.setResponseCode200(res);
+        } catch (error) {
+            next(error);
+        }
+    },
     update: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
