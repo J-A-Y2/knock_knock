@@ -1,71 +1,33 @@
-import { Router } from "express";
+import { Router } from 'express';
+import { userController } from '../controllers/userController.js';
+import { loginValidate, loginValidationRules } from '../middlewares/loginValidate.js';
+import { loginRequired } from '../middlewares/loginRequired.js';
+import { RegisterValidationRules, registerValidate } from '../middlewares/registerValidate.js';
 
 const userRouter = Router();
 
-/**
- * @swagger
- *  /register:
- *    post:
- *      tags:
- *      - user
- *      description: 회원가입 하기
- *      produces:
- *      - application/json
- *      parameters:
- *        - in: query
- *          name: category
- *          required: false
- *          schema:
- *            type: integer
- *            description: 카테고리
- *      responses:
- *       200:
- *        description: 유저 회원가입 성공
- */
 // 회원가입
-userRouter.post(
-  "/register",
-  RegisterValidationRules,
-  register_validate,
-  userAuthController.register
-);
+userRouter.post('/register', RegisterValidationRules, registerValidate, userController.register);
 
 // 로그인
-userRouter.post("/login", loginVas, login_validate, userAuthController.login);
-lidationRule;
+userRouter.post('/login', loginValidationRules, loginValidate, userController.login);
+
 // 로그인 검증
-userRouter.get("/isLogin", login_required, userAuthController.isLogin);
+userRouter.get('/isLogin', loginRequired, userController.isLogin);
 
-// 유저 실적 보여주기
-userRouter.get("/point", login_required, userAuthController.getPoint);
+// 현재 로그인된 유저 정보 불러오기
+userRouter.get('/mypage', loginRequired, userController.getCurrentUserInfo);
 
-//전체 유저 수 불러오기
-userRouter.get("/userCount", login_required, userAuthController.getCount);
+// 오늘의 낙낙(네트워크)페이지 - 랜덤으로 6명 유저 정보 불러오기
+userRouter.get('/network', loginRequired, userController.getRandomUsersInfo);
 
 // 유저 정보 불러오기
-userRouter.get(
-  "/:userId",
-  login_required,
-  userParams_validate,
-  userAuthController.getInfo
-);
+userRouter.get('/:userId', loginRequired, userController.getUserInfo);
 
 // 유저 정보 수정하기(별명, 설명)
-userRouter.put(
-  "/:userId",
-  login_required,
-  upload.single("image"),
-  SetUserValidationRules,
-  setUser_validate,
-  userAuthController.setInfo
-);
+userRouter.put('/mypage/update', loginRequired, userController.update);
 
 // 유저 정보 삭제하기
-userRouter.delete(
-  "/:userId",
-  login_required,
-  userParams_validate,
-  userAuthController.delInfo
-);
+userRouter.delete('/mypage/delete', loginRequired, userController.delete);
 
 export { userRouter };
