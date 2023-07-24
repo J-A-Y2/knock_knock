@@ -7,7 +7,7 @@ const BalanceGameResult = (sequelize, DataTypes) => {
                 autoIncrement: true,
                 primaryKey: true,
             },
-            result: {
+            answer: {
                 type: DataTypes.ENUM('left', 'right'),
                 allowNull: true,
             },
