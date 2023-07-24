@@ -96,19 +96,19 @@ const UserModel = {
         return randomUsers;
     },
     findMyPosts: async userId => {
-        await db.User.findAll({
+        console.log('유저 모델의 userId', userId);
+        return await db.Post.findAll({
             where: {
                 user_id: userId,
             },
-            include: [{ model: db.Post, attributes: [] }],
         });
     },
     findMyParticipants: async userId => {
-        await db.User.findAll({
+        console.log('유저 모델의 userId', userId);
+        return await db.Participant.findAll({
             where: {
                 user_id: userId,
             },
-            include: [{ model: db.Participant, attributes: [] }],
         });
     },
     // 유저 정보 업데이트
