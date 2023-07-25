@@ -43,13 +43,14 @@ function errorMiddleware(error, req, res, next) {
     console.log('\x1b[33m%s\x1b[0m', error);
 
     let message = 'Internal Server Error';
-    if (error instanceof BadRequestError) {
+    if (
+        error instanceof BadRequestError ||
+        error instanceof UnauthorizedError ||
+        error instanceof NotFoundError ||
+        error instanceof ConflictError
+    ) {
         message = error.message;
-    } else if (error instanceof UnauthorizedError) {
-        message = error.message;
-    } else if (error instanceof NotFoundError) {
-        message = error.message;
-    } else if (error instanceof ConflictError) {
+    } else {
         message = error.message;
     }
 
