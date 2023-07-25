@@ -727,7 +727,7 @@ paths:
             description: 모임 신청하기. Flag가 true면 신청된 상태, false면 신청 취소 떠야 함
 
             parameters:
-                - name: postid
+                - name: postId
                   in: path
                   description: 게시글 고유 아이디
                   required: true
@@ -771,10 +771,16 @@ paths:
             description: 신청자 조회하기
 
             parameters:
-                - name: postid
+                - name: postId
                   in: path
                   description: 게시글 고유 아이디
                   required: true
+                - name: cursor
+                  in: query
+                  description: 커서. 처음에는 0, 페이지 내 마지막 id
+                - name: limit
+                  in: query
+                  description: 한 페이지 내 띄울 아이템 수
 
             responses:
                 '200':
@@ -796,6 +802,8 @@ paths:
                                         items:
                                             type: object
                                             properties:
+                                                participationId:
+                                                    type: integer
                                                 status:
                                                     type: string
                                                 nickname:
@@ -813,6 +821,8 @@ paths:
                                                     items:
                                                         type: string
                                                         description: 성격
+                                                matchingCount:
+                                                    type: integer
 
                 '400':
                     description: Invalid ID supplied
