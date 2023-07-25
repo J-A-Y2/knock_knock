@@ -22,12 +22,6 @@ const RegisterValidationRules = [
         .matches(/^\d{4}-\d{2}-\d{2}$/)
         .withMessage('올바른 생년월일 형식(YYYY-MM-DD)을 입력하세요.'),
     body('job').notEmpty().withMessage('직업을 입력하세요.'),
-    body('mbti')
-        .optional()
-        .notEmpty()
-        .withMessage('mbti를 입력하세요.')
-        .isLength({ max: 4 })
-        .withMessage('4글자로 입력해주세요. ex) INFP'),
     body('religion').optional().notEmpty().withMessage('종교를 입력하세요.'),
     body('height').optional().notEmpty().withMessage('키를 입력하세요.'),
     body('hobby').optional().notEmpty().withMessage('취미 태그를 선택해주세요'),
@@ -44,7 +38,7 @@ const RegisterValidationRules = [
 
 const registerValidate = (req, res, next) => {
     const errors = validationResult(req).errors;
-
+    console.log('registerValidate에 있는 콘솔', req.file);
     if (errors.length > 0) {
         throw new BadRequestError(errors[0].msg);
     }

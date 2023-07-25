@@ -23,7 +23,6 @@ const UserModel = {
                     },
                 ],
             });
-
             const userAndTagIds = userAndTags.map(userAndTag => userAndTag.user_and_tag_id);
 
             // UserAndTag 행들 삭제
@@ -37,6 +36,19 @@ const UserModel = {
         } catch (error) {
             console.error(error);
         }
+    },
+    createImageURL: async (ImageURL, userId, imageCategoryId) => {
+        return await db.Image.create({
+            image_url: ImageURL,
+            user_id: userId,
+            image_category_id: imageCategoryId,
+        });
+    },
+    findImage: async (userId, imageCategoryId) => {
+        return await db.Image.findOne({
+            user_id: userId,
+            image_category_id: imageCategoryId,
+        });
     },
     findTagId: async (tagname, tagCategoryId) => {
         const tagId = await db.Tag.findOne({
@@ -102,6 +114,21 @@ const UserModel = {
 
         return randomUsers;
     },
+    findMyPosts: async userId => {
+        return await db.Post.findAll({
+            where: {
+                user_id: userId,
+            },
+        });
+    },
+    findMyParticipants: async userId => {
+        return await db.Participant.findAll({
+            where: {
+                user_id: userId,
+            },
+        });
+    },
+    // 유저 정보 업데이트
     update: async ({ userId, updateData }) => {
         try {
             const updatedUser = await db.User.update(updateData, {
@@ -116,6 +143,7 @@ const UserModel = {
             console.error(error);
         }
     },
+    // 유저 정보 삭제
     delete: async ({ userId }) => {
         const deleteUser = await db.User.update(
             {
@@ -130,15 +158,6 @@ const UserModel = {
             },
         );
         return deleteUser;
-    },
-    destroy: async () => {
-        const destroyTags = await db.UserAndTag.destroy({
-            where: {
-                user_id: userId,
-                tag_id: newTags.map(tag => tag.tag_id),
-                tag_type: tagType,
-            },
-        });
     },
 };
 

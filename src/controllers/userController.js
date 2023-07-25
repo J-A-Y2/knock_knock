@@ -3,9 +3,10 @@ import { statusCode } from '../utils/statusCode.js';
 
 const userController = {
     register: async (req, res, next) => {
+        console.log('userController에 있는 register의 req.file: ', req.file);
         try {
             const newUser = req.body;
-
+            console.log('userController newUser: ', newUser);
             const createUser = await userService.createUser({ newUser });
             statusCode.setResponseCode201(res);
             return res.send(createUser.message);
@@ -13,7 +14,6 @@ const userController = {
             next(error);
         }
     },
-
     login: async (req, res, next) => {
         try {
             const { email, password } = req.body;
@@ -71,6 +71,48 @@ const userController = {
 
             statusCode.setResponseCode200(res);
             return res.send(user);
+        } catch (error) {
+            next(error);
+        }
+    },
+    getCurrentUserPosts: async (req, res, next) => {
+        try {
+            const userId = req.currentUserId;
+            const posts = await userService.getMyPosts({ userId });
+
+            statusCode.setResponseCode200(res);
+            return res.send(posts);
+        } catch (error) {
+            next(error);
+        }
+    },
+    getCurrentUserParticipants: async (req, res, next) => {
+        try {
+            const userId = req.currentUserId;
+            const participants = await userService.getMyParticipants({ userId });
+
+            statusCode.setResponseCode200(res);
+            return res.send(participants);
+        } catch (error) {
+            next(error);
+        }
+    },
+    imagePost: async (req, res, next) => {
+        console.log('유저 컨트롤러의 req.file', req.file);
+        console.log('유저 컨트롤러의 req.body', req.body);
+        try {
+            const userId = req.currentUserId;
+
+            if (!req.file) {
+                console.log('No file received');
+                return res.status(400).send('No file received');
+            }
+
+            const imageURL = req.file.location;
+            const image = await userService.imageSave(userId, imageURL);
+
+            statusCode.setResponseCode201(res);
+            return res.send(image);
         } catch (error) {
             next(error);
         }

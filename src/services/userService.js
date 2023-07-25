@@ -9,7 +9,7 @@ import {
 } from '../middlewares/errorMiddleware.js';
 import { UserModel } from '../db/models/UserModel.js';
 import { db } from '../db/index.js';
-
+import { calculateKoreanAge } from '../utils/calculateKoreanAge.js';
 const userService = {
     // 유저 생성
     createUser: async ({ newUser }) => {
@@ -29,18 +29,15 @@ const userService = {
             const hashedPassword = await bcrypt.hash(userInfo.user_password, parseInt(process.env.PW_HASH_COUNT));
             userInfo.user_password = hashedPassword;
 
-            // birthday를 나이로 계산해서 데이터베이스에 넣기
-            const today = new Date();
-            const birthDate = new Date(userInfo.birthday);
-            let age = today.getFullYear() - birthDate.getFullYear() + 1;
-            const monthDiff = today.getMonth() - birthDate.getMonth();
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-                age -= 1;
-            }
-            // userInfo객체에 age값을 추가하기
-            userInfo.age = age;
+            userInfo.age = calculateKoreanAge(userInfo.birthday); // birthday로 한국 나이 계산하기
 
             const createdUser = await UserModel.create(userInfo);
+            console.log('유저 서비스 userInfo.profile_image: ', userInfo.profile_image);
+
+            // 유저의 프로필 이미지를 이미지 테이블에 저장
+            if (userInfo.profile_image) {
+                await UserModel.createProfileImage(userInfo.profile_image, createdUser.user_id, transaction);
+            }
 
             const TagsCreate = async (tag, tagCategoryId) => {
                 // 태그 생성
@@ -152,6 +149,30 @@ const userService = {
             throw error;
         }
     },
+    // imageURL 저장하기
+    imageSave: async (userId, imageURL) => {
+        try {
+            const user = await UserModel.findById(userId);
+
+            if (!user) {
+                throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
+            }
+
+            await UserModel.createImageURL(imageURL, userId, 1);
+            const image = UserModel.findImage(userId, imageCategoryId);
+
+            return {
+                message: '이미지 저장에 성공했습니다.',
+                image,
+            };
+        } catch (error) {
+            if (error instanceof ConflictError) {
+                throw error;
+            } else {
+                throw new BadRequestError('이미지 저장에 실패했습니다.');
+            }
+        }
+    },
     // 유저 정보 조회
     getUserById: async ({ userId }) => {
         try {
@@ -231,6 +252,48 @@ const userService = {
             };
         } catch (error) {
             throw new BadRequestError('랜덤으로 유저들을 조회하는 데 실패했습니다.');
+        }
+    },
+    // 내가 작성한 게시글 불러오기
+    getMyPosts: async ({ userId }) => {
+        try {
+            const posts = await UserModel.findMyPosts(userId);
+
+            if (!posts) {
+                throw new NotFoundError('내가 작성한 게시글을 찾을 수 없습니다.');
+            }
+
+            return {
+                message: '내가 작성한 게시글 조회 성공!',
+                posts,
+            };
+        } catch (error) {
+            if (error instanceof NotFoundError) {
+                throw error;
+            } else {
+                throw new InternalServerError('내가 작성한 게시글을 불러오기 실패했습니다.');
+            }
+        }
+    },
+    // 내가 참여한 게시글 불러오기
+    getMyParticipants: async ({ userId }) => {
+        try {
+            const participants = await UserModel.findMyParticipants(userId);
+
+            if (!participants) {
+                throw new NotFoundError('내가 참여한 게시글을 찾을 수 없습니다.');
+            }
+
+            return {
+                message: '내가 참여한 게시글 조회 성공!',
+                participants,
+            };
+        } catch (error) {
+            if (error instanceof NotFoundError) {
+                throw error;
+            } else {
+                throw new InternalServerError('내가 참여한 게시글을 불러오기 실패했습니다.');
+            }
         }
     },
     // 유저 정보 수정
