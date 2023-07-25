@@ -34,8 +34,11 @@ const participantService = {
                 await ParticipantModel.update({ participantId: participant_id, updateField: 'canceled', newValue: 0 });
                 participationFlag = canceled;
             } else {
+                await ParticipantModel.participatePost({ userId, postId });
+
                 participationFlag = 'true';
             }
+            console.log('b', participationFlag);
             return { message: '모임 참가 신청에 성공했습니다.', participationFlag };
         } catch (error) {
             if (error instanceof NotFoundError || error instanceof ConflictError) {
