@@ -109,11 +109,7 @@ const postService = {
             if (transaction) {
                 await transaction.rollback();
             }
-            if (error instanceof UnauthorizedError) {
-                throw error;
-            } else if (error instanceof NotFoundError) {
-                throw error;
-            } else if (error instanceof BadRequestError) {
+            if (error instanceof UnauthorizedError || error instanceof NotFoundError || error instanceof BadRequestError) {
                 throw error;
             } else {
                 throw new InternalServerError('게시글 수정을 실패했습니다.');
@@ -134,9 +130,7 @@ const postService = {
             await PostModel.delete(postId);
             return { message: '게시글 삭제를 성공했습니다.' };
         } catch (error) {
-            if (error instanceof UnauthorizedError) {
-                throw error;
-            } else if (error instanceof NotFoundError) {
+            if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
                 throw error;
             } else {
                 throw new InternalServerError('게시글 삭제를 실패했습니다.');

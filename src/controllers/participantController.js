@@ -6,10 +6,10 @@ const participantController = {
             const userId = req.currentUserId;
             const postId = req.params.postId;
 
-            const participant = await participantService.participatePost({ userId, postId });
+            const { message, participationFlag } = await participantService.participatePost({ userId, postId });
 
             statusCode.setResponseCode201(res);
-            res.send(participant.message);
+            res.send({ message, participationFlag });
         } catch (error) {
             next(error);
         }
@@ -19,10 +19,10 @@ const participantController = {
             const userId = req.currentUserId;
             const postId = req.params.postId;
 
-            const participant = await participantService.participateCancel({ userId, postId });
+            const { message, canceled } = await participantService.participateCancel({ userId, postId });
 
             statusCode.setResponseCode201(res);
-            res.send(participant.message);
+            res.send({ message, participationFlag: canceled });
         } catch (error) {
             next(error);
         }
@@ -32,10 +32,17 @@ const participantController = {
             const userId = req.currentUserId;
             const postId = req.params.postId;
 
-            const participants = await participantService.getParticipants({ userId, postId });
+            const { participantsList, message, isFulled } = await participantService.getParticipants({
+                userId,
+                postId,
+            });
 
             statusCode.setResponseCode200(res);
-            res.send({ message: participants.message, total: participants.total, participantsList: participants });
+            res.send({
+                message,
+                isFulled,
+                participantsList,
+            });
         } catch (error) {
             next(error);
         }
@@ -43,8 +50,9 @@ const participantController = {
     allow: async (req, res, next) => {
         try {
             const participantId = req.params.participantId;
+            const userId = req.currentUserId;
 
-            const participant = await participantService.allow(participantId);
+            const participant = await participantService.allow({ participantId, userId });
 
             statusCode.setResponseCode200(res);
             res.send({
@@ -61,7 +69,8 @@ const participantController = {
     deny: async (req, res, next) => {
         try {
             const participantId = req.params.participantId;
-            const participant = await participantService.deny(participantId);
+            const userId = req.currentUserId;
+            const participant = await participantService.deny({ participantId, userId });
 
             statusCode.setResponseCode200(res);
             res.send({ message: participant.message });
