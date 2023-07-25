@@ -159,8 +159,8 @@ const userService = {
             }
 
             await UserModel.createImageURL(imageURL, userId, 1);
-            const image = UserModel.findImage(userId, imageCategoryId);
-
+            const image = UserModel.findImage(userId, 1);
+            console.log('프로필 이미지 image', image);
             return {
                 message: '이미지 저장에 성공했습니다.',
                 image,

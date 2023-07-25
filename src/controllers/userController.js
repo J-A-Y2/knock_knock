@@ -102,11 +102,11 @@ const userController = {
             const userId = req.currentUserId;
 
             if (!req.file) {
-                console.log('No file received');
-                return res.status(400).send('No file received');
+                return res.status(400).send('이미지 파일을 받지 못했습니다.');
             }
 
             const imageURL = req.file.location;
+            console.log('유저 컨트롤러의 imageURL', imageURL);
             const image = await userService.imageSave(userId, imageURL);
 
             statusCode.setResponseCode201(res);

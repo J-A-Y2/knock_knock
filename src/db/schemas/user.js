@@ -44,10 +44,6 @@ const User = (sequelize, DataTypes) => {
                 type: DataTypes.STRING(20),
                 allowNull: false,
             },
-            profile_image: {
-                type: DataTypes.STRING,
-                allowNull: true,
-            },
             mbti: {
                 type: DataTypes.STRING(4),
                 allowNull: true,
