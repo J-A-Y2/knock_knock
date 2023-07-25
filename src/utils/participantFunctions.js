@@ -43,4 +43,40 @@ const updateRecruitedValue = async (gender, total_m, total_f, recruited_f, recru
     return { fieldToUpdate, newValue };
 };
 
-export { checkParticipation, updateRecruitedValue };
+const getHobbyAndIdeal = async user => {
+    let hobby = [];
+    let ideal = [];
+
+    for (const userAndTag of user.UserAndTags) {
+        if (userAndTag.Tag.tag_category_id === 1) {
+            hobby.push(userAndTag.Tag.tagname);
+        } else if (userAndTag.Tag.tag_category_id === 3) {
+            ideal.push(userAndTag.Tag.tagname);
+        }
+    }
+
+    return { hobby, ideal };
+};
+
+const getParticipantsList = async (participants, ideal) => {
+    const participantsList = participants.map(participant => {
+        const personality = participant.User.UserAndTags.map(userAndTag => userAndTag.Tag.tagname);
+
+        // ideal 배열과 personality 배열에서 일치하는 항목 개수 세기
+        const matchingCount = ideal.filter(tag => personality.includes(tag)).length;
+
+        return {
+            userId: participant.User.user_id,
+            status: participant.status,
+            nickname: participant.User.nickname,
+            gender: participant.User.gender,
+            age: participant.User.age,
+            job: participant.User.job,
+            profile_image: participant.User.profile_image,
+            personality,
+            matchingCount,
+        };
+    });
+    return participantsList;
+};
+export { checkParticipation, updateRecruitedValue, getHobbyAndIdeal, getParticipantsList };

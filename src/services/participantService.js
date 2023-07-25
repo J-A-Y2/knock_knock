@@ -4,7 +4,12 @@ import { ConflictError, InternalServerError, NotFoundError, UnauthorizedError } 
 import { db } from '../db/index.js';
 import { UserModel } from '../db/models/UserModel.js';
 import { throwNotFoundError } from '../utils/commonFunctions.js';
-import { checkParticipation, updateRecruitedValue } from '../utils/participantFunctions.js';
+import {
+    checkParticipation,
+    getHobbyAndIdeal,
+    updateRecruitedValue,
+    getParticipantsList,
+} from '../utils/participantFunctions.js';
 
 const participantService = {
     participatePost: async ({ userId, postId }) => {
@@ -15,7 +20,7 @@ const participantService = {
             if (post.user_id === userId) {
                 throw new ConflictError('게시글의 작성자는 참가 신청을 할 수 없습니다.');
             }
-
+            let participationFlag;
             const participation = await ParticipantModel.getParticipationByUserId({ userId, postId });
             if (participation) {
                 const { participant_id, canceled, status } = participation;
@@ -26,13 +31,12 @@ const participantService = {
                 if (status !== 'pending') {
                     throw new ConflictError('이미 수락되거나 거절된 모임입니다.');
                 }
-
                 await ParticipantModel.update({ participantId: participant_id, updateField: 'canceled', newValue: 0 });
+                participationFlag = canceled;
             } else {
-                await ParticipantModel.participatePost({ userId, postId });
+                participationFlag = 'true';
             }
-
-            return { message: '모임 참가 신청에 성공했습니다.' };
+            return { message: '모임 참가 신청에 성공했습니다.', participationFlag };
         } catch (error) {
             if (error instanceof NotFoundError || error instanceof ConflictError) {
                 throw error;
@@ -58,7 +62,7 @@ const participantService = {
 
             await ParticipantModel.update({ participantId: participant_id, updateField: 'canceled', newValue: 1 });
 
-            return { message: '신청 취소를 성공했습니다.' };
+            return { message: '신청 취소를 성공했습니다.', canceled };
         } catch (error) {
             if (error instanceof NotFoundError || error instanceof ConflictError) {
                 throw error;
@@ -79,31 +83,14 @@ const participantService = {
             }
 
             const participants = await ParticipantModel.getParticipants(postId);
-            let hobby = [];
-            let ideal = [];
-            for (const userAndTag of user.UserAndTags) {
-                if (userAndTag.Tag.tag_category_id === 3) {
-                    ideal.push(userAndTag.Tag.tagname);
-                } else if (userAndTag.Tag.tag_category_id === 1) {
-                    hobby.push(userAndTag.Tag.tagname);
-                }
-            }
 
-            const participantsList = participants.map(participant => {
-                const personality = participant.User.UserAndTags.map(userAndTag => userAndTag.Tag.tagname);
-                return {
-                    userId: participant.User.user_id,
-                    status: participant.status,
-                    nickname: participant.User.nickname,
-                    gender: participant.User.gender,
-                    age: participant.User.age,
-                    job: participant.User.job,
-                    profile_image: participant.User.profile_image,
-                    personality,
-                };
-            });
+            const { hobby, ideal } = await getHobbyAndIdeal(user);
 
-            return { message: '참가자 리스트 조회를 성공했습니다.', isFulled: post.is_completed, participantsList };
+            const participantsList = await getParticipantsList(participants, ideal);
+
+            // matchingCount를 기준으로 오름차순으로 정렬
+            participantsList.sort((a, b) => b.matchingCount - a.matchingCount);
+            return { message: '참가자 리스트 조회를 성공했습니다.', ideal, isFulled: post.is_completed, participantsList };
         } catch (error) {
             if (error instanceof NotFoundError || error instanceof ConflictError) {
                 throw error;
