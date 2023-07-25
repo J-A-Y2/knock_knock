@@ -14,11 +14,17 @@ const upload = multer({
         s3: s3,
         bucket: process.env.AWS_BUCKET_NAME,
         acl: 'public-read',
-        key: (req, file, cb) => {
+        metadata: function (req, file, cb) {
+            console.log('upload의 file: ', file);
+            cb(null, { fieldName: file.fieldname });
+        },
+        key: function (req, file, cb) {
+            console.log('This function is getting called');
+            console.log('upload.js의 file', file);
+            console;
             const date = new Date().toISOString().replace(/:/g, '-');
             const fileExtension = file.originalname.split('.').pop();
             const filename = `image-${date}.${fileExtension}`;
-            console.log('upload.js에 있는 filename: ', filename);
             cb(null, filename);
         },
     }),

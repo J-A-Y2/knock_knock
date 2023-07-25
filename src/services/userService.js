@@ -74,19 +74,6 @@ const userService = {
             }
         }
     },
-    // imageURL 저장하기
-    imageSave: async (userId, imageURL) => {
-        try {
-            const user = await UserModel.findById(userId);
-            await UserModel.createImageURL(imageURL, userId, imageCategoryId);
-        } catch (error) {
-            if (error instanceof ConflictError) {
-                throw error;
-            } else {
-                throw new BadRequestError('회원가입에 실패했습니다.');
-            }
-        }
-    },
     //유저 로그인
     getUser: async ({ email, password }) => {
         let transaction;
@@ -160,6 +147,30 @@ const userService = {
                 await transaction.rollback();
             }
             throw error;
+        }
+    },
+    // imageURL 저장하기
+    imageSave: async (userId, imageURL) => {
+        try {
+            const user = await UserModel.findById(userId);
+
+            if (!user) {
+                throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
+            }
+
+            await UserModel.createImageURL(imageURL, userId, 1);
+            const image = UserModel.findImage(userId, imageCategoryId);
+
+            return {
+                message: '이미지 저장에 성공했습니다.',
+                image,
+            };
+        } catch (error) {
+            if (error instanceof ConflictError) {
+                throw error;
+            } else {
+                throw new BadRequestError('이미지 저장에 실패했습니다.');
+            }
         }
     },
     // 유저 정보 조회

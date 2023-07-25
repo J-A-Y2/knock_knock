@@ -24,7 +24,7 @@ __metadata:
     express-validator: ^7.0.1
     jsonwebtoken: ^9.0.1
     multer: ^1.4.5-lts.1
-    multer-s3: ^3.0.1
+    multer-s3: 2.10.0
     mysql2: ^3.5.1
     nodemon: ^3.0.1
     passport: ^0.6.0
@@ -469,23 +469,6 @@ __metadata:
     "@smithy/hash-stream-node": ^1.0.1
     tslib: ^2.5.0
   checksum: ffbdb1abdcbd06b1290e8d056321ee586310fc8ce4a822d9fe5f9f5445c4adf2da64f88d335a58e0959952e7301f3ff235ee353ceb4e4cb2a5b2905a220ffb70
-  languageName: node
-  linkType: hard
-
-"@aws-sdk/lib-storage@npm:^3.46.0":
-  version: 3.374.0
-  resolution: "@aws-sdk/lib-storage@npm:3.374.0"
-  dependencies:
-    "@smithy/abort-controller": ^1.0.1
-    "@smithy/middleware-endpoint": ^1.0.2
-    "@smithy/smithy-client": ^1.0.3
-    buffer: 5.6.0
-    events: 3.3.0
-    stream-browserify: 3.0.0
-    tslib: ^2.5.0
-  peerDependencies:
-    "@aws-sdk/client-s3": ^3.0.0
-  checksum: 5d3a414ea7f901bc9392e13134862c1fad0dbaa6371f851e34a0a947fc840a1c47b8e2f54336a07d3d31178472e453e4fdf525c565902e2161730e9855aab0cd
   languageName: node
   linkType: hard
 
@@ -2274,7 +2257,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smithy/abort-controller@npm:^1.0.1, @smithy/abort-controller@npm:^1.0.2":
+"@smithy/abort-controller@npm:^1.0.2":
   version: 1.0.2
   resolution: "@smithy/abort-controller@npm:1.0.2"
   dependencies:
@@ -3208,16 +3191,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"buffer@npm:5.6.0":
-  version: 5.6.0
-  resolution: "buffer@npm:5.6.0"
-  dependencies:
-    base64-js: ^1.0.2
-    ieee754: ^1.1.4
-  checksum: d659494c5032dd39d03d2912e64179cc44c6340e7e9d1f68d3840e7ab4559989fbce92b4950174593c38d05268224235ba404f0878775cab2a616b6dcad9c23e
-  languageName: node
-  linkType: hard
-
 "busboy@npm:^1.0.0":
   version: 1.6.0
   resolution: "busboy@npm:1.6.0"
@@ -3914,13 +3887,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"events@npm:3.3.0":
-  version: 3.3.0
-  resolution: "events@npm:3.3.0"
-  checksum: f6f487ad2198aa41d878fa31452f1a3c00958f46e9019286ff4787c84aac329332ab45c9cdc8c445928fc6d7ded294b9e005a7fce9426488518017831b272780
-  languageName: node
-  linkType: hard
-
 "exponential-backoff@npm:^3.1.1":
   version: 3.1.1
   resolution: "exponential-backoff@npm:3.1.1"
@@ -4543,7 +4509,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"inherits@npm:2, inherits@npm:2.0.4, inherits@npm:^2.0.3, inherits@npm:~2.0.3, inherits@npm:~2.0.4":
+"inherits@npm:2, inherits@npm:2.0.4, inherits@npm:^2.0.3, inherits@npm:~2.0.3":
   version: 2.0.4
   resolution: "inherits@npm:2.0.4"
   checksum: 4a48a733847879d6cf6691860a6b1e3f0f4754176e4d71494c41f3475553768b10f84b5ce1d40fbd0e34e6bfbb864ee35858ad4dd2cf31e02fc4a154b724d7f1
@@ -5360,17 +5326,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"multer-s3@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "multer-s3@npm:3.0.1"
+"multer-s3@npm:2.10.0":
+  version: 2.10.0
+  resolution: "multer-s3@npm:2.10.0"
   dependencies:
-    "@aws-sdk/lib-storage": ^3.46.0
     file-type: ^3.3.0
     html-comment-regex: ^1.1.2
     run-parallel: ^1.1.6
-  peerDependencies:
-    "@aws-sdk/client-s3": ^3.0.0
-  checksum: 376b832c9f124db80051de5b4d637120d49f569614a5da6333c5903e3c6299e6210bc4e140485b4c6becb884792cc0b1f29da0d06731116b1518b46c4a89cdf6
+  checksum: 7de3089216288ae23a02b685149f11e119e184b9db66180c6a1a6c530f8d8a5b6a044cb19e4a05b407e04b9c16bbcd2aa76766dde961253b4ff59bffd3a84dd6
   languageName: node
   linkType: hard
 
@@ -5930,7 +5893,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:^3.5.0, readable-stream@npm:^3.6.0":
+"readable-stream@npm:^3.6.0":
   version: 3.6.2
   resolution: "readable-stream@npm:3.6.2"
   dependencies:
@@ -6455,16 +6418,6 @@ __metadata:
   version: 2.0.1
   resolution: "statuses@npm:2.0.1"
   checksum: 18c7623fdb8f646fb213ca4051be4df7efb3484d4ab662937ca6fbef7ced9b9e12842709872eb3020cc3504b93bde88935c9f6417489627a7786f24f8031cbcb
-  languageName: node
-  linkType: hard
-
-"stream-browserify@npm:3.0.0":
-  version: 3.0.0
-  resolution: "stream-browserify@npm:3.0.0"
-  dependencies:
-    inherits: ~2.0.4
-    readable-stream: ^3.5.0
-  checksum: 4c47ef64d6f03815a9ca3874e2319805e8e8a85f3550776c47ce523b6f4c6cd57f40e46ec6a9ab8ad260fde61863c2718f250d3bedb3fe9052444eb9abfd9921
   languageName: node
   linkType: hard
 

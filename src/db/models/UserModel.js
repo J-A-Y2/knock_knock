@@ -4,13 +4,6 @@ const UserModel = {
     create: async newUser => {
         return await db.User.create(newUser);
     },
-    createImageURL: async (ImageURL, userId, imageCategoryId) => {
-        return await db.Image.create({
-            image_url: ImageURL,
-            user_id: userId,
-            image_category_id: imageCategoryId,
-        });
-    },
     bulkCreateTags: async ({ newTags, transaction }) => {
         return await db.UserAndTag.bulkCreate(newTags, { transaction });
     },
@@ -43,6 +36,19 @@ const UserModel = {
         } catch (error) {
             console.error(error);
         }
+    },
+    createImageURL: async (ImageURL, userId, imageCategoryId) => {
+        return await db.Image.create({
+            image_url: ImageURL,
+            user_id: userId,
+            image_category_id: imageCategoryId,
+        });
+    },
+    findImage: async (userId, imageCategoryId) => {
+        return await db.Image.findOne({
+            user_id: userId,
+            image_category_id: imageCategoryId,
+        });
     },
     findTagId: async (tagname, tagCategoryId) => {
         const tagId = await db.Tag.findOne({

@@ -43,7 +43,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["express-validator", "npm:7.0.1"],\
             ["jsonwebtoken", "npm:9.0.1"],\
             ["multer", "npm:1.4.5-lts.1"],\
-            ["multer-s3", "virtual:e94b6a29c80fbdd35e8b7b27d4fa86ae04a8eeab5c48711538d94b1497c1280ed77fa70fa911019c99e9c4e5bccd1706ba6fcb9daff09eaa7a6fde97ef314d58#npm:3.0.1"],\
+            ["multer-s3", "npm:2.10.0"],\
             ["mysql2", "npm:3.5.1"],\
             ["nodemon", "npm:3.0.1"],\
             ["passport", "npm:0.6.0"],\
@@ -79,7 +79,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["express-validator", "npm:7.0.1"],\
             ["jsonwebtoken", "npm:9.0.1"],\
             ["multer", "npm:1.4.5-lts.1"],\
-            ["multer-s3", "virtual:e94b6a29c80fbdd35e8b7b27d4fa86ae04a8eeab5c48711538d94b1497c1280ed77fa70fa911019c99e9c4e5bccd1706ba6fcb9daff09eaa7a6fde97ef314d58#npm:3.0.1"],\
+            ["multer-s3", "npm:2.10.0"],\
             ["mysql2", "npm:3.5.1"],\
             ["nodemon", "npm:3.0.1"],\
             ["passport", "npm:0.6.0"],\
@@ -561,35 +561,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@aws-sdk/hash-stream-node", "npm:3.374.0"],\
             ["@smithy/hash-stream-node", "npm:1.0.2"],\
             ["tslib", "npm:2.6.0"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["@aws-sdk/lib-storage", [\
-        ["npm:3.374.0", {\
-          "packageLocation": "./.yarn/cache/@aws-sdk-lib-storage-npm-3.374.0-45ac5ea53c-5d3a414ea7.zip/node_modules/@aws-sdk/lib-storage/",\
-          "packageDependencies": [\
-            ["@aws-sdk/lib-storage", "npm:3.374.0"]\
-          ],\
-          "linkType": "SOFT"\
-        }],\
-        ["virtual:abe1e20b2eac6deec6238c06edd5734e56f68a142d91d12e1fa77f9b3d049b49957f9f569513055eb2593d1d99057061ddd7fc84f7ef5bbc1d48dc0501417621#npm:3.374.0", {\
-          "packageLocation": "./.yarn/__virtual__/@aws-sdk-lib-storage-virtual-cb1b6598f0/0/cache/@aws-sdk-lib-storage-npm-3.374.0-45ac5ea53c-5d3a414ea7.zip/node_modules/@aws-sdk/lib-storage/",\
-          "packageDependencies": [\
-            ["@aws-sdk/lib-storage", "virtual:abe1e20b2eac6deec6238c06edd5734e56f68a142d91d12e1fa77f9b3d049b49957f9f569513055eb2593d1d99057061ddd7fc84f7ef5bbc1d48dc0501417621#npm:3.374.0"],\
-            ["@aws-sdk/client-s3", "npm:3.374.0"],\
-            ["@smithy/abort-controller", "npm:1.0.2"],\
-            ["@smithy/middleware-endpoint", "npm:1.0.3"],\
-            ["@smithy/smithy-client", "npm:1.0.4"],\
-            ["@types/aws-sdk__client-s3", null],\
-            ["buffer", "npm:5.6.0"],\
-            ["events", "npm:3.3.0"],\
-            ["stream-browserify", "npm:3.0.0"],\
-            ["tslib", "npm:2.6.0"]\
-          ],\
-          "packagePeers": [\
-            "@aws-sdk/client-s3",\
-            "@types/aws-sdk__client-s3"\
           ],\
           "linkType": "HARD"\
         }]\
@@ -4504,15 +4475,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["isarray", "npm:1.0.0"]\
           ],\
           "linkType": "HARD"\
-        }],\
-        ["npm:5.6.0", {\
-          "packageLocation": "./.yarn/cache/buffer-npm-5.6.0-e1494693bf-d659494c50.zip/node_modules/buffer/",\
-          "packageDependencies": [\
-            ["buffer", "npm:5.6.0"],\
-            ["base64-js", "npm:1.5.1"],\
-            ["ieee754", "npm:1.2.1"]\
-          ],\
-          "linkType": "HARD"\
         }]\
       ]],\
       ["buffer-equal-constant-time", [\
@@ -5357,13 +5319,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/events-npm-1.1.1-ca9e5d580e-40431eb005.zip/node_modules/events/",\
           "packageDependencies": [\
             ["events", "npm:1.1.1"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
-        ["npm:3.3.0", {\
-          "packageLocation": "./.yarn/cache/events-npm-3.3.0-c280bc7e48-f6f487ad21.zip/node_modules/events/",\
-          "packageDependencies": [\
-            ["events", "npm:3.3.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -6961,27 +6916,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["multer-s3", [\
-        ["npm:3.0.1", {\
-          "packageLocation": "./.yarn/cache/multer-s3-npm-3.0.1-a1f4ba20cb-376b832c9f.zip/node_modules/multer-s3/",\
+        ["npm:2.10.0", {\
+          "packageLocation": "./.yarn/cache/multer-s3-npm-2.10.0-26c56380a8-7de3089216.zip/node_modules/multer-s3/",\
           "packageDependencies": [\
-            ["multer-s3", "npm:3.0.1"]\
-          ],\
-          "linkType": "SOFT"\
-        }],\
-        ["virtual:e94b6a29c80fbdd35e8b7b27d4fa86ae04a8eeab5c48711538d94b1497c1280ed77fa70fa911019c99e9c4e5bccd1706ba6fcb9daff09eaa7a6fde97ef314d58#npm:3.0.1", {\
-          "packageLocation": "./.yarn/__virtual__/multer-s3-virtual-abe1e20b2e/0/cache/multer-s3-npm-3.0.1-a1f4ba20cb-376b832c9f.zip/node_modules/multer-s3/",\
-          "packageDependencies": [\
-            ["multer-s3", "virtual:e94b6a29c80fbdd35e8b7b27d4fa86ae04a8eeab5c48711538d94b1497c1280ed77fa70fa911019c99e9c4e5bccd1706ba6fcb9daff09eaa7a6fde97ef314d58#npm:3.0.1"],\
-            ["@aws-sdk/client-s3", "npm:3.374.0"],\
-            ["@aws-sdk/lib-storage", "virtual:abe1e20b2eac6deec6238c06edd5734e56f68a142d91d12e1fa77f9b3d049b49957f9f569513055eb2593d1d99057061ddd7fc84f7ef5bbc1d48dc0501417621#npm:3.374.0"],\
-            ["@types/aws-sdk__client-s3", null],\
+            ["multer-s3", "npm:2.10.0"],\
             ["file-type", "npm:3.9.0"],\
             ["html-comment-regex", "npm:1.1.2"],\
             ["run-parallel", "npm:1.2.0"]\
-          ],\
-          "packagePeers": [\
-            "@aws-sdk/client-s3",\
-            "@types/aws-sdk__client-s3"\
           ],\
           "linkType": "HARD"\
         }]\
@@ -8205,17 +8146,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/statuses-npm-2.0.1-81d2b97fee-18c7623fdb.zip/node_modules/statuses/",\
           "packageDependencies": [\
             ["statuses", "npm:2.0.1"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["stream-browserify", [\
-        ["npm:3.0.0", {\
-          "packageLocation": "./.yarn/cache/stream-browserify-npm-3.0.0-4c0bd97245-4c47ef64d6.zip/node_modules/stream-browserify/",\
-          "packageDependencies": [\
-            ["stream-browserify", "npm:3.0.0"],\
-            ["inherits", "npm:2.0.4"],\
-            ["readable-stream", "npm:3.6.2"]\
           ],\
           "linkType": "HARD"\
         }]\
