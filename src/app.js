@@ -10,9 +10,9 @@ import { messageRouter } from './routers/messageRotuer.js';
 import { commentRouter } from './routers/commentRouter.js';
 import { participantRouter } from './routers/participantRouter.js';
 import { errorMiddleware } from './middlewares/errorMiddleware.js';
-import multer from 'multer';
+
 const app = express();
-const upload = multer();
+
 // CORS 에러 방지
 app.use(cors());
 
