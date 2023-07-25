@@ -16,15 +16,7 @@ userRouter.post('/login', loginValidationRules, loginValidate, userController.lo
 userRouter.use(loginRequired);
 
 // 이미지 저장
-userRouter.post(
-    '/image',
-    (req, res, next) => {
-        console.log('req.body: ', req.body, 'req.file: ', req.file);
-        next();
-    },
-    upload.single('image'),
-    userController.imagePost,
-);
+userRouter.post('/image', upload.single('image'), userController.imagePost);
 
 // 로그인 검증
 userRouter.get('/isLogin', userController.isLogin);
