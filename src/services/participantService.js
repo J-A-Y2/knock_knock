@@ -78,13 +78,14 @@ const participantService = {
     getParticipants: async ({ userId, postId, cursor, limit }) => {
         try {
             const post = await PostModel.getPostById(postId);
+
             const user = await UserModel.findById(userId);
             throwNotFoundError(post, '게시글');
+            throwNotFoundError(user, '유저');
 
             if (post.user_id !== userId) {
                 throw new ConflictError('참가자 리스트 조회 권한이 없습니다.');
             }
-
             const participants = await ParticipantModel.getParticipants(postId);
 
             const { hobby, ideal } = await getHobbyAndIdeal(user);
