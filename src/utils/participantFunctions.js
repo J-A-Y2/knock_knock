@@ -66,6 +66,7 @@ const getParticipantsList = async (participants, ideal) => {
         const matchingCount = ideal.filter(tag => personality.includes(tag)).length;
 
         return {
+            participationId: participant.participant_id,
             userId: participant.User.user_id,
             status: participant.status,
             nickname: participant.User.nickname,

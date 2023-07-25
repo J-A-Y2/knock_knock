@@ -31,17 +31,23 @@ const participantController = {
         try {
             const userId = req.currentUserId;
             const postId = req.params.postId;
+            const cursor = parseInt(req.query.cursor);
+            const limit = parseInt(req.query.limit);
 
-            const { participantsList, message, isFulled } = await participantService.getParticipants({
+            const { participantsList, message, ideal, isFulled, nextCursor } = await participantService.getParticipants({
                 userId,
                 postId,
+                cursor,
+                limit,
             });
 
             statusCode.setResponseCode200(res);
             res.send({
                 message,
+                ideal,
                 isFulled,
                 participantsList,
+                nextCursor,
             });
         } catch (error) {
             next(error);

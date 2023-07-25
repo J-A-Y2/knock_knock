@@ -20,6 +20,7 @@ const participantService = {
             if (post.user_id === userId) {
                 throw new ConflictError('게시글의 작성자는 참가 신청을 할 수 없습니다.');
             }
+
             let participationFlag;
             const participation = await ParticipantModel.getParticipationByUserId({ userId, postId });
             if (participation) {
@@ -74,11 +75,10 @@ const participantService = {
             }
         }
     },
-    getParticipants: async ({ userId, postId }) => {
+    getParticipants: async ({ userId, postId, cursor, limit }) => {
         try {
             const post = await PostModel.getPostById(postId);
             const user = await UserModel.findById(userId);
-
             throwNotFoundError(post, '게시글');
 
             if (post.user_id !== userId) {
@@ -91,9 +91,32 @@ const participantService = {
 
             const participantsList = await getParticipantsList(participants, ideal);
 
-            // matchingCount를 기준으로 오름차순으로 정렬
+            // matchingCount를 기준으로 내림차순으로 정렬
             participantsList.sort((a, b) => b.matchingCount - a.matchingCount);
-            return { message: '참가자 리스트 조회를 성공했습니다.', ideal, isFulled: post.is_completed, participantsList };
+
+            // 커서를 이용하여 페이지네이션을 위한 시작 인덱스 계산
+            let startIndex = 0;
+            if (cursor) {
+                const participantIndex = participantsList.findIndex(participant => participant.participationId == cursor);
+                startIndex = participantIndex !== -1 ? participantIndex + 1 : 0;
+            }
+
+            // limit 적용
+            const paginatedList = participantsList.slice(startIndex, startIndex + limit);
+
+            // 다음 페이지를 위한 커서를 사용할 맨 마지막 id 추출
+            let nextCursor = null;
+            if (paginatedList.length > 0) {
+                nextCursor = paginatedList[paginatedList.length - 1].participationId;
+            }
+
+            return {
+                message: '참가자 리스트 조회를 성공했습니다.',
+                ideal,
+                isFulled: post.is_completed,
+                participantsList: paginatedList,
+                nextCursor,
+            };
         } catch (error) {
             if (error instanceof NotFoundError || error instanceof ConflictError) {
                 throw error;
