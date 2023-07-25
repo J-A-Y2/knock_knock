@@ -98,8 +98,6 @@ const userController = {
         }
     },
     imagePost: async (req, res, next) => {
-        console.log('유저 컨트롤러의 req.file', req.file);
-        console.log('유저 컨트롤러의 req.body', req.body);
         try {
             const userId = req.currentUserId;
 
