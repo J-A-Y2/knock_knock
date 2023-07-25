@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { imageController } from '../controllers/imageController.js';
 import { upload } from '../utils/upload.js';
 import { loginRequired } from '../middlewares/loginRequired.js';
 

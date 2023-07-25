@@ -1,13 +1,13 @@
-import { imageService } from '../services/userService.js';
 import { statusCode } from '../utils/statusCode.js';
 
 const imageController = {
     getImageUrl: async (req, res, next) => {
         try {
-            const imageURL = req.file.location;
+            console.log(req.file.location);
+            const imageUrl = req.file.location;
 
-            statusCode.setResponseCode201(res);
-            return res.send(imageURL);
+            statusCode.setResponseCode200(res);
+            return res.send(imageUrl);
         } catch (error) {
             next(error);
         }
