@@ -3,7 +3,6 @@ import { userController } from '../controllers/userController.js';
 import { loginValidate, loginValidationRules } from '../middlewares/loginValidate.js';
 import { loginRequired } from '../middlewares/loginRequired.js';
 import { RegisterValidationRules, registerValidate } from '../middlewares/registerValidate.js';
-import { upload } from '../utils/upload.js';
 
 const userRouter = Router();
 
@@ -14,9 +13,6 @@ userRouter.post('/register', RegisterValidationRules, registerValidate, userCont
 userRouter.post('/login', loginValidationRules, loginValidate, userController.login);
 
 userRouter.use(loginRequired);
-
-// 이미지 저장
-userRouter.post('/image', upload.single('image'), userController.imagePost);
 
 // 로그인 검증
 userRouter.get('/isLogin', userController.isLogin);
@@ -37,7 +33,7 @@ userRouter.get('/network', userController.getRandomUsersInfo);
 userRouter.get('/:userId', userController.getUserInfo);
 
 // 유저 정보 수정하기(별명, 설명)
-userRouter.put('/mypage/update', upload.single('image'), userController.update);
+userRouter.put('/mypage/update', userController.update);
 
 // 유저 정보 삭제하기
 userRouter.delete('/mypage/delete', userController.delete);
