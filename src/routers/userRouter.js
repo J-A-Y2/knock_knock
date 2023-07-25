@@ -8,12 +8,15 @@ import { upload } from '../utils/upload.js';
 const userRouter = Router();
 
 // 회원가입
-userRouter.post('/register', RegisterValidationRules, registerValidate, upload.single('image'), userController.register);
+userRouter.post('/register', RegisterValidationRules, registerValidate, userController.register);
 
 // 로그인
 userRouter.post('/login', loginValidationRules, loginValidate, userController.login);
 
 userRouter.use(loginRequired);
+
+// 이미지 저장
+userRouter.post('/image', upload.single('image'), userController.imagePost);
 
 // 로그인 검증
 userRouter.get('/isLogin', userController.isLogin);

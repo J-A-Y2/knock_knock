@@ -4,10 +4,11 @@ const UserModel = {
     create: async newUser => {
         return await db.User.create(newUser);
     },
-    createProfileImage: async (profileImage, userId) => {
+    createImageURL: async (ImageURL, userId, imageCategoryId) => {
         return await db.Image.create({
-            image_url: profileImage,
+            image_url: ImageURL,
             user_id: userId,
+            image_category_id: imageCategoryId,
         });
     },
     bulkCreateTags: async ({ newTags, transaction }) => {
@@ -29,7 +30,6 @@ const UserModel = {
                     },
                 ],
             });
-
             const userAndTagIds = userAndTags.map(userAndTag => userAndTag.user_and_tag_id);
 
             // UserAndTag 행들 삭제

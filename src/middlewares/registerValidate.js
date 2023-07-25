@@ -44,7 +44,7 @@ const RegisterValidationRules = [
 
 const registerValidate = (req, res, next) => {
     const errors = validationResult(req).errors;
-
+    console.log('registerValidate에 있는 콘솔', req.file);
     if (errors.length > 0) {
         throw new BadRequestError(errors[0].msg);
     }

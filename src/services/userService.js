@@ -32,10 +32,11 @@ const userService = {
             userInfo.age = calculateKoreanAge(userInfo.birthday); // birthday로 한국 나이 계산하기
 
             const createdUser = await UserModel.create(userInfo);
+            console.log('유저 서비스 userInfo.profile_image: ', userInfo.profile_image);
 
             // 유저의 프로필 이미지를 이미지 테이블에 저장
-            if (profileImage) {
-                await UserModel.createProfileImage(profileImage, createdUser.user_id, transaction);
+            if (userInfo.profile_image) {
+                await UserModel.createProfileImage(userInfo.profile_image, createdUser.user_id, transaction);
             }
 
             const TagsCreate = async (tag, tagCategoryId) => {
@@ -66,6 +67,19 @@ const userService = {
             if (transaction) {
                 await transaction.rollback();
             }
+            if (error instanceof ConflictError) {
+                throw error;
+            } else {
+                throw new BadRequestError('회원가입에 실패했습니다.');
+            }
+        }
+    },
+    // imageURL 저장하기
+    imageSave: async (userId, imageURL) => {
+        try {
+            const user = await UserModel.findById(userId);
+            await UserModel.createImageURL(imageURL, userId, imageCategoryId);
+        } catch (error) {
             if (error instanceof ConflictError) {
                 throw error;
             } else {
