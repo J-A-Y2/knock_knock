@@ -32,7 +32,6 @@ const userService = {
             userInfo.age = calculateKoreanAge(userInfo.birthday); // birthday로 한국 나이 계산하기
 
             const createdUser = await UserModel.create(userInfo);
-            console.log('유저 서비스 userInfo.profile_image: ', userInfo.profile_image);
 
             // 유저의 프로필 이미지를 이미지 테이블에 저장
             if (userInfo.profile_image) {
@@ -160,7 +159,6 @@ const userService = {
 
             await UserModel.createImageURL(imageURL, userId, 1);
             const image = UserModel.findImage(userId, 1);
-            console.log('프로필 이미지 image', image);
             return {
                 message: '이미지 저장에 성공했습니다.',
                 image,
