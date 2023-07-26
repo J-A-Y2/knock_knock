@@ -27,7 +27,6 @@ const ImageModel = {
         await db.Image.update(ImageURL, {
             where: {
                 user_id: userId,
-                post_id: image.post_id,
                 image_category_id: image.image_category_id,
             },
         });
