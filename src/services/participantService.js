@@ -75,6 +75,16 @@ const participantService = {
             }
         }
     },
+    checkParticipation: async ({ userId, postId }) => {
+        try {
+            const participation = await ParticipantModel.getParticipationByUserId({ userId, postId });
+            throwNotFoundError(participation, '참가 신청 정보');
+            const { participant_id, status, canceled } = participation;
+            return { message: '신청 여부 조회에 성공했습니다.', participant_id, status, canceled };
+        } catch (error) {
+            throw new InternalServerError('신청 여부 조회에 실패했습니다.');
+        }
+    },
     getParticipants: async ({ userId, postId, cursor, limit }) => {
         try {
             const post = await PostModel.getPostById(postId);
