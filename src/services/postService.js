@@ -1,4 +1,4 @@
-import { PostModel } from '../db/models/postModel.js';
+import { PostModel } from '../db/models/PostModel.js';
 import { UserModel } from '../db/models/UserModel.js';
 import { ParticipantModel } from '../db/models/ParticipantModel.js';
 import { db } from '../db/index.js';
@@ -17,8 +17,8 @@ const postService = {
             }
             setRecruitedValue(user, newPost);
 
-            const post = await PostModel.create({ newPost: { transaction, user_id: userId, ...newPost } });
-            await ParticipantModel.participatePost({ transaction, userId, postId: post.post_id, status: 'accepted' });
+            const post = await PostModel.create({ newPost: { transaction, userId, ...newPost } });
+            await ParticipantModel.participatePost({ transaction, userId, postId: post.postId, status: 'accepted' });
             await transaction.commit();
 
             return { message: '게시물 작성을 성공했습니다.' };
@@ -71,12 +71,12 @@ const postService = {
             let post = await PostModel.getPostById(postId);
             throwNotFoundError(post, '게시글');
 
-            if (post.user_id !== userId) {
+            if (post.userId !== userId) {
                 throw new UnauthorizedError('수정 권한이 없습니다.');
             }
 
-            if (toUpdate.total_m) {
-                if (post.recruited_m > toUpdate.total_m) {
+            if (toUpdate.totalM) {
+                if (post.recruitedM > toUpdate.totalM) {
                     throw new BadRequestError('현재 모집된 인원보다 적게 수정할 수 없습니다.');
                 }
             }
@@ -106,7 +106,7 @@ const postService = {
 
             throwNotFoundError(post, '게시글');
 
-            if (post.user_id !== userId) {
+            if (post.userId !== userId) {
                 throw new UnauthorizedError('삭제 권한이 없습니다.');
             }
 

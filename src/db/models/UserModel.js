@@ -9,26 +9,26 @@ const UserModel = {
     },
     deleteTags: async (userId, tagCategoryId) => {
         try {
-            // 모든 user_and_tag_id들을 찾아서 user_id, tag_category_id와 일치하는 데이터 삭제
+            // 모든 userAndTagId들을 찾아서 userId, tag_categoryId와 일치하는 데이터 삭제
             const userAndTags = await db.UserAndTag.findAll({
                 where: {
-                    user_id: userId,
+                    userId,
                 },
                 include: [
                     {
                         model: db.Tag,
                         where: {
-                            tag_category_id: tagCategoryId,
+                            tagCategoryId,
                         },
                     },
                 ],
             });
-            const userAndTagIds = userAndTags.map(userAndTag => userAndTag.user_and_tag_id);
+            const userAndTagIds = userAndTags.map(userAndTag => userAndTag.userAndTagId);
 
             // UserAndTag 행들 삭제
             const deleteCount = await db.UserAndTag.destroy({
                 where: {
-                    user_and_tag_id: userAndTagIds,
+                    userAndTagId: userAndTagIds,
                 },
             });
 
@@ -37,24 +37,24 @@ const UserModel = {
             console.error(error);
         }
     },
-    createImageURL: async (ImageURL, userId, imageCategoryId) => {
+    createImageURL: async (imageURL, userId, imageCategoryId) => {
         return await db.Image.create({
-            image_url: ImageURL,
-            user_id: userId,
-            image_category_id: imageCategoryId,
+            imageURL,
+            userId,
+            imageCategoryId,
         });
     },
     findImage: async (userId, imageCategoryId) => {
         return await db.Image.findOne({
-            user_id: userId,
-            image_category_id: imageCategoryId,
+            userId,
+            imageCategoryId,
         });
     },
     findTagId: async (tagname, tagCategoryId) => {
         const tagId = await db.Tag.findOne({
             where: {
-                tagname: tagname,
-                tag_category_id: tagCategoryId,
+                tagname,
+                tagCategoryId,
             },
         });
 
@@ -64,12 +64,12 @@ const UserModel = {
         try {
             return await db.UserAndTag.findAll({
                 where: {
-                    user_id: userId,
+                    userId,
                 },
                 include: [
                     {
                         model: db.Tag,
-                        attributes: ['tag_category_id'],
+                        attributes: ['tagCategoryId'],
                     },
                 ],
             });
@@ -80,8 +80,8 @@ const UserModel = {
     findByEmail: async email => {
         const user = await db.User.findOne({
             where: {
-                email: email,
-                is_deleted: 0,
+                email,
+                isDeleted: 0,
             },
         });
 
@@ -90,14 +90,14 @@ const UserModel = {
     findById: async userId => {
         const user = await db.User.findOne({
             where: {
-                user_id: userId,
-                is_deleted: 0,
+                userId,
+                isDeleted: 0,
             },
             include: [
                 {
                     model: db.UserAndTag,
-                    attributes: ['user_id'],
-                    include: [{ model: db.Tag, attributes: ['tagname', 'tag_category_id'] }],
+                    attributes: ['userId'],
+                    include: [{ model: db.Tag, attributes: ['tagname', 'tagCategoryId'] }],
                 },
             ],
         });
@@ -117,14 +117,14 @@ const UserModel = {
     findMyPosts: async userId => {
         return await db.Post.findAll({
             where: {
-                user_id: userId,
+                userId,
             },
         });
     },
     findMyParticipants: async userId => {
         return await db.Participant.findAll({
             where: {
-                user_id: userId,
+                userId,
             },
         });
     },
@@ -133,8 +133,8 @@ const UserModel = {
         try {
             const updatedUser = await db.User.update(updateData, {
                 where: {
-                    user_id: userId,
-                    is_deleted: 0,
+                    userId,
+                    isDeleted: 0,
                 },
             });
 
@@ -147,13 +147,13 @@ const UserModel = {
     delete: async ({ userId }) => {
         const deleteUser = await db.User.update(
             {
-                is_deleted: 1,
-                deleted_at: new Date(),
+                isDeleted: 1,
+                deletedAt: new Date(),
             },
             {
                 where: {
-                    user_id: userId,
-                    is_deleted: 0,
+                    userId,
+                    isDeleted: 0,
                 },
             },
         );

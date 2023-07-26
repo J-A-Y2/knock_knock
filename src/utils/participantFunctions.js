@@ -1,5 +1,4 @@
 import { throwNotFoundError } from './commonFunctions.js';
-import { ParticipantModel } from '../db/models/ParticipantModel.js';
 import { ConflictError } from '../middlewares/errorMiddleware.js';
 
 const checkParticipation = async (type, participation, userId) => {
@@ -7,7 +6,7 @@ const checkParticipation = async (type, participation, userId) => {
 
     throwNotFoundError(Post, '게시글');
 
-    if (Post.user_id !== userId) {
+    if (Post.userId !== userId) {
         throw new ConflictError(`참가자 ${type} 권한이 없습니다.`);
     }
 
@@ -22,23 +21,23 @@ const checkParticipation = async (type, participation, userId) => {
     return { Post, canceled, status, User };
 };
 
-const updateRecruitedValue = async (gender, total_m, total_f, recruited_f, recruited_m) => {
+const updateRecruitedValue = async (gender, totalM, totalF, recruitedF, recruitedM) => {
     let fieldToUpdate, newValue;
     if (gender === '여') {
-        fieldToUpdate = 'recruited_f';
+        fieldToUpdate = 'recruitedF';
 
-        if (recruited_f === total_f) {
+        if (recruitedF === totalF) {
             throw new ConflictError('더 이상 여성 유저의 신청을 수락할 수 없습니다.');
         }
-        newValue = recruited_f + 1;
+        newValue = recruitedF + 1;
     }
 
     if (gender === '남') {
-        fieldToUpdate = 'recruited_m';
-        if (recruited_m === total_m) {
+        fieldToUpdate = 'recruitedM';
+        if (recruitedM === totalM) {
             throw new ConflictError('더 이상 남성 유저의 신청을 수락할 수 없습니다.');
         }
-        newValue = recruited_m + 1;
+        newValue = recruitedM + 1;
     }
     return { fieldToUpdate, newValue };
 };
@@ -48,9 +47,9 @@ const getHobbyAndIdeal = async user => {
     let ideal = [];
 
     for (const userAndTag of user.UserAndTags) {
-        if (userAndTag.Tag.tag_category_id === 1) {
+        if (userAndTag.Tag.tagCategoryId === 1) {
             hobby.push(userAndTag.Tag.tagname);
-        } else if (userAndTag.Tag.tag_category_id === 3) {
+        } else if (userAndTag.Tag.tagCategoryId === 3) {
             ideal.push(userAndTag.Tag.tagname);
         }
     }
@@ -66,14 +65,13 @@ const getParticipantsList = async (participants, ideal) => {
         const matchingCount = ideal.filter(tag => personality.includes(tag)).length;
 
         return {
-            participationId: participant.participant_id,
-            userId: participant.User.user_id,
+            participationId: participant.participantId,
+            userId: participant.User.userId,
             status: participant.status,
             nickname: participant.User.nickname,
             gender: participant.User.gender,
             age: participant.User.age,
             job: participant.User.job,
-            profile_image: participant.User.profile_image,
             personality,
             matchingCount,
         };

@@ -2,7 +2,7 @@ const UserAndTag = (sequelize, DataTypes) => {
     const UserAndTag = sequelize.define(
         'UserAndTag',
         {
-            user_and_tag_id: {
+            userAndTagId: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true,
@@ -19,12 +19,12 @@ const UserAndTag = (sequelize, DataTypes) => {
     );
     UserAndTag.associate = db => {
         db.UserAndTag.belongsTo(db.User, {
-            foreignKey: 'user_id',
-            targetKey: 'user_id',
+            foreignKey: 'userId',
+            targetKey: 'userId',
         }); // foreignKey는 Tag 모델의 userId, targetKey는 User 모델의 userId
         db.UserAndTag.belongsTo(db.Tag, {
-            foreignKey: 'tag_id',
-            targetKey: 'tag_id',
+            foreignKey: 'tagId',
+            targetKey: 'tagId',
         }); // foreignKey는 UserAndTag 모델의 tagId, sourceKey는 Tag 모델의 tagId
     };
 
