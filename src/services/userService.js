@@ -8,6 +8,7 @@ import {
     InternalServerError,
 } from '../middlewares/errorMiddleware.js';
 import { UserModel } from '../db/models/UserModel.js';
+import { ImageModel } from '../db/models/ImageModel.js';
 import { db } from '../db/index.js';
 import { calculateKoreanAge } from '../utils/calculateKoreanAge.js';
 const userService = {
@@ -16,7 +17,7 @@ const userService = {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
-            const { hobby, personality, ideal, ...userInfo } = newUser;
+            const { hobby, personality, ideal, image, ...userInfo } = newUser;
 
             //이메일 중복 확인
             const user = await UserModel.findByEmail(newUser.email);
@@ -34,14 +35,14 @@ const userService = {
             const createdUser = await UserModel.create(userInfo);
 
             // 유저의 프로필 이미지를 이미지 테이블에 저장
-            if (userInfo.profile_image) {
-                await UserModel.createProfileImage(userInfo.profile_image, createdUser.user_id, transaction);
+            if (image) {
+                await ImageModel.createImageURL(image[1], createdUser.user_id, image[0]);
             }
 
             const TagsCreate = async (tag, tagCategoryId) => {
                 // 태그 생성
                 if (tag && tag.length > 0) {
-                    // // 태그이름 배열을 태그아이디(정수) 배열로 변경, [(tagId,userId)] 형태로 변경
+                    // 태그이름 배열을 태그아이디(정수) 배열로 변경, [(tagId,userId)] 형태로 변경
                     const newTags = await Promise.all(
                         tag.map(async TagName => {
                             const tagId = await UserModel.findTagId(TagName, tagCategoryId);
@@ -146,29 +147,6 @@ const userService = {
                 await transaction.rollback();
             }
             throw error;
-        }
-    },
-    // imageURL 저장하기
-    imageSave: async (userId, imageURL) => {
-        try {
-            const user = await UserModel.findById(userId);
-
-            if (!user) {
-                throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
-            }
-
-            await UserModel.createImageURL(imageURL, userId, 1);
-            const image = UserModel.findImage(userId, 1);
-            return {
-                message: '이미지 저장에 성공했습니다.',
-                image,
-            };
-        } catch (error) {
-            if (error instanceof ConflictError) {
-                throw error;
-            } else {
-                throw new BadRequestError('이미지 저장에 실패했습니다.');
-            }
         }
     },
     // 유저 정보 조회

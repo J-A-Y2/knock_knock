@@ -95,23 +95,6 @@ const userController = {
             next(error);
         }
     },
-    imagePost: async (req, res, next) => {
-        try {
-            const userId = req.currentUserId;
-
-            if (!req.file) {
-                return res.status(400).send('이미지 파일을 받지 못했습니다.');
-            }
-
-            const imageURL = req.file.location;
-            const image = await userService.imageSave(userId, imageURL);
-
-            statusCode.setResponseCode201(res);
-            return res.send(image);
-        } catch (error) {
-            next(error);
-        }
-    },
     update: async (req, res, next) => {
         try {
             const userId = req.currentUserId;

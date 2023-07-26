@@ -37,19 +37,6 @@ const UserModel = {
             console.error(error);
         }
     },
-    createImageURL: async (ImageURL, userId, imageCategoryId) => {
-        return await db.Image.create({
-            image_url: ImageURL,
-            user_id: userId,
-            image_category_id: imageCategoryId,
-        });
-    },
-    findImage: async (userId, imageCategoryId) => {
-        return await db.Image.findOne({
-            user_id: userId,
-            image_category_id: imageCategoryId,
-        });
-    },
     findTagId: async (tagname, tagCategoryId) => {
         const tagId = await db.Tag.findOne({
             where: {

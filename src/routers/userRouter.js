@@ -12,6 +12,7 @@ userRouter.post('/register', RegisterValidationRules, registerValidate, userCont
 // 로그인
 userRouter.post('/login', loginValidationRules, loginValidate, userController.login);
 
+// 로그인 확인
 userRouter.use(loginRequired);
 
 // 로그인 검증
