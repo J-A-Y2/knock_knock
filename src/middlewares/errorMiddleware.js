@@ -1,3 +1,5 @@
+import { logger } from '../utils/logger.js';
+
 class BadRequestError extends Error {
     constructor(message = 'Bad Request') {
         super(message);

@@ -2,12 +2,12 @@ const Image = (sequelize, DataTypes) => {
     const Image = sequelize.define(
         'Image',
         {
-            image_id: {
+            imageId: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true,
             },
-            image_url: {
+            imageUrl: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
@@ -23,16 +23,16 @@ const Image = (sequelize, DataTypes) => {
     );
     Image.associate = db => {
         db.Image.belongsTo(db.ImageCategory, {
-            foreignKey: 'image_category_id',
-            targetKey: 'image_category_id',
+            foreignKey: 'imageCategoryId',
+            targetKey: 'imageCategoryId',
         }); // foreignKey는 Image 모델의 image_category_id, targetKey는 ImageCategory 모델의 image_category_id
         db.Image.belongsTo(db.User, {
-            foreignKey: 'user_id',
-            targetKey: 'user_id',
-        }); // foreignKey는 Image 모델의 user_id, sourceKey는 User 모델의 user_id
+            foreignKey: 'userId',
+            targetKey: 'userId',
+        }); // foreignKey는 Image 모델의 userId, sourceKey는 User 모델의 userId
         db.Image.belongsTo(db.Post, {
-            foreignKey: 'post_id',
-            targetKey: 'post_id',
+            foreignKey: 'postId',
+            targetKey: 'postId',
         });
     };
 

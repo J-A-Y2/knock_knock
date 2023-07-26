@@ -2,7 +2,7 @@ const Participant = (sequelize, DataTypes) => {
     const Participant = sequelize.define(
         'Participant',
         {
-            participant_id: {
+            participantId: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true,
@@ -28,15 +28,15 @@ const Participant = (sequelize, DataTypes) => {
         },
     );
     Participant.associate = db => {
-        // foreignKey는 Participant모델의 user_id, targetKey는 User 모델의 user_id
+        // foreignKey는 Participant모델의 userId, targetKey는 User 모델의 userIdd
         db.Participant.belongsTo(db.User, {
-            foreignKey: 'user_id',
-            targetKey: 'user_id',
+            foreignKey: 'userId',
+            targetKey: 'userId',
         });
-        // foreignKey는 Participant모델의 post_id, targetKey는 Post 모델의 post_id
+        // foreignKey는 Participant모델의 postId, targetKey는 Post 모델의 postId
         db.Participant.belongsTo(db.Post, {
-            foreignKey: 'post_id',
-            targetKey: 'post_id',
+            foreignKey: 'postId',
+            targetKey: 'postId',
         });
     };
 

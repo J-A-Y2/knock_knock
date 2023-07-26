@@ -23,8 +23,8 @@ const BalanceGameResult = (sequelize, DataTypes) => {
     );
     BalanceGameResult.associate = db => {
         db.BalanceGameResult.belongsTo(db.User, {
-            foreignKey: 'user_id',
-            targetKey: 'user_id',
+            foreignKey: 'userId',
+            targetKey: 'userId',
         }); // foreignKey는 Image 모델의 image_category_id, sourceKey는 ImageCategory 모델의 image_category_id
     };
 
