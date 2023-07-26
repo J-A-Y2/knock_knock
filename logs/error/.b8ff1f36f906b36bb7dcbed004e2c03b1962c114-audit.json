@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": false,
+        "amount": 30
+    },
+    "auditLog": "/Users/jay/개발/knockknock/knockknock_back/logs/error/.b8ff1f36f906b36bb7dcbed004e2c03b1962c114-audit.json",
+    "files": [
+        {
+            "date": 1690258717828,
+            "name": "/Users/jay/개발/knockknock/knockknock_back/logs/error/2023-07-25.error.log",
+            "hash": "2c25153fa0fa5874b2399cfd57d6bef722c8364b47c0443e2f2ccc66d7a5853c"
+        }
+    ],
+    "hashType": "sha256"
+}
