@@ -292,7 +292,7 @@ const userService = {
             }
 
             if (updateData.backgroundImage) {
-                await ImageModel.create();
+                await ImageModel.updateImageURL();
             }
 
             await UserModel.update({ userId, updateData });

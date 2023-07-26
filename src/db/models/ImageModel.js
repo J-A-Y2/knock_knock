@@ -1,20 +1,20 @@
 import { db } from '../index.js';
 const ImageModel = {
     // 이미지 저장
-    createImageURL: async (ImageURL, userId, imageCategoryName) => {
+    createImageURL: async (imageUrl, userId, imageCategoryName) => {
         const image = await db.ImageCategory.findOne({
             where: {
                 image_category_name: imageCategoryName,
             },
         });
         return await db.Image.create({
-            image_url: ImageURL,
+            image_url: imageUrl,
             user_id: userId,
             image_category_id: image.image_category_id,
         });
     },
     // 이미지 수정
-    updateImageURL: async (ImageURL, userId, imageCategoryName) => {
+    updateImageURL: async (imageUrl, userId, imageCategoryName) => {
         const image = await db.ImageCategory.findOne({
             where: {
                 user_id: userId,
@@ -22,9 +22,9 @@ const ImageModel = {
             },
         });
         if (!image) {
-            await this.createImageURL(ImageURL, userId, imageCategoryName);
+            await this.createImageURL(imageUrl, userId, imageCategoryName);
         }
-        await db.Image.update(ImageURL, {
+        await db.Image.update(imageUrl, {
             where: {
                 user_id: userId,
                 image_category_id: image.image_category_id,
