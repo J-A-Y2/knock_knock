@@ -27,6 +27,18 @@ const participantController = {
             next(error);
         }
     },
+    checkParticipation: async (req, res, next) => {
+        try {
+            const userId = req.currentUserId;
+            const postId = req.params.postId;
+
+            const status = await participantService.checkParticipation({ userId, postId });
+            statusCode.setResponseCode200(res);
+            res.send(status);
+        } catch (error) {
+            next(error);
+        }
+    },
     getParticipants: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
