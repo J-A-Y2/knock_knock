@@ -2,48 +2,56 @@ import { db } from '../index.js';
 
 const UserModel = {
     create: async newUser => {
-        const createNewUser = await db.User.create(newUser);
-        return createNewUser;
+        return await db.User.create(newUser);
     },
-    bulkCreateTags: async (tags, userId) => {
-        if (tags && tags.length > 0) {
-            const newTags = tags.map(tagId => {
-                return {
-                    tag_id: tagId,
+    bulkCreateTags: async ({ newTags, transaction }) => {
+        return await db.UserAndTag.bulkCreate(newTags, { transaction });
+    },
+    deleteTags: async (userId, tagCategoryId) => {
+        try {
+            // 모든 user_and_tag_id들을 찾아서 user_id, tag_category_id와 일치하는 데이터 삭제
+            const userAndTags = await db.UserAndTag.findAll({
+                where: {
                     user_id: userId,
-                };
+                },
+                include: [
+                    {
+                        model: db.Tag,
+                        where: {
+                            tag_category_id: tagCategoryId,
+                        },
+                    },
+                ],
             });
-            await db.UserAndTag.bulkCreate(newTags);
+            const userAndTagIds = userAndTags.map(userAndTag => userAndTag.user_and_tag_id);
+
+            // UserAndTag 행들 삭제
+            const deleteCount = await db.UserAndTag.destroy({
+                where: {
+                    user_and_tag_id: userAndTagIds,
+                },
+            });
+
+            return deleteCount;
+        } catch (error) {
+            console.error(error);
         }
     },
-    bulkUpdateTags: async (tagCategoryId, tags, userId, transaction) => {
-        for (const newTag of tags)
-            if (tags && tags.length > 0) {
-                const newTags = tags.map(tagId => {
-                    return {
-                        tag_id: tagId,
-                        user_id: userId,
-                    };
-                });
-
-                for (const newTag of newTags) {
-                    const [numOfAffectedRows] = await db.UserAndTag.update(newTag, {
-                        where: {
-                            tag_id: newTag.tag_id,
-                            user_id: newTag.user_id,
-                        },
-                        returning: true,
-                        transaction,
-                    });
-
-                    if (numOfAffectedRows === 0) {
-                        await db.UserAndTag.create(newTag, { transaction });
-                    }
-                }
-            }
+    createImageURL: async (ImageURL, userId, imageCategoryId) => {
+        return await db.Image.create({
+            image_url: ImageURL,
+            user_id: userId,
+            image_category_id: imageCategoryId,
+        });
+    },
+    findImage: async (userId, imageCategoryId) => {
+        return await db.Image.findOne({
+            user_id: userId,
+            image_category_id: imageCategoryId,
+        });
     },
     findTagId: async (tagname, tagCategoryId) => {
-        const tagId = await db.Tags.findAll({
+        const tagId = await db.Tag.findOne({
             where: {
                 tagname: tagname,
                 tag_category_id: tagCategoryId,
@@ -51,6 +59,23 @@ const UserModel = {
         });
 
         return tagId;
+    },
+    findByUserId: async userId => {
+        try {
+            return await db.UserAndTag.findAll({
+                where: {
+                    user_id: userId,
+                },
+                include: [
+                    {
+                        model: db.Tag,
+                        attributes: ['tag_category_id'],
+                    },
+                ],
+            });
+        } catch (error) {
+            console.error(error);
+        }
     },
     findByEmail: async email => {
         const user = await db.User.findOne({
@@ -68,6 +93,13 @@ const UserModel = {
                 user_id: userId,
                 is_deleted: 0,
             },
+            include: [
+                {
+                    model: db.UserAndTag,
+                    attributes: ['user_id'],
+                    include: [{ model: db.Tag, attributes: ['tagname', 'tag_category_id'] }],
+                },
+            ],
         });
         return user;
     },
@@ -82,18 +114,36 @@ const UserModel = {
 
         return randomUsers;
     },
-    update: async ({ userId, updateData }) => {
-        console.log('유저 모델에서 userId, updateData', userId, updateData);
-        const updatedUser = await db.User.update(updateData, {
+    findMyPosts: async userId => {
+        return await db.Post.findAll({
             where: {
                 user_id: userId,
-                is_deleted: 0,
             },
-            returning: true,
         });
-        console.log('유저 모델의 updatedUser', updatedUser);
-        return updatedUser[0];
     },
+    findMyParticipants: async userId => {
+        return await db.Participant.findAll({
+            where: {
+                user_id: userId,
+            },
+        });
+    },
+    // 유저 정보 업데이트
+    update: async ({ userId, updateData }) => {
+        try {
+            const updatedUser = await db.User.update(updateData, {
+                where: {
+                    user_id: userId,
+                    is_deleted: 0,
+                },
+            });
+
+            return updatedUser;
+        } catch (error) {
+            console.error(error);
+        }
+    },
+    // 유저 정보 삭제
     delete: async ({ userId }) => {
         const deleteUser = await db.User.update(
             {
@@ -108,15 +158,6 @@ const UserModel = {
             },
         );
         return deleteUser;
-    },
-    destroy: async () => {
-        const destroyTags = await db.UserAndTag.destroy({
-            where: {
-                user_id: userId,
-                tag_id: newTags.map(tag => tag.tag_id),
-                tag_type: tagType,
-            },
-        });
     },
 };
 

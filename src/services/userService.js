@@ -9,11 +9,13 @@ import {
 } from '../middlewares/errorMiddleware.js';
 import { UserModel } from '../db/models/UserModel.js';
 import { db } from '../db/index.js';
-
+import { calculateKoreanAge } from '../utils/calculateKoreanAge.js';
 const userService = {
     // 유저 생성
     createUser: async ({ newUser }) => {
+        let transaction;
         try {
+            transaction = await db.sequelize.transaction();
             const { hobby, personality, ideal, ...userInfo } = newUser;
 
             //이메일 중복 확인
@@ -27,16 +29,44 @@ const userService = {
             const hashedPassword = await bcrypt.hash(userInfo.user_password, parseInt(process.env.PW_HASH_COUNT));
             userInfo.user_password = hashedPassword;
 
-            const createdUser = await UserModel.create(userInfo);
+            userInfo.age = calculateKoreanAge(userInfo.birthday); // birthday로 한국 나이 계산하기
 
-            await UserModel.bulkCreateTags(hobby, createdUser.user_id); // 회원-태그 테이블에 회원의 취미를 생성
-            await UserModel.bulkCreateTags(personality, createdUser.user_id); // 회원-태그 테이블에 회원의 성격을 생성
-            await UserModel.bulkCreateTags(ideal, createdUser.user_id); // 회원-태그 테이블에 회원의 성격을 생성
+            const createdUser = await UserModel.create(userInfo);
+            console.log('유저 서비스 userInfo.profile_image: ', userInfo.profile_image);
+
+            // 유저의 프로필 이미지를 이미지 테이블에 저장
+            if (userInfo.profile_image) {
+                await UserModel.createProfileImage(userInfo.profile_image, createdUser.user_id, transaction);
+            }
+
+            const TagsCreate = async (tag, tagCategoryId) => {
+                // 태그 생성
+                if (tag && tag.length > 0) {
+                    // // 태그이름 배열을 태그아이디(정수) 배열로 변경, [(tagId,userId)] 형태로 변경
+                    const newTags = await Promise.all(
+                        tag.map(async TagName => {
+                            const tagId = await UserModel.findTagId(TagName, tagCategoryId);
+                            return { tag_id: tagId.tag_id, user_id: createdUser.user_id };
+                        }),
+                    );
+                    // userAndTags 테이블에 데이터 생성
+                    await UserModel.bulkCreateTags({ newTags, transaction });
+                }
+            };
+
+            await TagsCreate(hobby, 1);
+            await TagsCreate(personality, 2);
+            await TagsCreate(ideal, 3);
+
+            await transaction.commit();
 
             return {
                 message: '회원가입에 성공했습니다.',
             };
         } catch (error) {
+            if (transaction) {
+                await transaction.rollback();
+            }
             if (error instanceof ConflictError) {
                 throw error;
             } else {
@@ -119,41 +149,74 @@ const userService = {
             throw error;
         }
     },
-    // 유저 정보 조회
-    getUserById: async ({ userId }) => {
-        let transaction;
+    // imageURL 저장하기
+    imageSave: async (userId, imageURL) => {
         try {
-            transaction = await db.sequelize.transaction();
             const user = await UserModel.findById(userId);
 
             if (!user) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
-            await transaction.commit();
+            await UserModel.createImageURL(imageURL, userId, 1);
+            const image = UserModel.findImage(userId, imageCategoryId);
+
             return {
-                message: '회원정보 조회 성공!',
+                message: '이미지 저장에 성공했습니다.',
+                image,
+            };
+        } catch (error) {
+            if (error instanceof ConflictError) {
+                throw error;
+            } else {
+                throw new BadRequestError('이미지 저장에 실패했습니다.');
+            }
+        }
+    },
+    // 유저 정보 조회
+    getUserById: async ({ userId }) => {
+        try {
+            const user = await UserModel.findById(userId);
+
+            if (!user) {
+                throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
+            }
+
+            let hobby = [];
+            let personality = [];
+            let ideal = [];
+            for (const userAndTag of user.UserAndTags) {
+                if (userAndTag.Tag.tag_category_id === 1) {
+                    hobby.push(userAndTag.Tag.tagname);
+                } else if (userAndTag.Tag.tag_category_id === 2) {
+                    personality.push(userAndTag.Tag.tagname);
+                } else {
+                    ideal.push(userAndTag.Tag.tagname);
+                }
+            }
+
+            return {
+                message: '회원 정보 조회를 성공했습니다.',
+                // user,
                 userId: user.user_id,
                 email: user.email,
                 username: user.username,
                 nickname: user.nickname,
                 gender: user.gender,
                 birthday: user.birthday,
+                age: user.age,
                 job: user.job,
                 region: user.region,
                 profileImage: user.profile_image,
                 mbti: user.mbti,
                 religion: user.religion,
                 height: user.height,
-                hobby: user.hooby,
-                personality: user.perosnality,
-                ideal: user.ideal,
                 introduce: user.introduce,
+                hobby,
+                personality,
+                ideal,
             };
         } catch (error) {
-            if (transaction) {
-                await transaction.rollback();
-            }
             if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
                 throw error;
             } else {
@@ -191,9 +254,52 @@ const userService = {
             throw new BadRequestError('랜덤으로 유저들을 조회하는 데 실패했습니다.');
         }
     },
+    // 내가 작성한 게시글 불러오기
+    getMyPosts: async ({ userId }) => {
+        try {
+            const posts = await UserModel.findMyPosts(userId);
+
+            if (!posts) {
+                throw new NotFoundError('내가 작성한 게시글을 찾을 수 없습니다.');
+            }
+
+            return {
+                message: '내가 작성한 게시글 조회 성공!',
+                posts,
+            };
+        } catch (error) {
+            if (error instanceof NotFoundError) {
+                throw error;
+            } else {
+                throw new InternalServerError('내가 작성한 게시글을 불러오기 실패했습니다.');
+            }
+        }
+    },
+    // 내가 참여한 게시글 불러오기
+    getMyParticipants: async ({ userId }) => {
+        try {
+            const participants = await UserModel.findMyParticipants(userId);
+
+            if (!participants) {
+                throw new NotFoundError('내가 참여한 게시글을 찾을 수 없습니다.');
+            }
+
+            return {
+                message: '내가 참여한 게시글 조회 성공!',
+                participants,
+            };
+        } catch (error) {
+            if (error instanceof NotFoundError) {
+                throw error;
+            } else {
+                throw new InternalServerError('내가 참여한 게시글을 불러오기 실패했습니다.');
+            }
+        }
+    },
     // 유저 정보 수정
     updateUser: async ({ userId, updateUserInfo }) => {
         let transaction;
+
         try {
             transaction = await db.sequelize.transaction();
 
@@ -205,29 +311,45 @@ const userService = {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
-            // userId: 24, updateData는 hobby, personality, ideal 제외한 객체
-            const updatedUser = await UserModel.update({ userId, updateData });
+            await UserModel.update({ userId, updateData });
 
-            await UserModel.bulkUpdateTags(hobby, user.user_id, transaction); // 회원-태그 테이블에서 회원의 취미를 수정
-            await UserModel.bulkUpdateTags(personality, user.user_id, transaction); // 회원-태그 테이블에서 회원의 성격을 수정
-            await UserModel.bulkUpdateTags(ideal, user.user_id, transaction); // 회원-태그 테이블에서 회원의 성격을 수정
+            const TagsUpdate = async (tag, tagCategoryId) => {
+                // 태그 수정
+                if (tag && tag.length > 0) {
+                    // 태그 카테고리와 일치하는 태그들 삭제
+                    await UserModel.deleteTags(user.user_id, tagCategoryId);
+                    // 태그이름 배열을 태그아이디(정수) 배열로 변경, [(tagId,userId)] 형태로 변경
+                    const newTags = await Promise.all(
+                        tag.map(async TagName => {
+                            const tagId = await UserModel.findTagId(TagName, tagCategoryId);
+                            return { tag_id: tagId.tag_id, user_id: user.user_id };
+                        }),
+                    );
+                    // 수정할 태그들 userAndTags 테이블에 데이터 생성
+                    await UserModel.bulkCreateTags({ newTags, transaction });
+                }
+            };
 
+            await TagsUpdate(hobby, 1);
+            await TagsUpdate(personality, 2);
+            await TagsUpdate(ideal, 3);
             await transaction.commit();
 
             return {
                 message: '회원 정보가 수정되었습니다.',
                 updatedUser: {
-                    nickname: updatedUser.nickname,
-                    job: updatedUser.job,
-                    region: updatedUser.region,
-                    profileImage: updatedUser.profile_image,
-                    mbti: updatedUser.mbti,
-                    religion: updatedUser.religion,
-                    height: updatedUser.height,
+                    nickname: user.nickname,
+                    age: user.age,
+                    job: user.job,
+                    region: user.region,
+                    profileImage: user.profile_image,
+                    mbti: user.mbti,
+                    religion: user.religion,
+                    height: user.height,
                     hobby,
                     personality,
                     ideal,
-                    introduce: updatedUser.introduce,
+                    introduce: user.introduce,
                 },
             };
         } catch (error) {

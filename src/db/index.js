@@ -9,6 +9,9 @@ import Tag from './schemas/tag.js';
 import TagCategory from './schemas/tagCategory.js';
 import UserAndTag from './schemas/userAndTag.js';
 import ChatRoom from './schemas/chatRoom.js';
+import Image from './schemas/image.js';
+import ImageCategory from './schemas/imageCategory.js';
+import BalanceGameResult from './schemas/balanceGameResult.js';
 
 const db = {};
 
@@ -27,6 +30,9 @@ db.Tag = Tag(sequelize, Sequelize);
 db.TagCategory = TagCategory(sequelize, Sequelize);
 db.UserAndTag = UserAndTag(sequelize, Sequelize);
 db.ChatRoom = ChatRoom(sequelize, Sequelize);
+db.Image = Image(sequelize, Sequelize);
+db.ImageCategory = ImageCategory(sequelize, Sequelize);
+db.BalanceGameResult = BalanceGameResult(sequelize, Sequelize);
 
 // 각 모델들을 돌면서 모델간의 관계를 정의하는 함수를 동작시킴.
 Object.keys(db).forEach(modelName => {

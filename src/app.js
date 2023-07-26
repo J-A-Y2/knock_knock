@@ -13,8 +13,10 @@ import { chatRouter } from './routers/chatRouter.js';
 import { logger } from '../src/utils/logger.js';
 import { morganMiddleware } from './middlewares/morgon.js';
 
+import { errorMiddleware } from './middlewares/errorMiddleware.js';
+import multer from 'multer';
 const app = express();
-
+const upload = multer();
 // CORS 에러 방지
 app.use(cors());
 
@@ -46,5 +48,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true })
 app.get('/', (req, res) => {
     res.send('안녕하세요, 레이서 프로젝트 API 입니다.');
 });
+
+app.use(errorMiddleware);
 
 export { app };

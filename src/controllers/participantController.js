@@ -6,10 +6,10 @@ const participantController = {
             const userId = req.currentUserId;
             const postId = req.params.postId;
 
-            const participant = await participantService.participatePost({ userId, postId });
+            const { message, participationFlag } = await participantService.participatePost({ userId, postId });
 
             statusCode.setResponseCode201(res);
-            res.send(participant.message);
+            res.send({ message, participationFlag });
         } catch (error) {
             next(error);
         }
@@ -19,10 +19,10 @@ const participantController = {
             const userId = req.currentUserId;
             const postId = req.params.postId;
 
-            const participant = await participantService.participateCancel({ userId, postId });
+            const { message, canceled } = await participantService.participateCancel({ userId, postId });
 
             statusCode.setResponseCode201(res);
-            res.send(participant.message);
+            res.send({ message, participationFlag: canceled });
         } catch (error) {
             next(error);
         }
@@ -31,11 +31,24 @@ const participantController = {
         try {
             const userId = req.currentUserId;
             const postId = req.params.postId;
+            const cursor = parseInt(req.query.cursor);
+            const limit = parseInt(req.query.limit);
 
-            const participants = await participantService.getParticipants({ userId, postId });
+            const { participantsList, message, ideal, isFulled, nextCursor } = await participantService.getParticipants({
+                userId,
+                postId,
+                cursor,
+                limit,
+            });
 
             statusCode.setResponseCode200(res);
-            res.send({ message: participants.message, total: participants.total, participantsList: participants });
+            res.send({
+                message,
+                ideal,
+                isFulled,
+                participantsList,
+                nextCursor,
+            });
         } catch (error) {
             next(error);
         }
@@ -43,8 +56,9 @@ const participantController = {
     allow: async (req, res, next) => {
         try {
             const participantId = req.params.participantId;
+            const userId = req.currentUserId;
 
-            const participant = await participantService.allow(participantId);
+            const participant = await participantService.allow({ participantId, userId });
 
             statusCode.setResponseCode200(res);
             res.send({
@@ -61,7 +75,8 @@ const participantController = {
     deny: async (req, res, next) => {
         try {
             const participantId = req.params.participantId;
-            const participant = await participantService.deny(participantId);
+            const userId = req.currentUserId;
+            const participant = await participantService.deny({ participantId, userId });
 
             statusCode.setResponseCode200(res);
             res.send({ message: participant.message });
@@ -71,10 +86,13 @@ const participantController = {
     },
     getAcceptedUsers: async (req, res, next) => {
         try {
+            const userId = req.currentUserId;
             const postId = req.params.postId;
 
-            const participants = await participantService.getAcceptedUsers(postId);
-            
+            const { message, acceptedUsers } = await participantService.getAcceptedUsers({ userId, postId });
+
+            statusCode.setResponseCode200(res);
+            res.send({ message, acceptedUsers });
         } catch (error) {
             next(error);
         }

@@ -12,7 +12,7 @@ postRouter.use(loginRequired);
 // 게시글 작성
 postRouter.post('/', createPostValidationRules, createPostValidate, postController.createPost);
 
-// 전체 게시글 시간순 조회
+// 전체, 카테고리별 게시글 시간순 조회
 postRouter.get('/', getPostValidate, postController.getAllPosts);
 
 // 게시글 개별 조회
@@ -22,7 +22,7 @@ postRouter.get('/:postId', postParamsValidate, postController.getPost);
 postRouter.put('/:postId', postParamsValidate, setPostValidationRules, setPostValidate, postController.setPost);
 
 // 게시글 삭제
-postRouter.delete('/:postId', postController.deletePost);
+postRouter.delete('/:postId', postParamsValidate, postController.deletePost);
 
 export { postRouter };
 // 포스트 테이블 -> 포스트의 id -> 신청하기
