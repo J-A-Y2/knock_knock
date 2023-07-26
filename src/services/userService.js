@@ -17,7 +17,7 @@ const userService = {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
-            const { hobby, personality, ideal, image, ...userInfo } = newUser;
+            const { hobby, personality, ideal, ...userInfo } = newUser;
 
             //이메일 중복 확인
             const user = await UserModel.findByEmail(newUser.email);
@@ -35,8 +35,8 @@ const userService = {
             const createdUser = await UserModel.create(userInfo);
 
             // 유저의 프로필 이미지를 이미지 테이블에 저장
-            if (image) {
-                await ImageModel.createImageURL(image[1], createdUser.user_id, image[0]);
+            if (userInfo.image) {
+                await ImageModel.createImageURL(userInfo.image[1], createdUser.user_id, userInfo.image[0]);
             }
 
             const TagsCreate = async (tag, tagCategoryId) => {
@@ -285,6 +285,14 @@ const userService = {
 
             if (!user) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
+            }
+
+            if (updateData.profileImage) {
+                await ImageModel.updateImageURL();
+            }
+
+            if (updateData.backgroundImage) {
+                await ImageModel.create();
             }
 
             await UserModel.update({ userId, updateData });
