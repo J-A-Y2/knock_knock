@@ -3,29 +3,30 @@ import { db } from '../index.js';
 const PostModel = {
     create: async ({ newPost }) => {
         const post = await db.Post.create(newPost);
+        console.log(post);
         return post;
     },
     getAllPosts: async ({ offset, limit }) => {
         const { count, rows: posts } = await db.Post.findAndCountAll({
             offset,
             limit,
-            include: [{ model: db.User, attributes: ['nickname', 'profile_image'] }],
+            include: [{ model: db.User, attributes: ['nickname', 'profileImage'] }],
             order: [
                 ['createdAt', 'DESC'],
-                ['post_id', 'DESC'],
+                ['postId', 'DESC'],
             ],
         });
         return { total: count, posts };
     },
     getFilteredPosts: async ({ offset, limit, type }) => {
         const { count, rows: posts } = await db.Post.findAndCountAll({
-            where: { post_type: type },
+            where: { postType: type },
             offset,
             limit,
-            include: [{ model: db.User, attributes: ['nickname', 'profile_image'] }],
+            include: [{ model: db.User, attributes: ['nickname', 'profileImage'] }],
             order: [
                 ['createdAt', 'DESC'],
-                ['post_id', 'DESC'],
+                ['postId', 'DESC'],
             ],
         });
         return { total: count, posts };
@@ -33,7 +34,7 @@ const PostModel = {
     getPostById: async postId => {
         const post = await db.Post.findOne({
             where: {
-                post_id: postId,
+                postId,
             },
         });
         return post;
@@ -42,7 +43,7 @@ const PostModel = {
         const updatePost = await db.Post.update(
             { [fieldToUpdate]: newValue },
             {
-                where: { post_id: postId },
+                where: { postId },
                 transaction,
             },
         );
@@ -50,7 +51,7 @@ const PostModel = {
     },
     delete: async postId => {
         await db.Post.destroy({
-            where: { post_id: postId },
+            where: { postId },
         });
     },
 };

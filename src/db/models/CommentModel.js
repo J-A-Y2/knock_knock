@@ -4,7 +4,7 @@ import { db } from '../index.js';
 const CommentModel = {
     // 댓글 생성
     create: async ({ userId, postId, content }) => {
-        const createComment = await db.Comment.create({ user_id: userId, post_id: postId, comment_content: content });
+        const createComment = await db.Comment.create({ userId, postId, commentContent: content });
         return createComment;
     },
 
@@ -12,7 +12,7 @@ const CommentModel = {
     findByCommentId: async ({ commentId }) => {
         const getComment = await db.Comment.findOne({
             where: {
-                comment_id: commentId,
+                commentId,
             },
         });
         return getComment;
@@ -21,12 +21,12 @@ const CommentModel = {
     // 댓글 수정
     update: async ({ userId, postId, commentId, content }) => {
         const updateComment = await db.Comment.update(
-            { comment_content: content },
+            { commentContent: content },
             {
                 where: {
-                    user_id: userId,
-                    post_id: postId,
-                    comment_id: commentId,
+                    userId,
+                    postId,
+                    commentId,
                 },
             },
         );
@@ -37,7 +37,7 @@ const CommentModel = {
     delete: async ({ commentId }) => {
         const deleteComment = await db.Comment.destroy({
             where: {
-                comment_id: commentId,
+                commentId,
             },
         });
         return deleteComment;
@@ -46,7 +46,7 @@ const CommentModel = {
     // 댓글 불러오기 (무한스크롤) 커서는 댓글의 아이디 값
     getComment: async ({ postId, cursor }) => {
         const getComment = await db.Comment.findAll({
-            attributes: ['comment_id', 'user_id', 'comment_content', 'createdAt'],
+            attributes: ['commentId', 'userId', 'commentContent', 'createdAt'],
             include: [
                 {
                     model: db.User,
@@ -55,8 +55,8 @@ const CommentModel = {
             ],
             order: [['createdAt', 'DESC']],
             where: {
-                post_id: postId,
-                comment_id: {
+                postId,
+                commentId: {
                     [Op.lt]: cursor,
                 },
             },
@@ -68,7 +68,7 @@ const CommentModel = {
 
     recentComment: async postId => {
         const recentComment = await db.Comment.findAll({
-            attributes: ['comment_id', 'user_id', 'comment_content', 'createdAt'],
+            attributes: ['commentId', 'userId', 'commentContent', 'createdAt'],
             include: [
                 {
                     model: db.User,
@@ -76,7 +76,7 @@ const CommentModel = {
                 },
             ],
             where: {
-                post_id: postId,
+                postId,
             },
             limit: 10,
 

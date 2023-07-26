@@ -76,6 +76,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["express-validator", "npm:7.0.1"],\
             ["jsonwebtoken", "npm:9.0.1"],\
             ["morgan", "npm:1.10.0"],\
+            ["multer", "npm:1.4.5-lts.1"],\
+            ["multer-s3", "npm:2.10.0"],\
             ["mysql2", "npm:3.5.1"],\
             ["nodemon", "npm:3.0.1"],\
             ["passport", "npm:0.6.0"],\
@@ -3083,6 +3085,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["base64-js", [\
+        ["npm:1.5.1", {\
+          "packageLocation": "./.yarn/cache/base64-js-npm-1.5.1-b2f7275641-669632eb37.zip/node_modules/base64-js/",\
+          "packageDependencies": [\
+            ["base64-js", "npm:1.5.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["basic-auth", [\
         ["npm:2.0.1", {\
           "packageLocation": "./.yarn/cache/basic-auth-npm-2.0.1-f1627ef330-3419b805d5.zip/node_modules/basic-auth/",\
@@ -4170,6 +4181,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["file-stream-rotator", "npm:0.6.1"],\
             ["moment", "npm:2.29.4"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["file-type", [\
+        ["npm:3.9.0", {\
+          "packageLocation": "./.yarn/cache/file-type-npm-3.9.0-fec2c20533-1db70b2485.zip/node_modules/file-type/",\
+          "packageDependencies": [\
+            ["file-type", "npm:3.9.0"]\
           ],\
           "linkType": "HARD"\
         }]\
