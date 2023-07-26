@@ -2,12 +2,12 @@ const ImageCategory = (sequelize, DataTypes) => {
     const ImageCategory = sequelize.define(
         'ImageCategory',
         {
-            image_category_id: {
+            imageCategoryId: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true,
             },
-            image_category_name: {
+            imageCategoryName: {
                 type: DataTypes.STRING(20),
                 allowNull: false,
             },
@@ -23,8 +23,8 @@ const ImageCategory = (sequelize, DataTypes) => {
     );
     ImageCategory.associate = db => {
         db.ImageCategory.hasMany(db.Image, {
-            foreignKey: 'image_category_id',
-            sourceKey: 'image_category_id',
+            foreignKey: 'imageCategoryId',
+            sourceKey: 'imageCategoryId',
         }); // foreignKey는 Image 모델의 image_category_id, sourceKey는 ImageCategory 모델의 image_category_id
     };
 

@@ -27,21 +27,39 @@ const participantController = {
             next(error);
         }
     },
-    getParticipants: async (req, res, next) => {
+    checkParticipation: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
             const postId = req.params.postId;
 
-            const { participantsList, message, isFulled } = await participantService.getParticipants({
+            const status = await participantService.checkParticipation({ userId, postId });
+            statusCode.setResponseCode200(res);
+            res.send(status);
+        } catch (error) {
+            next(error);
+        }
+    },
+    getParticipants: async (req, res, next) => {
+        try {
+            const userId = req.currentUserId;
+            const postId = req.params.postId;
+            const cursor = parseInt(req.query.cursor);
+            const limit = parseInt(req.query.limit);
+
+            const { participantsList, message, ideal, isFulled, nextCursor } = await participantService.getParticipants({
                 userId,
                 postId,
+                cursor,
+                limit,
             });
 
             statusCode.setResponseCode200(res);
             res.send({
                 message,
+                ideal,
                 isFulled,
                 participantsList,
+                nextCursor,
             });
         } catch (error) {
             next(error);

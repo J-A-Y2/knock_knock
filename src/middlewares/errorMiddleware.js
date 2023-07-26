@@ -1,3 +1,5 @@
+import { logger } from '../utils/logger.js';
+
 class BadRequestError extends Error {
     constructor(message = 'Bad Request') {
         super(message);
@@ -40,7 +42,7 @@ class InternalServerError extends Error {
 
 function errorMiddleware(error, req, res, next) {
     // 터미널에 노란색으로 출력됨.
-    console.log('\x1b[33m%s\x1b[0m', error);
+    logger.error('\x1b[33m%s\x1b[0m', error);
 
     let message = 'Internal Server Error';
     if (

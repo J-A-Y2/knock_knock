@@ -2,7 +2,7 @@ const User = (sequelize, DataTypes) => {
     const User = sequelize.define(
         'User',
         {
-            user_id: {
+            userId: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true,
@@ -20,7 +20,7 @@ const User = (sequelize, DataTypes) => {
                 type: DataTypes.STRING(15),
                 allowNull: false,
             },
-            user_password: {
+            userPassword: {
                 type: DataTypes.STRING(60),
                 allowNull: false,
             },
@@ -60,7 +60,7 @@ const User = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: true,
             },
-            is_deleted: {
+            isDeleted: {
                 type: DataTypes.BOOLEAN,
                 allowNull: false,
                 defaultValue: false,
@@ -76,13 +76,14 @@ const User = (sequelize, DataTypes) => {
         },
     );
     User.associate = db => {
-        db.User.hasMany(db.Post, { foreignKey: 'user_id' }); // foreignKey는 Post 모델의 user_id, sourceKey는 User 모델의 user_id
-        db.User.hasMany(db.Comment, { foreignKey: 'user_id' }); // foreignKey는 Comment 모델의 user_id, sourceKey는 User 모델의 user_id
-        db.User.hasMany(db.Message, { foreignKey: 'send_id' }); // foreignKey는 Message 모델의 send_id, sourceKey는 User 모델의 user_id
-        db.User.hasMany(db.Message, { foreignKey: 'receive_id' }); // foreignKey는 Message 모델의 recieve_id, sourceKey는 User 모델의 user_id
-        db.User.hasMany(db.Participant, { foreignKey: 'user_id' }); // foreignKey는 Participant 모델의 user_id, sourceKey는 User 모델의 user_id
-        db.User.hasMany(db.Image, { foreignKey: 'user_id' });
-        db.User.hasMany(db.BalanceGameResult, { foreignKey: 'user_id' });
+        db.User.hasMany(db.Post, { foreignKey: 'userId' }); // foreignKey는 Post 모델의 userId, sourceKey는 User 모델의 userId
+        db.User.hasMany(db.Comment, { foreignKey: 'userId' }); // foreignKey는 Comment 모델의 userId, sourceKey는 User 모델의 userId
+        db.User.hasMany(db.Message, { foreignKey: 'sendId' }); // foreignKey는 Message 모델의 send_id, sourceKey는 User 모델의 userId
+        db.User.hasMany(db.Message, { foreignKey: 'receiveId' }); // foreignKey는 Message 모델의 recieve_id, sourceKey는 User 모델의 userId
+        db.User.hasMany(db.Participant, { foreignKey: 'userId' }); // foreignKey는 Participant 모델의 userId, sourceKey는 User 모델의 userId
+        db.User.hasMany(db.UserAndTag, { foreignKey: 'userId' });
+        db.User.hasMany(db.Image, { foreignKey: 'userId' });
+        db.User.hasMany(db.BalanceGameResult, { foreignKey: 'userId' });
     };
 
     return User;

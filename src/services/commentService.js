@@ -6,7 +6,7 @@ import { NotFoundError, InternalServerError, UnauthorizedError } from '../middle
 const commentService = {
     createComment: async ({ userId, postId, content }) => {
         try {
-            const participant = await ParticipantModel.getParticipationIdById({ userId, postId });
+            const participant = await ParticipantModel.getParticipationByUserId({ userId, postId });
             if (!participant) {
                 throw new NotFoundError('해당 id의 신청 정보가 없습니다. ');
             }
@@ -32,7 +32,7 @@ const commentService = {
         try {
             const comment = await CommentModel.findByCommentId({ commentId });
 
-            if (comment.user_id !== userId) {
+            if (comment.userId !== userId) {
                 throw new UnauthorizedError('작성한 유저에게 권한이 있습니다.');
             }
 
@@ -60,7 +60,7 @@ const commentService = {
                 throw new NotFoundError('이미 삭제된 댓글입니다.');
             }
 
-            if (comment.user_id !== userId) {
+            if (comment.userId !== userId) {
                 throw new UnauthorizedError('작성한 유저에게 권한이 있습니다.');
             }
 
@@ -82,8 +82,7 @@ const commentService = {
         try {
             let commentList = [];
             const post = await PostModel.getPostById(postId);
-            const participant = await ParticipantModel.getParticipationIdById({ userId, postId });
-
+            const participant = await ParticipantModel.getParticipationByUserId({ userId, postId });
             if (!participant) {
                 throw new NotFoundError('해당 id의 신청 정보가 없습니다. ');
             }

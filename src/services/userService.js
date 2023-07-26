@@ -27,16 +27,17 @@ const userService = {
             }
 
             // 비밀번호 암호화
-            const hashedPassword = await bcrypt.hash(userInfo.user_password, parseInt(process.env.PW_HASH_COUNT));
-            userInfo.user_password = hashedPassword;
+            const hashedPassword = await bcrypt.hash(userInfo.userPassword, parseInt(process.env.PW_HASH_COUNT));
+            userInfo.userPassword = hashedPassword;
 
             userInfo.age = calculateKoreanAge(userInfo.birthday); // birthday로 한국 나이 계산하기
 
             const createdUser = await UserModel.create(userInfo);
+            console.log('유저 서비스 userInfo.profile_image: ', userInfo.profileImage);
 
             // 유저의 프로필 이미지를 이미지 테이블에 저장
-            if (userInfo.image) {
-                await ImageModel.createImageURL(userInfo.image[1], createdUser.user_id, userInfo.image[0]);
+            if (userInfo.profileImage) {
+                await UserModel.createProfileImage(userInfo.profileImage, createdUser.userId, transaction);
             }
 
             const TagsCreate = async (tag, tagCategoryId) => {
@@ -46,7 +47,7 @@ const userService = {
                     const newTags = await Promise.all(
                         tag.map(async TagName => {
                             const tagId = await UserModel.findTagId(TagName, tagCategoryId);
-                            return { tag_id: tagId.tag_id, user_id: createdUser.user_id };
+                            return { tagId: tagId.tagId, userId: createdUser.userId };
                         }),
                     );
                     // userAndTags 테이블에 데이터 생성
@@ -85,11 +86,11 @@ const userService = {
                 throw new NotFoundError('가입 내역이 없는 이메일입니다. 다시 한 번 확인해 주세요');
             }
 
-            if (user.is_deleted === true) {
+            if (user.isDeleted === true) {
                 throw new BadRequestError('이미 탈퇴한 회원입니다.');
             }
 
-            const correctPasswordHash = user.user_password;
+            const correctPasswordHash = user.userPassword;
             const isPasswordCorrect = await bcrypt.compare(password, correctPasswordHash);
 
             if (!isPasswordCorrect) {
@@ -99,7 +100,7 @@ const userService = {
             const secretKey = process.env.JWT_SECRET_KEY || 'jwt-secret-key';
             const token = jwt.sign(
                 {
-                    userId: user.user_id,
+                    userId: user.userId,
                     email: user.email,
                     name: user.nickname,
                 },
@@ -111,7 +112,7 @@ const userService = {
             return {
                 message: '로그인에 성공했습니다.',
                 token,
-                userId: user.user_id,
+                userId: user.userId,
             };
         } catch (error) {
             if (transaction) {
@@ -162,9 +163,9 @@ const userService = {
             let personality = [];
             let ideal = [];
             for (const userAndTag of user.UserAndTags) {
-                if (userAndTag.Tag.tag_category_id === 1) {
+                if (userAndTag.Tag.tagCategoryId === 1) {
                     hobby.push(userAndTag.Tag.tagname);
-                } else if (userAndTag.Tag.tag_category_id === 2) {
+                } else if (userAndTag.Tag.tagCategoryId === 2) {
                     personality.push(userAndTag.Tag.tagname);
                 } else {
                     ideal.push(userAndTag.Tag.tagname);
@@ -174,7 +175,7 @@ const userService = {
             return {
                 message: '회원 정보 조회를 성공했습니다.',
                 // user,
-                userId: user.user_id,
+                userId: user.userId,
                 email: user.email,
                 username: user.username,
                 nickname: user.nickname,
@@ -183,7 +184,7 @@ const userService = {
                 age: user.age,
                 job: user.job,
                 region: user.region,
-                profileImage: user.profile_image,
+                profileImage: user.profileImage,
                 mbti: user.mbti,
                 religion: user.religion,
                 height: user.height,
@@ -301,12 +302,12 @@ const userService = {
                 // 태그 수정
                 if (tag && tag.length > 0) {
                     // 태그 카테고리와 일치하는 태그들 삭제
-                    await UserModel.deleteTags(user.user_id, tagCategoryId);
+                    await UserModel.deleteTags(user.userId, tagCategoryId);
                     // 태그이름 배열을 태그아이디(정수) 배열로 변경, [(tagId,userId)] 형태로 변경
                     const newTags = await Promise.all(
                         tag.map(async TagName => {
                             const tagId = await UserModel.findTagId(TagName, tagCategoryId);
-                            return { tag_id: tagId.tag_id, user_id: user.user_id };
+                            return { tagId: tagId.tagId, userId: user.userId };
                         }),
                     );
                     // 수정할 태그들 userAndTags 테이블에 데이터 생성
@@ -326,7 +327,7 @@ const userService = {
                     age: user.age,
                     job: user.job,
                     region: user.region,
-                    profileImage: user.profile_image,
+                    profileImage: user.profileImage,
                     mbti: user.mbti,
                     religion: user.religion,
                     height: user.height,
