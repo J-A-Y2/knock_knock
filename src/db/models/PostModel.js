@@ -9,7 +9,19 @@ const PostModel = {
         const { count, rows: posts } = await db.Post.findAndCountAll({
             offset,
             limit,
-            include: [{ model: db.User, attributes: ['nickname'] }],
+            include: [
+                {
+                    model: db.User,
+                    attributes: ['nickname'],
+                    include: [
+                        {
+                            model: db.UserFile,
+                            attributes: ['userId', 'fileId'],
+                            include: [{ model: db.File, attributes: ['url'], where: { category: 'profile' } }],
+                        },
+                    ],
+                },
+            ],
             order: [
                 ['createdAt', 'DESC'],
                 ['postId', 'DESC'],

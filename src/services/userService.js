@@ -140,7 +140,7 @@ const userService = {
             transaction = await db.sequelize.transaction();
             const user = await UserModel.findById(userId);
 
-            if (!user) {
+            if (!user || user.isDeleted === true) {
                 throw new NotFoundError('회원의 정보를 찾을 수 없습니다.');
             }
 
@@ -163,7 +163,7 @@ const userService = {
         try {
             const user = await UserModel.findById(userId);
 
-            if (!user) {
+            if (!user || user.isDeleted === true) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
@@ -213,7 +213,7 @@ const userService = {
         try {
             const user = await UserModel.findById(userId);
 
-            if (!user) {
+            if (!user || user.isDeleted === true) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
@@ -227,7 +227,7 @@ const userService = {
             const randomUsers = await UserModel.findRandomUsers(genderToFind, 6);
 
             if (!randomUsers || randomUsers.length === 0) {
-                throw new NotFoundError('No users found.');
+                throw new NotFoundError('유저들을 찾을 수 없습니다..');
             }
 
             return {
@@ -291,16 +291,8 @@ const userService = {
 
             const user = await UserModel.findById(userId);
 
-            if (!user) {
+            if (!user || user.isDeleted === true) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
-            }
-
-            if (updateData.profileImage) {
-                await FileModel.updateImageURL();
-            }
-
-            if (updateData.backgroundImage) {
-                await FileModel.updateImageURL();
             }
 
             await UserModel.update({ userId, updateData });
@@ -314,7 +306,7 @@ const userService = {
                     const newTags = await Promise.all(
                         tag.map(async tagName => {
                             const tagId = await UserModel.findTagId(tagName, tagCategoryId);
-                            return { userId: createdUser.userId, tagId: tagId.tagId };
+                            return { userId: user.userId, tagId: tagId.tagId };
                         }),
                     );
                     // 수정할 태그들 userTags 테이블에 데이터 생성
@@ -357,7 +349,8 @@ const userService = {
                     age: user.age,
                     job: user.job,
                     region: user.region,
-                    profileImage: user.profileImage,
+                    profileImage,
+                    backgroundImage,
                     mbti: user.mbti,
                     height: user.height,
                     hobby,
@@ -385,8 +378,8 @@ const userService = {
 
             const user = await UserModel.findById(userId);
 
-            if (!user) {
-                throw new NotFoundError('사용자의 정보를 찾을 수 없습니다.');
+            if (!user || user.isDeleted === true) {
+                throw new NotFoundError('회원의 정보를 찾을 수 없습니다.');
             }
 
             // softdelete로 삭제하는 기능
