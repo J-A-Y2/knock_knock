@@ -11,7 +11,7 @@ import { UserModel } from '../db/models/UserModel.js';
 import { FileModel } from '../db/models/FileModel.js';
 import { db } from '../db/index.js';
 import { calculateKoreanAge } from '../utils/calculateKoreanAge.js';
-import { extentionSplit } from '../utils/extentionSplit.js';
+import { extensionSplit } from '../utils/extensionSplit.js';
 
 const userService = {
     // 유저 생성
@@ -57,11 +57,11 @@ const userService = {
 
             // 유저의 프로필 이미지를 이미지 테이블에 저장
             if (profileImage) {
-                const fileExtention = extentionSplit(profileImage[1]);
+                const fileExtension = extensionSplit(profileImage[1]);
                 await FileModel.createUserImage(
                     profileImage[0], // category
                     profileImage[1], // url
-                    fileExtention,
+                    fileExtension,
                     createdUser.userId,
                     transaction,
                 );
@@ -287,7 +287,7 @@ const userService = {
         try {
             transaction = await db.sequelize.transaction();
 
-            const { hobby, personality, ideal, ...updateData } = updateUserInfo;
+            const { hobby, personality, ideal, profileImage, backgroundImage, ...updateData } = updateUserInfo;
 
             const user = await UserModel.findById(userId);
 
@@ -325,6 +325,29 @@ const userService = {
             await tagsUpdate(hobby, 1);
             await tagsUpdate(personality, 2);
             await tagsUpdate(ideal, 3);
+
+            if (profileImage) {
+                const fileExtension = extensionSplit(profileImage[1]);
+                await FileModel.updateUserImage(
+                    profileImage[0], // category
+                    profileImage[1], // url
+                    fileExtension,
+                    user.userId,
+                    transaction,
+                );
+            }
+
+            if (backgroundImage) {
+                const fileExtension = extensionSplit(backgroundImage[1]);
+                await FileModel.updateUserImage(
+                    backgroundImage[0], // category
+                    backgroundImage[1], // url
+                    fileExtension,
+                    user.userId,
+                    transaction,
+                );
+            }
+
             await transaction.commit();
 
             return {

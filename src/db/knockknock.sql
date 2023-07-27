@@ -30,7 +30,7 @@ INSERT INTO tags VALUES(NULL, '볼링',1);
 INSERT INTO tags VALUES(NULL, '요리',1);
 INSERT INTO tags VALUES(NULL, '그림 그리기',1);
 INSERT INTO tags VALUES(NULL, '음악 듣기',1);
-INSERT INTO tags VALUES(NULL, '악기 여주',1);
+INSERT INTO tags VALUES(NULL, '악기 연주',1);
 INSERT INTO tags VALUES(NULL, '사진 찍기',1);
 INSERT INTO tags VALUES(NULL, '웹툰',1);
 INSERT INTO tags VALUES(NULL, '게임',1);
