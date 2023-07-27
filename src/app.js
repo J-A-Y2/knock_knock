@@ -3,7 +3,7 @@ import specs from './swagger/swagger.js';
 import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
 import { db } from './db/index.js';
-import { imageRouter } from './routers/imageRouter.js';
+import { fileRouter } from './routers/fileRouter.js';
 import { userRouter } from './routers/userRouter.js';
 import { postRouter } from './routers/postRouter.js';
 import { messageRouter } from './routers/messageRouter.js';
