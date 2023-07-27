@@ -44,6 +44,7 @@ const UserModel = {
         });
         return tagId;
     },
+    // UserTag 매핑 테이블의 tagId 찾아내기
     findByUserId: async userId => {
         try {
             return await db.UserTag.findAll({
@@ -56,6 +57,7 @@ const UserModel = {
             console.error(error);
         }
     },
+    // email로 유저 찾아내기(email 중복 확인)
     findByEmail: async email => {
         const user = await db.User.findOne({
             where: {
@@ -66,6 +68,7 @@ const UserModel = {
 
         return user;
     },
+    // userId 검색해서 유저 찾기
     findById: async userId => {
         const user = await db.User.findOne({
             where: {
@@ -82,6 +85,7 @@ const UserModel = {
         });
         return user;
     },
+    // limit(정수)에 해당하는 인원 랜덤으로 조회하기
     findRandomUsers: async (gender, limit) => {
         const randomUsers = await db.User.findAll({
             where: {
@@ -93,6 +97,7 @@ const UserModel = {
 
         return randomUsers;
     },
+    // 로그인한 유저가 작성한 게시글 찾기
     findMyPosts: async userId => {
         return await db.Post.findAll({
             where: {
@@ -100,6 +105,7 @@ const UserModel = {
             },
         });
     },
+    // 로그인한 유저가 참여한 게시글 찾기
     findMyParticipants: async userId => {
         return await db.Participant.findAll({
             where: {

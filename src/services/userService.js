@@ -140,7 +140,7 @@ const userService = {
             transaction = await db.sequelize.transaction();
             const user = await UserModel.findById(userId);
 
-            if (!user) {
+            if (!user || user.isDeleted === true) {
                 throw new NotFoundError('회원의 정보를 찾을 수 없습니다.');
             }
 
@@ -163,7 +163,7 @@ const userService = {
         try {
             const user = await UserModel.findById(userId);
 
-            if (user.isDeleted === 1) {
+            if (!user || user.isDeleted === true) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
@@ -213,7 +213,7 @@ const userService = {
         try {
             const user = await UserModel.findById(userId);
 
-            if (user.isDeleted === 1) {
+            if (!user || user.isDeleted === true) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
@@ -291,7 +291,7 @@ const userService = {
 
             const user = await UserModel.findById(userId);
 
-            if (!user.isDeleted === 1) {
+            if (!user || user.isDeleted === true) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
@@ -378,8 +378,8 @@ const userService = {
 
             const user = await UserModel.findById(userId);
 
-            if (!user) {
-                throw new NotFoundError('사용자의 정보를 찾을 수 없습니다.');
+            if (!user || user.isDeleted === true) {
+                throw new NotFoundError('회원의 정보를 찾을 수 없습니다.');
             }
 
             // softdelete로 삭제하는 기능
