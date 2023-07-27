@@ -8,7 +8,7 @@ const File = (sequelize, DataTypes) => {
                 primaryKey: true,
             },
             category: {
-                type: DataTypes.ENUM('profile', 'backgroud', 'post', 'card'),
+                type: DataTypes.ENUM('profile', 'background', 'post', 'card'),
             },
             url: {
                 type: DataTypes.STRING,

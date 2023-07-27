@@ -55,7 +55,7 @@ INSERT INTO tags VALUES(NULL, '지적인',2);
 INSERT INTO tags VALUES(NULL, '성실한',2);
 INSERT INTO tags VALUES(NULL, '감성적인',2);
 INSERT INTO tags VALUES(NULL, '논리적인',2);
-INSERT INTO tags VALUES(NULL, '증흑적인',2);
+INSERT INTO tags VALUES(NULL, '즉흥적인',2);
 INSERT INTO tags VALUES(NULL, '소심한',2);
 INSERT INTO tags VALUES(NULL, '쿨한',2);
 
@@ -86,7 +86,7 @@ INSERT INTO tags VALUES(NULL, '지적인',3);
 INSERT INTO tags VALUES(NULL, '성실한',3);
 INSERT INTO tags VALUES(NULL, '감성적인',3);
 INSERT INTO tags VALUES(NULL, '논리적인',3);
-INSERT INTO tags VALUES(NULL, '증흑적인',3);
+INSERT INTO tags VALUES(NULL, '즉흥적인',3);
 INSERT INTO tags VALUES(NULL, '소심한',3);
 INSERT INTO tags VALUES(NULL, '쿨한',3);
 

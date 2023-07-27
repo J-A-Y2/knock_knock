@@ -1,34 +1,31 @@
 import { db } from '../index.js';
 
 const UserModel = {
+    // 유저 생성
     create: async newUser => {
         return await db.User.create(newUser);
     },
+    // 유저 태그 생성
     bulkCreateTags: async (newTags, transaction) => {
         return await db.UserTag.bulkCreate(newTags, { transaction });
     },
+    // 유저 태그 삭제
     deleteTags: async (userId, tagCategoryId) => {
         try {
-            // 모든 userTagId들을 찾아서 userId, tag_categoryId와 일치하는 데이터 삭제
+            // 모든 UserTag의 id들을 찾아서 userId, tag_categoryId와 일치하는 데이터 삭제
             const userTags = await db.UserTag.findAll({
                 where: {
                     userId,
+                    tagCategoryId,
                 },
-                include: [
-                    {
-                        model: db.Tag,
-                        where: {
-                            tagCategoryId,
-                        },
-                    },
-                ],
             });
-            const userTagIds = userTags.map(userTag => userTag.userTagId);
+            // 태그아이디만 뽑아서 배열 만들기 [1,2]
+            const userTagIds = userTags.map(userTag => userTag.id);
 
             // UserTag 행들 삭제
             const deleteCount = await db.UserTag.destroy({
                 where: {
-                    userTagId: userTagIds,
+                    id: userTagIds,
                 },
             });
 
@@ -52,13 +49,8 @@ const UserModel = {
             return await db.UserTag.findAll({
                 where: {
                     userId,
+                    tagCategoryId,
                 },
-                include: [
-                    {
-                        model: db.Tag,
-                        attributes: ['tagCategoryId'],
-                    },
-                ],
             });
         } catch (error) {
             console.error(error);
