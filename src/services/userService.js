@@ -27,12 +27,12 @@ const userService = {
             }
 
             // 비밀번호 암호화
-            const hashedPassword = await bcrypt.hash(userInfo.userPassword, parseInt(process.env.PW_HASH_COUNT));
-            userInfo.userPassword = hashedPassword;
+            const hashedPassword = await bcrypt.hash(userInfo.password, parseInt(process.env.PW_HASH_COUNT));
+            userInfo.password = hashedPassword;
 
             userInfo.age = calculateKoreanAge(userInfo.birthday); // birthday로 한국 나이 계산하기
 
-            const createdUser = await UserModel.create(userInfo);
+            const createdUser = await UserModel.create(userInfo); // profileImage: URL
             console.log('유저 서비스 userInfo.profile_image: ', userInfo.profileImage);
 
             // 유저의 프로필 이미지를 이미지 테이블에 저장
@@ -90,7 +90,7 @@ const userService = {
                 throw new BadRequestError('이미 탈퇴한 회원입니다.');
             }
 
-            const correctPasswordHash = user.userPassword;
+            const correctPasswordHash = user.password;
             const isPasswordCorrect = await bcrypt.compare(password, correctPasswordHash);
 
             if (!isPasswordCorrect) {
@@ -164,11 +164,11 @@ const userService = {
             let ideal = [];
             for (const userTag of user.UserTags) {
                 if (userTag.Tag.tagCategoryId === 1) {
-                    hobby.push(userTag.Tag.tagname);
+                    hobby.push(userTag.Tag.tagName);
                 } else if (userTag.Tag.tagCategoryId === 2) {
-                    personality.push(userTag.Tag.tagname);
+                    personality.push(userTag.Tag.tagName);
                 } else {
-                    ideal.push(userTag.Tag.tagname);
+                    ideal.push(userTag.Tag.tagName);
                 }
             }
 
@@ -177,7 +177,7 @@ const userService = {
                 // user,
                 userId: user.userId,
                 email: user.email,
-                username: user.username,
+                name: user.name,
                 nickname: user.nickname,
                 gender: user.gender,
                 birthday: user.birthday,
@@ -186,7 +186,6 @@ const userService = {
                 region: user.region,
                 profileImage: user.profileImage,
                 mbti: user.mbti,
-                religion: user.religion,
                 height: user.height,
                 introduce: user.introduce,
                 hobby,
@@ -329,7 +328,6 @@ const userService = {
                     region: user.region,
                     profileImage: user.profileImage,
                     mbti: user.mbti,
-                    religion: user.religion,
                     height: user.height,
                     hobby,
                     personality,
