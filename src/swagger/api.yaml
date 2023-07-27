@@ -26,13 +26,13 @@ paths:
                         schema:
                             type: object
                             properties:
-                                username:
+                                name:
                                     type: string
                                 email:
                                     type: string
                                 nickname:
                                     type: string
-                                userPassword:
+                                password:
                                     type: string
                                 gender:
                                     type: string
@@ -46,8 +46,6 @@ paths:
                                 profileImage:
                                     type: string
                                 mbti:
-                                    type: string
-                                religion:
                                     type: string
                                 height:
                                     type: string
@@ -75,13 +73,13 @@ paths:
                             schema:
                             type: object
                             properties:
-                                username:
+                                name:
                                     type: string
                                 email:
                                     type: string
                                 nickname:
                                     type: string
-                                userPassword:
+                                password:
                                     type: string
                                 gender:
                                     type: string
@@ -95,8 +93,6 @@ paths:
                                 profileImage:
                                     type: string
                                 mbti:
-                                    type: string
-                                religion:
                                     type: string
                                 height:
                                     type: string
@@ -177,7 +173,7 @@ paths:
                                         type: integer
                                     email:
                                         type: string
-                                    username:
+                                    name:
                                         type: string
                                     nickname:
                                         type: string
@@ -195,8 +191,6 @@ paths:
                                     profileImage:
                                         type: string
                                     mbti:
-                                        type: string
-                                    religion:
                                         type: string
                                     height:
                                         type: string
@@ -240,7 +234,7 @@ paths:
                                         type: integer
                                     email:
                                         type: string
-                                    username:
+                                    name:
                                         type: string
                                     nickname:
                                         type: string
@@ -256,8 +250,6 @@ paths:
                                     profileImage:
                                         type: string
                                     mbti:
-                                        type: string
-                                    religion:
                                         type: string
                                     height:
                                         type: string
@@ -326,8 +318,6 @@ paths:
                                     type: string
                                 mbti:
                                     type: string
-                                religion:
-                                    type: string
                                 height:
                                     type: string
                                 hobby:
@@ -369,8 +359,6 @@ paths:
                                             profileImage:
                                                 type: string
                                             mbti:
-                                                type: string
-                                            religion:
                                                 type: string
                                             height:
                                                 type: string
@@ -442,7 +430,7 @@ paths:
                                                     type: integer
                                                 email:
                                                     type: string
-                                                username:
+                                                name:
                                                     type: string
                                                 nickname:
                                                     type: string
@@ -458,8 +446,6 @@ paths:
                                                 profileImage:
                                                     type: string
                                                 mbti:
-                                                    type: string
-                                                religion:
                                                     type: string
                                                 height:
                                                     type: string

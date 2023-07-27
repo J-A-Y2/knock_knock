@@ -50,10 +50,10 @@ const UserModel = {
             imageCategoryId,
         });
     },
-    findTagId: async (tagname, tagCategoryId) => {
+    findTagId: async (tagName, tagCategoryId) => {
         const tagId = await db.Tag.findOne({
             where: {
-                tagname,
+                tagName,
                 tagCategoryId,
             },
         });
@@ -97,7 +97,7 @@ const UserModel = {
                 {
                     model: db.UserTag,
                     attributes: ['userId'],
-                    include: [{ model: db.Tag, attributes: ['tagname', 'tagCategoryId'] }],
+                    include: [{ model: db.Tag, attributes: ['tagName', 'tagCategoryId'] }],
                 },
             ],
         });
