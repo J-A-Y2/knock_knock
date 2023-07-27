@@ -1,6 +1,7 @@
 import { ParticipantModel } from '../db/models/ParticipantModel.js';
 import { ConflictError, InternalServerError, NotFoundError, UnauthorizedError } from '../middlewares/errorMiddleware.js';
 import { db } from '../db/index.js';
+import { PostModel } from '../db/models/PostModel.js';
 import { UserModel } from '../db/models/UserModel.js';
 import { throwNotFoundError } from '../utils/commonFunctions.js';
 import {

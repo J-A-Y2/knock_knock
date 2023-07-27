@@ -7,9 +7,15 @@ const File = (sequelize, DataTypes) => {
                 autoIncrement: true,
                 primaryKey: true,
             },
-            fileUrl: {
+            url: {
                 type: DataTypes.STRING,
                 allowNull: false,
+            },
+            category: {
+                type: DataTypes.ENUM('profile', 'backgroud', 'post', 'card'),
+            },
+            extention: {
+                type: DataTypes.ENUM('jpg', 'png'),
             },
         },
         {
@@ -24,6 +30,7 @@ const File = (sequelize, DataTypes) => {
     File.associate = db => {
         db.File.hasOne(db.UserFile, { foreignKey: 'fileId' }); // foreignKey는 File 모델의 userId, sourceKey는 UserFile 모델의 fileId
         db.File.hasOne(db.PostFile, { foreignKey: 'fileId' }); // foreignKey는 File 모델의 userId, sourceKey는 PostFile 모델의 fileId
+        db.File.hasOne(db.CardFile, { foreignKey: 'fileId' });
     };
 
     return File;

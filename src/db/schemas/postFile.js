@@ -13,15 +13,11 @@ const PostFile = (sequelize, DataTypes) => {
             timestamps: false,
             underscored: true,
             modelName: 'PostFile',
-            tableName: 'postFiles',
+            tableName: 'post_files',
             paranoid: false,
         },
     );
     PostFile.associate = db => {
-        db.PostFile.belongsTo(db.User, {
-            foreignKey: 'userId',
-            targetKey: 'userId',
-        }); // foreignKey는 PostFile 모델의 userId, targetKey는 User 모델의 userId
         db.PostFile.belongsTo(db.Post, {
             foreignKey: 'postId',
             targetKey: 'postId',

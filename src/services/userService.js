@@ -8,7 +8,7 @@ import {
     InternalServerError,
 } from '../middlewares/errorMiddleware.js';
 import { UserModel } from '../db/models/UserModel.js';
-import { ImageModel } from '../db/models/ImageModel.js';
+import { FileModel } from '../db/models/FileModel.js';
 import { db } from '../db/index.js';
 import { calculateKoreanAge } from '../utils/calculateKoreanAge.js';
 const userService = {
@@ -289,11 +289,11 @@ const userService = {
             }
 
             if (updateData.profileImage) {
-                await ImageModel.updateImageURL();
+                await FileModel.updateImageURL();
             }
 
             if (updateData.backgroundImage) {
-                await ImageModel.updateImageURL();
+                await FileModel.updateImageURL();
             }
 
             await UserModel.update({ userId, updateData });

@@ -2,7 +2,7 @@ const UserTag = (sequelize, DataTypes) => {
     const UserTag = sequelize.define(
         'UserTag',
         {
-            userTagId: {
+            id: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true,
@@ -13,7 +13,7 @@ const UserTag = (sequelize, DataTypes) => {
             timestamps: false,
             underscored: true,
             modelName: 'UserTag',
-            tableName: 'userTags',
+            tableName: 'user_tags',
             paranoid: false,
         },
     );

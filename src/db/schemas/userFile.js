@@ -13,7 +13,7 @@ const UserFile = (sequelize, DataTypes) => {
             timestamps: false,
             underscored: true,
             modelName: 'UserFile',
-            tableName: 'userFiles',
+            tableName: 'user_files',
             paranoid: false,
         },
     );

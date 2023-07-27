@@ -9,18 +9,23 @@ const Participant = (sequelize, DataTypes) => {
             },
             canceled: {
                 type: DataTypes.BOOLEAN,
-                allowNull: true,
+                allowNull: false,
                 defaultValue: false,
             },
             status: {
-                type: DataTypes.STRING(15),
-                allowNull: true,
+                type: DataTypes.ENUM('pending', 'accepted', 'rejected'),
+                allowNull: false,
                 defaultValue: 'pending',
+            },
+            matchingCount: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                defaultValue: 0,
             },
         },
         {
             sequelize,
-            timestamps: false,
+            timestamps: true,
             underscored: true,
             modelName: 'Participant',
             tableName: 'participants',
