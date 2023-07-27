@@ -7,8 +7,8 @@ const Comment = (sequelize, DataTypes) => {
                 autoIncrement: true,
                 primaryKey: true,
             },
-            commentContent: {
-                type: DataTypes.STRING(40),
+            content: {
+                type: DataTypes.STRING,
                 allowNull: true,
             },
         },

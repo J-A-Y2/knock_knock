@@ -21,7 +21,7 @@ const ChatRoom = (sequelize, DataTypes) => {
             timestamps: true,
             underscored: true,
             modelName: 'ChatRoom',
-            tableName: 'chatRooms',
+            tableName: 'chat_rooms',
             paranoid: false,
         },
     );

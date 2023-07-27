@@ -17,7 +17,7 @@ const TagCategory = (sequelize, DataTypes) => {
             timestamps: false,
             underscored: true,
             modelName: 'TagCategory',
-            tableName: 'tagCategories',
+            tableName: 'tag_categories',
             paranoid: false,
         },
     );

@@ -7,11 +7,11 @@ const Post = (sequelize, DataTypes) => {
                 autoIncrement: true,
                 primaryKey: true,
             },
-            postType: {
+            type: {
                 type: DataTypes.STRING(5),
                 allowNull: false,
             },
-            postTitle: {
+            title: {
                 type: DataTypes.STRING(100),
                 allowNull: false,
             },
@@ -23,7 +23,7 @@ const Post = (sequelize, DataTypes) => {
                 type: DataTypes.STRING(20),
                 allowNull: false,
             },
-            postContent: {
+            content: {
                 type: DataTypes.STRING(200),
                 allowNull: true,
             },

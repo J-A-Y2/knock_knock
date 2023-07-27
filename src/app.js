@@ -11,7 +11,7 @@ import { commentRouter } from './routers/commentRouter.js';
 import { participantRouter } from './routers/participantRouter.js';
 import { chatRouter } from './routers/chatRouter.js';
 import { logger } from '../src/utils/logger.js';
-import { morganMiddleware } from './middlewares/morgon.js';
+import { morganMiddleware } from './middlewares/morgan.js';
 
 import { errorMiddleware } from './middlewares/errorMiddleware.js';
 
@@ -31,10 +31,10 @@ app.use('/comments', commentRouter);
 app.use('/messages', messageRouter);
 app.use('/participants', participantRouter);
 app.use('/chats', chatRouter);
-app.use('/file', fileRouter);
+app.use('/files', fileRouter);
 
 db.sequelize
-    .sync({ force: false }) // true이면 테이블 모두 삭제 후 생성, false이면 테이블 그대로 유지
+    .sync({ force: true }) // true이면 테이블 모두 삭제 후 생성, false이면 테이블 그대로 유지
     .then(() => {
         logger.info('데이터베이스 연결 성공');
     })

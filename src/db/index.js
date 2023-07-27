@@ -12,6 +12,9 @@ import ChatRoom from './schemas/chatRoom.js';
 import File from './schemas/file.js';
 import UserFile from './schemas/userFile.js';
 import PostFile from './schemas/postFile.js';
+import CardFile from './schemas/cardFile.js';
+import Card from './schemas/card.js';
+import UserCard from './schemas/userCard.js';
 
 const db = {};
 
@@ -19,6 +22,7 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
     host: config.host,
     port: config.port,
     dialect: config.dialect,
+    // logging: false,
 });
 
 db.User = User(sequelize, Sequelize);
@@ -33,6 +37,9 @@ db.ChatRoom = ChatRoom(sequelize, Sequelize);
 db.File = File(sequelize, Sequelize);
 db.UserFile = UserFile(sequelize, Sequelize);
 db.PostFile = PostFile(sequelize, Sequelize);
+db.CardFile = CardFile(sequelize, Sequelize);
+db.Card = Card(sequelize, Sequelize);
+db.UserCard = UserCard(sequelize, Sequelize);
 
 // 각 모델들을 돌면서 모델간의 관계를 정의하는 함수를 동작시킴.
 Object.keys(db).forEach(modelName => {

@@ -12,7 +12,7 @@ const User = (sequelize, DataTypes) => {
                 allowNull: false,
                 unique: true,
             },
-            username: {
+            name: {
                 type: DataTypes.STRING(5),
                 allowNull: false,
             },
@@ -20,7 +20,7 @@ const User = (sequelize, DataTypes) => {
                 type: DataTypes.STRING(15),
                 allowNull: false,
             },
-            userPassword: {
+            password: {
                 type: DataTypes.STRING(60),
                 allowNull: false,
             },
@@ -45,15 +45,28 @@ const User = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             mbti: {
-                type: DataTypes.STRING(4),
-                allowNull: true,
-            },
-            religion: {
-                type: DataTypes.STRING(10),
+                type: DataTypes.ENUM(
+                    'ISTJ',
+                    'ISFJ',
+                    'INFJ',
+                    'INTJ',
+                    'ISTP',
+                    'ISFP',
+                    'INFP',
+                    'INTP',
+                    'ESTP',
+                    'ESFP',
+                    'ENFP',
+                    'ENTP',
+                    'ESTJ',
+                    'ESFJ',
+                    'ENFJ',
+                    'ENTJ',
+                ),
                 allowNull: true,
             },
             height: {
-                type: DataTypes.STRING(3),
+                type: DataTypes.INTEGER,
                 allowNull: true,
             },
             introduce: {
@@ -83,6 +96,7 @@ const User = (sequelize, DataTypes) => {
         db.User.hasMany(db.Participant, { foreignKey: 'userId' }); // foreignKey는 Participant 모델의 userId, sourceKey는 User 모델의 userId
         db.User.hasMany(db.UserTag, { foreignKey: 'userId' });
         db.User.hasMany(db.UserFile, { foreignKey: 'userId' });
+        db.User.hasMany(db.UserCard, { foreignKey: 'userId' });
     };
 
     return User;

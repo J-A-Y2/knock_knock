@@ -66,8 +66,8 @@ const postService = {
         }
     },
     setPost: async ({ userId, postId, toUpdate }) => {
+        const transaction = await db.sequelize.transaction({ autocommit: false });
         try {
-            const transaction = await db.sequelize.transaction({ autocommit: false });
             let post = await PostModel.getPostById(postId);
             throwNotFoundError(post, '게시글');
 

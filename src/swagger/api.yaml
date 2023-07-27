@@ -32,7 +32,7 @@ paths:
                                     type: string
                                 nickname:
                                     type: string
-                                user_password:
+                                userPassword:
                                     type: string
                                 gender:
                                     type: string
@@ -43,7 +43,7 @@ paths:
                                     type: string
                                 region:
                                     type: string
-                                profile_image:
+                                profileImage:
                                     type: string
                                 mbti:
                                     type: string
@@ -81,7 +81,7 @@ paths:
                                     type: string
                                 nickname:
                                     type: string
-                                user_password:
+                                userPassword:
                                     type: string
                                 gender:
                                     type: string
@@ -92,7 +92,7 @@ paths:
                                     type: string
                                 region:
                                     type: string
-                                profile_image:
+                                profileImage:
                                     type: string
                                 mbti:
                                     type: string
@@ -146,12 +146,14 @@ paths:
                     content:
                         application/json:
                             schema:
-                            type: object
-                            properties:
-                                email:
-                                    type: string
-                                password:
-                                    type: string
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    token:
+                                        type: string
+                                    userId:
+                                        type: integer
                 '405':
                     description: Invalid input
 
@@ -159,11 +161,11 @@ paths:
         get:
             tags:
                 - user
-            description: 유저 정보 불러오기
+            description: 내 정보 불러오기
 
             responses:
                 '200':
-                    description: 유저 정보 불러오기 성공!
+                    description: 내 정보 불러오기 성공!
                     content:
                         application/json:
                             schema:
@@ -351,36 +353,41 @@ paths:
                     content:
                         application/json:
                             schema:
-                            type: object
-                            properties:
-                                nickname:
-                                    type: string
-                                job:
-                                    type: string
-                                region:
-                                    type: string
-                                profileImage:
-                                    type: string
-                                mbti:
-                                    type: string
-                                religion:
-                                    type: string
-                                height:
-                                    type: string
-                                hobby:
-                                    type: array
-                                    items:
+                                type: object
+                                properties:
+                                    message:
                                         type: string
-                                presonality:
-                                    type: array
-                                    items:
-                                        type: string
-                                ideal:
-                                    type: array
-                                    items:
-                                        type: string
-                                indtroduce:
-                                    type: string
+                                    updatedUser:
+                                        type: object
+                                        properties:
+                                            nickname:
+                                                type: string
+                                            job:
+                                                type: string
+                                            region:
+                                                type: string
+                                            profileImage:
+                                                type: string
+                                            mbti:
+                                                type: string
+                                            religion:
+                                                type: string
+                                            height:
+                                                type: string
+                                            hobby:
+                                                type: array
+                                                items:
+                                                    type: string
+                                            presonality:
+                                                type: array
+                                                items:
+                                                    type: string
+                                            ideal:
+                                                type: array
+                                                items:
+                                                    type: string
+                                            indtroduce:
+                                                type: string
 
                 '400':
                     description: Invalid ID supplied
@@ -422,54 +429,54 @@ paths:
                     content:
                         application/json:
                             schema:
-                            type: object
-                            properties:
-                                message:
-                                    type: string
-                                randomUsers:
-                                    type: array
-                                    items:
-                                        type: object
-                                        properties:
-                                            userId:
-                                                type: integer
-                                            email:
-                                                type: string
-                                            username:
-                                                type: string
-                                            nickname:
-                                                type: string
-                                            gender:
-                                                type: string
-                                            birthday:
-                                                type: string
-                                                format: date
-                                            job:
-                                                type: string
-                                            region:
-                                                type: string
-                                            profileImage:
-                                                type: string
-                                            mbti:
-                                                type: string
-                                            religion:
-                                                type: string
-                                            height:
-                                                type: string
-                                            hobby:
-                                                type: array
-                                                items:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    randomUsers:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                userId:
+                                                    type: integer
+                                                email:
                                                     type: string
-                                            presonality:
-                                                type: array
-                                                items:
+                                                username:
                                                     type: string
-                                            ideal:
-                                                type: array
-                                                items:
+                                                nickname:
                                                     type: string
-                                            introduce:
-                                                type: string
+                                                gender:
+                                                    type: string
+                                                birthday:
+                                                    type: string
+                                                    format: date
+                                                job:
+                                                    type: string
+                                                region:
+                                                    type: string
+                                                profileImage:
+                                                    type: string
+                                                mbti:
+                                                    type: string
+                                                religion:
+                                                    type: string
+                                                height:
+                                                    type: string
+                                                hobby:
+                                                    type: array
+                                                    items:
+                                                        type: string
+                                                presonality:
+                                                    type: array
+                                                    items:
+                                                        type: string
+                                                ideal:
+                                                    type: array
+                                                    items:
+                                                        type: string
+                                                introduce:
+                                                    type: string
                 '400':
                     description: Invalid value
 
@@ -520,34 +527,34 @@ paths:
                                         items:
                                             type: object
                                             properties:
-                                                post_id:
+                                                postId:
                                                     type: integer
-                                                profile_image:
+                                                profileImage:
                                                     type: string
                                                     nullable: true
-                                                post_type:
+                                                postType:
                                                     type: string
-                                                post_title:
+                                                postTitle:
                                                     type: string
-                                                post_image:
+                                                postImage:
                                                     type: string
                                                     nullable: true
                                                 place:
                                                     type: string
-                                                meeting_time:
+                                                meetingTime:
                                                     type: string
-                                                post_content:
+                                                postContent:
                                                     type: string
-                                                is_completed:
+                                                isCompleted:
                                                     type: boolean
                                                     default: false
-                                                total_m:
+                                                totalM:
                                                     type: integer
-                                                total_f:
+                                                totalF:
                                                     type: integer
-                                                recruited_m:
+                                                recruitedM:
                                                     type: integer
-                                                recruited_f:
+                                                recruitedF:
                                                     type: integer
                                                 createdAt:
                                                     type: string
@@ -577,19 +584,19 @@ paths:
                         schema:
                             type: object
                             properties:
-                                post_title:
+                                postTitle:
                                     type: string
-                                post_content:
+                                postContent:
                                     type: string
-                                post_type:
+                                postType:
                                     type: string
-                                total_m:
+                                totalM:
                                     type: integer
-                                total_f:
+                                totalF:
                                     type: integer
                                 place:
                                     type: string
-                                meeting_time:
+                                meetingTime:
                                     type: string
                 required: true
 
@@ -620,33 +627,33 @@ paths:
                                     post:
                                         type: object
                                         properties:
-                                            post_id:
+                                            postId:
                                                 type: integer
-                                            profile_image:
+                                            profileImage:
                                                 type: string
                                                 nullable: true
-                                            post_type:
+                                            postType:
                                                 type: string
-                                            post_title:
+                                            postTitle:
                                                 type: string
-                                            post_image:
+                                            postImage:
                                                 type: string
                                                 nullable: true
                                             place:
                                                 type: string
-                                            meeting_time:
+                                            meetingTime:
                                                 type: string
-                                            post_content:
+                                            postContent:
                                                 type: string
-                                            is_completed:
+                                            isCompleted:
                                                 type: boolean
-                                            total_m:
+                                            totalM:
                                                 type: integer
-                                            total_f:
+                                            totalF:
                                                 type: integer
-                                            recruited_m:
+                                            recruitedM:
                                                 type: integer
-                                            recruited_f:
+                                            recruitedF:
                                                 type: integer
                                             createdAt:
                                                 type: string
@@ -654,7 +661,7 @@ paths:
                                             updatedAt:
                                                 type: string
                                                 format: date-time
-                                            user_id:
+                                            userId:
                                                 type: integer
                     required: true
         delete:
