@@ -1,24 +1,31 @@
 import { db } from '../index.js';
-const ImageModel = {
+const FileModel = {
     // 이미지 저장
     createImageURL: async (imageUrl, userId, imageCategoryName) => {
         const image = await db.ImageCategory.findOne({
             where: {
-                image_category_name: imageCategoryName,
+                imageCategoryName,
             },
         });
         return await db.Image.create({
-            image_url: imageUrl,
-            user_id: userId,
-            image_category_id: image.image_category_id,
+            imageUrl,
+            userId,
+            imageCategoryId: image.imageCategoryId,
+        });
+    },
+    // 이미지 조회
+    findImage: async (userId, imageCategoryId) => {
+        return await db.Image.findOne({
+            userId,
+            imageCategoryId,
         });
     },
     // 이미지 수정
     updateImageURL: async (imageUrl, userId, imageCategoryName) => {
         const image = await db.ImageCategory.findOne({
             where: {
-                user_id: userId,
-                image_category_name: imageCategoryName,
+                userId,
+                imageCategoryName,
             },
         });
         if (!image) {
@@ -26,18 +33,11 @@ const ImageModel = {
         }
         await db.Image.update(imageUrl, {
             where: {
-                user_id: userId,
-                image_category_id: image.image_category_id,
+                userId,
+                imageCategoryId: image.imageCategoryId,
             },
-        });
-    },
-    // 이미지 조회
-    findImage: async (userId, imageCategoryId) => {
-        return await db.Image.findOne({
-            user_id: userId,
-            image_category_id: imageCategoryId,
         });
     },
 };
 
-export { ImageModel };
+export { FileModel };

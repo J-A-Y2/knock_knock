@@ -1,6 +1,6 @@
 import { statusCode } from '../utils/statusCode.js';
 
-const imageController = {
+const fileController = {
     getImageUrl: async (req, res, next) => {
         try {
             console.log(req.file.location);
@@ -14,4 +14,4 @@ const imageController = {
     },
 };
 
-export { imageController };
+export { fileController };
