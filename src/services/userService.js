@@ -11,13 +11,15 @@ import { UserModel } from '../db/models/UserModel.js';
 import { FileModel } from '../db/models/FileModel.js';
 import { db } from '../db/index.js';
 import { calculateKoreanAge } from '../utils/calculateKoreanAge.js';
+import { extentionSplit } from '../utils/extentionSplit.js';
+
 const userService = {
     // 유저 생성
     createUser: async ({ newUser }) => {
         let transaction;
         try {
             transaction = await db.sequelize.transaction();
-            const { hobby, personality, ideal, ...userInfo } = newUser;
+            const { hobby, personality, ideal, profileImage, ...userInfo } = newUser;
 
             //이메일 중복 확인
             const user = await UserModel.findByEmail(newUser.email);
@@ -32,31 +34,37 @@ const userService = {
 
             userInfo.age = calculateKoreanAge(userInfo.birthday); // birthday로 한국 나이 계산하기
 
-            const createdUser = await UserModel.create(userInfo); // profileImage: URL
-            console.log('유저 서비스 userInfo.profile_image: ', userInfo.profileImage);
+            const createdUser = await UserModel.create(userInfo);
 
-            const TagsCreate = async (tag, tagCategoryId) => {
+            const tagsCreate = async (tag, tagCategoryId) => {
                 // 태그 생성
                 if (tag && tag.length > 0) {
                     // 태그이름 배열을 태그아이디(정수) 배열로 변경, [(tagId,userId)] 형태로 변경
                     const newTags = await Promise.all(
-                        tag.map(async TagName => {
-                            const tagId = await UserModel.findTagId(TagName, tagCategoryId);
-                            return { tagId: tagId.tagId, userId: createdUser.userId };
+                        tag.map(async tagName => {
+                            const tagId = await UserModel.findTagId(tagName, tagCategoryId);
+                            return { userId: createdUser.userId, tagId: tagId.tagId, tagCategoryId };
                         }),
                     );
                     // userTags 테이블에 데이터 생성
-                    await UserModel.bulkCreateTags({ newTags, transaction });
+                    await UserModel.bulkCreateTags(newTags, transaction);
                 }
             };
 
-            await TagsCreate(hobby, 1);
-            await TagsCreate(personality, 2);
-            await TagsCreate(ideal, 3);
+            await tagsCreate(hobby, 1);
+            await tagsCreate(personality, 2);
+            await tagsCreate(ideal, 3);
 
             // 유저의 프로필 이미지를 이미지 테이블에 저장
-            if (userInfo.profileImage) {
-                await FileModel.createProfileImage(userInfo.profileImage, createdUser.userId, transaction);
+            if (profileImage) {
+                const fileExtention = extentionSplit(profileImage[1]);
+                await FileModel.createUserImage(
+                    profileImage[0], // category
+                    profileImage[1], // url
+                    fileExtention,
+                    createdUser.userId,
+                    transaction,
+                );
             }
 
             await transaction.commit();
@@ -297,16 +305,16 @@ const userService = {
 
             await UserModel.update({ userId, updateData });
 
-            const TagsUpdate = async (tag, tagCategoryId) => {
+            const tagsUpdate = async (tag, tagCategoryId) => {
                 // 태그 수정
                 if (tag && tag.length > 0) {
                     // 태그 카테고리와 일치하는 태그들 삭제
                     await UserModel.deleteTags(user.userId, tagCategoryId);
                     // 태그이름 배열을 태그아이디(정수) 배열로 변경, [(tagId,userId)] 형태로 변경
                     const newTags = await Promise.all(
-                        tag.map(async TagName => {
-                            const tagId = await UserModel.findTagId(TagName, tagCategoryId);
-                            return { tagId: tagId.tagId, userId: user.userId };
+                        tag.map(async tagName => {
+                            const tagId = await UserModel.findTagId(tagName, tagCategoryId);
+                            return { userId: createdUser.userId, tagId: tagId.tagId };
                         }),
                     );
                     // 수정할 태그들 userTags 테이블에 데이터 생성
@@ -314,9 +322,9 @@ const userService = {
                 }
             };
 
-            await TagsUpdate(hobby, 1);
-            await TagsUpdate(personality, 2);
-            await TagsUpdate(ideal, 3);
+            await tagsUpdate(hobby, 1);
+            await tagsUpdate(personality, 2);
+            await tagsUpdate(ideal, 3);
             await transaction.commit();
 
             return {

@@ -26,6 +26,10 @@ const UserTag = (sequelize, DataTypes) => {
             foreignKey: 'tagId',
             targetKey: 'tagId',
         }); // foreignKey는 UserTag 모델의 tagId, sourceKey는 Tag 모델의 tagId
+        db.UserTag.belongsTo(db.TagCategory, {
+            foreignKey: 'tagCategoryId',
+            targetKey: 'tagCategoryId',
+        }); // foreignKey는 UserTag 모델의 tagId, sourceKey는 Tag 모델의 tagId
     };
 
     return UserTag;
