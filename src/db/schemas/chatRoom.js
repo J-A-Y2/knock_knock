@@ -30,6 +30,14 @@ const ChatRoom = (sequelize, DataTypes) => {
             foreignKey: 'chatId',
             sourceKey: 'chatId',
         });
+        db.ChatRoom.belongsTo(db.User, {
+            foreignKey: 'firstId',
+            targetKey: 'userId',
+        });
+        db.ChatRoom.belongsTo(db.User, {
+            foreignKey: 'secondId',
+            targetKey: 'userId',
+        });
     };
 
     return ChatRoom;

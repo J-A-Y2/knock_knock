@@ -35,11 +35,6 @@ const userService = {
             const createdUser = await UserModel.create(userInfo); // profileImage: URL
             console.log('유저 서비스 userInfo.profile_image: ', userInfo.profileImage);
 
-            // 유저의 프로필 이미지를 이미지 테이블에 저장
-            if (userInfo.profileImage) {
-                await UserModel.createProfileImage(userInfo.profileImage, createdUser.userId, transaction);
-            }
-
             const TagsCreate = async (tag, tagCategoryId) => {
                 // 태그 생성
                 if (tag && tag.length > 0) {
@@ -58,6 +53,11 @@ const userService = {
             await TagsCreate(hobby, 1);
             await TagsCreate(personality, 2);
             await TagsCreate(ideal, 3);
+
+            // 유저의 프로필 이미지를 이미지 테이블에 저장
+            if (userInfo.profileImage) {
+                await FileModel.createProfileImage(userInfo.profileImage, createdUser.userId, transaction);
+            }
 
             await transaction.commit();
 
