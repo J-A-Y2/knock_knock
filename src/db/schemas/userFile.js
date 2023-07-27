@@ -21,11 +21,11 @@ const UserFile = (sequelize, DataTypes) => {
         db.UserFile.belongsTo(db.User, {
             foreignKey: 'userId',
             targetKey: 'userId',
-        }); // foreignKey는 Tag 모델의 userId, targetKey는 User 모델의 userId
-        db.UserFile.belongsTo(db.Post, {
-            foreignKey: 'tagId',
-            targetKey: 'tagId',
-        }); // foreignKey는 UserAndTag 모델의 tagId, sourceKey는 Tag 모델의 tagId
+        }); // foreignKey는 UserFile 모델의 userId, targetKey는 User 모델의 userId
+        db.UserFile.belongsTo(db.File, {
+            foreignKey: 'fileId',
+            targetKey: 'fileId',
+        }); // foreignKey는 UserFile 모델의 fileId, sourceKey는 File 모델의 fileId
     };
 
     return UserFile;
