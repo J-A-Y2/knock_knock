@@ -22,14 +22,8 @@ const File = (sequelize, DataTypes) => {
         },
     );
     File.associate = db => {
-        db.File.belongsTo(db.User, {
-            foreignKey: 'userId',
-            targetKey: 'userId',
-        }); // foreignKey는 Image 모델의 userId, sourceKey는 User 모델의 userId
-        db.File.belongsTo(db.Post, {
-            foreignKey: 'postId',
-            targetKey: 'postId',
-        });
+        db.File.hasOne(db.UserFile, { foreignKey: 'fileId' }); // foreignKey는 File 모델의 userId, sourceKey는 UserFile 모델의 fileId
+        db.File.hasOne(db.PostFile, { foreignKey: 'fileId' }); // foreignKey는 File 모델의 userId, sourceKey는 PostFile 모델의 fileId
     };
 
     return File;
