@@ -3,14 +3,13 @@ import { db } from '../index.js';
 const PostModel = {
     create: async ({ newPost }) => {
         const post = await db.Post.create(newPost);
-        console.log(post);
         return post;
     },
     getAllPosts: async ({ offset, limit }) => {
         const { count, rows: posts } = await db.Post.findAndCountAll({
             offset,
             limit,
-            include: [{ model: db.User, attributes: ['nickname', 'profileImage'] }],
+            include: [{ model: db.User, attributes: ['nickname'] }],
             order: [
                 ['createdAt', 'DESC'],
                 ['postId', 'DESC'],
@@ -19,17 +18,21 @@ const PostModel = {
         return { total: count, posts };
     },
     getFilteredPosts: async ({ offset, limit, type }) => {
-        const { count, rows: posts } = await db.Post.findAndCountAll({
-            where: { postType: type },
-            offset,
-            limit,
-            include: [{ model: db.User, attributes: ['nickname', 'profileImage'] }],
-            order: [
-                ['createdAt', 'DESC'],
-                ['postId', 'DESC'],
-            ],
-        });
-        return { total: count, posts };
+        try {
+            const { count, rows: posts } = await db.Post.findAndCountAll({
+                where: { postType: type },
+                offset,
+                limit,
+                include: [{ model: db.User, attributes: ['nickname'] }],
+                order: [
+                    ['createdAt', 'DESC'],
+                    ['postId', 'DESC'],
+                ],
+            });
+            return { total: count, posts };
+        } catch (e) {
+            console.log(e);
+        }
     },
     getPostById: async postId => {
         const post = await db.Post.findOne({

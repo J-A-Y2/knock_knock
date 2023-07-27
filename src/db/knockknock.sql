@@ -3,13 +3,9 @@ CREATE DATABASE knockknock;
 
 USE knockknock;
 
-INSERT INTO imageCategories VALUES(NULL, '프로필이미지');
-INSERT INTO imageCategories VALUES(NULL, '배경이미지');
-INSERT INTO imageCategories VALUES(NULL, '게시글이미지');
-
-INSERT INTO tagCategories VALUES(NULL, '취미');
-INSERT INTO tagCategories VALUES(NULL, '성격');
-INSERT INTO tagCategories VALUES(NULL, '이상형');
+INSERT INTO tag_categories VALUES(NULL, '취미');
+INSERT INTO tag_categories VALUES(NULL, '성격');
+INSERT INTO tag_categories VALUES(NULL, '이상형');
 
 INSERT INTO tags VALUES(NULL, '영화',1);
 INSERT INTO tags VALUES(NULL, '코인노래방',1);
