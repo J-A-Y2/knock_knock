@@ -4,7 +4,7 @@ const UserModel = {
     create: async newUser => {
         return await db.User.create(newUser);
     },
-    bulkCreateTags: async ({ newTags, transaction }) => {
+    bulkCreateTags: async (newTags, transaction) => {
         return await db.UserTag.bulkCreate(newTags, { transaction });
     },
     deleteTags: async (userId, tagCategoryId) => {
@@ -37,19 +37,7 @@ const UserModel = {
             console.error(error);
         }
     },
-    createImageURL: async (imageURL, userId, imageCategoryId) => {
-        return await db.Image.create({
-            imageURL,
-            userId,
-            imageCategoryId,
-        });
-    },
-    findImage: async (userId, imageCategoryId) => {
-        return await db.Image.findOne({
-            userId,
-            imageCategoryId,
-        });
-    },
+    // tagId 찾아내기
     findTagId: async (tagName, tagCategoryId) => {
         const tagId = await db.Tag.findOne({
             where: {
@@ -57,7 +45,6 @@ const UserModel = {
                 tagCategoryId,
             },
         });
-
         return tagId;
     },
     findByUserId: async userId => {
