@@ -1,9 +1,9 @@
 import express from 'express';
 import specs from './swagger/swagger.js';
 import swaggerUi from 'swagger-ui-express';
-import dotenv from 'dotenv';
 import cors from 'cors';
 import { db } from './db/index.js';
+import { fileRouter } from './routers/fileRouter.js';
 import { userRouter } from './routers/userRouter.js';
 import { postRouter } from './routers/postRouter.js';
 import { messageRouter } from './routers/messageRouter.js';
@@ -14,9 +14,9 @@ import { logger } from '../src/utils/logger.js';
 import { morganMiddleware } from './middlewares/morgon.js';
 
 import { errorMiddleware } from './middlewares/errorMiddleware.js';
-import multer from 'multer';
+
 const app = express();
-const upload = multer();
+
 // CORS 에러 방지
 app.use(cors());
 
@@ -31,8 +31,8 @@ app.use('/comments', commentRouter);
 app.use('/messages', messageRouter);
 app.use('/participants', participantRouter);
 app.use('/chats', chatRouter);
+app.use('/file', fileRouter);
 
-dotenv.config();
 db.sequelize
     .sync({ force: false }) // true이면 테이블 모두 삭제 후 생성, false이면 테이블 그대로 유지
     .then(() => {

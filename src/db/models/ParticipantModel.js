@@ -18,7 +18,7 @@ const ParticipantModel = {
                     attributes: ['userId', 'nickname', 'gender', 'age', 'job'],
                     include: [
                         {
-                            model: db.UserAndTag,
+                            model: db.UserTag,
                             attributes: ['userId'],
                             include: [{ model: db.Tag, attributes: ['tagname'], where: { tagCategoryId: 2 } }],
                         },

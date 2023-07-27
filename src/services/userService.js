@@ -8,6 +8,7 @@ import {
     InternalServerError,
 } from '../middlewares/errorMiddleware.js';
 import { UserModel } from '../db/models/UserModel.js';
+import { ImageModel } from '../db/models/ImageModel.js';
 import { db } from '../db/index.js';
 import { calculateKoreanAge } from '../utils/calculateKoreanAge.js';
 const userService = {
@@ -42,14 +43,14 @@ const userService = {
             const TagsCreate = async (tag, tagCategoryId) => {
                 // 태그 생성
                 if (tag && tag.length > 0) {
-                    // // 태그이름 배열을 태그아이디(정수) 배열로 변경, [(tagId,userId)] 형태로 변경
+                    // 태그이름 배열을 태그아이디(정수) 배열로 변경, [(tagId,userId)] 형태로 변경
                     const newTags = await Promise.all(
                         tag.map(async TagName => {
                             const tagId = await UserModel.findTagId(TagName, tagCategoryId);
                             return { tagId: tagId.tagId, userId: createdUser.userId };
                         }),
                     );
-                    // userAndTags 테이블에 데이터 생성
+                    // userTags 테이블에 데이터 생성
                     await UserModel.bulkCreateTags({ newTags, transaction });
                 }
             };
@@ -149,30 +150,6 @@ const userService = {
             throw error;
         }
     },
-    // imageURL 저장하기
-    imageSave: async (userId, imageURL) => {
-        try {
-            const user = await UserModel.findById(userId);
-
-            if (!user) {
-                throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
-            }
-
-            await UserModel.createImageURL(imageURL, userId, 1);
-            const image = UserModel.findImage(userId, imageCategoryId);
-
-            return {
-                message: '이미지 저장에 성공했습니다.',
-                image,
-            };
-        } catch (error) {
-            if (error instanceof ConflictError) {
-                throw error;
-            } else {
-                throw new BadRequestError('이미지 저장에 실패했습니다.');
-            }
-        }
-    },
     // 유저 정보 조회
     getUserById: async ({ userId }) => {
         try {
@@ -185,13 +162,13 @@ const userService = {
             let hobby = [];
             let personality = [];
             let ideal = [];
-            for (const userAndTag of user.UserAndTags) {
-                if (userAndTag.Tag.tagCategoryId === 1) {
-                    hobby.push(userAndTag.Tag.tagname);
-                } else if (userAndTag.Tag.tagCategoryId === 2) {
-                    personality.push(userAndTag.Tag.tagname);
+            for (const userTag of user.UserTags) {
+                if (userTag.Tag.tagCategoryId === 1) {
+                    hobby.push(userTag.Tag.tagname);
+                } else if (userTag.Tag.tagCategoryId === 2) {
+                    personality.push(userTag.Tag.tagname);
                 } else {
-                    ideal.push(userAndTag.Tag.tagname);
+                    ideal.push(userTag.Tag.tagname);
                 }
             }
 
@@ -311,6 +288,14 @@ const userService = {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
+            if (updateData.profileImage) {
+                await ImageModel.updateImageURL();
+            }
+
+            if (updateData.backgroundImage) {
+                await ImageModel.updateImageURL();
+            }
+
             await UserModel.update({ userId, updateData });
 
             const TagsUpdate = async (tag, tagCategoryId) => {
@@ -325,7 +310,7 @@ const userService = {
                             return { tagId: tagId.tagId, userId: user.userId };
                         }),
                     );
-                    // 수정할 태그들 userAndTags 테이블에 데이터 생성
+                    // 수정할 태그들 userTags 테이블에 데이터 생성
                     await UserModel.bulkCreateTags({ newTags, transaction });
                 }
             };

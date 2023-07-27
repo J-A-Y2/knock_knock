@@ -3,10 +3,8 @@ import { statusCode } from '../utils/statusCode.js';
 
 const userController = {
     register: async (req, res, next) => {
-        console.log('userController에 있는 register의 req.file: ', req.file);
         try {
             const newUser = req.body;
-            console.log('userController newUser: ', newUser);
             const createUser = await userService.createUser({ newUser });
             statusCode.setResponseCode201(res);
             return res.send(createUser.message);
@@ -93,24 +91,6 @@ const userController = {
 
             statusCode.setResponseCode200(res);
             return res.send(participants);
-        } catch (error) {
-            next(error);
-        }
-    },
-    imagePost: async (req, res, next) => {
-        try {
-            const userId = req.currentUserId;
-
-            if (!req.file) {
-                console.log('No file received');
-                return res.status(400).send('No file received');
-            }
-
-            const imageURL = req.file.location;
-            const image = await userService.imageSave(userId, imageURL);
-
-            statusCode.setResponseCode201(res);
-            return res.send(image);
         } catch (error) {
             next(error);
         }

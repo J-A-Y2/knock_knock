@@ -67,7 +67,7 @@ const Post = (sequelize, DataTypes) => {
             foreignKey: 'postId',
             sourceKey: 'postId',
         }); // foreignKey는 Participant모델의 postId, sourceKey는 Post 모델의 postId
-        db.Post.hasMany(db.Image, { foreignKey: 'postId' });
+        db.Post.hasMany(db.PostFile, { foreignKey: 'postId' });
     };
 
     return Post;
