@@ -14,7 +14,7 @@ const File = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
-            extention: {
+            extension: {
                 type: DataTypes.ENUM('jpg', 'png'),
             },
         },
