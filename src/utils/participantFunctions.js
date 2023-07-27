@@ -48,9 +48,9 @@ const getHobbyAndIdeal = async user => {
 
     for (const userTag of user.UserTags) {
         if (userTag.Tag.tagCategoryId === 1) {
-            hobby.push(userTag.Tag.tagname);
+            hobby.push(userTag.Tag.tagName);
         } else if (userTag.Tag.tagCategoryId === 3) {
-            ideal.push(userTag.Tag.tagname);
+            ideal.push(userTag.Tag.tagName);
         }
     }
 
@@ -59,7 +59,7 @@ const getHobbyAndIdeal = async user => {
 
 const getParticipantsList = async (participants, ideal) => {
     const participantsList = participants.map(participant => {
-        const personality = participant.User.UserTags.map(userTag => userTag.Tag.tagname);
+        const personality = participant.User.UserTags.map(userTag => userTag.Tag.tagName);
 
         // ideal 배열과 personality 배열에서 일치하는 항목 개수 세기
         const matchingCount = ideal.filter(tag => personality.includes(tag)).length;

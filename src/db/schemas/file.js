@@ -7,14 +7,14 @@ const File = (sequelize, DataTypes) => {
                 autoIncrement: true,
                 primaryKey: true,
             },
+            category: {
+                type: DataTypes.ENUM('profile', 'background', 'post', 'card'),
+            },
             url: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
-            category: {
-                type: DataTypes.ENUM('profile', 'backgroud', 'post', 'card'),
-            },
-            extention: {
+            extension: {
                 type: DataTypes.ENUM('jpg', 'png'),
             },
         },

@@ -11,7 +11,7 @@ const Message = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
-            messageContent: {
+            content: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },

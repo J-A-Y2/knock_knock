@@ -20,7 +20,7 @@ const ParticipantModel = {
                         {
                             model: db.UserTag,
                             attributes: ['userId'],
-                            include: [{ model: db.Tag, attributes: ['tagname'], where: { tagCategoryId: 2 } }],
+                            include: [{ model: db.Tag, attributes: ['tagName'], where: { tagCategoryId: 2 } }],
                         },
                     ],
                 },
