@@ -7,9 +7,11 @@ import Message from './schemas/message.js';
 import Participant from './schemas/participant.js';
 import Tag from './schemas/tag.js';
 import TagCategory from './schemas/tagCategory.js';
-import UserAndTag from './schemas/userAndTag.js';
+import UserTag from './schemas/userTag.js';
 import ChatRoom from './schemas/chatRoom.js';
 import File from './schemas/file.js';
+import UserFile from './schemas/userFile.js';
+import PostFile from './schemas/postFile.js';
 
 const db = {};
 
@@ -26,9 +28,11 @@ db.Message = Message(sequelize, Sequelize);
 db.Participant = Participant(sequelize, Sequelize);
 db.Tag = Tag(sequelize, Sequelize);
 db.TagCategory = TagCategory(sequelize, Sequelize);
-db.UserAndTag = UserAndTag(sequelize, Sequelize);
+db.UserTag = UserTag(sequelize, Sequelize);
 db.ChatRoom = ChatRoom(sequelize, Sequelize);
 db.File = File(sequelize, Sequelize);
+db.UserFile = UserFile(sequelize, Sequelize);
+db.PostFile = PostFile(sequelize, Sequelize);
 
 // 각 모델들을 돌면서 모델간의 관계를 정의하는 함수를 동작시킴.
 Object.keys(db).forEach(modelName => {

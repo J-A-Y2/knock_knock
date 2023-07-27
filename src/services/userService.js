@@ -50,7 +50,7 @@ const userService = {
                             return { tagId: tagId.tagId, userId: createdUser.userId };
                         }),
                     );
-                    // userAndTags 테이블에 데이터 생성
+                    // userTags 테이블에 데이터 생성
                     await UserModel.bulkCreateTags({ newTags, transaction });
                 }
             };
@@ -162,13 +162,13 @@ const userService = {
             let hobby = [];
             let personality = [];
             let ideal = [];
-            for (const userAndTag of user.UserAndTags) {
-                if (userAndTag.Tag.tagCategoryId === 1) {
-                    hobby.push(userAndTag.Tag.tagname);
-                } else if (userAndTag.Tag.tagCategoryId === 2) {
-                    personality.push(userAndTag.Tag.tagname);
+            for (const userTag of user.UserTags) {
+                if (userTag.Tag.tagCategoryId === 1) {
+                    hobby.push(userTag.Tag.tagname);
+                } else if (userTag.Tag.tagCategoryId === 2) {
+                    personality.push(userTag.Tag.tagname);
                 } else {
-                    ideal.push(userAndTag.Tag.tagname);
+                    ideal.push(userTag.Tag.tagname);
                 }
             }
 
@@ -310,7 +310,7 @@ const userService = {
                             return { tagId: tagId.tagId, userId: user.userId };
                         }),
                     );
-                    // 수정할 태그들 userAndTags 테이블에 데이터 생성
+                    // 수정할 태그들 userTags 테이블에 데이터 생성
                     await UserModel.bulkCreateTags({ newTags, transaction });
                 }
             };
