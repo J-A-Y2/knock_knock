@@ -9,6 +9,21 @@
             "date": 1690258717829,
             "name": "/Users/jay/개발/knockknock/knockknock_back/logs/2023-07-25.exception.log",
             "hash": "805316adf53f45f5c953c5ebce96d2ae642ce4246cdac7e5a3ea317ca98e9108"
+        },
+        {
+            "date": 1690383462765,
+            "name": "/Users/jay/개발/knockknock/knockknock_back/logs/2023-07-26.exception.log",
+            "hash": "53db26f6423a226853a2bcb86fad46edcfb243364fdf1772dbfdf0b6ff129a86"
+        },
+        {
+            "date": 1690383868318,
+            "name": "/Users/jay/개발/knockknock/knockknock_back/logs/2023-07-27.exception.log",
+            "hash": "cf167890baf48b5ebf2ea55b71142a4f1e7098f98361e0d850e6f4916b8355a8"
+        },
+        {
+            "date": 1690511923329,
+            "name": "/Users/jay/개발/knockknock/knockknock_back/logs/2023-07-28.exception.log",
+            "hash": "6f98af7a41d51f9a141f98495d9cf661afd80fd5423f881e2e3aebc7b01e716f"
         }
     ],
     "hashType": "sha256"

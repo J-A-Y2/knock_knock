@@ -2,27 +2,46 @@ import { db } from '../index.js';
 
 const ChatModel = {
     create: async ({ userId, anotherId }) => {
-        const createChat = await db.ChatRoom.create({ first_id: userId, second_id: anotherId });
+        console.log({ userId, anotherId });
+        const createChat = await db.ChatRoom.create({ firstId: userId, secondId: anotherId });
         return createChat;
     },
 
     findChatRoom: async ({ userId, anotherId }) => {
         const findChatRoom = await db.ChatRoom.findOne({
             where: {
-                first_id: userId,
-                second_id: anotherId,
+                firstId: userId,
+                secondId: anotherId,
             },
+            include: [
+                {
+                    model: db.User,
+                    attributes: ['nickname'],
+                    include: [
+                        {
+                            model: db.UserFile,
+                            attributes: ['fileId'],
+                            include: [{ model: db.File, where: { category: 'profile' }, attributes: ['url'] }],
+                        },
+                    ],
+                },
+            ],
         });
         return findChatRoom;
     },
 
     getUserChats: async userId => {
-        const getUserChats = await db.ChatRoom.findOne({
+        const getUserChats = await db.ChatRoom.findAll({
             where: {
-                first_id: userId,
+                firstId: userId,
             },
         });
         return getUserChats;
+    },
+
+    findChatRoomByChatId: async chatId => {
+        const chatRoom = await db.ChatRoom.findOne({ where: { chatId } });
+        return chatRoom;
     },
 };
 

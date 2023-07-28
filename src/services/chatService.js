@@ -27,9 +27,10 @@ const chatService = {
     //유저의 채팅 리스트 불러오기
     getListChats: async userId => {
         try {
-            await ChatModel.getUserChats(userId);
+            const allChatList = await ChatModel.getUserChats(userId);
 
             return {
+                allChatList,
                 message: '유저의 채팅 목록 불러오기에 성공했습니다.',
             };
         } catch (error) {
@@ -39,9 +40,9 @@ const chatService = {
     // 유저의 채팅 불러오기
     getChat: async ({ userId, anotherId }) => {
         try {
-            await ChatModel.findChatRoom({ userId, anotherId });
-
+            const chatRoom = await ChatModel.findChatRoom({ userId, anotherId });
             return {
+                chatRoom,
                 message: '유저의 채팅 불러오기에 성공했습니다.',
             };
         } catch (error) {
