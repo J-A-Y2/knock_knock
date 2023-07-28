@@ -1,3 +1,4 @@
+import { logger } from '../../utils/logger.js';
 import { db } from '../index.js';
 
 const FileModel = {
@@ -37,6 +38,15 @@ const FileModel = {
         } catch (error) {
             console.error(error);
         }
+    },
+    createPostImage: async (category, url, extension, postId, transaction) => {
+        const file = await db.File.create({ category, url, extension }, { transaction });
+        await db.PostFile.create({ postId, fileId: file.fileId }, { transaction });
+    },
+    updatePostImage: async (category, url, extension, postId, transaction) => {
+        const file = await db.PostFile.findOne({ where: { postId } });
+
+        await db.File.update({ category, url, extension }, { where: { fileId: file.fileId }, transaction });
     },
 };
 

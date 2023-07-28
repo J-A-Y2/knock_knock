@@ -42,19 +42,22 @@ const updateRecruitedValue = async (gender, totalM, totalF, recruitedF, recruite
     return { fieldToUpdate, newValue };
 };
 
-const getHobbyAndIdeal = async user => {
+const getIdealAndPersonality = async user => {
     let hobby = [];
     let ideal = [];
+    let personality = [];
 
     for (const userTag of user.UserTags) {
         if (userTag.Tag.tagCategoryId === 1) {
             hobby.push(userTag.Tag.tagName);
+        } else if (userTag.Tag.tagCategoryId === 2) {
+            personality.push(userTag.Tag.tagName);
         } else if (userTag.Tag.tagCategoryId === 3) {
             ideal.push(userTag.Tag.tagName);
         }
     }
-
-    return { hobby, ideal };
+    console.log(hobby, ideal, personality, '?');
+    return { hobby, ideal, personality };
 };
 
 const getParticipantsList = async (participants, ideal) => {
@@ -78,4 +81,13 @@ const getParticipantsList = async (participants, ideal) => {
     });
     return participantsList;
 };
-export { checkParticipation, updateRecruitedValue, getHobbyAndIdeal, getParticipantsList };
+
+const getMatchingCount = async (firstUser, secondUser) => {
+    const { ideal } = await getIdealAndPersonality(firstUser);
+    const { personality } = await getIdealAndPersonality(secondUser);
+
+    const matchingCount = ideal.filter(tag => personality.includes(tag)).length;
+    return matchingCount;
+};
+
+export { checkParticipation, updateRecruitedValue, getIdealAndPersonality, getParticipantsList, getMatchingCount };
