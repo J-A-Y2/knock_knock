@@ -36,9 +36,10 @@ const commentController = {
     delete: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
+            const postId = req.params.postId;
             const commentId = req.params.commentId;
 
-            const deleteComment = await commentService.deleteComment({ userId, commentId });
+            const deleteComment = await commentService.deleteComment({ userId, postId, commentId });
             statusCode.setResponseCode200(res);
 
             return res.send({ message: deleteComment.message });
