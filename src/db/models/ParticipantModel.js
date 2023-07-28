@@ -2,15 +2,15 @@ import { db } from '../index.js';
 
 const ParticipantModel = {
     // 참가 신청
-    participatePost: async ({ transaction, userId, postId, status }) => {
-        const createParticipant = await db.Participant.create({ userId, postId, status }, { transaction });
+    participatePost: async ({ transaction, userId, postId, matchingCount }) => {
+        const createParticipant = await db.Participant.create({ userId, postId, matchingCount }, { transaction });
         return createParticipant;
     },
 
     // 참가 신청자 리스트
     getParticipants: async postId => {
         const { rows: participants } = await db.Participant.findAndCountAll({
-            attributes: ['participantId', 'canceled', 'status'],
+            attributes: ['participantId', 'canceled', 'status', 'matchingCount'],
             where: { postId, canceled: 0 },
             include: [
                 {
@@ -25,6 +25,7 @@ const ParticipantModel = {
                     ],
                 },
             ],
+            order: [['matchingCount', 'DESC']],
         });
         return participants;
     },

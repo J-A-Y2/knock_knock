@@ -515,21 +515,15 @@ paths:
                                             properties:
                                                 postId:
                                                     type: integer
-                                                profileImage:
+                                                type:
                                                     type: string
-                                                    nullable: true
-                                                postType:
+                                                title:
                                                     type: string
-                                                postTitle:
-                                                    type: string
-                                                postImage:
-                                                    type: string
-                                                    nullable: true
                                                 place:
                                                     type: string
                                                 meetingTime:
                                                     type: string
-                                                postContent:
+                                                content:
                                                     type: string
                                                 isCompleted:
                                                     type: boolean
@@ -555,9 +549,32 @@ paths:
                                                     properties:
                                                         nickname:
                                                             type: string
-                                                        profile_image:
-                                                            type: string
-                                                            nullable: true
+                                                        UserFiles:
+                                                            type: array
+                                                            items:
+                                                                type: object
+                                                                properties:
+                                                                    fileId:
+                                                                        type: integer
+                                                                    File:
+                                                                        type: object
+                                                                        properties:
+                                                                            url:
+                                                                                type: string
+                                                PostFiles:
+                                                    type: array
+                                                    items:
+                                                        type: object
+                                                        properties:
+                                                            postId:
+                                                                type: integer
+                                                            fileId:
+                                                                type: integer
+                                                            File:
+                                                                type: object
+                                                                properties:
+                                                                    url:
+                                                                        type: string
                     required: true
 
         post:
@@ -570,11 +587,11 @@ paths:
                         schema:
                             type: object
                             properties:
-                                postTitle:
+                                title:
                                     type: string
-                                postContent:
+                                content:
                                     type: string
-                                postType:
+                                type:
                                     type: string
                                 totalM:
                                     type: integer
@@ -615,21 +632,15 @@ paths:
                                         properties:
                                             postId:
                                                 type: integer
-                                            profileImage:
+                                            type:
                                                 type: string
-                                                nullable: true
-                                            postType:
+                                            title:
                                                 type: string
-                                            postTitle:
-                                                type: string
-                                            postImage:
-                                                type: string
-                                                nullable: true
                                             place:
                                                 type: string
                                             meetingTime:
                                                 type: string
-                                            postContent:
+                                            content:
                                                 type: string
                                             isCompleted:
                                                 type: boolean
@@ -649,6 +660,37 @@ paths:
                                                 format: date-time
                                             userId:
                                                 type: integer
+                                            User:
+                                                type: object
+                                                properties:
+                                                    nickname:
+                                                        type: string
+                                                    UserFiles:
+                                                        type: array
+                                                        items:
+                                                            type: object
+                                                            properties:
+                                                                fileId:
+                                                                    type: integer
+                                                                File:
+                                                                    type: object
+                                                                    properties:
+                                                                        url:
+                                                                            type: string
+                                            PostFiles:
+                                                type: array
+                                                items:
+                                                    type: object
+                                                    properties:
+                                                        postId:
+                                                            type: integer
+                                                        fileId:
+                                                            type: integer
+                                                        File:
+                                                            type: object
+                                                            properties:
+                                                                url:
+                                                                    type: string
                     required: true
         delete:
             tags:
@@ -682,19 +724,19 @@ paths:
                         schema:
                             type: object
                             properties:
-                                post_title:
+                                title:
                                     type: string
-                                post_content:
+                                content:
                                     type: string
-                                post_type:
+                                type:
                                     type: string
-                                total_m:
+                                totalM:
                                     type: integer
-                                total_f:
+                                totalF:
                                     type: integer
                                 place:
                                     type: string
-                                meeting_time:
+                                meetingTime:
                                     type: string
                 required: true
 
@@ -781,7 +823,7 @@ paths:
                                 properties:
                                     message:
                                         type: string
-                                    participant_id:
+                                    participantId:
                                         type: integer
                                     status:
                                         type: string
@@ -818,8 +860,6 @@ paths:
                                     isFulled:
                                         type: boolean
                                         description: 모집 완료 여부
-                                    total:
-                                        type: integer
                                     nextCursor:
                                         type: integer
                                     participantsList:
@@ -829,16 +869,25 @@ paths:
                                             properties:
                                                 participationId:
                                                     type: integer
+                                                canceled:
+                                                    type: boolean
                                                 status:
                                                     type: string
-                                                nickname:
-                                                    type: string
-                                                gender:
-                                                    type: string
-                                                age:
+                                                matchingCount:
                                                     type: integer
-                                                job:
-                                                    type: string
+                                                User:
+                                                    type: object
+                                                    properties:
+                                                        userId:
+                                                            type: integer
+                                                        nickname:
+                                                            type: string
+                                                        gender:
+                                                            type: string
+                                                        age:
+                                                            type: integer
+                                                        job:
+                                                            type: string
                                                 profile_image:
                                                     type: string
                                                 personality:
@@ -966,8 +1015,7 @@ paths:
                                                             type: integer
                                                         job:
                                                             type: integer
-                                                        profile_image:
-                                                            type: string
+                                                        
                 '400':
                     description: Invalid ID supplied
                 '404':

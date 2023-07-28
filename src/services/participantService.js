@@ -6,20 +6,25 @@ import { UserModel } from '../db/models/UserModel.js';
 import { throwNotFoundError } from '../utils/commonFunctions.js';
 import {
     checkParticipation,
-    getHobbyAndIdeal,
+    getIdealAndPersonality,
     updateRecruitedValue,
     getParticipantsList,
+    getMatchingCount,
 } from '../utils/participantFunctions.js';
 
 const participantService = {
     participatePost: async ({ userId, postId }) => {
         try {
             const post = await PostModel.getPostById(postId);
+            const writer = await UserModel.findById(post.userId);
+            const participant = await UserModel.findById(userId);
             throwNotFoundError(post, '게시글');
 
             if (post.userId === userId) {
                 throw new ConflictError('게시글의 작성자는 참가 신청을 할 수 없습니다.');
             }
+
+            const matchingCount = await getMatchingCount(writer, participant);
 
             let participationFlag;
             const participation = await ParticipantModel.getParticipationByUserId({ userId, postId });
@@ -35,9 +40,9 @@ const participantService = {
                 await ParticipantModel.update({ participantId, updateField: 'canceled', newValue: 0 });
                 participationFlag = canceled;
             } else {
-                await ParticipantModel.participatePost({ userId, postId });
+                await ParticipantModel.participatePost({ userId, postId, matchingCount });
 
-                participationFlag = 'true';
+                participationFlag = true;
             }
             return { message: '모임 참가 신청에 성공했습니다.', participationFlag };
         } catch (error) {
@@ -81,7 +86,11 @@ const participantService = {
             const { participantId, status, canceled } = participation;
             return { message: '신청 여부 조회에 성공했습니다.', participantId, status, canceled };
         } catch (error) {
-            throw new InternalServerError('신청 여부 조회에 실패했습니다.');
+            if (error instanceof NotFoundError) {
+                throw error;
+            } else {
+                throw new InternalServerError('신청 여부 조회에 실패했습니다.');
+            }
         }
     },
     getParticipants: async ({ userId, postId, cursor, limit }) => {
@@ -95,24 +104,37 @@ const participantService = {
             if (post.userId !== userId) {
                 throw new ConflictError('참가자 리스트 조회 권한이 없습니다.');
             }
+
             const participants = await ParticipantModel.getParticipants(postId);
 
-            const { ideal } = await getHobbyAndIdeal(user);
+            const { ideal } = await getIdealAndPersonality(user);
+            console.log(ideal);
+            for (const participant of participants) {
+                const { personality } = await getIdealAndPersonality(participant.User);
+                const matchingCount = ideal.filter(tag => personality.includes(tag)).length;
+                await ParticipantModel.update({
+                    participantId: participant.User.userId,
+                    updateField: 'matchingCount',
+                    newValue: matchingCount,
+                });
+            }
 
-            const participantsList = await getParticipantsList(participants, ideal);
+            const updatedparticipants = await ParticipantModel.getParticipants(postId);
+
+            // const participantsList = await getParticipantsList(participants, ideal);
 
             // matchingCount를 기준으로 내림차순으로 정렬
-            participantsList.sort((a, b) => b.matchingCount - a.matchingCount);
+            // participantsList.sort((a, b) => b.matchingCount - a.matchingCount);
 
             // 커서를 이용하여 페이지네이션을 위한 시작 인덱스 계산
             let startIndex = 0;
             if (cursor) {
-                const participantIndex = participantsList.findIndex(participant => participant.participationId == cursor);
+                const participantIndex = updatedparticipants.findIndex(participant => participant.participationId == cursor);
                 startIndex = participantIndex !== -1 ? participantIndex + 1 : 0;
             }
 
             // limit 적용
-            const paginatedList = participantsList.slice(startIndex, startIndex + limit);
+            const paginatedList = updatedparticipants.slice(startIndex, startIndex + limit);
 
             // 다음 페이지를 위한 커서를 사용할 맨 마지막 id 추출
             let nextCursor = null;

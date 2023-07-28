@@ -1,18 +1,18 @@
-const setRecruitedValue = async (user, newPost) => {
+const setRecruitedValue = async (user, postInfo) => {
     const { gender } = user;
     if (gender === '여') {
-        newPost.recruitedF = 1;
+        postInfo.recruitedF = 1;
     }
 
     if (gender === '남') {
-        newPost.recruitedM = 1;
+        postInfo.recruitedM = 1;
     }
 };
 
 const fieldsToUpdate = {
-    postTitle: 'postTitle',
-    postContent: 'postContent',
-    postType: 'postType',
+    title: 'title',
+    content: 'content',
+    type: 'type',
     place: 'place',
     totalM: 'totalM',
     totalF: 'totalF',
