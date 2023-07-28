@@ -19,6 +19,6 @@ commentRouter.put('/:postId/:commentId', updateCommentValidationRules, updateCom
 commentRouter.get('/', getCommentValidate, commentController.getComment);
 
 // 댓글 삭제
-commentRouter.delete('/:commentId', commentParamsValidate, commentController.delete);
+commentRouter.delete('/:postId/:commentId', commentParamsValidate, commentController.delete);
 
 export { commentRouter };
