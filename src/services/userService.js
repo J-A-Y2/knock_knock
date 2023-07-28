@@ -180,9 +180,10 @@ const userService = {
                 }
             }
 
+            const a = await FileModel.getUserImage(user.userId);
+            console.log(a);
             return {
                 message: '회원 정보 조회를 성공했습니다.',
-                // user,
                 userId: user.userId,
                 email: user.email,
                 name: user.name,
@@ -192,13 +193,13 @@ const userService = {
                 age: user.age,
                 job: user.job,
                 region: user.region,
-                profileImage: user.profileImage,
                 mbti: user.mbti,
                 height: user.height,
                 introduce: user.introduce,
                 hobby,
                 personality,
                 ideal,
+                Image: a,
             };
         } catch (error) {
             if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
@@ -317,6 +318,28 @@ const userService = {
             await tagsUpdate(hobby, 1);
             await tagsUpdate(personality, 2);
             await tagsUpdate(ideal, 3);
+
+            for (const userFile of userFiles) {
+                const file = await db.File.findOne({
+                    where: { fileId: userFile.fileId },
+                });
+
+                if (file.category === 'profile') {
+                    // 프로필 이미지가 존재하면 수정하기
+                    await db.File.update({ category, url, extension }, { where: { fileId: file.fileId }, transaction });
+                } else {
+                    // 프로필 이미지가 없으면 생성하기
+                    await db.File.create({ category, url, extension }, { transaction });
+                }
+
+                if (file.category === 'background') {
+                    // 배경 이미지가 존재하면 수정하기
+                    await db.File.update({ category, url, extension }, { where: { fileId: file.fileId }, transaction });
+                } else {
+                    // 배경 이미지 없으면 생성하기
+                    await db.File.create({ category, url, extension }, { transaction });
+                }
+            }
 
             if (profileImage) {
                 const fileExtension = extensionSplit(profileImage[1]);
