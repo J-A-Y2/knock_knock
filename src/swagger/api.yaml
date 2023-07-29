@@ -9,6 +9,8 @@ tags:
       description: 댓글 라우터 모음
     - name: message
       description: 메세지 라우터 모음
+    - name: chat
+      description: 채팅 라우터 모음
 
 paths:
     /users/register:
@@ -1315,7 +1317,7 @@ paths:
         post:
             tags:
                 - message
-            description: 쪽지 작성 하기
+            description: 메세지 작성 하기
 
             requestbody:
                 content:
@@ -1323,7 +1325,7 @@ paths:
                         schema:
                             type: object
                             properties:
-                                receive_id:
+                                chatId:
                                     type: integer
                                 content:
                                     type: string
@@ -1331,96 +1333,145 @@ paths:
 
             responses:
                 '200':
-                    description: 쪽지 작성 성공.
+                    description: 새로운 메세지 생성에 성공했습니다.
+                '409':
+                    description: 현재 채팅방에 속해있지 않습니다.
+                '500':
+                    description: 새로운 메세지 생성에 실패했습니다.
+
+    /messages/{:chatId}:
+        get:
+            tags:
+                - message
+            description: 전체 메세지 불러 오기
+
+            parameters:
+                - name: chatId
+                  schema:
+                      type: integer
+                  in: path
+                  description: 채팅방 아이디
+                  required: true
+
+            requestbody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                chat:
+                                    type: array
+                                    items:
+                                        type: object
+                                        properties:
+                                            messageId:
+                                                type: integer
+                                            senderId:
+                                                type: integer
+                                            content:
+                                                type: string
+                                            createAt:
+                                                type: datetime
+                                            updateAt:
+                                                type: datetime
+                                            chatId:
+                                                type: integer
+
+            responses:
+                '200':
+                    description: 유저의 메세지 불러오기에 성공했습니다.
+                '500':
+                    description: 유저의 메세지 불러오기에 실패했습니다.
+
+    /chats:
+        post:
+            tags:
+                - chat
+            description: 채팅 방 생성
+
+            requestbody:
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            anotherId:
+                                type: integer
+
+            responses:
+                '201':
+                    description: 새로운 채팅 방 생성에 성공했습니다.
+                '409':
+                    description: 이미 존재하는 채팅 입니다.
+                '500':
+                    description: 채팅방 생성에 실패 했습니다.
+
+        get:
+            tags:
+                - chat
+            description: 전체 채팅 조회
+
+            responses:
+                '200':
+                    description: 유저의 채팅 목록 불러오기에 성공했습니다.
                     content:
                         application/json:
                             schema:
                                 type: object
                                 properties:
-                                    message_id:
-                                        type: integer
-                                    send_id:
-                                        type: integer
-                                    receive_id:
-                                        type: integer
-                                    content:
-                                        type: string
-                                    createAt:
-                                        type: datetime
-                '400':
-                    description: Invalid ID supplied
-                '404':
-                    description: User not found
+                                    allChatList:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                chatId:
+                                                    type: integer
+                                                firstId:
+                                                    type: integer
+                                                secondId:
+                                                    type: integer
+                                                url:
+                                                    type: string
+                                                createAt:
+                                                    type: datetime
+                                                updateAt:
+                                                    type: datetime
+                '500':
+                    description: 유저의 채팅 목록 불러오기에 실패했습니다.
 
+    /chats/{:secondId}:
         get:
             tags:
-                - message
-            description: 전체 쪽지 불러 오기
-
-            responses:
-                '200':
-                    description: 전체 쪽지 불러오기 성공.
-                '400':
-                    description: Invalid ID supplied
-                '404':
-                    description: User not found
-
-    /messages/{messageId}:
-        delete:
-            tags:
-                - message
-            description: 쪽지 삭제 하기
+                - chat
+            description: 개별 채팅 조회
 
             parameters:
-                - name: messageid
+                - name: anotherId
+                  schema:
+                      type: integer
                   in: path
-                  description: 쪽지 고유 아이디
+                  description: 현재 유저 아니고, 다른 유저 아이디
                   required: true
 
             responses:
                 '200':
-                    description: 쪽지 삭제 성공.
-                '400':
-                    description: Invalid ID supplied
-                '404':
-                    description: User not found
-
-        get:
-            tags:
-                - message
-            description: 개별 쪽지 확인 하기
-
-            responses:
-                '200':
-                    description: 쪽지 작성 성공.
+                    description: 유저의 채팅 불러오기에 성공했습니다.
                     content:
                         application/json:
                             schema:
                                 type: object
                                 properties:
-                                    message_id:
+                                    chatId:
                                         type: integer
-                                    send_id:
+                                    firstId:
                                         type: integer
-                                    content:
+                                    secondId:
+                                        type: integer
+                                    creatAt:
+                                        type: date
+                                    updateAt:
+                                        type: date
+                                    url:
                                         type: string
-                                    createAt:
-                                        type: datetime
-                '400':
-                    description: Invalid ID supplied
-                '404':
-                    description: User not found
-
-    /messages/isRead:
-        get:
-            tags:
-                - message
-            description: 쪽지 확인 여부 검사하기
-
-            responses:
-                '200':
-                    description: 쪽지 작성 성공.
-                '400':
-                    description: Invalid ID supplied
-                '404':
-                    description: User not found
+                '500':
+                    description: 유저의 채팅 불러오기에 실패했습니다.

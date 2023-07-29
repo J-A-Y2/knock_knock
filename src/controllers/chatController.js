@@ -22,7 +22,7 @@ const chatController = {
 
             const { allChatList, message } = await chatService.getListChats(userId);
 
-            statusCode.setResponseCode201(res);
+            statusCode.setResponseCode200(res);
             return res.send({ allChatList, message });
         } catch (error) {
             next(error);
@@ -36,7 +36,7 @@ const chatController = {
 
             const { chatRoom, message } = await chatService.getChat({ userId, anotherId });
 
-            statusCode.setResponseCode201(res);
+            statusCode.setResponseCode200(res);
             return res.send({ chatRoom, message });
         } catch (error) {
             next(error);
