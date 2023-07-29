@@ -30,10 +30,11 @@ userRouter.get('/mypage/participants', userController.getCurrentUserParticipants
 // 오늘의 낙낙(네트워크)페이지 - 랜덤으로 6명 유저 정보 불러오기
 userRouter.get('/network', userController.getRandomUsersInfo);
 
-userRouter.get('/yourpage', userController);
+// 오늘의 낙낙 랜덤 유저의 마이페이지 불러오기
+userRouter.get('/yourpage/:userId', userController.getRandomUserPage);
 
 // 유저 정보 불러오기
-userRouter.get('/:userId', userController.getUserInfo);
+userRouter.get('/:userId', userController.getOtherUserInfo);
 
 // 유저 정보 수정하기(별명, 설명)
 userRouter.put('/mypage', userController.update);

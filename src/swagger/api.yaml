@@ -867,7 +867,7 @@ paths:
                                         items:
                                             type: object
                                             properties:
-                                                participationId:
+                                                participantId:
                                                     type: integer
                                                 canceled:
                                                     type: boolean
