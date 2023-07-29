@@ -1207,7 +1207,7 @@ paths:
                 '500':
                     description: '댓글 추가하기에 실패했습니다'
 
-    /comments/{postId}/{commentId}:
+    /comments/:postId/:commentId:
         put:
             tags:
                 - comment
@@ -1219,7 +1219,7 @@ paths:
                   description: 게시글 아이디
                   required: true
 
-                - name: commentid
+                - name: commentId
                   in: path
                   description: 댓글 고유 아이디
                   required: true
@@ -1263,17 +1263,17 @@ paths:
                 '500':
                     description: 댓글 삭제하기에 실패했습니다.
 
-    /comments/{postId}:
+    /comments/:postId/{?cursor&limit}:
         get:
             tags:
                 - comment
-            description: 댓글 불러오기 (커서기반 무한 스크롤)
+            description: 댓글 불러오기 (커서기반 무한 스크롤), 처음 불러올때 0, 마지막 값 불러오면 -1
 
             parameters:
                 - name: postId
                   schema:
                       type: integer
-                  in: query
+                  in: path
                   description: 게시글 고유 아이디
                   required: true
 
@@ -1282,6 +1282,13 @@ paths:
                       type: integer
                   in: query
                   description: 커서의 마지막 위치값, 댓글의 아이디
+                  required: true
+
+                - name: limit
+                  schema:
+                      type: integer
+                  in: query
+                  description: 불러올 데이터 수
                   required: true
 
             responses:
