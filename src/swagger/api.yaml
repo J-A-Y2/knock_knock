@@ -769,7 +769,7 @@ paths:
                 '201':
                     description: 게시글 작성하기 성공.
 
-    /posts/:postId:
+    /posts/{postId}:
         get:
             tags:
                 - post
@@ -917,7 +917,7 @@ paths:
                 '404':
                     description: Order not found
 
-    /participants/:postId:
+    /participants/{postId}:
         post:
             tags:
                 - participation
@@ -991,7 +991,7 @@ paths:
                                         type: string
                                     canceled:
                                         type: boolean
-    /participants/:postId/userlist:
+    /participants/{postId}/userlist:
         get:
             tags:
                 - participation
@@ -1137,7 +1137,7 @@ paths:
                 '404':
                     description: User not found
 
-    /participants/:postId/acceptedlist:
+    /participants/{postId}/acceptedlist:
         get:
             tags:
                 - participation
@@ -1205,7 +1205,7 @@ paths:
                 '500':
                     description: '댓글 추가하기에 실패했습니다'
 
-    /comments/:postId/:commentId:
+    /comments/{postId}/{commentId}:
         put:
             tags:
                 - comment
@@ -1261,7 +1261,7 @@ paths:
                 '500':
                     description: 댓글 삭제하기에 실패했습니다.
 
-    /comments/:postId:
+    /comments/{postId}:
         get:
             tags:
                 - comment
@@ -1365,7 +1365,7 @@ paths:
                 '404':
                     description: User not found
 
-    /messages/:messageId:
+    /messages/{messageId}:
         delete:
             tags:
                 - message
