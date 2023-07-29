@@ -10,10 +10,12 @@ const FileModel = {
     getUserImage: async userId => {
         try {
             return await db.UserFile.findAll({
+                where: {
+                    userId,
+                },
                 include: [
                     {
                         model: db.File,
-                        attributes: ['category', 'url'],
                     },
                 ],
             });
@@ -24,12 +26,26 @@ const FileModel = {
     // 이미지 수정
     updateUserImage: async (category, url, extension, userId, transaction) => {
         try {
-            const userFiles = await db.UserFile.findAll({
-                where: { userId },
-            });
+            db.File.update({ category, url, extension, userId }, { transaction });
         } catch (error) {
             console.error(error);
         }
+    },
+    // 유저의 fileIds 조회
+    findFileIds: async userId => {
+        return await db.UserFile.findAll({
+            where: {
+                userId,
+            },
+        });
+    },
+    // 유저의 files 테이블 조회
+    findByFileId: async fileId => {
+        return await db.File.findOne({
+            where: {
+                fileId,
+            },
+        });
     },
 };
 

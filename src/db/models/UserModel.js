@@ -21,7 +21,6 @@ const UserModel = {
             });
             // 태그아이디만 뽑아서 배열 만들기 [1,2]
             const userTagIds = userTags.map(userTag => userTag.id);
-
             // UserTag 행들 삭제
             const deleteCount = await db.UserTag.destroy({
                 where: {
@@ -36,13 +35,12 @@ const UserModel = {
     },
     // tagId 찾아내기
     findTagId: async (tagName, tagCategoryId) => {
-        const tagId = await db.Tag.findOne({
+        return await db.Tag.findOne({
             where: {
                 tagName,
                 tagCategoryId,
             },
         });
-        return tagId;
     },
     // UserTag 매핑 테이블의 tagId 찾아내기
     findByUserId: async userId => {
