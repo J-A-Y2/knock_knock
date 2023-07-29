@@ -25,9 +25,10 @@ const FileModel = {
         }
     },
     // 이미지 수정
-    updateUserImage: async (category, url, extension, transaction) => {
+    updateUserImage: async (category, url, extension, userId, transaction) => {
         try {
-            db.File.update({ category, url, extension }, { transaction });
+            const file = await db.UserFile.findOne({ where: { userId } });
+            await db.File.update({ url, extension }, { where: { category, fileId: file.fileId }, transaction });
         } catch (error) {
             console.error(error);
         }
@@ -47,7 +48,6 @@ const FileModel = {
                 fileId,
             },
         });
-        console.log('files', files.category);
         return files;
     },
 };

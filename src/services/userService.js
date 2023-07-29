@@ -10,7 +10,7 @@ import {
 import { UserModel } from '../db/models/UserModel.js';
 import { FileModel } from '../db/models/FileModel.js';
 import { db } from '../db/index.js';
-import { fieldsToUpdate, calculateKoreanAge, extensionSplit } from '../utils/userFunction.js';
+import { calculateKoreanAge, extensionSplit } from '../utils/userFunction.js';
 
 const userService = {
     // 유저 생성
@@ -54,33 +54,14 @@ const userService = {
             await tagsCreate(personality, 2);
             await tagsCreate(ideal, 3);
 
-            for (const [field, fieldToUpdate] of Object.entries(fieldsToUpdate)) {
-                if (toUpdate[field]) {
-                    const newValue = updateValue[field];
-                    await UserModel.update({ postId, fieldToUpdate, newValue, transaction });
-                }
-            }
-
-            // 기존에 사진이미지가 있고 수정사항에 이미지가 있으면 update
-            if (post.PostFiles && postImage) {
-                const fileExtension = extensionSplit(postImage[1]);
-                await FileModel.updatePostImage(
-                    postImage[0], // category
-                    postImage[1], // url
+            // 유저의 프로필 이미지를 이미지 테이블에 저장
+            if (profileImage) {
+                const fileExtension = extensionSplit(profileImage[1]);
+                await FileModel.createUserImage(
+                    profileImage[0], // category
+                    profileImage[1], // url
                     fileExtension,
-                    postId,
-                    transaction,
-                );
-            }
-
-            // 기존에 이미지가 없고 수정사항에 이미지가 없으면 create
-            if (!post.PostFiles && postImage) {
-                const fileExtension = extensionSplit(postImage[1]);
-                await FileModel.createPostImage(
-                    postImage[0], // category
-                    postImage[1], // url
-                    fileExtension,
-                    postId,
+                    createdUser.userId,
                     transaction,
                 );
             }
@@ -300,13 +281,13 @@ const userService = {
         }
     },
     // 유저 정보 수정
-    updateUser: async ({ userId, toUpdate }) => {
+    updateUser: async ({ userId, updateUserInfo }) => {
         let transaction;
 
         try {
             transaction = await db.sequelize.transaction();
 
-            const { hobby, personality, ideal, profileImage, backgroundImage, ...updateData } = toUpdate;
+            const { hobby, personality, ideal, profileImage, backgroundImage, ...updateData } = updateUserInfo;
 
             const user = await UserModel.findById(userId);
 
@@ -314,48 +295,7 @@ const userService = {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
-            for (const [field, fieldToUpdate] of Object.entries(fieldsToUpdate)) {
-                if (toUpdate[field]) {
-                    const newValue = updateData[field];
-                    await UserModel.update({ userId, fieldToUpdate, newValue, transaction });
-                }
-            }
-
-            // 기존에 사진이미지가 있고 수정사항에 이미지가 있으면 update
-            if (user.UserFiles && profileImage) {
-                const fileExtension = extensionSplit(profileImage[1]);
-                await FileModel.updateUserImage(
-                    postImage[0], // category
-                    postImage[1], // url
-                    fileExtension,
-                    userId,
-                    transaction,
-                );
-            }
-
-            // 기존에 이미지가 없고 수정사항에 이미지가 없으면 create
-            if (!user.UserFiles && profileImage) {
-                const fileExtension = extensionSplit(postImage[1]);
-                await FileModel.createUserImage(
-                    profileImage[0], // category
-                    profileImage[1], // url
-                    fileExtension,
-                    userId,
-                    transaction,
-                );
-            }
-
-            // 기존에 이미지가 없고 수정사항에 이미지가 없으면 create
-            if (!user.UserFiles && backgroundImage) {
-                const fileExtension = extensionSplit(backgroundImage[1]);
-                await FileModel.createUserImage(
-                    backgroundImage[0], // category
-                    backgroundImage[1], // url
-                    fileExtension,
-                    userId,
-                    transaction,
-                );
-            }
+            await UserModel.update({ userId, updateData });
 
             const tagsUpdate = async (tag, tagCategoryId) => {
                 // 태그 수정
@@ -379,6 +319,54 @@ const userService = {
             await tagsUpdate(hobby, 1);
             await tagsUpdate(personality, 2);
             await tagsUpdate(ideal, 3);
+
+            const fileIds = await FileModel.findFileIds(userId);
+
+            for (const fileId of fileIds) {
+                const file = await FileModel.findByFileId(fileId.fileId);
+                console.log('유저 서비스의 file: ', file);
+                if (file && file.category === 'profile' && profileImage) {
+                    console.log('file 카테고리: ', file.category, '프로필 이미지: ', profileImage, '파일 아이디: ', file.fileId);
+                    const fileExtension = extensionSplit(profileImage[1]);
+                    await FileModel.updateUserImage(
+                        profileImage[0], // category
+                        profileImage[1], // url
+                        fileExtension,
+                        userId,
+                        transaction,
+                    );
+                } else if ((file && file.category === 'background' && profileImage) || (!file && profileImage)) {
+                    const fileExtension = extensionSplit(profileImage[1]);
+                    await FileModel.createUserImage(
+                        profileImage[0], // category
+                        profileImage[1], // url
+                        fileExtension,
+                        userId,
+                        transaction,
+                    );
+                }
+
+                if (file && file.category === 'background' && backgroundImage) {
+                    console.log('file 카테고리: ', file.category, '프로필 이미지', profileImage);
+                    const fileExtension = extensionSplit(backgroundImage[1]);
+                    await FileModel.updateUserImage(
+                        backgroundImage[0], // category
+                        backgroundImage[1], // url
+                        fileExtension,
+                        userId,
+                        transaction,
+                    );
+                } else if ((file && file.category === 'profile' && backgroundImage) || (!file && backgroundImage)) {
+                    const fileExtension = extensionSplit(backgroundImage[1]);
+                    await FileModel.createUserImage(
+                        backgroundImage[0], // category
+                        backgroundImage[1], // url
+                        fileExtension,
+                        userId,
+                        transaction,
+                    );
+                }
+            }
 
             await transaction.commit();
 
