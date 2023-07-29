@@ -88,6 +88,7 @@ const UserModel = {
         const randomUsers = await db.User.findAll({
             where: {
                 gender,
+                isDeleted: 0,
             },
             order: db.sequelize.random(),
             limit,
