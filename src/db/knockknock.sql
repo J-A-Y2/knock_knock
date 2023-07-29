@@ -90,3 +90,14 @@ INSERT INTO tags VALUES(NULL, '즉흥적인',3);
 INSERT INTO tags VALUES(NULL, '소심한',3);
 INSERT INTO tags VALUES(NULL, '쿨한',3);
 
+INSERT INTO files VALUES(NULL, 'card','https://knock-s3.s3.ap-northeast-2.amazonaws.com/The+Emperor.png','png');
+INSERT INTO files VALUES(NULL, 'card','https://knock-s3.s3.ap-northeast-2.amazonaws.com/The+Empress.png','png');
+INSERT INTO files VALUES(NULL, 'card','https://knock-s3.s3.ap-northeast-2.amazonaws.com/The+Lovers.png','png');
+INSERT INTO files VALUES(NULL, 'card','https://knock-s3.s3.ap-northeast-2.amazonaws.com/The+star.png','png');
+INSERT INTO files VALUES(NULL, 'card','https://knock-s3.s3.ap-northeast-2.amazonaws.com/The+Hierophant.png','png');
+INSERT INTO files VALUES(NULL, 'card','https://knock-s3.s3.ap-northeast-2.amazonaws.com/The+High+Priestess.png','png');
+INSERT INTO files VALUES(NULL, 'card','https://knock-s3.s3.ap-northeast-2.amazonaws.com/The+Chariot.png','png');
+INSERT INTO files VALUES(NULL, 'card','https://knock-s3.s3.ap-northeast-2.amazonaws.com/Page+of+Cups.png','png');
+INSERT INTO files VALUES(NULL, 'card','https://knock-s3.s3.ap-northeast-2.amazonaws.com/The+Pentacles.png','png');
+INSERT INTO files VALUES(NULL, 'card','https://knock-s3.s3.ap-northeast-2.amazonaws.com/King+of+Wands.png','png');
+
