@@ -25,9 +25,9 @@ const FileModel = {
         }
     },
     // 이미지 수정
-    updateUserImage: async (category, url, extension, userId, transaction) => {
+    updateUserImage: async (category, url, extension, transaction) => {
         try {
-            db.File.update({ category, url, extension, userId }, { transaction });
+            db.File.update({ category, url, extension }, { transaction });
         } catch (error) {
             console.error(error);
         }
@@ -42,11 +42,13 @@ const FileModel = {
     },
     // 유저의 files 테이블 조회
     findByFileId: async fileId => {
-        return await db.File.findOne({
+        const files = await db.File.findOne({
             where: {
                 fileId,
             },
         });
+        console.log('files', files.category);
+        return files;
     },
 };
 

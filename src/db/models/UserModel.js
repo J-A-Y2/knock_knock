@@ -113,14 +113,18 @@ const UserModel = {
         });
     },
     // 유저 정보 업데이트
-    update: async ({ userId, updateData }) => {
+    update: async ({ userId, fieldToUpdate, newValue, transaction }) => {
         try {
-            const updatedUser = await db.User.update(updateData, {
-                where: {
-                    userId,
-                    isDeleted: 0,
+            const updatedUser = await db.User.update(
+                { [fieldToUpdate]: newValue },
+                {
+                    where: {
+                        userId,
+                        isDeleted: 0,
+                    },
+                    transaction,
                 },
-            });
+            );
 
             return updatedUser;
         } catch (error) {
