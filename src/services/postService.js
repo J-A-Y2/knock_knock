@@ -6,7 +6,7 @@ import { db } from '../db/index.js';
 import { BadRequestError, InternalServerError, NotFoundError, UnauthorizedError } from '../middlewares/errorMiddleware.js';
 import { setRecruitedValue, fieldsToUpdate } from '../utils/postFunctions.js';
 import { throwNotFoundError } from '../utils/commonFunctions.js';
-import { extensionSplit } from '../utils/extensionSplit.js';
+import { extensionSplit } from '../utils/userFunction.js';
 import { logger } from '../utils/logger.js';
 
 const postService = {

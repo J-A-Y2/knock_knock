@@ -13,12 +13,10 @@ tags:
 paths:
     /users/register:
         post:
+            deprecated: false
             tags:
                 - user
             description: 유저 회원가입하기. job까지 필수, 이후로 선택
-
-            parameters:
-                deprecated: true
 
             requestBody:
                 content:
@@ -71,45 +69,45 @@ paths:
                     content:
                         application/json:
                             schema:
-                            type: object
-                            properties:
-                                name:
-                                    type: string
-                                email:
-                                    type: string
-                                nickname:
-                                    type: string
-                                password:
-                                    type: string
-                                gender:
-                                    type: string
-                                birthday:
-                                    type: string
-                                    format: date
-                                job:
-                                    type: string
-                                region:
-                                    type: string
-                                profileImage:
-                                    type: string
-                                mbti:
-                                    type: string
-                                height:
-                                    type: integer
-                                hobby:
-                                    type: array
-                                    items:
+                                type: object
+                                properties:
+                                    name:
                                         type: string
-                                presonality:
-                                    type: array
-                                    items:
+                                    email:
                                         type: string
-                                ideal:
-                                    type: array
-                                    items:
+                                    nickname:
                                         type: string
-                                introduce:
-                                    type: string
+                                    password:
+                                        type: string
+                                    gender:
+                                        type: string
+                                    birthday:
+                                        type: string
+                                        format: date
+                                    job:
+                                        type: string
+                                    region:
+                                        type: string
+                                    profileImage:
+                                        type: string
+                                    mbti:
+                                        type: string
+                                    height:
+                                        type: integer
+                                    hobby:
+                                        type: array
+                                        items:
+                                            type: string
+                                    presonality:
+                                        type: array
+                                        items:
+                                            type: string
+                                    ideal:
+                                        type: array
+                                        items:
+                                            type: string
+                                    introduce:
+                                        type: string
 
                 '400':
                     description: Invalid ID supplied
@@ -253,8 +251,6 @@ paths:
                                     type: string
                                 region:
                                     type: string
-                                profileImage:
-                                    type: string
                                 mbti:
                                     type: string
                                 height:
@@ -273,6 +269,14 @@ paths:
                                         type: string
                                 indtroduce:
                                     type: string
+                                profileImage:
+                                    type: array
+                                    items:
+                                        type: string
+                                backgrounImage:
+                                    type: array
+                                    items:
+                                        type: string
 
                 required: true
 
