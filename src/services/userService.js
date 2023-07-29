@@ -324,9 +324,8 @@ const userService = {
 
             for (const fileId of fileIds) {
                 const file = await FileModel.findByFileId(fileId.fileId);
-                console.log('유저 서비스의 file: ', file);
+
                 if (file && file.category === 'profile' && profileImage) {
-                    console.log('file 카테고리: ', file.category, '프로필 이미지: ', profileImage, '파일 아이디: ', file.fileId);
                     const fileExtension = extensionSplit(profileImage[1]);
                     await FileModel.updateUserImage(
                         profileImage[0], // category
@@ -347,7 +346,6 @@ const userService = {
                 }
 
                 if (file && file.category === 'background' && backgroundImage) {
-                    console.log('file 카테고리: ', file.category, '프로필 이미지', profileImage);
                     const fileExtension = extensionSplit(backgroundImage[1]);
                     await FileModel.updateUserImage(
                         backgroundImage[0], // category
