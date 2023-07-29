@@ -21,6 +21,15 @@ userRouter.get('/isLogin', userController.isLogin);
 // 현재 로그인한 유저 정보 불러오기
 userRouter.get('/mypage', userController.getCurrentUserInfo);
 
+// 유저 정보 수정하기(별명, 설명)
+userRouter.put('/mypage', userController.update);
+
+// 유저 정보 삭제하기
+userRouter.delete('/mypage', userController.delete);
+
+// 유저 정보 불러오기
+userRouter.get('/:userId', userController.getOtherUserInfo);
+
 // 현재 로그인한 유저가 작성한 게시글 모두 불러오기
 userRouter.get('/mypage/posts', userController.getCurrentUserPosts);
 
@@ -32,14 +41,5 @@ userRouter.get('/network', userController.getRandomUsersInfo);
 
 // 오늘의 낙낙 랜덤 유저의 마이페이지 불러오기
 userRouter.get('/yourpage/:userId', userController.getRandomUserPage);
-
-// 유저 정보 불러오기
-userRouter.get('/:userId', userController.getOtherUserInfo);
-
-// 유저 정보 수정하기(별명, 설명)
-userRouter.put('/mypage', userController.update);
-
-// 유저 정보 삭제하기
-userRouter.delete('/mypage', userController.delete);
 
 export { userRouter };
