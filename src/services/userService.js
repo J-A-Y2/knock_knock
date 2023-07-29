@@ -180,9 +180,10 @@ const userService = {
                 }
             }
 
+            const Image = await FileModel.getUserImage(user.userId);
+
             return {
                 message: '회원 정보 조회를 성공했습니다.',
-                // user,
                 userId: user.userId,
                 email: user.email,
                 name: user.name,
@@ -192,13 +193,13 @@ const userService = {
                 age: user.age,
                 job: user.job,
                 region: user.region,
-                profileImage: user.profileImage,
                 mbti: user.mbti,
                 height: user.height,
                 introduce: user.introduce,
                 hobby,
                 personality,
                 ideal,
+                Image,
             };
         } catch (error) {
             if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
@@ -301,16 +302,18 @@ const userService = {
                 // 태그 수정
                 if (tag && tag.length > 0) {
                     // 태그 카테고리와 일치하는 태그들 삭제
-                    await UserModel.deleteTags(user.userId, tagCategoryId);
-                    // 태그이름 배열을 태그아이디(정수) 배열로 변경, [(tagId,userId)] 형태로 변경
+                    await UserModel.deleteTags(userId, tagCategoryId);
+
+                    // 태그이름 배열을 태그아이디(정수) 배열로 변경, [{ userId, tagId }] 형태로 변경
                     const newTags = await Promise.all(
                         tag.map(async tagName => {
                             const tagId = await UserModel.findTagId(tagName, tagCategoryId);
-                            return { userId: user.userId, tagId: tagId.tagId };
+                            return { userId, tagId: tagId.tagId, tagCategoryId };
                         }),
                     );
+
                     // 수정할 태그들 userTags 테이블에 데이터 생성
-                    await UserModel.bulkCreateTags({ newTags, transaction });
+                    await UserModel.bulkCreateTags(newTags, transaction);
                 }
             };
 
@@ -318,26 +321,71 @@ const userService = {
             await tagsUpdate(personality, 2);
             await tagsUpdate(ideal, 3);
 
-            if (profileImage) {
-                const fileExtension = extensionSplit(profileImage[1]);
-                await FileModel.updateUserImage(
-                    profileImage[0], // category
-                    profileImage[1], // url
-                    fileExtension,
-                    user.userId,
-                    transaction,
-                );
-            }
+            const userFiles = await FileModel.findFileIds(userId); // 유저가 가진 fileId 조회
+            console.log(userFiles);
+            for (const userFile of userFiles) {
+                const fileId = userFile.fileId;
+                const file = await FileModel.findByFileId(fileId);
 
-            if (backgroundImage) {
-                const fileExtension = extensionSplit(backgroundImage[1]);
-                await FileModel.updateUserImage(
-                    backgroundImage[0], // category
-                    backgroundImage[1], // url
-                    fileExtension,
-                    user.userId,
-                    transaction,
-                );
+                if (file.category === 'profile') {
+                    // 프로필 이미지가 존재하면 수정하기
+                    const fileExtension = extensionSplit(profileImage[1]);
+                    try {
+                        await FileModel.updateUserImage(
+                            profileImage[0], // category
+                            profileImage[1], // url
+                            fileExtension,
+                            userId,
+                            transaction,
+                        );
+                    } catch (error) {
+                        console.error(error);
+                    }
+                } else {
+                    // 프로필 이미지가 없으면 생성하기
+                    const fileExtension = extensionSplit(profileImage[1]);
+                    try {
+                        await FileModel.createUserImage(
+                            profileImage[0], // category
+                            profileImage[1], // url
+                            fileExtension,
+                            userId,
+                            transaction,
+                        );
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+
+                if (file.category === 'background') {
+                    // 배경 이미지가 존재하면 수정하기
+                    const fileExtension = extensionSplit(backgroundImage[1]);
+                    try {
+                        await FileModel.updateUserImage(
+                            backgroundImage[0], // category
+                            backgroundImage[1], // url
+                            fileExtension,
+                            userId,
+                            transaction,
+                        );
+                    } catch (error) {
+                        console.error(error);
+                    }
+                } else {
+                    // 배경 이미지 없으면 생성하기
+                    const fileExtension = extensionSplit(backgroundImage[1]);
+                    try {
+                        await FileModel.createUserImage(
+                            backgroundImage[0], // category
+                            backgroundImage[1], // url
+                            fileExtension,
+                            userId,
+                            transaction,
+                        );
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
             }
 
             await transaction.commit();

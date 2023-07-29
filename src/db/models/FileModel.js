@@ -7,46 +7,46 @@ const FileModel = {
         const newFile = await db.File.create({ category, url, extension }, { transaction });
         await db.UserFile.create({ userId, fileId: newFile.fileId }, { transaction });
     },
-    // 이미지 수정
-    updateUserImage: async (category, url, extension, userId, transaction) => {
+    // 이미지 조회
+    getUserImage: async userId => {
         try {
-            const userFiles = await db.UserFile.findAll({
-                where: { userId },
+            return await db.UserFile.findAll({
+                where: {
+                    userId,
+                },
+                include: [
+                    {
+                        model: db.File,
+                    },
+                ],
             });
-
-            for (const userFile of userFiles) {
-                const file = await db.File.findOne({
-                    where: { fileId: userFile.fileId },
-                });
-
-                if (file.category === 'profile') {
-                    // 프로필 이미지가 존재하면 수정하기
-                    await db.File.update({ category, url, extension }, { where: { fileId: file.fileId }, transaction });
-                } else {
-                    // 프로필 이미지가 없으면 생성하기
-                    await db.File.create({ category, url, extension }, { transaction });
-                }
-
-                if (file.category === 'background') {
-                    // 배경 이미지가 존재하면 수정하기
-                    await db.File.update({ category, url, extension }, { where: { fileId: file.fileId }, transaction });
-                } else {
-                    // 배경 이미지 없으면 생성하기
-                    await db.File.create({ category, url, extension }, { transaction });
-                }
-            }
         } catch (error) {
             console.error(error);
         }
     },
-    createPostImage: async (category, url, extension, postId, transaction) => {
-        const file = await db.File.create({ category, url, extension }, { transaction });
-        await db.PostFile.create({ postId, fileId: file.fileId }, { transaction });
+    // 이미지 수정
+    updateUserImage: async (category, url, extension, userId, transaction) => {
+        try {
+            db.File.update({ category, url, extension, userId }, { transaction });
+        } catch (error) {
+            console.error(error);
+        }
     },
-    updatePostImage: async (category, url, extension, postId, transaction) => {
-        const file = await db.PostFile.findOne({ where: { postId } });
-
-        await db.File.update({ category, url, extension }, { where: { fileId: file.fileId }, transaction });
+    // 유저의 fileIds 조회
+    findFileIds: async userId => {
+        return await db.UserFile.findAll({
+            where: {
+                userId,
+            },
+        });
+    },
+    // 유저의 files 테이블 조회
+    findByFileId: async fileId => {
+        return await db.File.findOne({
+            where: {
+                fileId,
+            },
+        });
     },
 };
 
