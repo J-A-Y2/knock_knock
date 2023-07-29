@@ -56,19 +56,17 @@ const getIdealAndPersonality = async user => {
             ideal.push(userTag.Tag.tagName);
         }
     }
-    console.log(hobby, ideal, personality, '?');
     return { hobby, ideal, personality };
 };
 
-const getParticipantsList = async (participants, ideal) => {
+const getParticipantsList = async participants => {
     const participantsList = participants.map(participant => {
         const personality = participant.User.UserTags.map(userTag => userTag.Tag.tagName);
 
-        // ideal 배열과 personality 배열에서 일치하는 항목 개수 세기
-        const matchingCount = ideal.filter(tag => personality.includes(tag)).length;
-
         return {
             participationId: participant.participantId,
+            canceled: participant.canceled,
+            matchingCount: participant.matchingCount,
             userId: participant.User.userId,
             status: participant.status,
             nickname: participant.User.nickname,
@@ -76,7 +74,6 @@ const getParticipantsList = async (participants, ideal) => {
             age: participant.User.age,
             job: participant.User.job,
             personality,
-            matchingCount,
         };
     });
     return participantsList;
