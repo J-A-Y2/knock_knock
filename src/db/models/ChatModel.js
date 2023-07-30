@@ -35,6 +35,19 @@ const ChatModel = {
             where: {
                 firstId: userId,
             },
+            include: [
+                {
+                    model: db.User,
+                    attributes: ['nickname'],
+                    include: [
+                        {
+                            model: db.UserFile,
+                            attributes: ['fileId'],
+                            include: [{ model: db.File, where: { category: 'profile' }, attributes: ['url'] }],
+                        },
+                    ],
+                },
+            ],
         });
         return getUserChats;
     },

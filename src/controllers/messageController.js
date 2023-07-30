@@ -22,7 +22,7 @@ const messageController = {
 
             const { chat, message } = await messageService.getMessage(chatId);
 
-            statusCode.setResponseCode201(res);
+            statusCode.setResponseCode200(res);
             return res.send({ chat, message });
         } catch (error) {
             next(error);

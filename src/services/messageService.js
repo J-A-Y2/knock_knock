@@ -30,7 +30,7 @@ const messageService = {
     getMessage: async chatId => {
         try {
             const chat = await MessageModel.getAllMessage(chatId);
-
+            console.log(chat);
             throwNotFoundError(chat, '채팅');
 
             return { chat, message: '유저의 메세지 불러오기에 성공했습니다.' };
