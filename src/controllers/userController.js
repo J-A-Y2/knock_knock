@@ -5,7 +5,6 @@ const userController = {
     register: async (req, res, next) => {
         try {
             const newUser = req.body;
-
             const createUser = await userService.createUser({ newUser });
             statusCode.setResponseCode201(res);
             return res.send(createUser.message);
@@ -13,7 +12,6 @@ const userController = {
             next(error);
         }
     },
-
     login: async (req, res, next) => {
         try {
             const { email, password } = req.body;
@@ -42,10 +40,10 @@ const userController = {
             next(error);
         }
     },
-    getUserInfo: async (req, res, next) => {
+    getOtherUserInfo: async (req, res, next) => {
         try {
-            const { userId } = req.params;
-            const user = await userService.getUserById({ userId });
+            const userId = req.params;
+            const user = await userService.getUserById(userId);
 
             statusCode.setResponseCode200(res);
             return res.send(user);
@@ -64,6 +62,17 @@ const userController = {
             next(error);
         }
     },
+    getRandomUserPage: async (req, res, next) => {
+        try {
+            const userId = req.params;
+            const user = await userService.getUserById(userId);
+
+            statusCode.setResponseCode200(res);
+            return res.send(user);
+        } catch (error) {
+            next(error);
+        }
+    },
     getCurrentUserInfo: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
@@ -71,6 +80,28 @@ const userController = {
 
             statusCode.setResponseCode200(res);
             return res.send(user);
+        } catch (error) {
+            next(error);
+        }
+    },
+    getCurrentUserPosts: async (req, res, next) => {
+        try {
+            const userId = req.currentUserId;
+            const posts = await userService.getMyPosts({ userId });
+
+            statusCode.setResponseCode200(res);
+            return res.send(posts);
+        } catch (error) {
+            next(error);
+        }
+    },
+    getCurrentUserParticipants: async (req, res, next) => {
+        try {
+            const userId = req.currentUserId;
+            const participants = await userService.getMyParticipants({ userId });
+
+            statusCode.setResponseCode200(res);
+            return res.send(participants);
         } catch (error) {
             next(error);
         }

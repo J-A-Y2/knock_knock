@@ -1,19 +1,21 @@
-import sequelize from 'sequelize';
 import { Op } from 'sequelize';
 import { db } from '../index.js';
 
 const CommentModel = {
     // 댓글 생성
     create: async ({ userId, postId, content }) => {
-        const createComment = await db.Comment.create({ user_id: userId, post_id: postId, comment_content: content });
+        console.log({ userId, postId, content });
+        const createComment = await db.Comment.create({ userId, postId, content });
+        console.log(createComment);
         return createComment;
     },
 
     //댓글 찾기
-    findByCommentId: async ({ commentId }) => {
+    findByCommentId: async ({ postId, commentId }) => {
         const getComment = await db.Comment.findOne({
             where: {
-                comment_id: commentId,
+                postId,
+                commentId,
             },
         });
         return getComment;
@@ -22,12 +24,12 @@ const CommentModel = {
     // 댓글 수정
     update: async ({ userId, postId, commentId, content }) => {
         const updateComment = await db.Comment.update(
-            { comment_content: content },
+            { content },
             {
                 where: {
-                    user_id: userId,
-                    post_id: postId,
-                    comment_id: commentId,
+                    userId,
+                    postId,
+                    commentId,
                 },
             },
         );
@@ -35,10 +37,11 @@ const CommentModel = {
     },
 
     // 댓글 삭제
-    delete: async ({ commentId }) => {
+    delete: async ({ postId, commentId }) => {
         const deleteComment = await db.Comment.destroy({
             where: {
-                comment_id: commentId,
+                postId,
+                commentId,
             },
         });
         return deleteComment;
@@ -47,17 +50,25 @@ const CommentModel = {
     // 댓글 불러오기 (무한스크롤) 커서는 댓글의 아이디 값
     getComment: async ({ postId, cursor }) => {
         const getComment = await db.Comment.findAll({
-            attributes: ['comment_id', 'user_id', 'comment_content', 'createdAt'],
+            attributes: ['commentId', 'userId', 'content', 'createdAt'],
             include: [
                 {
                     model: db.User,
                     attributes: ['nickname'],
+
+                    include: [
+                        {
+                            model: db.UserFile,
+                            attributes: ['userId', 'fileId'],
+                            include: [{ model: db.File, attributes: ['url'], where: { category: 'profile' } }],
+                        },
+                    ],
                 },
             ],
             order: [['createdAt', 'DESC']],
             where: {
-                post_id: postId,
-                comment_id: {
+                postId,
+                commentId: {
                     [Op.lt]: cursor,
                 },
             },
@@ -69,15 +80,23 @@ const CommentModel = {
 
     recentComment: async postId => {
         const recentComment = await db.Comment.findAll({
-            attributes: ['comment_id', 'user_id', 'comment_content', 'createdAt'],
+            attributes: ['commentId', 'userId', 'content', 'createdAt'],
             include: [
                 {
                     model: db.User,
                     attributes: ['nickname'],
+
+                    include: [
+                        {
+                            model: db.UserFile,
+                            attributes: ['userId', 'fileId'],
+                            include: [{ model: db.File, attributes: ['url'], where: { category: 'profile' } }],
+                        },
+                    ],
                 },
             ],
             where: {
-                post_id: postId,
+                postId,
             },
             limit: 10,
 

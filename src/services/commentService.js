@@ -6,7 +6,7 @@ import { NotFoundError, InternalServerError, UnauthorizedError } from '../middle
 const commentService = {
     createComment: async ({ userId, postId, content }) => {
         try {
-            const participant = await ParticipantModel.getParticipationIdById({ userId, postId });
+            const participant = await ParticipantModel.getParticipationByUserId({ userId, postId });
             if (!participant) {
                 throw new NotFoundError('해당 id의 신청 정보가 없습니다. ');
             }
@@ -30,14 +30,15 @@ const commentService = {
 
     updateComment: async ({ userId, postId, commentId, content }) => {
         try {
-            const comment = await CommentModel.findByCommentId({ commentId });
-
-            if (comment.user_id !== userId) {
-                throw new UnauthorizedError('작성한 유저에게 권한이 있습니다.');
-            }
+            const comment = await CommentModel.findByCommentId({ postId, commentId });
+            console.log(comment);
 
             if (!comment) {
                 throw new NotFoundError('요청한 댓글의 정보를 찾을 수 없습니다.');
+            }
+
+            if (comment.userId !== userId) {
+                throw new UnauthorizedError('작성한 유저에게 권한이 있습니다.');
             }
 
             await CommentModel.update({ userId, postId, commentId, content });
@@ -47,24 +48,26 @@ const commentService = {
             };
         } catch (error) {
             if (error instanceof NotFoundError || error instanceof UnauthorizedError) {
-                throw new InternalServerError('댓글 수정하기에 실패했습니다.');
+                throw error;
+            } else {
+                new InternalServerError('댓글 수정하기에 실패했습니다.');
             }
         }
     },
 
-    deleteComment: async ({ userId, commentId }) => {
+    deleteComment: async ({ userId, postId, commentId }) => {
         try {
-            const comment = await CommentModel.findByCommentId({ commentId });
+            const comment = await CommentModel.findByCommentId({ postId, commentId });
 
             if (!comment) {
                 throw new NotFoundError('이미 삭제된 댓글입니다.');
             }
 
-            if (comment.user_id !== userId) {
+            if (comment.userId !== userId) {
                 throw new UnauthorizedError('작성한 유저에게 권한이 있습니다.');
             }
 
-            await CommentModel.delete({ commentId });
+            await CommentModel.delete({ postId, commentId });
 
             return {
                 message: '댓글 삭제하기에 성공하셨습니다.',
@@ -81,19 +84,22 @@ const commentService = {
     getComment: async ({ userId, postId, cursor }) => {
         try {
             let commentList = [];
-            const post = await PostModel.getPostById(postId);
-            const participant = await ParticipantModel.getParticipationIdById({ userId, postId });
 
-            if (!participant) {
-                throw new NotFoundError('해당 id의 신청 정보가 없습니다. ');
-            }
-            if (participant.status !== 'accepted') {
-                throw new UnauthorizedError('신청이 수락된 유저에게만 권한이 있습니다');
-            }
+            const post = await PostModel.getPostById(postId);
+            const participant = await ParticipantModel.getParticipationByUserId({ userId, postId });
 
             if (!post) {
                 throw new NotFoundError('요청한 게시물의 정보를 찾을 수 없습니다.');
             }
+
+            if (!participant) {
+                throw new NotFoundError('해당 id의 신청 정보가 없습니다. ');
+            }
+
+            if (participant.status !== 'accepted') {
+                throw new UnauthorizedError('신청이 수락된 유저에게만 권한이 있습니다');
+            }
+
             // cursor == 0 이면, 처음으로 댓글 불러오기.
             if (cursor == 0) {
                 commentList = await CommentModel.recentComment(postId);

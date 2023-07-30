@@ -2,58 +2,50 @@ const Post = (sequelize, DataTypes) => {
     const Post = sequelize.define(
         'Post',
         {
-            post_id: {
+            postId: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true,
             },
-            profile_image: {
-                type: DataTypes.STRING,
-                allowNull: true,
-            },
-            post_type: {
+            type: {
                 type: DataTypes.STRING(5),
                 allowNull: false,
             },
-            post_title: {
+            title: {
                 type: DataTypes.STRING(100),
                 allowNull: false,
-            },
-            post_image: {
-                type: DataTypes.STRING,
-                allowNull: true,
             },
             place: {
                 type: DataTypes.STRING(30),
                 allowNull: false,
             },
-            meeting_time: {
+            meetingTime: {
                 type: DataTypes.STRING(20),
                 allowNull: false,
             },
-            post_content: {
+            content: {
                 type: DataTypes.STRING(200),
                 allowNull: true,
             },
-            is_completed: {
+            isCompleted: {
                 type: DataTypes.BOOLEAN,
                 allowNull: false,
                 defaultValue: false,
             },
-            total_m: {
+            totalM: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
             },
-            total_f: {
+            totalF: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
             },
-            recruited_m: {
+            recruitedM: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 defaultValue: 0,
             },
-            recruited_f: {
+            recruitedF: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 defaultValue: 0,
@@ -69,12 +61,13 @@ const Post = (sequelize, DataTypes) => {
         },
     );
     Post.associate = db => {
-        db.Post.hasMany(db.Comment, { foreignKey: 'post_id', sourceKey: 'post_id' }); // foreignKey는 Post모델의 post_id, sourceKey는 User 모델의 post_id
-        db.Post.belongsTo(db.User, { foreignKey: 'user_id', targetKey: 'user_id' }); // foreignKey는 Post모델의 user_id, targetKey는 User 모델의 user_id
+        db.Post.hasMany(db.Comment, { foreignKey: 'postId', sourceKey: 'postId' }); // foreignKey는 Post모델의 postId, sourceKey는 User 모델의 postId
+        db.Post.belongsTo(db.User, { foreignKey: 'userId', targetKey: 'userId' }); // foreignKey는 Post모델의 userId, targetKey는 User 모델의 userId
         db.Post.hasMany(db.Participant, {
-            foreignKey: 'post_id',
-            sourceKey: 'post_id',
-        }); // foreignKey는 Participant모델의 post_id, sourceKey는 Post 모델의 post_id
+            foreignKey: 'postId',
+            sourceKey: 'postId',
+        }); // foreignKey는 Participant모델의 postId, sourceKey는 Post 모델의 postId
+        db.Post.hasMany(db.PostFile, { foreignKey: 'postId' });
     };
 
     return Post;

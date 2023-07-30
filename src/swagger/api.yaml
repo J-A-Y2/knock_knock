@@ -13,12 +13,10 @@ tags:
 paths:
     /users/register:
         post:
+            deprecated: false
             tags:
                 - user
             description: 유저 회원가입하기. job까지 필수, 이후로 선택
-
-            parameters:
-                deprecated: true
 
             requestBody:
                 content:
@@ -26,13 +24,13 @@ paths:
                         schema:
                             type: object
                             properties:
-                                username:
+                                name:
                                     type: string
                                 email:
                                     type: string
                                 nickname:
                                     type: string
-                                user_password:
+                                password:
                                     type: string
                                 gender:
                                     type: string
@@ -43,14 +41,12 @@ paths:
                                     type: string
                                 region:
                                     type: string
-                                profile_image:
+                                profileImage:
                                     type: string
                                 mbti:
                                     type: string
-                                religion:
-                                    type: string
                                 height:
-                                    type: string
+                                    type: integer
                                 hobby:
                                     type: array
                                     items:
@@ -73,47 +69,45 @@ paths:
                     content:
                         application/json:
                             schema:
-                            type: object
-                            properties:
-                                username:
-                                    type: string
-                                email:
-                                    type: string
-                                nickname:
-                                    type: string
-                                user_password:
-                                    type: string
-                                gender:
-                                    type: string
-                                birthday:
-                                    type: string
-                                    format: date
-                                job:
-                                    type: string
-                                region:
-                                    type: string
-                                profile_image:
-                                    type: string
-                                mbti:
-                                    type: string
-                                religion:
-                                    type: string
-                                height:
-                                    type: string
-                                hobby:
-                                    type: array
-                                    items:
+                                type: object
+                                properties:
+                                    name:
                                         type: string
-                                presonality:
-                                    type: array
-                                    items:
+                                    email:
                                         type: string
-                                ideal:
-                                    type: array
-                                    items:
+                                    nickname:
                                         type: string
-                                introduce:
-                                    type: string
+                                    password:
+                                        type: string
+                                    gender:
+                                        type: string
+                                    birthday:
+                                        type: string
+                                        format: date
+                                    job:
+                                        type: string
+                                    region:
+                                        type: string
+                                    profileImage:
+                                        type: string
+                                    mbti:
+                                        type: string
+                                    height:
+                                        type: integer
+                                    hobby:
+                                        type: array
+                                        items:
+                                            type: string
+                                    presonality:
+                                        type: array
+                                        items:
+                                            type: string
+                                    ideal:
+                                        type: array
+                                        items:
+                                            type: string
+                                    introduce:
+                                        type: string
 
                 '400':
                     description: Invalid ID supplied
@@ -146,249 +140,16 @@ paths:
                     content:
                         application/json:
                             schema:
-                            type: object
-                            properties:
-                                email:
-                                    type: string
-                                password:
-                                    type: string
-                '405':
-                    description: Invalid input
-
-    /users/mypage:
-        get:
-            tags:
-                - user
-            description: 유저 정보 불러오기
-
-            responses:
-                '200':
-                    description: 유저 정보 불러오기 성공!
-                    content:
-                        application/json:
-                            schema:
                                 type: object
                                 properties:
                                     message:
                                         type: string
+                                    token:
+                                        type: string
                                     userId:
                                         type: integer
-                                    email:
-                                        type: string
-                                    username:
-                                        type: string
-                                    nickname:
-                                        type: string
-                                    gender:
-                                        type: string
-                                    birthday:
-                                        type: string
-                                        format: date
-                                    age:
-                                        type: integer
-                                    job:
-                                        type: string
-                                    region:
-                                        type: string
-                                    profileImage:
-                                        type: string
-                                    mbti:
-                                        type: string
-                                    religion:
-                                        type: string
-                                    height:
-                                        type: string
-                                    hobby:
-                                        type: array
-                                        items:
-                                            type: string
-                                    presonality:
-                                        type: array
-                                        items:
-                                            type: string
-                                    ideal:
-                                        type: array
-                                        items:
-                                            type: string
-                                    introduce:
-                                        type: string
-                '400':
-                    description: Invalid status value
-
-    /users/{userId}:
-        get:
-            tags:
-                - user
-            description: 유저 정보 조회하기.
-            parameters:
-                - name: userId
-                  in: path
-                  description: 유저 고유 아이디
-                  required: true
-
-            responses:
-                '200':
-                    description: 유저 조회 성공!
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    userId:
-                                        type: integer
-                                    email:
-                                        type: string
-                                    username:
-                                        type: string
-                                    nickname:
-                                        type: string
-                                    gender:
-                                        type: string
-                                    birthday:
-                                        type: string
-                                        format: date
-                                    job:
-                                        type: string
-                                    region:
-                                        type: string
-                                    profileImage:
-                                        type: string
-                                    mbti:
-                                        type: string
-                                    religion:
-                                        type: string
-                                    height:
-                                        type: string
-                                    hobby:
-                                        type: array
-                                        items:
-                                            type: string
-                                    presonality:
-                                        type: array
-                                        items:
-                                            type: string
-                                    ideal:
-                                        type: array
-                                        items:
-                                            type: string
-                                    introduce:
-                                        type: string
-
-                '400':
-                    description: Invalid tag value
-
-    /users/mypage/delete:
-        delete:
-            tags:
-                - user
-            description: 유저 정보 삭제하기.
-            parameters:
-                in: query
-                description: 유저 아이디
-                required: true
-                style: form
-                explode: true
-                schema:
-                    type: array
-                    items:
-                        type: string
-            responses:
-                '200':
-                    description: 유저 삭제 성공!
-
-                '400':
-                    description: Invalid tag value
-
-    /users/mypage/update:
-        put:
-            tags:
-                - user
-            description: 유저 정보 수정하기
-
-            parameters:
-                deprecated: true
-
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                nickname:
-                                    type: string
-                                job:
-                                    type: string
-                                region:
-                                    type: string
-                                profileImage:
-                                    type: string
-                                mbti:
-                                    type: string
-                                religion:
-                                    type: string
-                                height:
-                                    type: string
-                                hobby:
-                                    type: array
-                                    items:
-                                        type: string
-                                presonality:
-                                    type: array
-                                    items:
-                                        type: string
-                                ideal:
-                                    type: array
-                                    items:
-                                        type: string
-                                indtroduce:
-                                    type: string
-
-                required: true
-
-            responses:
-                '200':
-                    description: 유저 정보 수정하기 성공!
-                    content:
-                        application/json:
-                            schema:
-                            type: object
-                            properties:
-                                nickname:
-                                    type: string
-                                job:
-                                    type: string
-                                region:
-                                    type: string
-                                profileImage:
-                                    type: string
-                                mbti:
-                                    type: string
-                                religion:
-                                    type: string
-                                height:
-                                    type: string
-                                hobby:
-                                    type: array
-                                    items:
-                                        type: string
-                                presonality:
-                                    type: array
-                                    items:
-                                        type: string
-                                ideal:
-                                    type: array
-                                    items:
-                                        type: string
-                                indtroduce:
-                                    type: string
-
-                '400':
-                    description: Invalid ID supplied
-
-                '404':
-                    description: Pet not found
                 '405':
-                    description: Validation exception
+                    description: Invalid input
 
     /users/isLogin:
         get:
@@ -410,40 +171,130 @@ paths:
                                         type: string
                                     nickname:
                                         type: string
-    /users/network:
+
+    /users/mypage:
         get:
             tags:
                 - user
-            description: 오늘의 낙낙(네트워크) 랜덤으로 6명 불러오기
+            description: 내 정보 불러오기
 
             responses:
                 '200':
-                    description: 랜덤 유저 6명 불러오기 성공!
+                    description: 내 정보 불러오기 성공!
                     content:
                         application/json:
                             schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    userId:
+                                        type: integer
+                                    email:
+                                        type: string
+                                    name:
+                                        type: string
+                                    nickname:
+                                        type: string
+                                    gender:
+                                        type: string
+                                    birthday:
+                                        type: string
+                                        format: date
+                                    age:
+                                        type: integer
+                                    job:
+                                        type: string
+                                    region:
+                                        type: string
+                                    mbti:
+                                        type: string
+                                    height:
+                                        type: integer
+                                    introduce:
+                                        type: string
+                                    hobby:
+                                        type: array
+                                        items:
+                                            type: string
+                                    presonality:
+                                        type: array
+                                        items:
+                                            type: string
+                                    ideal:
+                                        type: array
+                                        items:
+                                            type: string
+                                    profileImage:
+                                        type: string
+                                    backgroundImage:
+                                        type: string
+                '400':
+                    description: Invalid status value
+        put:
+            tags:
+                - user
+            description: 유저 정보 수정하기
+
+            parameters:
+                deprecated: true
+
+            requestBody:
+                content:
+                    application/json:
+                        schema:
                             type: object
                             properties:
-                                message:
+                                nickname:
                                     type: string
-                                randomUsers:
+                                job:
+                                    type: string
+                                region:
+                                    type: string
+                                mbti:
+                                    type: string
+                                height:
+                                    type: string
+                                hobby:
                                     type: array
                                     items:
+                                        type: string
+                                presonality:
+                                    type: array
+                                    items:
+                                        type: string
+                                ideal:
+                                    type: array
+                                    items:
+                                        type: string
+                                indtroduce:
+                                    type: string
+                                profileImage:
+                                    type: array
+                                    items:
+                                        type: string
+                                backgrounImage:
+                                    type: array
+                                    items:
+                                        type: string
+
+                required: true
+
+            responses:
+                '200':
+                    description: 유저 정보 수정하기 성공!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    updatedUser:
                                         type: object
                                         properties:
-                                            userId:
-                                                type: integer
-                                            email:
-                                                type: string
-                                            username:
-                                                type: string
                                             nickname:
                                                 type: string
-                                            gender:
-                                                type: string
-                                            birthday:
-                                                type: string
-                                                format: date
                                             job:
                                                 type: string
                                             region:
@@ -451,8 +302,6 @@ paths:
                                             profileImage:
                                                 type: string
                                             mbti:
-                                                type: string
-                                            religion:
                                                 type: string
                                             height:
                                                 type: string
@@ -468,10 +317,320 @@ paths:
                                                 type: array
                                                 items:
                                                     type: string
-                                            introduce:
+                                            indtroduce:
                                                 type: string
+
+                '400':
+                    description: Invalid ID supplied
+
+                '404':
+                    description: Pet not found
+                '405':
+                    description: Validation exception
+
+        delete:
+            tags:
+                - user
+            description: 유저 정보 삭제하기.
+            parameters:
+                in: query
+                description: 유저 아이디
+                required: true
+                style: form
+                explode: true
+                schema:
+                    type: array
+                    items:
+                        type: string
+            responses:
+                '200':
+                    description: 유저 삭제 성공!
+
+                '400':
+                    description: Invalid tag value
+
+    /users/{userId}:
+        get:
+            tags:
+                - user
+            description: 유저 정보 조회하기.
+            parameters:
+                - name: userId
+                  in: path
+                  description: 유저 고유 아이디
+                  required: true
+
+            responses:
+                '200':
+                    description: 유저 조회 성공!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    userId:
+                                        type: integer
+                                    email:
+                                        type: string
+                                    name:
+                                        type: string
+                                    nickname:
+                                        type: string
+                                    gender:
+                                        type: string
+                                    birthday:
+                                        type: string
+                                        format: date
+                                    age:
+                                        type: integer
+                                    job:
+                                        type: string
+                                    region:
+                                        type: string
+                                    mbti:
+                                        type: string
+                                    height:
+                                        type: integer
+                                    introduce:
+                                        type: string
+                                    hobby:
+                                        type: array
+                                        items:
+                                            type: string
+                                    presonality:
+                                        type: array
+                                        items:
+                                            type: string
+                                    ideal:
+                                        type: array
+                                        items:
+                                            type: string
+                                    profileImage:
+                                        type: string
+                                    backgroundImage:
+                                        type: string
+
+                '400':
+                    description: Invalid tag value
+
+    /users/mypage/posts:
+        get:
+            tags:
+                - user
+            description: 현재 로그인한 유저가 작성한 게시글 모두 불러오기
+            response:
+                '200':
+                    description: 내가 작성한 게시글 조회 성공!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    posts:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                postId:
+                                                    type: integer
+                                                type:
+                                                    type: string
+                                                title:
+                                                    type: string
+                                                place:
+                                                    type: string
+                                                meetingTime:
+                                                    type: string
+                                                    format: datet-ime
+                                                content:
+                                                    type: string
+                                                isCompleted:
+                                                    type: boolean
+                                                totalM:
+                                                    type: integer
+                                                totalF:
+                                                    type: integer
+                                                recruitedM:
+                                                    type: integer
+                                                recruitedF:
+                                                    type: integer
+                                                createdAt:
+                                                    type: string
+                                                    format: date-time
+                                                updatedAt:
+                                                    type: string
+                                                    format: date-time
+                                                userId:
+                                                    type: integer
+
+    /users/mypage/participants:
+        get:
+            tags:
+                - user
+            description: 현재 로그인한 유저의 참여한 게시글 모두 불러오기
+            response:
+                '200':
+                    description: 내가 참여한 게시글 조회 성공!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    participants:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                participantId:
+                                                    type: integer
+                                                canceled:
+                                                    type: boolean
+                                                status:
+                                                    type: string
+                                                matchingCount:
+                                                    type: integer
+                                                createdAt:
+                                                    type: string
+                                                    format: date-time
+                                                updatedAt:
+                                                    type: string
+                                                    format: date-time
+                                                userId:
+                                                    type: integer
+                                                postId:
+                                                    type: integer
+
+    /users/network:
+        get:
+            tags:
+                - user
+            description: 오늘의 낙낙(네트워크) 랜덤으로 6명 불러오기
+
+            responses:
+                '200':
+                    description: 랜덤 유저 6명 불러오기 성공!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    randomUsers:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                userId:
+                                                    type: integer
+                                                email:
+                                                    type: string
+                                                name:
+                                                    type: string
+                                                nickname:
+                                                    type: string
+                                                gender:
+                                                    type: string
+                                                birthday:
+                                                    type: string
+                                                    format: date
+                                                job:
+                                                    type: string
+                                                region:
+                                                    type: string
+                                                profileImage:
+                                                    type: string
+                                                mbti:
+                                                    type: string
+                                                height:
+                                                    type: string
+                                                hobby:
+                                                    type: array
+                                                    items:
+                                                        type: string
+                                                presonality:
+                                                    type: array
+                                                    items:
+                                                        type: string
+                                                ideal:
+                                                    type: array
+                                                    items:
+                                                        type: string
+                                                introduce:
+                                                    type: string
                 '400':
                     description: Invalid value
+
+    /users/yourpage/{userId}:
+        get:
+            tags:
+                - user
+            description: 오늘의 낙낙 랜덤 유저의 마이페이지 불러오기
+            parameters:
+                - name: userId
+                  in: path
+                  description: 유저 고유 아이디
+                  required: true
+            responses:
+                '200':
+                    descruption: 회원정보 조회를 성공했습니다.
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    userId:
+                                        type: integer
+                                    email:
+                                        type: string
+                                    name:
+                                        type: string
+                                    nickname:
+                                        type: string
+                                    gender:
+                                        type: string
+                                    birthday:
+                                        type: string
+                                        format: date
+                                    age:
+                                        type: integer
+                                    job:
+                                        type: string
+                                    region:
+                                        type: string
+                                    mbti:
+                                        type: string
+                                    height:
+                                        type: integer
+                                    introduce:
+                                        type: string
+                                    hobby:
+                                        type: array
+                                        items:
+                                            type: string
+                                    presonality:
+                                        type: array
+                                        items:
+                                            type: string
+                                    ideal:
+                                        type: array
+                                        items:
+                                            type: string
+                                    profileImage:
+                                        type: string
+                                    backgroundImage:
+                                        type: string
+
+                '400':
+                    description: Invalid tag value
 
     /posts:
         get:
@@ -520,34 +679,28 @@ paths:
                                         items:
                                             type: object
                                             properties:
-                                                post_id:
+                                                postId:
                                                     type: integer
-                                                profile_image:
+                                                type:
                                                     type: string
-                                                    nullable: true
-                                                post_type:
+                                                title:
                                                     type: string
-                                                post_title:
-                                                    type: string
-                                                post_image:
-                                                    type: string
-                                                    nullable: true
                                                 place:
                                                     type: string
-                                                meeting_time:
+                                                meetingTime:
                                                     type: string
-                                                post_content:
+                                                content:
                                                     type: string
-                                                is_completed:
+                                                isCompleted:
                                                     type: boolean
                                                     default: false
-                                                total_m:
+                                                totalM:
                                                     type: integer
-                                                total_f:
+                                                totalF:
                                                     type: integer
-                                                recruited_m:
+                                                recruitedM:
                                                     type: integer
-                                                recruited_f:
+                                                recruitedF:
                                                     type: integer
                                                 createdAt:
                                                     type: string
@@ -562,9 +715,32 @@ paths:
                                                     properties:
                                                         nickname:
                                                             type: string
-                                                        profile_image:
-                                                            type: string
-                                                            nullable: true
+                                                        UserFiles:
+                                                            type: array
+                                                            items:
+                                                                type: object
+                                                                properties:
+                                                                    fileId:
+                                                                        type: integer
+                                                                    File:
+                                                                        type: object
+                                                                        properties:
+                                                                            url:
+                                                                                type: string
+                                                PostFiles:
+                                                    type: array
+                                                    items:
+                                                        type: object
+                                                        properties:
+                                                            postId:
+                                                                type: integer
+                                                            fileId:
+                                                                type: integer
+                                                            File:
+                                                                type: object
+                                                                properties:
+                                                                    url:
+                                                                        type: string
                     required: true
 
         post:
@@ -577,19 +753,19 @@ paths:
                         schema:
                             type: object
                             properties:
-                                post_title:
+                                title:
                                     type: string
-                                post_content:
+                                content:
                                     type: string
-                                post_type:
+                                type:
                                     type: string
-                                total_m:
+                                totalM:
                                     type: integer
-                                total_f:
+                                totalF:
                                     type: integer
                                 place:
                                     type: string
-                                meeting_time:
+                                meetingTime:
                                     type: string
                 required: true
 
@@ -597,7 +773,7 @@ paths:
                 '201':
                     description: 게시글 작성하기 성공.
 
-    /posts/:postId:
+    /posts/{postId}:
         get:
             tags:
                 - post
@@ -620,33 +796,27 @@ paths:
                                     post:
                                         type: object
                                         properties:
-                                            post_id:
+                                            postId:
                                                 type: integer
-                                            profile_image:
+                                            type:
                                                 type: string
-                                                nullable: true
-                                            post_type:
+                                            title:
                                                 type: string
-                                            post_title:
-                                                type: string
-                                            post_image:
-                                                type: string
-                                                nullable: true
                                             place:
                                                 type: string
-                                            meeting_time:
+                                            meetingTime:
                                                 type: string
-                                            post_content:
+                                            content:
                                                 type: string
-                                            is_completed:
+                                            isCompleted:
                                                 type: boolean
-                                            total_m:
+                                            totalM:
                                                 type: integer
-                                            total_f:
+                                            totalF:
                                                 type: integer
-                                            recruited_m:
+                                            recruitedM:
                                                 type: integer
-                                            recruited_f:
+                                            recruitedF:
                                                 type: integer
                                             createdAt:
                                                 type: string
@@ -654,8 +824,39 @@ paths:
                                             updatedAt:
                                                 type: string
                                                 format: date-time
-                                            user_id:
+                                            userId:
                                                 type: integer
+                                            User:
+                                                type: object
+                                                properties:
+                                                    nickname:
+                                                        type: string
+                                                    UserFiles:
+                                                        type: array
+                                                        items:
+                                                            type: object
+                                                            properties:
+                                                                fileId:
+                                                                    type: integer
+                                                                File:
+                                                                    type: object
+                                                                    properties:
+                                                                        url:
+                                                                            type: string
+                                            PostFiles:
+                                                type: array
+                                                items:
+                                                    type: object
+                                                    properties:
+                                                        postId:
+                                                            type: integer
+                                                        fileId:
+                                                            type: integer
+                                                        File:
+                                                            type: object
+                                                            properties:
+                                                                url:
+                                                                    type: string
                     required: true
         delete:
             tags:
@@ -689,19 +890,19 @@ paths:
                         schema:
                             type: object
                             properties:
-                                post_title:
+                                title:
                                     type: string
-                                post_content:
+                                content:
                                     type: string
-                                post_type:
+                                type:
                                     type: string
-                                total_m:
+                                totalM:
                                     type: integer
-                                total_f:
+                                totalF:
                                     type: integer
                                 place:
                                     type: string
-                                meeting_time:
+                                meetingTime:
                                     type: string
                 required: true
 
@@ -720,14 +921,14 @@ paths:
                 '404':
                     description: Order not found
 
-    /participants/:postId/participants:
+    /participants/{postId}:
         post:
             tags:
                 - participation
-            description: 모임 신청하기
+            description: 모임 신청하기. Flag가 true면 신청된 상태, false면 신청 취소 떠야 함
 
             parameters:
-                - name: postid
+                - name: postId
                   in: path
                   description: 게시글 고유 아이디
                   required: true
@@ -742,14 +943,21 @@ paths:
                                 properties:
                                     message:
                                         type: string
+                                    participationFlag:
+                                        type: boolean
                 '400':
                     description: Invalid ID supplied
                 '404':
                     description: Order not found
         put:
             tags:
-                - post
-            description: 모임 신청 취소하기
+                - participation
+            description: 모임 신청 취소하기. Flag가 true면 신청된 상태, false면 신청 취소 떠야 함
+            parameters:
+                - name: postId
+                  in: path
+                  description: 게시글 고유 아이디
+                  required: true
             responses:
                 '200':
                     description: 모임 신청 취소 성공.
@@ -760,17 +968,50 @@ paths:
                                 properties:
                                     message:
                                         type: string
-    /participants/:postId/userlist:
+                                    participationFlag:
+                                        type: boolean
+        get:
+            tags:
+                - participation
+            description: 모임 신청 여부 조회하기. canceled가 false면 신청된거고 true면 신청 취소된거
+            parameters:
+                - name: postId
+                  in: path
+                  description: 게시글 고유 아이디
+                  required: true
+            responses:
+                '200':
+                    description: 모임 신청 취소 성공.
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    participantId:
+                                        type: integer
+                                    status:
+                                        type: string
+                                    canceled:
+                                        type: boolean
+    /participants/{postId}/userlist:
         get:
             tags:
                 - participation
             description: 신청자 조회하기
 
             parameters:
-                - name: postid
+                - name: postId
                   in: path
                   description: 게시글 고유 아이디
                   required: true
+                - name: cursor
+                  in: query
+                  description: 커서. 처음에는 0, 페이지 내 마지막 id
+                - name: limit
+                  in: query
+                  description: 한 페이지 내 띄울 아이템 수
 
             responses:
                 '200':
@@ -785,23 +1026,34 @@ paths:
                                     isFulled:
                                         type: boolean
                                         description: 모집 완료 여부
-                                    total:
+                                    nextCursor:
                                         type: integer
                                     participantsList:
                                         type: array
                                         items:
                                             type: object
                                             properties:
+                                                participantId:
+                                                    type: integer
+                                                canceled:
+                                                    type: boolean
                                                 status:
                                                     type: string
-                                                nickname:
-                                                    type: string
-                                                gender:
-                                                    type: string
-                                                age:
+                                                matchingCount:
                                                     type: integer
-                                                job:
-                                                    type: string
+                                                User:
+                                                    type: object
+                                                    properties:
+                                                        userId:
+                                                            type: integer
+                                                        nickname:
+                                                            type: string
+                                                        gender:
+                                                            type: string
+                                                        age:
+                                                            type: integer
+                                                        job:
+                                                            type: string
                                                 profile_image:
                                                     type: string
                                                 personality:
@@ -889,7 +1141,7 @@ paths:
                 '404':
                     description: User not found
 
-    /participants/:postId/acceptedlist:
+    /participants/{postId}/acceptedlist:
         get:
             tags:
                 - participation
@@ -927,8 +1179,7 @@ paths:
                                                             type: integer
                                                         job:
                                                             type: integer
-                                                        profile_image:
-                                                            type: string
+
                 '400':
                     description: Invalid ID supplied
                 '404':
@@ -958,7 +1209,7 @@ paths:
                 '500':
                     description: '댓글 추가하기에 실패했습니다'
 
-    /comments/:postId/:commentId:
+    /comments/{postId}/{commentId}:
         put:
             tags:
                 - comment
@@ -1014,7 +1265,7 @@ paths:
                 '500':
                     description: 댓글 삭제하기에 실패했습니다.
 
-    /comments/:postId:
+    /comments/{postId}:
         get:
             tags:
                 - comment
@@ -1118,7 +1369,7 @@ paths:
                 '404':
                     description: User not found
 
-    /messages/:messageId:
+    /messages/{messageId}:
         delete:
             tags:
                 - message

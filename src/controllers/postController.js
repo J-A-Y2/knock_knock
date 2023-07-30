@@ -33,10 +33,10 @@ const postController = {
     getPost: async (req, res, next) => {
         try {
             const postId = req.params.postId;
-            const post = await postService.getPost(postId);
+            const { message, post } = await postService.getPost(postId);
 
             statusCode.setResponseCode200(res);
-            res.send({ message: post.message, post: post.post });
+            res.send({ message, post });
         } catch (error) {
             next(error);
         }
@@ -46,7 +46,6 @@ const postController = {
             const userId = req.currentUserId;
             const postId = req.params.postId;
             const toUpdate = req.body;
-            // const toUpdate = { post_title: postTitle, postContent, postType, people, place, meetingTime };
             const post = await postService.setPost({ userId, postId, toUpdate });
 
             statusCode.setResponseCode200(res);

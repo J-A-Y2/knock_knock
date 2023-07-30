@@ -9,23 +9,53 @@ const PostModel = {
         const { count, rows: posts } = await db.Post.findAndCountAll({
             offset,
             limit,
-            include: [{ model: db.User, attributes: ['nickname', 'profile_image'] }],
+            include: [
+                {
+                    model: db.User,
+                    attributes: ['nickname'],
+                    include: [
+                        {
+                            model: db.UserFile,
+                            attributes: ['fileId'],
+                            include: [{ model: db.File, attributes: ['url'], where: { category: 'profile' } }],
+                        },
+                    ],
+                },
+                { model: db.PostFile, attributes: ['postId', 'fileId'], include: [{ model: db.File, attributes: ['url'] }] },
+            ],
             order: [
                 ['createdAt', 'DESC'],
-                ['post_id', 'DESC'],
+                ['postId', 'DESC'],
             ],
         });
         return { total: count, posts };
     },
     getFilteredPosts: async ({ offset, limit, type }) => {
         const { count, rows: posts } = await db.Post.findAndCountAll({
-            where: { post_type: type },
+            where: { type },
             offset,
             limit,
-            include: [{ model: db.User, attributes: ['nickname', 'profile_image'] }],
+            include: [
+                {
+                    model: db.User,
+                    attributes: ['nickname'],
+                    include: [
+                        {
+                            model: db.UserFile,
+                            attributes: ['fileId'],
+                            include: [{ model: db.File, attributes: ['url'], where: { category: 'profile' } }],
+                        },
+                    ],
+                },
+                {
+                    model: db.PostFile,
+                    attributes: ['postId', 'fileId'],
+                    include: [{ model: db.File, attributes: ['url'], where: { category: 'post' } }],
+                },
+            ],
             order: [
                 ['createdAt', 'DESC'],
-                ['post_id', 'DESC'],
+                ['postId', 'DESC'],
             ],
         });
         return { total: count, posts };
@@ -33,8 +63,26 @@ const PostModel = {
     getPostById: async postId => {
         const post = await db.Post.findOne({
             where: {
-                post_id: postId,
+                postId,
             },
+            include: [
+                {
+                    model: db.User,
+                    attributes: ['nickname'],
+                    include: [
+                        {
+                            model: db.UserFile,
+                            attributes: ['fileId'],
+                            include: [{ model: db.File, attributes: ['url'], where: { category: 'profile' } }],
+                        },
+                    ],
+                },
+                {
+                    model: db.PostFile,
+                    attributes: ['postId', 'fileId'],
+                    include: [{ model: db.File, attributes: ['url'], where: { category: 'post' } }],
+                },
+            ],
         });
         return post;
     },
@@ -42,7 +90,7 @@ const PostModel = {
         const updatePost = await db.Post.update(
             { [fieldToUpdate]: newValue },
             {
-                where: { post_id: postId },
+                where: { postId },
                 transaction,
             },
         );
@@ -50,7 +98,7 @@ const PostModel = {
     },
     delete: async postId => {
         await db.Post.destroy({
-            where: { post_id: postId },
+            where: { postId },
         });
     },
 };

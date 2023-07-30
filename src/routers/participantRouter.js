@@ -8,10 +8,13 @@ const participantRouter = Router();
 participantRouter.use(loginRequired);
 
 // 참여 신청
-participantRouter.post('/:postId/participants', postParamsValidate, participantController.participatePost);
+participantRouter.post('/:postId', postParamsValidate, participantController.participatePost);
 
 // 참여 신청 취소
-participantRouter.put('/:postId/participants', postParamsValidate, participantController.participateCancel);
+participantRouter.put('/:postId', postParamsValidate, participantController.participateCancel);
+
+// 신청 여부 조회
+participantRouter.get('/:postId', postParamsValidate, participantController.checkParticipation);
 
 // 신청자 조회
 participantRouter.get('/:postId/userlist', postParamsValidate, participantController.getParticipants);
