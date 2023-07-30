@@ -11,16 +11,16 @@ tags:
       description: 메세지 라우터 모음
     - name: chat
       description: 채팅 라우터 모음
+    - name: card
+      description: 카드 라우터 모음
 
 paths:
     /users/register:
         post:
+            deprecated: false
             tags:
                 - user
             description: 유저 회원가입하기. job까지 필수, 이후로 선택
-
-            parameters:
-                deprecated: true
 
             requestBody:
                 content:
@@ -73,45 +73,45 @@ paths:
                     content:
                         application/json:
                             schema:
-                            type: object
-                            properties:
-                                name:
-                                    type: string
-                                email:
-                                    type: string
-                                nickname:
-                                    type: string
-                                password:
-                                    type: string
-                                gender:
-                                    type: string
-                                birthday:
-                                    type: string
-                                    format: date
-                                job:
-                                    type: string
-                                region:
-                                    type: string
-                                profileImage:
-                                    type: string
-                                mbti:
-                                    type: string
-                                height:
-                                    type: integer
-                                hobby:
-                                    type: array
-                                    items:
+                                type: object
+                                properties:
+                                    name:
                                         type: string
-                                presonality:
-                                    type: array
-                                    items:
+                                    email:
                                         type: string
-                                ideal:
-                                    type: array
-                                    items:
+                                    nickname:
                                         type: string
-                                introduce:
-                                    type: string
+                                    password:
+                                        type: string
+                                    gender:
+                                        type: string
+                                    birthday:
+                                        type: string
+                                        format: date
+                                    job:
+                                        type: string
+                                    region:
+                                        type: string
+                                    profileImage:
+                                        type: string
+                                    mbti:
+                                        type: string
+                                    height:
+                                        type: integer
+                                    hobby:
+                                        type: array
+                                        items:
+                                            type: string
+                                    presonality:
+                                        type: array
+                                        items:
+                                            type: string
+                                    ideal:
+                                        type: array
+                                        items:
+                                            type: string
+                                    introduce:
+                                        type: string
 
                 '400':
                     description: Invalid ID supplied
@@ -255,8 +255,6 @@ paths:
                                     type: string
                                 region:
                                     type: string
-                                profileImage:
-                                    type: string
                                 mbti:
                                     type: string
                                 height:
@@ -275,6 +273,14 @@ paths:
                                         type: string
                                 indtroduce:
                                     type: string
+                                profileImage:
+                                    type: array
+                                    items:
+                                        type: string
+                                backgrounImage:
+                                    type: array
+                                    items:
+                                        type: string
 
                 required: true
 
@@ -1077,16 +1083,6 @@ paths:
                   description: 참가 신청 고유 아이디
                   required: true
 
-            requestbody:
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                user_id:
-                                    type: integer
-                required: true
-
             responses:
                 '200':
                     description: 신청자 수락 성공.
@@ -1113,16 +1109,6 @@ paths:
                   in: path
                   description: 참가 신청 고유 아이디
                   required: true
-
-            requestbody:
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                user_id:
-                                    type: integer
-                required: true
 
             responses:
                 '200':
@@ -1482,3 +1468,107 @@ paths:
                                         type: string
                 '500':
                     description: 유저의 채팅 불러오기에 실패했습니다.
+    /cards:
+        post:
+            tags:
+                - card
+            description: 뽑은 카드 저장하기
+
+            parameters:
+                - name: cardId
+                  schema:
+                      type: integer
+                  in: query
+                  description: 카드 고유 아이디 (21~30)
+                  required: true
+
+            responses:
+                '201':
+                    description: 유저 카드 정보 저장에 성공했습니다!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    user:
+                                        type: integer
+                                    card:
+                                        type: object
+                                        properties:
+                                            cardId:
+                                                type: integer
+                                            content:
+                                                type: array
+                                                items:
+                                                    type: string
+                                    CardFile:
+                                        type: object
+                                        properties:
+                                            fileId:
+                                                type: integer
+                                            File:
+                                                type: object
+                                                properties:
+                                                    url:
+                                                        type: string
+                '500':
+                    description: 게시글 댓글 불러오기에 실패했습니다.
+                '404':
+                    description: 요청한 게시물의 정보를 찾을 수 없습니다.
+        get:
+            tags:
+                - card
+            description: 같은 카드 고른 유저 랜덤 3명 뽑기
+
+            parameters:
+                - name: limit
+                  schema:
+                      type: integer
+                  in: query
+                  description: 띄울 유저 수
+                  required: true
+
+            responses:
+                '200':
+                    description: 랜덤 유저 (limit)명 조회 성공!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    randomLovers:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                id:
+                                                    type: integer
+                                                User:
+                                                    type: object
+                                                    properties:
+                                                        userId:
+                                                            type: integer
+                                                        email:
+                                                            type: string
+                                                        nickname:
+                                                            type: string
+                                                        gender:
+                                                            type: string
+                                                        birthday:
+                                                            type: string
+                                                        age:
+                                                            type: integer
+                                                        job:
+                                                            type: string
+                                                        region:
+                                                            type: string
+                                                        mbti:
+                                                            type: string
+                                                        height:
+                                                            type: string
+                                                        introduce:
+                                                            type: string

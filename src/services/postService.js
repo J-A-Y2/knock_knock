@@ -6,7 +6,7 @@ import { db } from '../db/index.js';
 import { BadRequestError, InternalServerError, NotFoundError, UnauthorizedError } from '../middlewares/errorMiddleware.js';
 import { setRecruitedValue, fieldsToUpdate } from '../utils/postFunctions.js';
 import { throwNotFoundError } from '../utils/commonFunctions.js';
-import { extensionSplit } from '../utils/extensionSplit.js';
+import { extensionSplit } from '../utils/userFunction.js';
 import { logger } from '../utils/logger.js';
 
 const postService = {
@@ -73,12 +73,12 @@ const postService = {
         try {
             const post = await PostModel.getPostById(postId);
             throwNotFoundError(post, '게시글');
-            const userWithImage = {
-                nickname: post.User.nickname,
-                profileImage: post.User.UserFiles[0].File.url,
-            };
+            // const userWithImage = {
+            //     nickname: post.User.nickname,
+            //     profileImage: post.User.UserFiles[0].File.url,
+            // };
 
-            const postImage = post.PostFiles[0]?.File.url || null;
+            // const postImage = post.PostFiles[0]?.File.url || null;
 
             return {
                 message: '게시글 조회를 성공했습니다.',
@@ -117,12 +117,12 @@ const postService = {
 
             for (const [field, fieldToUpdate] of Object.entries(fieldsToUpdate)) {
                 if (toUpdate[field]) {
-                    const newValue = updateValue[field];
-                    post = await PostModel.update({ postId, fieldToUpdate, newValue, transaction });
+                    const newValue = updateValue[field]; //{"title": "수정"}
+                    await PostModel.update({ postId, fieldToUpdate, newValue, transaction });
                 }
             }
 
-            if (postImage) {
+            if (post.PostFiles.length > 0 && postImage) {
                 const fileExtension = extensionSplit(postImage[1]);
                 await FileModel.updatePostImage(
                     postImage[0], // category
@@ -132,6 +132,17 @@ const postService = {
                     transaction,
                 );
             }
+            if (post.PostFiles.length == 0 && postImage) {
+                const fileExtension = extensionSplit(postImage[1]);
+                await FileModel.createPostImage(
+                    postImage[0], // category
+                    postImage[1], // url
+                    fileExtension,
+                    postId,
+                    transaction,
+                );
+            }
+
             await transaction.commit();
             return { message: '게시글 수정을 성공했습니다.' };
         } catch (error) {
