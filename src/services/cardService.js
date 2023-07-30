@@ -66,19 +66,19 @@ const cardService = {
             const cards = await CardModel.checkPlayed(userId);
 
             if (cards.length == 0) {
-                throw new NotFoundError('나와 같은 운명을 가진 똑똑이는 누굴까? 이번 달 카드를 뽑고 확인해 보세요!');
+                throw new NotFoundError('카드를 뽑은 내역이 없습니다.');
             }
 
             const currentCard = cards.pop();
 
             if (currentMonth !== currentCard.createdAt.getMonth() + 1) {
-                throw new NotFoundError('나와 같은 운명을 가진 똑똑이는 누굴까? 이번 달 카드를 뽑고 확인해 보세요!');
+                throw new NotFoundError('이번 달에 카드를 뽑은 내역이 없습니다.');
             }
 
             const randomLovers = await CardModel.findRandomLovers({ cardId: currentCard.cardId, gender: genderToFind, limit });
 
             if (!randomLovers || randomLovers.length === 0) {
-                throw new NotFoundError('다른 똑똑이들이 카드를 뽑을 때까지 조금만 더 기다려 볼까요?');
+                throw new NotFoundError('같은 카드를 뽑은 다른 유저가 없습니다.');
             }
 
             return {
