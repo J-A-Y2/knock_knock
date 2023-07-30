@@ -8,7 +8,7 @@ const Card = (sequelize, DataTypes) => {
                 primaryKey: true,
             },
             content: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING(500),
                 allowNull: false,
             },
         },

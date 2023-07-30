@@ -198,7 +198,7 @@ const userService = {
                 hobby,
                 personality,
                 ideal,
-                Image,
+                Image: Image.File,
             };
         } catch (error) {
             if (error instanceof UnauthorizedError || error instanceof NotFoundError) {

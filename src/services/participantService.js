@@ -108,46 +108,31 @@ const participantService = {
             const participants = await ParticipantModel.getParticipants(postId);
 
             const { ideal } = await getIdealAndPersonality(user);
-            console.log(ideal);
+
             for (const participant of participants) {
                 const { personality } = await getIdealAndPersonality(participant.User);
                 const matchingCount = ideal.filter(tag => personality.includes(tag)).length;
                 await ParticipantModel.update({
-                    participantId: participant.User.userId,
+                    participantId: participant.participantId,
                     updateField: 'matchingCount',
                     newValue: matchingCount,
                 });
             }
+            let updatedParticipants = [];
 
-            const updatedparticipants = await ParticipantModel.getParticipants(postId);
-
-            // const participantsList = await getParticipantsList(participants, ideal);
-
-            // matchingCount를 기준으로 내림차순으로 정렬
-            // participantsList.sort((a, b) => b.matchingCount - a.matchingCount);
-
-            // 커서를 이용하여 페이지네이션을 위한 시작 인덱스 계산
-            let startIndex = 0;
-            if (cursor) {
-                const participantIndex = updatedparticipants.findIndex(participant => participant.participationId == cursor);
-                startIndex = participantIndex !== -1 ? participantIndex + 1 : 0;
-            }
-
-            // limit 적용
-            const paginatedList = updatedparticipants.slice(startIndex, startIndex + limit);
-
-            // 다음 페이지를 위한 커서를 사용할 맨 마지막 id 추출
-            let nextCursor = null;
-            if (paginatedList.length > 0) {
-                nextCursor = paginatedList[paginatedList.length - 1].participationId;
+            if (cursor == 0) {
+                updatedParticipants = await ParticipantModel.getUpdatedParticipants({ postId, limit });
+            } else if (cursor == -1) {
+                updatedParticipants = '전체 신청자 조회가 끝났습니다';
+            } else {
+                updatedParticipants = await ParticipantModel.getUpdatedParticipantsByCursor({ postId, cursor, limit });
             }
 
             return {
                 message: '참가자 리스트 조회를 성공했습니다.',
                 ideal,
                 isFulled: post.isCompleted,
-                participantsList: paginatedList,
-                nextCursor,
+                participantsList: updatedParticipants,
             };
         } catch (error) {
             if (error instanceof NotFoundError || error instanceof ConflictError) {
