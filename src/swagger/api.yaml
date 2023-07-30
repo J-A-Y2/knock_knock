@@ -1540,6 +1540,8 @@ paths:
                                 properties:
                                     message:
                                         type: string
+                                    cardId:
+                                        type: integer
                                     randomLovers:
                                         type: array
                                         items:
@@ -1572,3 +1574,5 @@ paths:
                                                             type: string
                                                         introduce:
                                                             type: string
+                '404':
+                    description: 캡쳐보세요

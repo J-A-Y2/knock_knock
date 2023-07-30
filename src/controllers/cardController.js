@@ -28,10 +28,10 @@ const cardController = {
         try {
             const userId = req.currentUserId;
             const limit = parseInt(req.query.limit);
-            const randomLovers = await cardService.getRandomLovers({ userId, limit });
+            const { message, cardId, randomLovers } = await cardService.getRandomLovers({ userId, limit });
 
             statusCode.setResponseCode200(res);
-            res.send(randomLovers);
+            res.send({ message, cardId, randomLovers });
         } catch (error) {
             next(error);
         }
