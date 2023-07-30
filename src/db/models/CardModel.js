@@ -29,19 +29,33 @@ const CardModel = {
                 {
                     model: db.CardFile,
                     attributes: ['fileId'],
-                    include: [{ model: db.File, attribures: ['url'], where: { category: 'card' } }],
+                    include: [{ model: db.File, attributes: ['url'], where: { category: 'card' } }],
                 },
             ],
         });
     },
     // 카드 같은 유저 랜덤 조회
-    findRandomLovers: async (gender, cardId, limit) => {
-        await db.UserCard.findAll({
+    findRandomLovers: async ({ gender, cardId, limit }) => {
+        return await db.UserCard.findAll({
             where: { cardId },
+            attributes: ['id'],
             include: [
                 {
                     model: db.User,
-                    where: { gender },
+                    attributes: [
+                        'userId',
+                        'email',
+                        'nickname',
+                        'gender',
+                        'birthday',
+                        'age',
+                        'job',
+                        'region',
+                        'mbti',
+                        'height',
+                        'introduce',
+                    ],
+                    where: { gender, isDeleted: 0 },
                 },
             ],
             order: db.sequelize.random(),
@@ -50,8 +64,13 @@ const CardModel = {
     },
 
     // 유저가 뽑은 카드 저장
-    saveCard: async ({ userId, cardId }) => {
-        return await db.UserCard.upsert({ userId, cardId });
+    saveCard: async ({ userId, cardId, transaction }) => {
+        return await db.UserCard.create({ userId, cardId }, { transaction });
+    },
+
+    // 이미 카드를 뽑은 유저인지 검증
+    checkPlayed: async userId => {
+        return await db.UserCard.findAll({ where: { userId } });
     },
 };
 
