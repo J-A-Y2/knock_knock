@@ -10,6 +10,7 @@ import { messageRouter } from './routers/messageRouter.js';
 import { commentRouter } from './routers/commentRouter.js';
 import { participantRouter } from './routers/participantRouter.js';
 import { chatRouter } from './routers/chatRouter.js';
+import { cardRouter } from './routers/cardRouter.js';
 import { logger } from '../src/utils/logger.js';
 import { morganMiddleware } from './middlewares/morgan.js';
 
@@ -32,6 +33,7 @@ app.use('/messages', messageRouter);
 app.use('/participants', participantRouter);
 app.use('/chats', chatRouter);
 app.use('/files', fileRouter);
+app.use('/cards', cardRouter);
 
 db.sequelize
     .sync({ force: false }) // true이면 테이블 모두 삭제 후 생성, false이면 테이블 그대로 유지

@@ -10,8 +10,7 @@ import {
 import { UserModel } from '../db/models/UserModel.js';
 import { FileModel } from '../db/models/FileModel.js';
 import { db } from '../db/index.js';
-import { calculateKoreanAge } from '../utils/calculateKoreanAge.js';
-import { extensionSplit } from '../utils/extensionSplit.js';
+import { calculateKoreanAge, extensionSplit } from '../utils/userFunction.js';
 
 const userService = {
     // 유저 생성
@@ -199,7 +198,7 @@ const userService = {
                 hobby,
                 personality,
                 ideal,
-                Image,
+                Image: Image.File,
             };
         } catch (error) {
             if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
@@ -321,70 +320,49 @@ const userService = {
             await tagsUpdate(personality, 2);
             await tagsUpdate(ideal, 3);
 
-            const userFiles = await FileModel.findFileIds(userId); // 유저가 가진 fileId 조회
-            console.log(userFiles);
-            for (const userFile of userFiles) {
-                const fileId = userFile.fileId;
-                const file = await FileModel.findByFileId(fileId);
+            const fileIds = await FileModel.findFileIds(userId);
 
-                if (file.category === 'profile') {
-                    // 프로필 이미지가 존재하면 수정하기
+            for (const fileId of fileIds) {
+                const file = await FileModel.findByFileId(fileId.fileId);
+
+                if (file && file.category === 'profile' && profileImage) {
                     const fileExtension = extensionSplit(profileImage[1]);
-                    try {
-                        await FileModel.updateUserImage(
-                            profileImage[0], // category
-                            profileImage[1], // url
-                            fileExtension,
-                            userId,
-                            transaction,
-                        );
-                    } catch (error) {
-                        console.error(error);
-                    }
-                } else {
-                    // 프로필 이미지가 없으면 생성하기
+                    await FileModel.updateUserImage(
+                        profileImage[0], // category
+                        profileImage[1], // url
+                        fileExtension,
+                        userId,
+                        transaction,
+                    );
+                } else if ((file && file.category === 'background' && profileImage) || (!file && profileImage)) {
                     const fileExtension = extensionSplit(profileImage[1]);
-                    try {
-                        await FileModel.createUserImage(
-                            profileImage[0], // category
-                            profileImage[1], // url
-                            fileExtension,
-                            userId,
-                            transaction,
-                        );
-                    } catch (error) {
-                        console.error(error);
-                    }
+                    await FileModel.createUserImage(
+                        profileImage[0], // category
+                        profileImage[1], // url
+                        fileExtension,
+                        userId,
+                        transaction,
+                    );
                 }
 
-                if (file.category === 'background') {
-                    // 배경 이미지가 존재하면 수정하기
+                if (file && file.category === 'background' && backgroundImage) {
                     const fileExtension = extensionSplit(backgroundImage[1]);
-                    try {
-                        await FileModel.updateUserImage(
-                            backgroundImage[0], // category
-                            backgroundImage[1], // url
-                            fileExtension,
-                            userId,
-                            transaction,
-                        );
-                    } catch (error) {
-                        console.error(error);
-                    }
-                } else {
-                    // 배경 이미지 없으면 생성하기
+                    await FileModel.updateUserImage(
+                        backgroundImage[0], // category
+                        backgroundImage[1], // url
+                        fileExtension,
+                        userId,
+                        transaction,
+                    );
+                } else if ((file && file.category === 'profile' && backgroundImage) || (!file && backgroundImage)) {
                     const fileExtension = extensionSplit(backgroundImage[1]);
-                    try {
-                        await FileModel.createUserImage(
-                            backgroundImage[0], // category
-                            backgroundImage[1], // url
-                            fileExtension,
-                            userId,
-                            transaction,
-                        );
-                    } catch (error) {
-                        console.error(error);
-                    }
+                    await FileModel.createUserImage(
+                        backgroundImage[0], // category
+                        backgroundImage[1], // url
+                        fileExtension,
+                        userId,
+                        transaction,
+                    );
                 }
             }
 
