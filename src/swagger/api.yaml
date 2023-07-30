@@ -11,6 +11,8 @@ tags:
       description: 메세지 라우터 모음
     - name: chat
       description: 채팅 라우터 모음
+    - name: card
+      description: 카드 라우터 모음
 
 paths:
     /users/register:
@@ -1069,7 +1071,7 @@ paths:
                 '404':
                     description: Order not found
 
-    /participants/:participantId/allow:
+    /participants/{participantId}/allow:
         put:
             tags:
                 - participation
@@ -1096,7 +1098,7 @@ paths:
                 '404':
                     description: User not found
 
-    /participants/:participantId/deny:
+    /participants/{participantId}/deny:
         put:
             tags:
                 - participation
@@ -1191,7 +1193,7 @@ paths:
                 '500':
                     description: '댓글 추가하기에 실패했습니다'
 
-    /comments/:postId/:commentId:
+    /comments/{postId}/{commentId}:
         put:
             tags:
                 - comment
@@ -1247,7 +1249,7 @@ paths:
                 '500':
                     description: 댓글 삭제하기에 실패했습니다.
 
-    /comments/:postId/{?cursor&limit}:
+    /comments/{postId}/{?cursor&limit}:
         get:
             tags:
                 - comment
@@ -1330,7 +1332,7 @@ paths:
                 '500':
                     description: 새로운 메세지 생성에 실패했습니다.
 
-    /messages/{:chatId}:
+    /messages/{chatId}:
         get:
             tags:
                 - message
@@ -1430,7 +1432,7 @@ paths:
                 '500':
                     description: 유저의 채팅 목록 불러오기에 실패했습니다.
 
-    /chats/{:secondId}:
+    /chats/{secondId}:
         get:
             tags:
                 - chat
@@ -1466,3 +1468,107 @@ paths:
                                         type: string
                 '500':
                     description: 유저의 채팅 불러오기에 실패했습니다.
+    /cards:
+        post:
+            tags:
+                - card
+            description: 뽑은 카드 저장하기
+
+            parameters:
+                - name: cardId
+                  schema:
+                      type: integer
+                  in: query
+                  description: 카드 고유 아이디 (21~30)
+                  required: true
+
+            responses:
+                '201':
+                    description: 유저 카드 정보 저장에 성공했습니다!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    user:
+                                        type: integer
+                                    card:
+                                        type: object
+                                        properties:
+                                            cardId:
+                                                type: integer
+                                            content:
+                                                type: array
+                                                items:
+                                                    type: string
+                                    CardFile:
+                                        type: object
+                                        properties:
+                                            fileId:
+                                                type: integer
+                                            File:
+                                                type: object
+                                                properties:
+                                                    url:
+                                                        type: string
+                '500':
+                    description: 게시글 댓글 불러오기에 실패했습니다.
+                '404':
+                    description: 요청한 게시물의 정보를 찾을 수 없습니다.
+        get:
+            tags:
+                - card
+            description: 같은 카드 고른 유저 랜덤 3명 뽑기
+
+            parameters:
+                - name: limit
+                  schema:
+                      type: integer
+                  in: query
+                  description: 띄울 유저 수
+                  required: true
+
+            responses:
+                '200':
+                    description: 랜덤 유저 (limit)명 조회 성공!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    randomLovers:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                id:
+                                                    type: integer
+                                                User:
+                                                    type: object
+                                                    properties:
+                                                        userId:
+                                                            type: integer
+                                                        email:
+                                                            type: string
+                                                        nickname:
+                                                            type: string
+                                                        gender:
+                                                            type: string
+                                                        birthday:
+                                                            type: string
+                                                        age:
+                                                            type: integer
+                                                        job:
+                                                            type: string
+                                                        region:
+                                                            type: string
+                                                        mbti:
+                                                            type: string
+                                                        height:
+                                                            type: string
+                                                        introduce:
+                                                            type: string
