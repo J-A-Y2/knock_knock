@@ -21,10 +21,15 @@ const userService = {
             const { hobby, personality, ideal, profileImage, ...userInfo } = newUser;
 
             //이메일 중복 확인
-            const user = await UserModel.findByEmail(newUser.email);
+            const userByEmail = await UserModel.findByEmail(newUser.email);
+            const userByNickname = await UserModel.findByNickname(newUser.nickname);
 
-            if (user) {
+            if (userByEmail) {
                 throw new ConflictError('이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요.');
+            }
+
+            if (userByNickname) {
+                throw new ConflictError('이 닉네임은 현재 사용중입니다. 다른 닉네임을 입력해 주세요.');
             }
 
             // 비밀번호 암호화
@@ -211,9 +216,11 @@ const userService = {
     // 유저 랜덤으로 6명 네트워크페이지에 불러오기
     getRandomUsers: async userId => {
         try {
+            console.log(userId);
             const user = await UserModel.findById(userId);
+            console.log(user);
 
-            if (!user) {
+            if (!user || user.isDeleted === true) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
