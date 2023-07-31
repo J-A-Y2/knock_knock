@@ -62,20 +62,36 @@ const cardService = {
                 genderToFind = '남';
             }
 
+            const currentMonth = new Date().getMonth() + 1;
             const cards = await CardModel.checkPlayed(userId);
 
-            const randomLovers = await CardModel.findRandomLovers({ cardId: cards.pop().cardId, gender: genderToFind, limit });
+            if (cards.length == 0) {
+                throw new NotFoundError('카드를 뽑은 내역이 없습니다.');
+            }
+
+            const currentCard = cards.pop();
+
+            if (currentMonth !== currentCard.createdAt.getMonth() + 1) {
+                throw new NotFoundError('이번 달에 카드를 뽑은 내역이 없습니다.');
+            }
+
+            const randomLovers = await CardModel.findRandomLovers({ cardId: currentCard.cardId, gender: genderToFind, limit });
 
             if (!randomLovers || randomLovers.length === 0) {
-                throw new NotFoundError('유저들을 찾을 수 없습니다.');
+                throw new NotFoundError('같은 카드를 뽑은 다른 유저가 없습니다.');
             }
 
             return {
                 message: '랜덤으로 유저 3명 조회하기 성공!',
+                cardId: currentCard.cardId,
                 randomLovers,
             };
         } catch (error) {
-            throw new InternalServerError('랜덤으로 유저들을 조회하는 데 실패했습니다.');
+            if (error instanceof NotFoundError) {
+                throw error;
+            } else {
+                throw new InternalServerError('랜덤으로 유저들을 조회하는 데 실패했습니다.');
+            }
         }
     },
 };
