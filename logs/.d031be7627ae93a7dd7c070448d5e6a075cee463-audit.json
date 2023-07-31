@@ -34,6 +34,11 @@
             "date": 1690643062895,
             "name": "/Users/jay/개발/knockknock/knockknock_back/logs/2023-07-30.log",
             "hash": "a60a8023b37e7e9d0cc5994790d017f43fefa529e9437578db3b601ba85c5234"
+        },
+        {
+            "date": 1690729487536,
+            "name": "/Users/jay/개발/knockknock/knockknock_back/logs/2023-07-31.log",
+            "hash": "73285619cafded8b16d5041fbc38c7b2fedc5598eec930cd77fa30c353316fb0"
         }
     ],
     "hashType": "sha256"
