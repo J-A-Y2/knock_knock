@@ -213,7 +213,7 @@ const userService = {
         try {
             const user = await UserModel.findById(userId);
 
-            if (!user || user.isDeleted === true) {
+            if (!user) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 

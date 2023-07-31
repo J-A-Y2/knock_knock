@@ -54,6 +54,7 @@ const userController = {
     getRandomUsersInfo: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
+            console.log('유저 컨트롤러 userId:', userId);
             const users = await userService.getRandomUsers(userId);
 
             statusCode.setResponseCode200(res);
