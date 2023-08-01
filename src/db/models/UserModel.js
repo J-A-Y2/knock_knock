@@ -1,5 +1,5 @@
 import { db } from '../index.js';
-
+import { Op } from 'sequelize';
 const UserModel = {
     // 유저 생성
     create: async newUser => {
@@ -87,6 +87,19 @@ const UserModel = {
                     model: db.UserTag,
                     attributes: ['userId'],
                     include: [{ model: db.Tag, attributes: ['tagName', 'tagCategoryId'] }],
+                },
+                {
+                    model: db.UserFile,
+                    attributes: ['userId', 'fileId'],
+                    include: [
+                        {
+                            model: db.File,
+                            attributes: ['url'],
+                            where: {
+                                [Op.or]: [{ category: 'profile' }, { category: 'background' }],
+                            },
+                        },
+                    ],
                 },
             ],
         });

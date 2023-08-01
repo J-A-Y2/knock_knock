@@ -184,26 +184,12 @@ const userService = {
                 }
             }
 
-            const Image = await FileModel.getUserImage(user.userId);
-
             return {
                 message: '회원 정보 조회를 성공했습니다.',
-                userId: user.userId,
-                email: user.email,
-                name: user.name,
-                nickname: user.nickname,
-                gender: user.gender,
-                birthday: user.birthday,
-                age: user.age,
-                job: user.job,
-                region: user.region,
-                mbti: user.mbti,
-                height: user.height,
-                introduce: user.introduce,
+                user,
                 hobby,
                 personality,
                 ideal,
-                Image: Image.File,
             };
         } catch (error) {
             if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
