@@ -328,19 +328,10 @@ const userService = {
                 if (file && file.category === 'profile' && profileImage) {
                     const fileExtension = extensionSplit(profileImage[1]);
                     await FileModel.updateUserImage(
+                        fileId.fileId,
                         profileImage[0], // category
                         profileImage[1], // url
                         fileExtension,
-                        userId,
-                        transaction,
-                    );
-                } else if ((file && file.category === 'background' && profileImage) || (!file && profileImage)) {
-                    const fileExtension = extensionSplit(profileImage[1]);
-                    await FileModel.createUserImage(
-                        profileImage[0], // category
-                        profileImage[1], // url
-                        fileExtension,
-                        userId,
                         transaction,
                     );
                 }
@@ -348,19 +339,10 @@ const userService = {
                 if (file && file.category === 'background' && backgroundImage) {
                     const fileExtension = extensionSplit(backgroundImage[1]);
                     await FileModel.updateUserImage(
+                        fileId.fileId,
                         backgroundImage[0], // category
                         backgroundImage[1], // url
                         fileExtension,
-                        userId,
-                        transaction,
-                    );
-                } else if ((file && file.category === 'profile' && backgroundImage) || (!file && backgroundImage)) {
-                    const fileExtension = extensionSplit(backgroundImage[1]);
-                    await FileModel.createUserImage(
-                        backgroundImage[0], // category
-                        backgroundImage[1], // url
-                        fileExtension,
-                        userId,
                         transaction,
                     );
                 }

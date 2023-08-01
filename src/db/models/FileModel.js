@@ -25,10 +25,9 @@ const FileModel = {
         }
     },
     // 이미지 수정
-    updateUserImage: async (category, url, extension, userId, transaction) => {
+    updateUserImage: async (fileId, category, url, extension, transaction) => {
         try {
-            const file = await db.UserFile.findOne({ where: { userId } });
-            await db.File.update({ url, extension }, { where: { category, fileId: file.fileId }, transaction });
+            await db.File.upsert({ fileId, category, url, extension }, { where: { category, fileId }, transaction });
         } catch (error) {
             console.error(error);
         }
@@ -50,7 +49,6 @@ const FileModel = {
         });
         return files;
     },
-
     createPostImage: async (category, url, extension, postId, transaction) => {
         const file = await db.File.create({ category, url, extension }, { transaction });
         await db.PostFile.create({ postId, fileId: file.fileId }, { transaction });
