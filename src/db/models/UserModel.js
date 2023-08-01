@@ -66,6 +66,15 @@ const UserModel = {
 
         return user;
     },
+    findByNickname: async nickname => {
+        const user = await db.User.findOne({
+            where: {
+                nickname,
+                isDeleted: 0,
+            },
+        });
+        return user;
+    },
     // userId 검색해서 유저 찾기
     findById: async userId => {
         const user = await db.User.findOne({

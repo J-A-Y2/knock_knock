@@ -42,17 +42,21 @@ const updateRecruitedValue = async (gender, totalM, totalF, recruitedF, recruite
     return { fieldToUpdate, newValue };
 };
 
+const hobbyCategoryId = 1;
+const personalityCategoryId = 2;
+const idealCategoryId = 3;
+
 const getIdealAndPersonality = async user => {
     let hobby = [];
     let ideal = [];
     let personality = [];
 
     for (const userTag of user.UserTags) {
-        if (userTag.Tag.tagCategoryId === 1) {
+        if (userTag.Tag.tagCategoryId === hobbyCategoryId) {
             hobby.push(userTag.Tag.tagName);
-        } else if (userTag.Tag.tagCategoryId === 2) {
+        } else if (userTag.Tag.tagCategoryId === personalityCategoryId) {
             personality.push(userTag.Tag.tagName);
-        } else if (userTag.Tag.tagCategoryId === 3) {
+        } else if (userTag.Tag.tagCategoryId === idealCategoryId) {
             ideal.push(userTag.Tag.tagName);
         }
     }
