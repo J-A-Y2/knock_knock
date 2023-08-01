@@ -216,9 +216,7 @@ const userService = {
     // 유저 랜덤으로 6명 네트워크페이지에 불러오기
     getRandomUsers: async userId => {
         try {
-            console.log(userId);
             const user = await UserModel.findById(userId);
-            console.log(user);
 
             if (!user || user.isDeleted === true) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
@@ -327,50 +325,46 @@ const userService = {
             await tagsUpdate(personality, 2);
             await tagsUpdate(ideal, 3);
 
-            const fileIds = await FileModel.findFileIds(userId);
+            let file = await FileModel.findFileByUserId(userId, profileImage[0]);
+            if (file && profileImage) {
+                const fileExtension = extensionSplit(profileImage[1]);
+                await FileModel.updateUserImage(
+                    file.fileId,
+                    profileImage[0], // category
+                    profileImage[1], // url
+                    fileExtension,
+                    transaction,
+                );
+            } else if (!file) {
+                const fileExtension = extensionSplit(profileImage[1]);
+                await FileModel.createUserImage(
+                    profileImage[0], // category
+                    profileImage[1], // url
+                    fileExtension,
+                    userId,
+                    transaction,
+                );
+            }
 
-            for (const fileId of fileIds) {
-                const file = await FileModel.findByFileId(fileId.fileId);
-
-                if (file && file.category === 'profile' && profileImage) {
-                    const fileExtension = extensionSplit(profileImage[1]);
-                    await FileModel.updateUserImage(
-                        profileImage[0], // category
-                        profileImage[1], // url
-                        fileExtension,
-                        userId,
-                        transaction,
-                    );
-                } else if ((file && file.category === 'background' && profileImage) || (!file && profileImage)) {
-                    const fileExtension = extensionSplit(profileImage[1]);
-                    await FileModel.createUserImage(
-                        profileImage[0], // category
-                        profileImage[1], // url
-                        fileExtension,
-                        userId,
-                        transaction,
-                    );
-                }
-
-                if (file && file.category === 'background' && backgroundImage) {
-                    const fileExtension = extensionSplit(backgroundImage[1]);
-                    await FileModel.updateUserImage(
-                        backgroundImage[0], // category
-                        backgroundImage[1], // url
-                        fileExtension,
-                        userId,
-                        transaction,
-                    );
-                } else if ((file && file.category === 'profile' && backgroundImage) || (!file && backgroundImage)) {
-                    const fileExtension = extensionSplit(backgroundImage[1]);
-                    await FileModel.createUserImage(
-                        backgroundImage[0], // category
-                        backgroundImage[1], // url
-                        fileExtension,
-                        userId,
-                        transaction,
-                    );
-                }
+            file = await FileModel.findFileByUserId(userId, backgroundImage[0]);
+            if (file && backgroundImage) {
+                const fileExtension = extensionSplit(backgroundImage[1]);
+                await FileModel.updateUserImage(
+                    file.fileId,
+                    backgroundImage[0], // category
+                    backgroundImage[1], // url
+                    fileExtension,
+                    transaction,
+                );
+            } else if (!file) {
+                const fileExtension = extensionSplit(backgroundImage[1]);
+                await FileModel.createUserImage(
+                    backgroundImage[0], // category
+                    backgroundImage[1], // url
+                    fileExtension,
+                    userId,
+                    transaction,
+                );
             }
 
             await transaction.commit();
