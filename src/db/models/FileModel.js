@@ -27,27 +27,26 @@ const FileModel = {
     // 이미지 수정
     updateUserImage: async (fileId, category, url, extension, transaction) => {
         try {
-            await db.File.upsert({ fileId, category, url, extension }, { where: { category, fileId }, transaction });
+            await db.File.update({ category, url, extension }, { where: { fileId, category }, transaction });
         } catch (error) {
             console.error(error);
         }
     },
-    // 유저의 fileIds 조회
-    findFileIds: async userId => {
-        return await db.UserFile.findAll({
+    // 유저가 가진 files 조회
+    findFileByUserId: async (userId, category) => {
+        const file = await db.UserFile.findOne({
             where: {
                 userId,
             },
+            attributes: ['fileId'],
+            include: [
+                {
+                    model: db.File,
+                    where: { category },
+                },
+            ],
         });
-    },
-    // 유저의 files 테이블 조회
-    findByFileId: async fileId => {
-        const files = await db.File.findOne({
-            where: {
-                fileId,
-            },
-        });
-        return files;
+        return file;
     },
     createPostImage: async (category, url, extension, postId, transaction) => {
         const file = await db.File.create({ category, url, extension }, { transaction });
