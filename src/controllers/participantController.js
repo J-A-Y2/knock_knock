@@ -109,5 +109,19 @@ const participantController = {
             next(error);
         }
     },
+    allowCancel: async (req, res, next) => {
+        try {
+            const userId = req.currentUserId;
+            const postId = req.params.postId;
+            const participantId = parseInt(req.query.participantId);
+
+            const { message } = await participantService.allowCancel({ userId, postId, participantId });
+
+            statusCode.setResponseCode200(res);
+            res.send({ message });
+        } catch (error) {
+            next(error);
+        }
+    },
 };
 export { participantController };
