@@ -3,8 +3,8 @@ import { db } from '../index.js';
 
 const ParticipantModel = {
     // 참가 신청
-    participatePost: async ({ transaction, userId, postId, matchingCount }) => {
-        const createParticipant = await db.Participant.create({ userId, postId, matchingCount }, { transaction });
+    participatePost: async ({ transaction, userId, postId, status, matchingCount }) => {
+        const createParticipant = await db.Participant.create({ userId, postId, status, matchingCount }, { transaction });
         return createParticipant;
     },
 
@@ -41,7 +41,7 @@ const ParticipantModel = {
     getUpdatedParticipantsByCursor: async ({ postId, cursor, limit }) => {
         const { count, rows: participants } = await db.Participant.findAndCountAll({
             attributes: ['participantId', 'canceled', 'status', 'matchingCount'],
-            where: { postId, canceled: 0, status: 'pending', participantId: { [Op.lt]: cursor } },
+            where: { postId, canceled: 0, status: 'pending', matchingCount: { [Op.lt]: cursor } },
             limit,
             include: [
                 {
@@ -67,8 +67,25 @@ const ParticipantModel = {
                 ['participantId', 'ASC'],
             ],
         });
+        // 필요한 정보만 추출하여 반환하고 인덱스 추가
+        const processedParticipants = participants.map((participant, index) => ({
+            index: index + 1,
+            participantId: participant.participantId,
+            canceled: participant.canceled,
+            status: participant.status,
+            matchingCount: participant.matchingCount,
+            user: {
+                userId: participant.User.userId,
+                nickname: participant.User.nickname,
+                gender: participant.User.gender,
+                age: participant.User.age,
+                job: participant.User.job,
+                // 필요한 경우 더 많은 사용자 정보 추가 가능
+            },
+        }));
+
         console.log(count);
-        return participants;
+        return processedParticipants;
     },
     // 참가 신청자 리스트 (커서 X)
     getUpdatedParticipants: async ({ postId, limit }) => {
@@ -125,10 +142,13 @@ const ParticipantModel = {
         });
         return participation;
     },
-
+    // matchingCount 수정
+    updateMatchingCount: async ({ participantId, matchingCount }) => {
+        await db.Participant.update({ matchingCount }, { where: { participantId } });
+    },
     // 참가 신청 변경
     update: async ({ transaction, participantId, updateField, newValue }) => {
-        const updated = await db.Participant.update(
+        await db.Participant.update(
             { [updateField]: newValue },
             {
                 where: { participantId },
@@ -138,7 +158,7 @@ const ParticipantModel = {
     },
     getAcceptedUsers: async postId => {
         const acceptedUsers = await db.Participant.findAll({
-            attributes: [],
+            attributes: ['participantId'],
             where: {
                 postId,
                 status: 'accepted',

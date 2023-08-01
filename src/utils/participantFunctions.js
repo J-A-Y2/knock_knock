@@ -1,14 +1,11 @@
-import { throwNotFoundError } from './commonFunctions.js';
+import { checkAccess, throwNotFoundError } from './commonFunctions.js';
 import { ConflictError } from '../middlewares/errorMiddleware.js';
 
-const checkParticipation = async (type, participation, userId) => {
+const checkParticipationStatus = async (type, participation, userId) => {
     const { Post, canceled, status, User } = participation;
 
     throwNotFoundError(Post, '게시글');
-
-    if (Post.userId !== userId) {
-        throw new ConflictError(`참가자 ${type} 권한이 없습니다.`);
-    }
+    checkAccess(userId, Post.userId, type);
 
     if (canceled) {
         throw new ConflictError('취소된 신청 정보입니다.');
@@ -91,4 +88,4 @@ const getMatchingCount = async (firstUser, secondUser) => {
     return matchingCount;
 };
 
-export { checkParticipation, updateRecruitedValue, getIdealAndPersonality, getParticipantsList, getMatchingCount };
+export { checkParticipationStatus, updateRecruitedValue, getIdealAndPersonality, getParticipantsList, getMatchingCount };

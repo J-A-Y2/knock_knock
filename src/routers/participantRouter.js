@@ -28,4 +28,6 @@ participantRouter.put('/:participantId/deny', participantParamsValidate, partici
 // 수락된 유저 조회
 participantRouter.get('/:postId/acceptedlist', postParamsValidate, participantController.getAcceptedUsers);
 
+// 수락된 유저 취소
+// participantRouter.put('/:postId/acceptedlist', postParamsValidate, participantController.allowCancel);
 export { participantRouter };
