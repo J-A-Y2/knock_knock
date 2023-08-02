@@ -4,16 +4,14 @@ import { Op } from 'sequelize';
 const ChatModel = {
     create: async ({ userId, anotherId }) => {
         const createChat = await db.ChatRoom.create({ firstId: userId, secondId: anotherId });
+        console.log(createChat);
         return createChat;
     },
 
-    findChatRoom: async ({ userId, anotherId }) => {
+    findChatRoom: async ({ chatId, receiverId }) => {
         const findChatRoom = await db.ChatRoom.findOne({
             where: {
-                [Op.or]: [
-                    { [Op.and]: [{ firstId: userId }, { secondId: anotherId }] },
-                    { [Op.and]: [{ firstId: anotherId }, { secondId: userId }] },
-                ],
+                chatId,
             },
             include: [
                 {
@@ -40,19 +38,6 @@ const ChatModel = {
                     { [Op.and]: [{ firstId: anotherId }, { secondId: userId }] },
                 ],
             },
-            // include: [
-            //     {
-            //         model: db.User,
-            //         attributes: ['nickname'],
-            //         include: [
-            //             {
-            //                 model: db.UserFile,
-            //                 attributes: ['fileId'],
-            //                 include: [{ model: db.File, where: { category: 'profile' }, attributes: ['url'] }],
-            //             },
-            //         ],
-            //     },
-            // ],
         });
         return checkExistingChatRoom;
     },
@@ -62,19 +47,6 @@ const ChatModel = {
             where: {
                 [Op.or]: [{ firstId: userId }, { secondId: userId }],
             },
-            include: [
-                {
-                    model: db.User,
-                    attributes: ['nickname'],
-                    include: [
-                        {
-                            model: db.UserFile,
-                            attributes: ['fileId'],
-                            include: [{ model: db.File, where: { category: 'profile' }, attributes: ['url'] }],
-                        },
-                    ],
-                },
-            ],
         });
         return getUserChats;
     },
