@@ -235,6 +235,7 @@ paths:
                                         type: string
                 '400':
                     description: Invalid status value
+
         put:
             tags:
                 - user
@@ -303,8 +304,6 @@ paths:
                                                 type: string
                                             region:
                                                 type: string
-                                            profileImage:
-                                                type: string
                                             mbti:
                                                 type: string
                                             height:
@@ -323,6 +322,10 @@ paths:
                                                     type: string
                                             indtroduce:
                                                 type: string
+                                            profileImage:
+                                                type: array
+                                            backgrounImage:
+                                                type: array
 
                 '400':
                     description: Invalid ID supplied
