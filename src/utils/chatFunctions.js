@@ -2,7 +2,6 @@ import { ChatModel } from '../db/models/ChatModel.js';
 import { UserModel } from '../db/models/UserModel.js';
 
 const getSenderReciever = async (userId, chatId) => {
-    console.log(userId, chatId);
     let currentUserInfo = [];
 
     const currentUserId = userId;

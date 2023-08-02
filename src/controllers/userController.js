@@ -35,6 +35,7 @@ const userController = {
                 userId: checkUser.userId,
                 email: checkUser.email,
                 nickname: checkUser.nickname,
+                url: checkUser.url,
             });
         } catch (error) {
             next(error);
