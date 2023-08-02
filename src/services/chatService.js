@@ -48,9 +48,9 @@ const chatService = {
             const chatRoom = await ChatModel.findChatRoom({ userId, anotherId });
 
             if (currentUserId == chatRoom.firstId) {
-                currentUserInfo = { sender: chatRoom.firstId, reciever: chatRoom.secondId };
+                currentUserInfo = { sender: chatRoom.firstId, reciever: chatRoom.secondId, chatId: chatRoom.chatId };
             } else {
-                currentUserInfo = { sender: chatRoom.secondId, reciever: chatRoom.firstId };
+                currentUserInfo = { sender: chatRoom.secondId, reciever: chatRoom.firstId, chatId: chatRoom.chatId };
             }
 
             return {
