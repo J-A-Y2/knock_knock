@@ -12,6 +12,6 @@ chatRouter.post('/', chatController.createChat);
 chatRouter.get('/', chatController.getUserChats);
 
 // 개별 채팅 조회
-chatRouter.get('/:secondId', chatController.getChat);
+chatRouter.get('/:chatId', chatController.getChat);
 
 export { chatRouter };

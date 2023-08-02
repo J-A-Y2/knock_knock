@@ -165,6 +165,31 @@ const UserModel = {
         );
         return deleteUser;
     },
+    findProfileById: async userId => {
+        const user = await db.User.findOne({
+            attributes: ['userId', 'nickname'],
+            where: {
+                userId,
+                isDeleted: 0,
+            },
+            include: [
+                {
+                    model: db.UserFile,
+                    attributes: ['userId', 'fileId'],
+                    include: [
+                        {
+                            model: db.File,
+                            attributes: ['url'],
+                            where: {
+                                category: 'profile',
+                            },
+                        },
+                    ],
+                },
+            ],
+        });
+        return user;
+    },
 };
 
 export { UserModel };
