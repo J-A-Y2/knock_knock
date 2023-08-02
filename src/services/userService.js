@@ -184,8 +184,6 @@ const userService = {
                 }
             }
 
-            const Image = await FileModel.getUserImage(user.userId);
-
             return {
                 message: '회원 정보 조회를 성공했습니다.',
                 userId: user.userId,
@@ -193,17 +191,16 @@ const userService = {
                 name: user.name,
                 nickname: user.nickname,
                 gender: user.gender,
-                birthday: user.birthday,
+                brthday: user.birthday,
                 age: user.age,
                 job: user.job,
                 region: user.region,
-                mbti: user.mbti,
                 height: user.height,
                 introduce: user.introduce,
                 hobby,
                 personality,
                 ideal,
-                Image: Image.File,
+                profileImage: user.UserFiles[0].File.url,
             };
         } catch (error) {
             if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
@@ -216,9 +213,7 @@ const userService = {
     // 유저 랜덤으로 6명 네트워크페이지에 불러오기
     getRandomUsers: async userId => {
         try {
-            console.log(userId);
             const user = await UserModel.findById(userId);
-            console.log(user);
 
             if (!user || user.isDeleted === true) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
@@ -327,50 +322,48 @@ const userService = {
             await tagsUpdate(personality, 2);
             await tagsUpdate(ideal, 3);
 
-            const fileIds = await FileModel.findFileIds(userId);
+            let file = await FileModel.findFileByUserId(userId, profileImage[0]);
 
-            for (const fileId of fileIds) {
-                const file = await FileModel.findByFileId(fileId.fileId);
+            if (file && profileImage) {
+                const fileExtension = extensionSplit(profileImage[1]);
 
-                if (file && file.category === 'profile' && profileImage) {
-                    const fileExtension = extensionSplit(profileImage[1]);
-                    await FileModel.updateUserImage(
-                        profileImage[0], // category
-                        profileImage[1], // url
-                        fileExtension,
-                        userId,
-                        transaction,
-                    );
-                } else if ((file && file.category === 'background' && profileImage) || (!file && profileImage)) {
-                    const fileExtension = extensionSplit(profileImage[1]);
-                    await FileModel.createUserImage(
-                        profileImage[0], // category
-                        profileImage[1], // url
-                        fileExtension,
-                        userId,
-                        transaction,
-                    );
-                }
+                await FileModel.updateUserImage(
+                    file.fileId,
+                    profileImage[0], // category
+                    profileImage[1], // url
+                    fileExtension,
+                    transaction,
+                );
+            } else if (!file) {
+                const fileExtension = extensionSplit(profileImage[1]);
+                await FileModel.createUserImage(
+                    profileImage[0], // category
+                    profileImage[1], // url
+                    fileExtension,
+                    userId,
+                    transaction,
+                );
+            }
 
-                if (file && file.category === 'background' && backgroundImage) {
-                    const fileExtension = extensionSplit(backgroundImage[1]);
-                    await FileModel.updateUserImage(
-                        backgroundImage[0], // category
-                        backgroundImage[1], // url
-                        fileExtension,
-                        userId,
-                        transaction,
-                    );
-                } else if ((file && file.category === 'profile' && backgroundImage) || (!file && backgroundImage)) {
-                    const fileExtension = extensionSplit(backgroundImage[1]);
-                    await FileModel.createUserImage(
-                        backgroundImage[0], // category
-                        backgroundImage[1], // url
-                        fileExtension,
-                        userId,
-                        transaction,
-                    );
-                }
+            file = await FileModel.findFileByUserId(userId, backgroundImage[0]);
+            if (file && backgroundImage) {
+                const fileExtension = extensionSplit(backgroundImage[1]);
+                await FileModel.updateUserImage(
+                    file.fileId,
+                    backgroundImage[0], // category
+                    backgroundImage[1], // url
+                    fileExtension,
+                    transaction,
+                );
+            } else if (!file) {
+                const fileExtension = extensionSplit(backgroundImage[1]);
+                await FileModel.createUserImage(
+                    backgroundImage[0], // category
+                    backgroundImage[1], // url
+                    fileExtension,
+                    userId,
+                    transaction,
+                );
             }
 
             await transaction.commit();
@@ -386,10 +379,10 @@ const userService = {
                     backgroundImage,
                     mbti: user.mbti,
                     height: user.height,
+                    introduce: user.introduce,
                     hobby,
                     personality,
                     ideal,
-                    introduce: user.introduce,
                 },
             };
         } catch (error) {

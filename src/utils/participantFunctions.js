@@ -1,14 +1,11 @@
-import { throwNotFoundError } from './commonFunctions.js';
+import { checkAccess, throwNotFoundError } from './commonFunctions.js';
 import { ConflictError } from '../middlewares/errorMiddleware.js';
 
-const checkParticipation = async (type, participation, userId) => {
+const checkParticipationStatus = async (type, participation, userId) => {
     const { Post, canceled, status, User } = participation;
 
     throwNotFoundError(Post, '게시글');
-
-    if (Post.userId !== userId) {
-        throw new ConflictError(`참가자 ${type} 권한이 없습니다.`);
-    }
+    checkAccess(userId, Post.userId, type);
 
     if (canceled) {
         throw new ConflictError('취소된 신청 정보입니다.');
@@ -22,7 +19,7 @@ const checkParticipation = async (type, participation, userId) => {
 };
 
 const updateRecruitedValue = async (gender, totalM, totalF, recruitedF, recruitedM) => {
-    let fieldToUpdate, newValue;
+    let fieldToUpdate, newValue, isCompleted;
     if (gender === '여') {
         fieldToUpdate = 'recruitedF';
 
@@ -30,6 +27,7 @@ const updateRecruitedValue = async (gender, totalM, totalF, recruitedF, recruite
             throw new ConflictError('더 이상 여성 유저의 신청을 수락할 수 없습니다.');
         }
         newValue = recruitedF + 1;
+        isCompleted = newValue === totalF && recruitedM === totalM;
     }
 
     if (gender === '남') {
@@ -38,8 +36,10 @@ const updateRecruitedValue = async (gender, totalM, totalF, recruitedF, recruite
             throw new ConflictError('더 이상 남성 유저의 신청을 수락할 수 없습니다.');
         }
         newValue = recruitedM + 1;
+        isCompleted = newValue === totalM && recruitedF === totalF;
     }
-    return { fieldToUpdate, newValue };
+
+    return { fieldToUpdate, newValue, isCompleted };
 };
 
 const hobbyCategoryId = 1;
@@ -91,4 +91,4 @@ const getMatchingCount = async (firstUser, secondUser) => {
     return matchingCount;
 };
 
-export { checkParticipation, updateRecruitedValue, getIdealAndPersonality, getParticipantsList, getMatchingCount };
+export { checkParticipationStatus, updateRecruitedValue, getIdealAndPersonality, getParticipantsList, getMatchingCount };

@@ -32,7 +32,7 @@ const RegisterValidationRules = [
     //     .withMessage('자기소개를 입력해주세요.')
     //     .isLength({ max: 255 })
     //     .withMessage('최대 255자만 입력 가능합니다'),
-    body('profileImage').notEmpty().withMessage('profileImage를 확인하세요.'),
+    // body('profileImage').notEmpty().withMessage('profileImage를 확인하세요.'),
 ];
 
 const registerValidate = (req, res, next) => {

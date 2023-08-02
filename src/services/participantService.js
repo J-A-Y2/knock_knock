@@ -3,9 +3,9 @@ import { ConflictError, InternalServerError, NotFoundError, UnauthorizedError } 
 import { db } from '../db/index.js';
 import { PostModel } from '../db/models/PostModel.js';
 import { UserModel } from '../db/models/UserModel.js';
-import { throwNotFoundError } from '../utils/commonFunctions.js';
+import { checkAccess, throwNotFoundError } from '../utils/commonFunctions.js';
 import {
-    checkParticipation,
+    checkParticipationStatus,
     getIdealAndPersonality,
     updateRecruitedValue,
     getParticipantsList,
@@ -56,8 +56,8 @@ const participantService = {
     participateCancel: async ({ userId, postId }) => {
         try {
             const participation = await ParticipantModel.getParticipationByUserId({ userId, postId });
-
             throwNotFoundError(participation, '참가 신청 정보');
+
             const { participantId, canceled, status } = participation;
 
             if (canceled) {
@@ -96,14 +96,12 @@ const participantService = {
     getParticipants: async ({ userId, postId, cursor, limit }) => {
         try {
             const post = await PostModel.getPostById(postId);
+            throwNotFoundError(post, '게시글');
 
             const user = await UserModel.findById(userId);
-            throwNotFoundError(post, '게시글');
             throwNotFoundError(user, '유저');
 
-            if (post.userId !== userId) {
-                throw new ConflictError('참가자 리스트 조회 권한이 없습니다.');
-            }
+            checkAccess(post.userId, userId, '참가자 리스트 조회');
 
             const participants = await ParticipantModel.getParticipants(postId);
 
@@ -112,27 +110,35 @@ const participantService = {
             for (const participant of participants) {
                 const { personality } = await getIdealAndPersonality(participant.User);
                 const matchingCount = ideal.filter(tag => personality.includes(tag)).length;
-                await ParticipantModel.update({
+                await ParticipantModel.updateMatchingCount({
                     participantId: participant.participantId,
-                    updateField: 'matchingCount',
-                    newValue: matchingCount,
+                    matchingCount,
                 });
             }
-            let updatedParticipants = [];
 
-            if (cursor == 0) {
-                updatedParticipants = await ParticipantModel.getUpdatedParticipants({ postId, limit });
-            } else if (cursor == -1) {
-                updatedParticipants = '전체 신청자 조회가 끝났습니다';
-            } else {
-                updatedParticipants = await ParticipantModel.getUpdatedParticipantsByCursor({ postId, cursor, limit });
+            let updatedparticipants = await ParticipantModel.getParticipants(postId);
+
+            let startIndex = 0;
+            if (cursor) {
+                const participantIndex = updatedparticipants.findIndex(participant => participant.participantId == cursor);
+                startIndex = participantIndex !== -1 ? participantIndex + 1 : 0;
+            }
+
+            // limit 적용
+            const paginatedList = updatedparticipants.slice(startIndex, startIndex + limit);
+
+            // 다음 페이지를 위한 커서를 사용할 맨 마지막 id 추출
+            let nextCursor = null;
+            if (paginatedList.length > 0) {
+                nextCursor = paginatedList[paginatedList.length - 1].participationId;
             }
 
             return {
                 message: '참가자 리스트 조회를 성공했습니다.',
                 ideal,
                 isFulled: post.isCompleted,
-                participantsList: updatedParticipants,
+                participantsList: paginatedList,
+                nextCursor,
             };
         } catch (error) {
             if (error instanceof NotFoundError || error instanceof ConflictError) {
@@ -149,16 +155,24 @@ const participantService = {
 
             throwNotFoundError(participation, '참가 신청 정보');
 
-            const { Post, User } = await checkParticipation('수락', participation, userId);
+            const { Post, User } = await checkParticipationStatus('수락', participation, userId);
 
             const { totalM, totalF, recruitedF, recruitedM, postId } = Post;
             const { gender } = User;
 
-            const { fieldToUpdate, newValue } = await updateRecruitedValue(gender, totalM, totalF, recruitedF, recruitedM);
-
+            const { fieldToUpdate, newValue, isCompleted } = await updateRecruitedValue(
+                gender,
+                totalM,
+                totalF,
+                recruitedF,
+                recruitedM,
+            );
+            console.log(isCompleted, '모집완료');
             await ParticipantModel.update({ transaction, participantId, updateField: 'status', newValue: 'accepted' });
             await PostModel.update({ transaction, postId, fieldToUpdate, newValue });
-
+            if (isCompleted) {
+                await PostModel.update({ transaction, postId, fieldToUpdate: 'isCompleted', newValue: true });
+            }
             await transaction.commit();
 
             return {
@@ -183,7 +197,7 @@ const participantService = {
 
             throwNotFoundError(participation, '참가 신청 정보');
 
-            await checkParticipation('거절', participation, userId);
+            await checkParticipationStatus('거절', participation, userId);
 
             await ParticipantModel.update({ participantId, updateField: 'status', newValue: 'rejected' });
 
@@ -200,10 +214,7 @@ const participantService = {
         try {
             const post = await PostModel.getPostById(postId);
             throwNotFoundError(post, '게시글');
-
-            if (post.userId !== userId) {
-                throw new ConflictError('리스트 조회 권한이 없습니다.');
-            }
+            checkAccess(userId, post.userId, '수락한 유저 리스트 조회');
 
             const acceptedUsers = await ParticipantModel.getAcceptedUsers(postId);
 
@@ -214,6 +225,34 @@ const participantService = {
             } else {
                 throw new InternalServerError('수락한 유저 리스트 불러오기에 실패했습니다.');
             }
+        }
+    },
+    allowCancel: async ({ userId, postId, participantId }) => {
+        try {
+            const post = await PostModel.getPostById(postId);
+            const participation = await ParticipantModel.getParticipationById(participantId);
+            throwNotFoundError(participation, '참가 신청 정보');
+            checkAccess(userId, post.userId, '취소');
+
+            await ParticipantModel.update({ participantId, updateField: 'status', newValue: 'pending' });
+
+            let fieldToUpdate, newValue;
+            const { User, Post } = participation;
+
+            if (User.gender === '여') {
+                fieldToUpdate = 'recruitedF';
+                newValue = Post.recruitedF - 1;
+            }
+
+            if (participation.User.gender === '남') {
+                fieldToUpdate = 'recruitedM';
+                newValue = Post.recruitedM - 1;
+            }
+
+            await PostModel.update({ postId, fieldToUpdate, newValue });
+            return { message: '수락한 유저 취소에 성공했습니다.' };
+        } catch (error) {
+            throw new InternalServerError('수락한 유저 취소에 실패했습니다.');
         }
     },
 };
