@@ -14,9 +14,10 @@ const commentService = {
                 throw new UnauthorizedError('신청이 수락된 유저에게만 권한이 있습니다');
             }
 
-            await CommentModel.create({ userId, postId, content });
+            const { commentId } = await CommentModel.create({ userId, postId, content });
 
             return {
+                commentId,
                 message: '댓글 추가하기에 성공했습니다.',
             };
         } catch (error) {
