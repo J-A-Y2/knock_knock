@@ -184,8 +184,6 @@ const userService = {
                 }
             }
 
-            const Image = await FileModel.getUserImage(user.userId);
-
             return {
                 message: '회원 정보 조회를 성공했습니다.',
                 userId: user.userId,
@@ -193,17 +191,16 @@ const userService = {
                 name: user.name,
                 nickname: user.nickname,
                 gender: user.gender,
-                birthday: user.birthday,
+                brthday: user.birthday,
                 age: user.age,
                 job: user.job,
                 region: user.region,
-                mbti: user.mbti,
                 height: user.height,
                 introduce: user.introduce,
                 hobby,
                 personality,
                 ideal,
-                Image: Image.File,
+                profileImage: user.UserFiles[0].File.url,
             };
         } catch (error) {
             if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
@@ -326,8 +323,10 @@ const userService = {
             await tagsUpdate(ideal, 3);
 
             let file = await FileModel.findFileByUserId(userId, profileImage[0]);
+
             if (file && profileImage) {
                 const fileExtension = extensionSplit(profileImage[1]);
+
                 await FileModel.updateUserImage(
                     file.fileId,
                     profileImage[0], // category
@@ -380,10 +379,10 @@ const userService = {
                     backgroundImage,
                     mbti: user.mbti,
                     height: user.height,
+                    introduce: user.introduce,
                     hobby,
                     personality,
                     ideal,
-                    introduce: user.introduce,
                 },
             };
         } catch (error) {
