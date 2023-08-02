@@ -160,11 +160,19 @@ const participantService = {
             const { totalM, totalF, recruitedF, recruitedM, postId } = Post;
             const { gender } = User;
 
-            const { fieldToUpdate, newValue } = await updateRecruitedValue(gender, totalM, totalF, recruitedF, recruitedM);
-
+            const { fieldToUpdate, newValue, isCompleted } = await updateRecruitedValue(
+                gender,
+                totalM,
+                totalF,
+                recruitedF,
+                recruitedM,
+            );
+            console.log(isCompleted, '모집완료');
             await ParticipantModel.update({ transaction, participantId, updateField: 'status', newValue: 'accepted' });
             await PostModel.update({ transaction, postId, fieldToUpdate, newValue });
-
+            if (isCompleted) {
+                await PostModel.update({ transaction, postId, fieldToUpdate: 'isCompleted', newValue: true });
+            }
             await transaction.commit();
 
             return {
