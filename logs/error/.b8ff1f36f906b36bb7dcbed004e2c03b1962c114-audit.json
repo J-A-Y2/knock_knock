@@ -39,6 +39,16 @@
             "date": 1690729487538,
             "name": "/Users/jay/개발/knockknock/knockknock_back/logs/error/2023-07-31.error.log",
             "hash": "ea79aceeb29d903efea712001c776188a152d3c5ed8eacceef4947403eface13"
+        },
+        {
+            "date": 1690864690938,
+            "name": "/Users/jay/개발/knockknock/knockknock_back/logs/error/2023-08-01.error.log",
+            "hash": "588d494ce508c073ceb8ec5cdac3a86d9e9aa48c09fb915290f014faac0f1922"
+        },
+        {
+            "date": 1690955426897,
+            "name": "/Users/jay/개발/knockknock/knockknock_back/logs/error/2023-08-02.error.log",
+            "hash": "bb6e7c068ebd70905c18c02a9b093fd1556429c3965af0813329c274fe2323a0"
         }
     ],
     "hashType": "sha256"
