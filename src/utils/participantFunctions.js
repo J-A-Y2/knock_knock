@@ -19,7 +19,7 @@ const checkParticipationStatus = async (type, participation, userId) => {
 };
 
 const updateRecruitedValue = async (gender, totalM, totalF, recruitedF, recruitedM) => {
-    let fieldToUpdate, newValue;
+    let fieldToUpdate, newValue, isCompleted;
     if (gender === '여') {
         fieldToUpdate = 'recruitedF';
 
@@ -27,6 +27,7 @@ const updateRecruitedValue = async (gender, totalM, totalF, recruitedF, recruite
             throw new ConflictError('더 이상 여성 유저의 신청을 수락할 수 없습니다.');
         }
         newValue = recruitedF + 1;
+        isCompleted = newValue === totalF && recruitedM === totalM;
     }
 
     if (gender === '남') {
@@ -35,8 +36,10 @@ const updateRecruitedValue = async (gender, totalM, totalF, recruitedF, recruite
             throw new ConflictError('더 이상 남성 유저의 신청을 수락할 수 없습니다.');
         }
         newValue = recruitedM + 1;
+        isCompleted = newValue === totalM && recruitedF === totalF;
     }
-    return { fieldToUpdate, newValue };
+
+    return { fieldToUpdate, newValue, isCompleted };
 };
 
 const hobbyCategoryId = 1;
