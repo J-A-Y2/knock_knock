@@ -186,7 +186,17 @@ const userService = {
 
             return {
                 message: '회원 정보 조회를 성공했습니다.',
-                user,
+                userId: user.userId,
+                email: user.email,
+                name: user.name,
+                nickname: user.nickname,
+                gender: user.gender,
+                brthday: user.birthday,
+                age: user.age,
+                job: user.job,
+                region: user.region,
+                height: user.height,
+                introduce: user.introduce,
                 hobby,
                 personality,
                 ideal,
