@@ -1,8 +1,8 @@
 import { db } from '../index.js';
+import { Op } from 'sequelize';
 
 const ChatModel = {
     create: async ({ userId, anotherId }) => {
-        console.log({ userId, anotherId });
         const createChat = await db.ChatRoom.create({ firstId: userId, secondId: anotherId });
         return createChat;
     },
@@ -10,8 +10,10 @@ const ChatModel = {
     findChatRoom: async ({ userId, anotherId }) => {
         const findChatRoom = await db.ChatRoom.findOne({
             where: {
-                firstId: userId,
-                secondId: anotherId,
+                [Op.or]: [
+                    { [Op.and]: [{ firstId: userId }, { secondId: anotherId }] },
+                    { [Op.and]: [{ firstId: anotherId }, { secondId: userId }] },
+                ],
             },
             include: [
                 {
@@ -30,10 +32,35 @@ const ChatModel = {
         return findChatRoom;
     },
 
+    checkExistingChatRoom: async ({ userId, anotherId }) => {
+        const checkExistingChatRoom = await db.ChatRoom.findOne({
+            where: {
+                [Op.or]: [
+                    { [Op.and]: [{ firstId: userId }, { secondId: anotherId }] },
+                    { [Op.and]: [{ firstId: anotherId }, { secondId: userId }] },
+                ],
+            },
+            // include: [
+            //     {
+            //         model: db.User,
+            //         attributes: ['nickname'],
+            //         include: [
+            //             {
+            //                 model: db.UserFile,
+            //                 attributes: ['fileId'],
+            //                 include: [{ model: db.File, where: { category: 'profile' }, attributes: ['url'] }],
+            //             },
+            //         ],
+            //     },
+            // ],
+        });
+        return checkExistingChatRoom;
+    },
+
     getUserChats: async userId => {
         const getUserChats = await db.ChatRoom.findAll({
             where: {
-                firstId: userId,
+                [Op.or]: [{ firstId: userId }, { secondId: userId }],
             },
             include: [
                 {

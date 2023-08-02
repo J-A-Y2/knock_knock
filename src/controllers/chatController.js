@@ -34,10 +34,10 @@ const chatController = {
             const userId = req.currentUserId;
             const anotherId = req.params.secondId;
 
-            const { chatRoom, message } = await chatService.getChat({ userId, anotherId });
+            const { chatRoom, currentUserInfo, message } = await chatService.getChat({ userId, anotherId });
 
             statusCode.setResponseCode200(res);
-            return res.send({ chatRoom, message });
+            return res.send({ chatRoom, currentUserInfo, message });
         } catch (error) {
             next(error);
         }
