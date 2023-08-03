@@ -1,16 +1,10 @@
 import { ParticipantModel } from '../db/models/ParticipantModel.js';
-import { ConflictError, InternalServerError, NotFoundError, UnauthorizedError } from '../middlewares/errorMiddleware.js';
+import { ConflictError, InternalServerError, NotFoundError } from '../middlewares/errorMiddleware.js';
 import { db } from '../db/index.js';
 import { PostModel } from '../db/models/PostModel.js';
 import { UserModel } from '../db/models/UserModel.js';
 import { checkAccess, throwNotFoundError } from '../utils/commonFunctions.js';
-import {
-    checkParticipationStatus,
-    getIdealAndPersonality,
-    updateRecruitedValue,
-    getParticipantsList,
-    getMatchingCount,
-} from '../utils/participantFunctions.js';
+import { checkParticipationStatus, updateRecruitedValue, getMatchingCount } from '../utils/participantFunctions.js';
 
 const participantService = {
     participatePost: async ({ userId, postId }) => {
@@ -38,7 +32,6 @@ const participantService = {
                     throw new ConflictError('이미 수락되거나 거절된 모임입니다.');
                 }
                 await ParticipantModel.update({ participantId, updateField: 'canceled', newValue: 0 });
-                // await ParticipantModel.update({ participantId, updateField: 'matchingCount', newValue: matchingCount });
                 participationFlag = canceled;
             } else {
                 await ParticipantModel.participatePost({ userId, postId, matchingCount });
