@@ -38,6 +38,7 @@ const participantService = {
                     throw new ConflictError('이미 수락되거나 거절된 모임입니다.');
                 }
                 await ParticipantModel.update({ participantId, updateField: 'canceled', newValue: 0 });
+                // await ParticipantModel.update({ participantId, updateField: 'matchingCount', newValue: matchingCount });
                 participationFlag = canceled;
             } else {
                 await ParticipantModel.participatePost({ userId, postId, matchingCount });
@@ -93,52 +94,25 @@ const participantService = {
             }
         }
     },
-    getParticipants: async ({ userId, postId, cursor, limit }) => {
+    getParticipants: async ({ userId, postId, gender }) => {
         try {
             const post = await PostModel.getPostById(postId);
             throwNotFoundError(post, '게시글');
 
             const user = await UserModel.findById(userId);
             throwNotFoundError(user, '유저');
-
             checkAccess(post.userId, userId, '참가자 리스트 조회');
 
-            const participants = await ParticipantModel.getParticipants(postId);
-
-            const { ideal } = await getIdealAndPersonality(user);
-
-            for (const participant of participants) {
-                const { personality } = await getIdealAndPersonality(participant.User);
-                const matchingCount = ideal.filter(tag => personality.includes(tag)).length;
-                await ParticipantModel.updateMatchingCount({
-                    participantId: participant.participantId,
-                    matchingCount,
-                });
+            let userWhere = {};
+            if (gender) {
+                userWhere.gender = gender;
             }
-
-            let updatedparticipants = await ParticipantModel.getParticipants(postId);
-
-            let startIndex = 0;
-            if (cursor) {
-                const participantIndex = updatedparticipants.findIndex(participant => participant.participantId == cursor);
-                startIndex = participantIndex !== -1 ? participantIndex + 1 : 0;
-            }
-
-            // limit 적용
-            const paginatedList = updatedparticipants.slice(startIndex, startIndex + limit);
-
-            // 다음 페이지를 위한 커서를 사용할 맨 마지막 id 추출
-            let nextCursor = null;
-            if (paginatedList.length > 0) {
-                nextCursor = paginatedList[paginatedList.length - 1].participationId;
-            }
+            const participantsList = await ParticipantModel.getParticipantsByGender({ postId, userWhere });
 
             return {
                 message: '참가자 리스트 조회를 성공했습니다.',
-                ideal,
                 isFulled: post.isCompleted,
-                participantsList: paginatedList,
-                nextCursor,
+                participantsList,
             };
         } catch (error) {
             if (error instanceof NotFoundError || error instanceof ConflictError) {
@@ -167,7 +141,7 @@ const participantService = {
                 recruitedF,
                 recruitedM,
             );
-            console.log(isCompleted, '모집완료');
+
             await ParticipantModel.update({ transaction, participantId, updateField: 'status', newValue: 'accepted' });
             await PostModel.update({ transaction, postId, fieldToUpdate, newValue });
             if (isCompleted) {
