@@ -1543,8 +1543,23 @@ paths:
                                 properties:
                                     message:
                                         type: string
-                                    cardId:
-                                        type: integer
+                                    card:
+                                        type: object
+                                        properties:
+                                            cardId:
+                                                type: integer
+                                            content:
+                                                type: string
+                                            CardFile:
+                                                type: object
+                                                properties:
+                                                    fileId:
+                                                        type: integer
+                                                    File:
+                                                        type: object
+                                                        properties:
+                                                            url:
+                                                                type: string
                                     randomLovers:
                                         type: array
                                         items:
