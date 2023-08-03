@@ -7,10 +7,9 @@ const chatController = {
             const userId = req.currentUserId;
             const { anotherId } = req.body;
 
-            const createChat = await chatService.createChat({ userId, anotherId });
-
+            const { usingChat, message } = await chatService.createChat({ userId, anotherId });
             statusCode.setResponseCode201(res);
-            return res.send({ message: createChat.message });
+            return res.send({ usingChat, message });
         } catch (error) {
             next(error);
         }
@@ -20,10 +19,10 @@ const chatController = {
         try {
             const userId = req.currentUserId;
 
-            const { allChatList, message } = await chatService.getListChats(userId);
+            const { allChats, message } = await chatService.getListChats(userId);
 
             statusCode.setResponseCode200(res);
-            return res.send({ allChatList, message });
+            return res.send({ allChats, message });
         } catch (error) {
             next(error);
         }
@@ -32,12 +31,12 @@ const chatController = {
     getChat: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
-            const anotherId = req.params.secondId;
+            const chatId = req.params.chatId;
 
-            const { chatRoom, message } = await chatService.getChat({ userId, anotherId });
+            const { recieverInfo, currentUserInfo, message } = await chatService.getChat({ userId, chatId });
 
             statusCode.setResponseCode200(res);
-            return res.send({ chatRoom, message });
+            return res.send({ currentUserInfo, recieverInfo, message });
         } catch (error) {
             next(error);
         }

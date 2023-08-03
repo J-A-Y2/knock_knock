@@ -143,7 +143,7 @@ const userService = {
         try {
             transaction = await db.sequelize.transaction();
             const user = await UserModel.findById(userId);
-
+            console.log(user);
             if (!user || user.isDeleted === true) {
                 throw new NotFoundError('회원의 정보를 찾을 수 없습니다.');
             }
@@ -154,6 +154,7 @@ const userService = {
                 userId: user.userId,
                 email: user.email,
                 nickname: user.nickname,
+                url: user.UserFiles?.[0]?.File?.url,
             };
         } catch (error) {
             if (transaction) {
@@ -200,6 +201,7 @@ const userService = {
                 hobby,
                 personality,
                 ideal,
+                profileImage: user.UserFiles[0].File.url,
             };
         } catch (error) {
             if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
@@ -322,8 +324,10 @@ const userService = {
             await tagsUpdate(ideal, 3);
 
             let file = await FileModel.findFileByUserId(userId, profileImage[0]);
+
             if (file && profileImage) {
                 const fileExtension = extensionSplit(profileImage[1]);
+
                 await FileModel.updateUserImage(
                     file.fileId,
                     profileImage[0], // category
@@ -376,10 +380,10 @@ const userService = {
                     backgroundImage,
                     mbti: user.mbti,
                     height: user.height,
+                    introduce: user.introduce,
                     hobby,
                     personality,
                     ideal,
-                    introduce: user.introduce,
                 },
             };
         } catch (error) {

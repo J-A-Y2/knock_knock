@@ -122,9 +122,3 @@ INSERT INTO card_files VALUES(NULL, 58, 27);
 INSERT INTO card_files VALUES(NULL, 59, 28);
 INSERT INTO card_files VALUES(NULL, 60, 29);
 INSERT INTO card_files VALUES(NULL, 61, 30);
-
-SELECT users.user_id, ut.tag_id, t.tag_name
-FROM users
-JOIN user_tags ut ON ut.user_id = users.user_id 
-JOIN tags t ON ut.tag_id = t.tag_id
-WHERE ut.tag_category_id=2 OR ut.tag_category_id=3;
