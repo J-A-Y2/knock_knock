@@ -18,6 +18,17 @@ const participantService = {
                 throw new ConflictError('게시글의 작성자는 참가 신청을 할 수 없습니다.');
             }
 
+            // 참여자 리스트를 불러오고 성별에 따라 10명 제한하기
+            const participantsList = await ParticipantModel.getParticipants(postId);
+            const males = participantsList.filter(participant => participant.User.gender === '남');
+            const females = participantsList.filter(participant => participant.User.gender === '여');
+
+            if (participant.gender === '남' && males.length > 10) {
+                throw new ConflictError('현재 게시물에 남자는 더이상 참여 신청을 할 수 없습니다.');
+            } else if (participant.gender === '여' && females.length > 10) {
+                throw new ConflictError('현재 게시물에 여자는 더이상 참여 신청을 할 수 없습니다.');
+            }
+
             const matchingCount = await getMatchingCount(writer, participant);
 
             let participationFlag;
