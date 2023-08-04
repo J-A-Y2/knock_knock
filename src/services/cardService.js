@@ -76,7 +76,7 @@ const cardService = {
             }
 
             const randomLovers = await CardModel.findRandomLovers({ cardId: currentCard.cardId, gender: genderToFind, limit });
-
+            const card = await CardModel.getCardById(currentCard.cardId);
             if (!randomLovers || randomLovers.length === 0) {
                 throw new NotFoundError('같은 카드를 뽑은 다른 유저가 없습니다.');
             }
@@ -84,6 +84,7 @@ const cardService = {
             return {
                 message: '랜덤으로 유저 3명 조회하기 성공!',
                 cardId: currentCard.cardId,
+                card,
                 randomLovers,
             };
         } catch (error) {
