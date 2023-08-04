@@ -11,7 +11,8 @@ const ParticipantModel = {
     // 참가 신청자 리스트
     getParticipants: async postId => {
         const { rows: participants } = await db.Participant.findAndCountAll({
-            attributes: ['participantId', 'canceled', 'status', 'matchingCount'],
+            attributes: ['participantId', 'canceled', 'status', 'matchingCount',
+        [db.sequelize.literal(),`cursor`]],
             where: { postId, canceled: 0, status: 'pending' },
             include: [
                 {
@@ -32,7 +33,10 @@ const ParticipantModel = {
                     ],
                 },
             ],
-            order: [['matchingCount', 'DESC']],
+            order: [
+                ['matchingCount', 'DESC'],
+                ['userId', 'DESC'],
+            ],
         });
         return participants;
     },

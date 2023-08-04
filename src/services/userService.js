@@ -196,6 +196,7 @@ const userService = {
                 age: user.age,
                 job: user.job,
                 region: user.region,
+                mbti: user.mbti,
                 height: user.height,
                 introduce: user.introduce,
                 hobby,
