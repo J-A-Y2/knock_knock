@@ -3,8 +3,7 @@ import { statusCode } from '../utils/statusCode.js';
 const fileController = {
     getImageUrl: async (req, res, next) => {
         try {
-            console.log(req.file.location);
-            const imageUrl = req.file.location;
+            const imageUrl = req?.file?.location;
 
             statusCode.setResponseCode200(res);
             return res.send(imageUrl);
