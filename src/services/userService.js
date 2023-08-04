@@ -270,7 +270,6 @@ const userService = {
             if (!participants) {
                 throw new NotFoundError('내가 참여한 게시글을 찾을 수 없습니다.');
             }
-
             return {
                 message: '내가 참여한 게시글 조회 성공!',
                 participants,
