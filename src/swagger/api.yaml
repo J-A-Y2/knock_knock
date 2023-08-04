@@ -452,7 +452,6 @@ paths:
                                                     type: string
                                                 meetingTime:
                                                     type: string
-                                                    format: datet-ime
                                                 content:
                                                     type: string
                                                 isCompleted:
@@ -467,10 +466,8 @@ paths:
                                                     type: integer
                                                 createdAt:
                                                     type: string
-                                                    format: date-time
                                                 updatedAt:
                                                     type: string
-                                                    format: date-time
                                                 userId:
                                                     type: integer
 
@@ -504,10 +501,8 @@ paths:
                                                     type: integer
                                                 createdAt:
                                                     type: string
-                                                    format: date-time
                                                 updatedAt:
                                                     type: string
-                                                    format: date-time
                                                 userId:
                                                     type: integer
                                                 postId:

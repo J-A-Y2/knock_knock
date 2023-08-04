@@ -144,6 +144,13 @@ const UserModel = {
             where: {
                 userId,
             },
+            include: [
+                {
+                    model: db.PostFile,
+                    attributes: ['postId', 'fileId'],
+                    include: [{ model: db.File, attributes: ['url'], where: { category: 'post' } }],
+                },
+            ],
         });
     },
     // 로그인한 유저가 참여한 게시글 찾기
@@ -152,6 +159,23 @@ const UserModel = {
             where: {
                 userId,
             },
+            include: [
+                {
+                    model: db.Post,
+                    where: {
+                        userId: {
+                            [Op.not]: userId,
+                        },
+                    },
+                    include: [
+                        {
+                            model: db.PostFile,
+                            attributes: ['fileId'],
+                            include: [{ model: db.File, attributes: ['url'], where: { category: 'post' } }],
+                        },
+                    ],
+                },
+            ],
         });
     },
     // 유저 정보 업데이트

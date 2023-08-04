@@ -90,7 +90,6 @@ const userController = {
         try {
             const userId = req.currentUserId;
             const posts = await userService.getMyPosts({ userId });
-
             statusCode.setResponseCode200(res);
             return res.send(posts);
         } catch (error) {
