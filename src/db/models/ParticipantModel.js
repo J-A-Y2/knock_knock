@@ -1,4 +1,5 @@
 import { db } from '../index.js';
+import { Op } from 'sequelize';
 
 const ParticipantModel = {
     // 참가 신청
@@ -76,7 +77,22 @@ const ParticipantModel = {
                 {
                     model: db.User,
                     where: userWhere,
-                    attributes: ['userId', 'nickname', 'gender', 'age', 'job'],
+                    attributes: ['nickname', 'gender', 'age', 'job'],
+                    include: [
+                        {
+                            model: db.UserFile,
+                            attributes: ['fileId'],
+                            include: [
+                                {
+                                    model: db.File,
+                                    attributes: ['url'],
+                                    where: {
+                                        category: 'profile',
+                                    },
+                                },
+                            ],
+                        },
+                    ],
                 },
             ],
             order: [['matchingCount', 'DESC']],
@@ -120,17 +136,35 @@ const ParticipantModel = {
             },
         );
     },
-    getAcceptedUsers: async postId => {
+    getAcceptedUsers: async ({ postId, writerId }) => {
         const acceptedUsers = await db.Participant.findAll({
             attributes: ['participantId'],
             where: {
                 postId,
                 status: 'accepted',
+                userId: {
+                    [Op.not]: writerId,
+                },
             },
             include: [
                 {
                     model: db.User,
-                    attributes: ['nickname', 'gender', 'age', 'job'],
+                    attributes: ['userId', 'nickname', 'gender', 'age', 'job'],
+                    include: [
+                        {
+                            model: db.UserFile,
+                            attributes: ['fileId'],
+                            include: [
+                                {
+                                    model: db.File,
+                                    attributes: ['url'],
+                                    where: {
+                                        category: 'profile',
+                                    },
+                                },
+                            ],
+                        },
+                    ],
                 },
             ],
         });
