@@ -193,8 +193,7 @@ const participantService = {
             const post = await PostModel.getPostById(postId);
             throwNotFoundError(post, '게시글');
             checkAccess(userId, post.userId, '수락한 유저 리스트 조회');
-
-            const acceptedUsers = await ParticipantModel.getAcceptedUsers(postId);
+            const acceptedUsers = await ParticipantModel.getAcceptedUsers({ postId, writerId: post.userId });
 
             return { message: '수락한 유저 리스트 조회를 성공했습니다.', acceptedUsers };
         } catch (error) {
