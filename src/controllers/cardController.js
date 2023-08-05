@@ -2,16 +2,6 @@ import { statusCode } from '../utils/statusCode.js';
 import { cardService } from '../services/cardService.js';
 
 const cardController = {
-    // getAllCards: async (req, res, next) => {
-    //     try {
-    //         const { message, cards } = await cardService.getAllCards();
-    //         statusCode.setResponseCode200(res);
-    //         res.send({ message, cards });
-    //     } catch (error) {
-    //         next(error);
-    //     }
-    // },
-
     saveCard: async (req, res, next) => {
         try {
             const userId = req.currentUserId;

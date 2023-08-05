@@ -5,24 +5,6 @@ import { throwNotFoundError } from '../utils/commonFunctions.js';
 import { db } from '../db/index.js';
 
 const cardService = {
-    // getAllCards: async () => {
-    //     try {
-    //         const cards = await CardModel.getAllCards();
-    //         cards.forEach(card => {
-    //             card.content = card.content.split('/');
-    //         });
-    //         return {
-    //             message: '카드 불러오기에 성공했습니다.',
-    //             cards,
-    //         };
-    //     } catch (error) {
-    //         if (error instanceof NotFoundError) {
-    //             throw error;
-    //         } else {
-    //             throw new InternalServerError('카드 불러오기를 실패했습니다.');
-    //         }
-    //     }
-    // },
     saveCard: async ({ userId, cardId }) => {
         const transaction = await db.sequelize.transaction({ autocommit: false });
         try {
@@ -55,7 +37,7 @@ const cardService = {
             const user = await UserModel.findById(userId);
             throwNotFoundError(user, '유저');
 
-            let genderToFind; // 로그인 유저가 남자면 여자를 보여기 그 반대도 마찬가지
+            let genderToFind; // 로그인 유저가 남자면 여자를 보이고 그 반대도 마찬가지
             if (user.gender === '남') {
                 genderToFind = '여';
             } else {
@@ -75,7 +57,12 @@ const cardService = {
                 throw new NotFoundError('이번 달에 카드를 뽑은 내역이 없습니다.');
             }
 
-            const randomLovers = await CardModel.findRandomLovers({ cardId: currentCard.cardId, gender: genderToFind, limit });
+            const randomLovers = await CardModel.findRandomLovers({
+                cardId: currentCard.cardId,
+                gender: genderToFind,
+                limit,
+                currentMonth,
+            });
             const card = await CardModel.getCardById(currentCard.cardId);
             if (!randomLovers || randomLovers.length === 0) {
                 throw new NotFoundError('같은 카드를 뽑은 다른 유저가 없습니다.');
