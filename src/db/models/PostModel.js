@@ -50,7 +50,7 @@ const PostModel = {
                 {
                     model: db.PostFile,
                     attributes: ['postId', 'fileId'],
-                    include: [{ model: db.File, attributes: ['url'], where: { category: 'post' } }],
+                    include: [{ model: db.File, attributes: ['url'] }],
                 },
             ],
             order: [
