@@ -49,14 +49,14 @@ const cardService = {
 
             if (cards.length == 0) {
                 // throw new NotFoundError('카드를 뽑은 내역이 없습니다.');
-                return { message: '카드를 뽑은 내역이 없습니다.', card: [] };
+                return { message: '카드를 뽑은 내역이 없습니다.', randomLovers: [] };
             }
 
             const currentCard = cards.pop();
 
             if (currentMonth !== currentCard.createdAt.getMonth() + 1) {
                 // throw new NotFoundError('이번 달에 카드를 뽑은 내역이 없습니다.');
-                return { message: '이번 달에 카드를 뽑은 내역이 없습니다.', card: [] };
+                return { message: '이번 달에 카드를 뽑은 내역이 없습니다.', randomLovers: [] };
             }
 
             const randomLovers = await CardModel.findRandomLovers({
@@ -68,7 +68,7 @@ const cardService = {
 
             if (!randomLovers || randomLovers.length === 0) {
                 // throw new NotFoundError('같은 카드를 뽑은 다른 유저가 없습니다.');
-                return { message: '이번 달에 같은 카드를 뽑은 다른 유저가 없습니다.', card: [] };
+                return { message: '이번 달에 같은 카드를 뽑은 다른 유저가 없습니다.', randomLovers: [] };
             }
 
             const card = await CardModel.getCardById(currentCard.cardId);
