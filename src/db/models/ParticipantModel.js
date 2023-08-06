@@ -72,7 +72,7 @@ const ParticipantModel = {
     // 유저 성별에 따른 참가자 리스트 조회
     getParticipantsByGender: async ({ postId, userWhere }) => {
         const { rows: participants } = await db.Participant.findAndCountAll({
-            where: { postId, status: 'pending' },
+            where: { postId, status: 'pending', canceled: 0 },
             include: [
                 {
                     model: db.User,
