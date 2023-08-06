@@ -71,4 +71,9 @@ const getMatchingCount = async (firstUser, secondUser) => {
     return matchingCount;
 };
 
-export { checkParticipationStatus, updateRecruitedValue, getIdealAndPersonality, getMatchingCount };
+const hasReachedLimit = (participants, gender) => {
+    const filteredParticipants = participants.filter(participant => participant.User.gender === gender);
+    return filteredParticipants.length >= 10;
+};
+
+export { checkParticipationStatus, updateRecruitedValue, getIdealAndPersonality, getMatchingCount, hasReachedLimit };

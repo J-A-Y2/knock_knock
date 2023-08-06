@@ -4,7 +4,12 @@ import { db } from '../db/index.js';
 import { PostModel } from '../db/models/PostModel.js';
 import { UserModel } from '../db/models/UserModel.js';
 import { checkAccess, throwNotFoundError } from '../utils/commonFunctions.js';
-import { checkParticipationStatus, updateRecruitedValue, getMatchingCount } from '../utils/participantFunctions.js';
+import {
+    checkParticipationStatus,
+    updateRecruitedValue,
+    getMatchingCount,
+    hasReachedLimit,
+} from '../utils/participantFunctions.js';
 
 const participantService = {
     participatePost: async ({ userId, postId }) => {
@@ -19,14 +24,12 @@ const participantService = {
             }
 
             // 참여자 리스트를 불러오고 성별에 따라 10명 제한하기
-            const participantsList = await ParticipantModel.getParticipants(postId);
-            const males = participantsList.filter(participant => participant.User.gender === '남');
-            const females = participantsList.filter(participant => participant.User.gender === '여');
+            const participants = await ParticipantModel.getParticipants(postId);
 
-            if (participant.gender === '남' && males.length > 10) {
-                throw new ConflictError('현재 게시물에 남자는 더이상 참여 신청을 할 수 없습니다.');
-            } else if (participant.gender === '여' && females.length > 10) {
-                throw new ConflictError('현재 게시물에 여자는 더이상 참여 신청을 할 수 없습니다.');
+            if (hasReachedLimit(participants, participant.gender)) {
+                throw new ConflictError(
+                    `현재 게시물에 ${participant.gender === '남' ? '남자' : '여자'}는 더이상 참여 신청을 할 수 없습니다.`,
+                );
             }
 
             const matchingCount = await getMatchingCount(writer, participant);
