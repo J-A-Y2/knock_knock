@@ -8,15 +8,15 @@ const cardService = {
     saveCard: async ({ userId, cardId }) => {
         const transaction = await db.sequelize.transaction({ autocommit: false });
         try {
+            console.log(userId);
             const card = await CardModel.getCardById(cardId);
             throwNotFoundError(card, '카드');
             card.content = card.content.split('/');
-
             await CardModel.saveCard({ userId, cardId, transaction });
 
             const currentMonth = new Date().getMonth() + 1;
             const checked = await CardModel.checkPlayed(userId);
-
+            console.log(checked);
             if (checked.length > 0 && currentMonth == checked.pop().createdAt.getMonth() + 1) {
                 throw new ConflictError('이미 게임에 참가한 유저입니다.');
             }
@@ -66,13 +66,13 @@ const cardService = {
                 currentMonth,
             });
 
-            if (!randomLovers || randomLovers.length === 0) {
-                // throw new NotFoundError('같은 카드를 뽑은 다른 유저가 없습니다.');
-                return { message: '이번 달에 같은 카드를 뽑은 다른 유저가 없습니다.', randomLovers: [] };
-            }
-
             const card = await CardModel.getCardById(currentCard.cardId);
             card.content = card.content.split('/');
+
+            if (!randomLovers || randomLovers.length === 0) {
+                // throw new NotFoundError('같은 카드를 뽑은 다른 유저가 없습니다.');
+                return { message: '이번 달에 같은 카드를 뽑은 다른 유저가 없습니다.', card, randomLovers: [] };
+            }
 
             return {
                 message: '랜덤으로 유저 3명 조회하기 성공!',
