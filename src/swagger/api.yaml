@@ -9,6 +9,10 @@ tags:
       description: 댓글 라우터 모음
     - name: message
       description: 메세지 라우터 모음
+    - name: chat
+      description: 채팅 라우터 모음
+    - name: card
+      description: 카드 라우터 모음
 
 paths:
     /users/register:
@@ -231,6 +235,7 @@ paths:
                                         type: string
                 '400':
                     description: Invalid status value
+
         put:
             tags:
                 - user
@@ -299,8 +304,6 @@ paths:
                                                 type: string
                                             region:
                                                 type: string
-                                            profileImage:
-                                                type: string
                                             mbti:
                                                 type: string
                                             height:
@@ -319,6 +322,10 @@ paths:
                                                     type: string
                                             indtroduce:
                                                 type: string
+                                            profileImage:
+                                                type: array
+                                            backgrounImage:
+                                                type: array
 
                 '400':
                     description: Invalid ID supplied
@@ -445,7 +452,6 @@ paths:
                                                     type: string
                                                 meetingTime:
                                                     type: string
-                                                    format: datet-ime
                                                 content:
                                                     type: string
                                                 isCompleted:
@@ -460,10 +466,8 @@ paths:
                                                     type: integer
                                                 createdAt:
                                                     type: string
-                                                    format: date-time
                                                 updatedAt:
                                                     type: string
-                                                    format: date-time
                                                 userId:
                                                     type: integer
 
@@ -497,10 +501,8 @@ paths:
                                                     type: integer
                                                 createdAt:
                                                     type: string
-                                                    format: date-time
                                                 updatedAt:
                                                     type: string
-                                                    format: date-time
                                                 userId:
                                                     type: integer
                                                 postId:
@@ -1067,7 +1069,7 @@ paths:
                 '404':
                     description: Order not found
 
-    /participants/:participantId/allow:
+    /participants/{participantId}/allow:
         put:
             tags:
                 - participation
@@ -1078,16 +1080,6 @@ paths:
                   in: path
                   description: 참가 신청 고유 아이디
                   required: true
-
-            requestbody:
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                user_id:
-                                    type: integer
-                required: true
 
             responses:
                 '200':
@@ -1104,7 +1096,7 @@ paths:
                 '404':
                     description: User not found
 
-    /participants/:participantId/deny:
+    /participants/{participantId}/deny:
         put:
             tags:
                 - participation
@@ -1115,16 +1107,6 @@ paths:
                   in: path
                   description: 참가 신청 고유 아이디
                   required: true
-
-            requestbody:
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                user_id:
-                                    type: integer
-                required: true
 
             responses:
                 '200':
@@ -1221,7 +1203,7 @@ paths:
                   description: 게시글 아이디
                   required: true
 
-                - name: commentid
+                - name: commentId
                   in: path
                   description: 댓글 고유 아이디
                   required: true
@@ -1265,17 +1247,17 @@ paths:
                 '500':
                     description: 댓글 삭제하기에 실패했습니다.
 
-    /comments/{postId}:
+    /comments/{postId}/{?cursor&limit}:
         get:
             tags:
                 - comment
-            description: 댓글 불러오기 (커서기반 무한 스크롤)
+            description: 댓글 불러오기 (커서기반 무한 스크롤), 처음 불러올때 0, 마지막 값 불러오면 -1
 
             parameters:
                 - name: postId
                   schema:
                       type: integer
-                  in: query
+                  in: path
                   description: 게시글 고유 아이디
                   required: true
 
@@ -1284,6 +1266,13 @@ paths:
                       type: integer
                   in: query
                   description: 커서의 마지막 위치값, 댓글의 아이디
+                  required: true
+
+                - name: limit
+                  schema:
+                      type: integer
+                  in: query
+                  description: 불러올 데이터 수
                   required: true
 
             responses:
@@ -1319,7 +1308,7 @@ paths:
         post:
             tags:
                 - message
-            description: 쪽지 작성 하기
+            description: 메세지 작성 하기
 
             requestbody:
                 content:
@@ -1327,7 +1316,7 @@ paths:
                         schema:
                             type: object
                             properties:
-                                receive_id:
+                                chatId:
                                     type: integer
                                 content:
                                     type: string
@@ -1335,96 +1324,268 @@ paths:
 
             responses:
                 '200':
-                    description: 쪽지 작성 성공.
+                    description: 새로운 메세지 생성에 성공했습니다.
+                '409':
+                    description: 현재 채팅방에 속해있지 않습니다.
+                '500':
+                    description: 새로운 메세지 생성에 실패했습니다.
+
+    /messages/{chatId}:
+        get:
+            tags:
+                - message
+            description: 전체 메세지 불러 오기
+
+            parameters:
+                - name: chatId
+                  schema:
+                      type: integer
+                  in: path
+                  description: 채팅방 아이디
+                  required: true
+
+            requestbody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                chat:
+                                    type: array
+                                    items:
+                                        type: object
+                                        properties:
+                                            messageId:
+                                                type: integer
+                                            senderId:
+                                                type: integer
+                                            content:
+                                                type: string
+                                            createAt:
+                                                type: datetime
+                                            updateAt:
+                                                type: datetime
+                                            chatId:
+                                                type: integer
+
+            responses:
+                '200':
+                    description: 유저의 메세지 불러오기에 성공했습니다.
+                '500':
+                    description: 유저의 메세지 불러오기에 실패했습니다.
+
+    /chats:
+        post:
+            tags:
+                - chat
+            description: 채팅 방 생성
+
+            requestbody:
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            anotherId:
+                                type: integer
+
+            responses:
+                '201':
+                    description: 새로운 채팅 방 생성에 성공했습니다.
+                '409':
+                    description: 이미 존재하는 채팅 입니다.
+                '500':
+                    description: 채팅방 생성에 실패 했습니다.
+
+        get:
+            tags:
+                - chat
+            description: 전체 채팅 조회
+
+            responses:
+                '200':
+                    description: 유저의 채팅 목록 불러오기에 성공했습니다.
                     content:
                         application/json:
                             schema:
                                 type: object
                                 properties:
-                                    message_id:
-                                        type: integer
-                                    send_id:
-                                        type: integer
-                                    receive_id:
-                                        type: integer
-                                    content:
-                                        type: string
-                                    createAt:
-                                        type: datetime
-                '400':
-                    description: Invalid ID supplied
-                '404':
-                    description: User not found
+                                    allChatList:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                chatId:
+                                                    type: integer
+                                                firstId:
+                                                    type: integer
+                                                secondId:
+                                                    type: integer
+                                                url:
+                                                    type: string
+                                                createAt:
+                                                    type: datetime
+                                                updateAt:
+                                                    type: datetime
+                '500':
+                    description: 유저의 채팅 목록 불러오기에 실패했습니다.
 
+    /chats/{secondId}:
         get:
             tags:
-                - message
-            description: 전체 쪽지 불러 오기
-
-            responses:
-                '200':
-                    description: 전체 쪽지 불러오기 성공.
-                '400':
-                    description: Invalid ID supplied
-                '404':
-                    description: User not found
-
-    /messages/{messageId}:
-        delete:
-            tags:
-                - message
-            description: 쪽지 삭제 하기
+                - chat
+            description: 개별 채팅 조회
 
             parameters:
-                - name: messageid
+                - name: anotherId
+                  schema:
+                      type: integer
                   in: path
-                  description: 쪽지 고유 아이디
+                  description: 현재 유저 아니고, 다른 유저 아이디
                   required: true
 
             responses:
                 '200':
-                    description: 쪽지 삭제 성공.
-                '400':
-                    description: Invalid ID supplied
-                '404':
-                    description: User not found
-
-        get:
-            tags:
-                - message
-            description: 개별 쪽지 확인 하기
-
-            responses:
-                '200':
-                    description: 쪽지 작성 성공.
+                    description: 유저의 채팅 불러오기에 성공했습니다.
                     content:
                         application/json:
                             schema:
                                 type: object
                                 properties:
-                                    message_id:
+                                    chatId:
                                         type: integer
-                                    send_id:
+                                    firstId:
                                         type: integer
-                                    content:
+                                    secondId:
+                                        type: integer
+                                    creatAt:
+                                        type: date
+                                    updateAt:
+                                        type: date
+                                    url:
                                         type: string
-                                    createAt:
-                                        type: datetime
-                '400':
-                    description: Invalid ID supplied
-                '404':
-                    description: User not found
+                '500':
+                    description: 유저의 채팅 불러오기에 실패했습니다.
+    /cards:
+        post:
+            tags:
+                - card
+            description: 뽑은 카드 저장하기
 
-    /messages/isRead:
+            parameters:
+                - name: cardId
+                  schema:
+                      type: integer
+                  in: query
+                  description: 카드 고유 아이디 (21~30)
+                  required: true
+
+            responses:
+                '201':
+                    description: 유저 카드 정보 저장에 성공했습니다!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    user:
+                                        type: integer
+                                    card:
+                                        type: object
+                                        properties:
+                                            cardId:
+                                                type: integer
+                                            content:
+                                                type: array
+                                                items:
+                                                    type: string
+                                    CardFile:
+                                        type: object
+                                        properties:
+                                            fileId:
+                                                type: integer
+                                            File:
+                                                type: object
+                                                properties:
+                                                    url:
+                                                        type: string
+                '500':
+                    description: 게시글 댓글 불러오기에 실패했습니다.
+                '404':
+                    description: 요청한 게시물의 정보를 찾을 수 없습니다.
         get:
             tags:
-                - message
-            description: 쪽지 확인 여부 검사하기
+                - card
+            description: 같은 카드 고른 유저 랜덤 3명 뽑기
+
+            parameters:
+                - name: limit
+                  schema:
+                      type: integer
+                  in: query
+                  description: 띄울 유저 수
+                  required: true
 
             responses:
                 '200':
-                    description: 쪽지 작성 성공.
-                '400':
-                    description: Invalid ID supplied
+                    description: 랜덤 유저 (limit)명 조회 성공!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    card:
+                                        type: object
+                                        properties:
+                                            cardId:
+                                                type: integer
+                                            content:
+                                                type: string
+                                            CardFile:
+                                                type: object
+                                                properties:
+                                                    fileId:
+                                                        type: integer
+                                                    File:
+                                                        type: object
+                                                        properties:
+                                                            url:
+                                                                type: string
+                                    randomLovers:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                id:
+                                                    type: integer
+                                                User:
+                                                    type: object
+                                                    properties:
+                                                        userId:
+                                                            type: integer
+                                                        email:
+                                                            type: string
+                                                        nickname:
+                                                            type: string
+                                                        gender:
+                                                            type: string
+                                                        birthday:
+                                                            type: string
+                                                        age:
+                                                            type: integer
+                                                        job:
+                                                            type: string
+                                                        region:
+                                                            type: string
+                                                        mbti:
+                                                            type: string
+                                                        height:
+                                                            type: string
+                                                        introduce:
+                                                            type: string
                 '404':
-                    description: User not found
+                    description: 캡쳐보세요

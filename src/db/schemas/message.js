@@ -8,7 +8,7 @@ const Message = (sequelize, DataTypes) => {
                 primaryKey: true,
             },
             senderId: {
-                type: DataTypes.STRING,
+                type: DataTypes.INTEGER,
                 allowNull: false,
             },
             content: {

@@ -14,9 +14,10 @@ const commentService = {
                 throw new UnauthorizedError('신청이 수락된 유저에게만 권한이 있습니다');
             }
 
-            await CommentModel.create({ userId, postId, content });
+            const { commentId } = await CommentModel.create({ userId, postId, content });
 
             return {
+                commentId,
                 message: '댓글 추가하기에 성공했습니다.',
             };
         } catch (error) {
@@ -81,7 +82,7 @@ const commentService = {
         }
     },
 
-    getComment: async ({ userId, postId, cursor }) => {
+    getComment: async ({ userId, postId, cursor, limit }) => {
         try {
             let commentList = [];
 
@@ -102,15 +103,13 @@ const commentService = {
 
             // cursor == 0 이면, 처음으로 댓글 불러오기.
             if (cursor == 0) {
-                commentList = await CommentModel.recentComment(postId);
-
+                commentList = await CommentModel.recentComment({ postId, limit });
                 // cursor == -1 이면, 모든 댓글 불러오기 끝.
             } else if (cursor == -1) {
                 commentList = '전체 댓글 조회가 끝났습니다.';
             } else {
-                commentList = await CommentModel.getComment({ postId, cursor });
+                commentList = await CommentModel.getComment({ postId, cursor, limit });
             }
-
             return {
                 message: '게시글 댓글 불러오기에 성공하셨습니다.',
                 commentList,

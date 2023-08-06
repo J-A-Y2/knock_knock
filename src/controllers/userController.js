@@ -35,6 +35,7 @@ const userController = {
                 userId: checkUser.userId,
                 email: checkUser.email,
                 nickname: checkUser.nickname,
+                url: checkUser.url,
             });
         } catch (error) {
             next(error);
@@ -54,6 +55,7 @@ const userController = {
     getRandomUsersInfo: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
+            console.log('유저 컨트롤러 userId:', userId);
             const users = await userService.getRandomUsers(userId);
 
             statusCode.setResponseCode200(res);
@@ -88,7 +90,6 @@ const userController = {
         try {
             const userId = req.currentUserId;
             const posts = await userService.getMyPosts({ userId });
-
             statusCode.setResponseCode200(res);
             return res.send(posts);
         } catch (error) {

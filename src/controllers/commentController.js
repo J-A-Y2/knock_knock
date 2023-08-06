@@ -11,7 +11,7 @@ const commentController = {
             const createComment = await commentService.createComment({ userId, postId, content });
 
             statusCode.setResponseCode201(res);
-            return res.send({ message: createComment.message });
+            return res.send({ message: createComment.message, commentId: createComment.commentId });
         } catch (error) {
             next(error);
         }
@@ -51,11 +51,11 @@ const commentController = {
     getComment: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
-            const postId = req.query.postId;
+            const postId = req.params.postId;
             const cursor = req.query.cursor;
+            const limit = req.query.limit;
 
-            const getComment = await commentService.getComment({ userId, postId, cursor });
-
+            const getComment = await commentService.getComment({ userId, postId, cursor, limit });
             statusCode.setResponseCode200(res);
             return res.send({
                 message: getComment.message,

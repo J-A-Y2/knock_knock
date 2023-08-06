@@ -20,10 +20,10 @@ const messageController = {
         try {
             const chatId = req.params.chatId;
 
-            const { chat, message } = await messageService.getMessage(chatId);
+            const { messageList, message } = await messageService.getMessage(chatId);
 
-            statusCode.setResponseCode201(res);
-            return res.send({ chat, message });
+            statusCode.setResponseCode200(res);
+            return res.send({ messageList, message });
         } catch (error) {
             next(error);
         }

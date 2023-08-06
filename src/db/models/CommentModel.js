@@ -48,8 +48,15 @@ const CommentModel = {
     },
 
     // 댓글 불러오기 (무한스크롤) 커서는 댓글의 아이디 값
-    getComment: async ({ postId, cursor }) => {
+    getComment: async ({ postId, cursor, limit }) => {
         const getComment = await db.Comment.findAll({
+            where: {
+                postId,
+                commentId: {
+                    [Op.lt]: cursor,
+                },
+            },
+            limit: parseInt(limit),
             attributes: ['commentId', 'userId', 'content', 'createdAt'],
             include: [
                 {
@@ -66,20 +73,17 @@ const CommentModel = {
                 },
             ],
             order: [['createdAt', 'DESC']],
-            where: {
-                postId,
-                commentId: {
-                    [Op.lt]: cursor,
-                },
-            },
-            limit: 10,
         });
 
         return getComment;
     },
 
-    recentComment: async postId => {
+    recentComment: async ({ postId, limit }) => {
         const recentComment = await db.Comment.findAll({
+            where: {
+                postId,
+            },
+            limit: parseInt(limit),
             attributes: ['commentId', 'userId', 'content', 'createdAt'],
             include: [
                 {
@@ -95,10 +99,6 @@ const CommentModel = {
                     ],
                 },
             ],
-            where: {
-                postId,
-            },
-            limit: 10,
 
             order: [['createdAt', 'DESC']],
         });

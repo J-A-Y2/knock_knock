@@ -43,23 +43,19 @@ const participantController = {
         try {
             const userId = req.currentUserId;
             const postId = req.params.postId;
-            const cursor = parseInt(req.query.cursor);
-            const limit = parseInt(req.query.limit);
+            const gender = req.query.gender;
 
-            const { participantsList, message, ideal, isFulled, nextCursor } = await participantService.getParticipants({
+            const { message, isFulled, participantsList } = await participantService.getParticipants({
                 userId,
                 postId,
-                cursor,
-                limit,
+                gender,
             });
 
             statusCode.setResponseCode200(res);
             res.send({
                 message,
-                ideal,
                 isFulled,
                 participantsList,
-                nextCursor,
             });
         } catch (error) {
             next(error);
@@ -105,6 +101,20 @@ const participantController = {
 
             statusCode.setResponseCode200(res);
             res.send({ message, acceptedUsers });
+        } catch (error) {
+            next(error);
+        }
+    },
+    allowCancel: async (req, res, next) => {
+        try {
+            const userId = req.currentUserId;
+            const postId = req.params.postId;
+            const participantId = parseInt(req.query.participantId);
+
+            const { message } = await participantService.allowCancel({ userId, postId, participantId });
+
+            statusCode.setResponseCode200(res);
+            res.send({ message });
         } catch (error) {
             next(error);
         }

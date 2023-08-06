@@ -1,5 +1,5 @@
 import { db } from '../index.js';
-
+import { Op } from 'sequelize';
 const UserModel = {
     // 유저 생성
     create: async newUser => {
@@ -66,6 +66,15 @@ const UserModel = {
 
         return user;
     },
+    findByNickname: async nickname => {
+        const user = await db.User.findOne({
+            where: {
+                nickname,
+                isDeleted: 0,
+            },
+        });
+        return user;
+    },
     // userId 검색해서 유저 찾기
     findById: async userId => {
         const user = await db.User.findOne({
@@ -79,6 +88,19 @@ const UserModel = {
                     attributes: ['userId'],
                     include: [{ model: db.Tag, attributes: ['tagName', 'tagCategoryId'] }],
                 },
+                {
+                    model: db.UserFile,
+                    attributes: ['userId', 'fileId'],
+                    include: [
+                        {
+                            model: db.File,
+                            attributes: ['url'],
+                            where: {
+                                [Op.or]: [{ category: 'profile' }, { category: 'background' }],
+                            },
+                        },
+                    ],
+                },
             ],
         });
         return user;
@@ -90,6 +112,26 @@ const UserModel = {
                 gender,
                 isDeleted: 0,
             },
+            include: [
+                {
+                    model: db.UserTag,
+                    attributes: ['userId'],
+                    include: [{ model: db.Tag, attributes: ['tagName', 'tagCategoryId'] }],
+                },
+                {
+                    model: db.UserFile,
+                    attributes: ['userId', 'fileId'],
+                    include: [
+                        {
+                            model: db.File,
+                            attributes: ['url'],
+                            where: {
+                                [Op.or]: [{ category: 'profile' }, { category: 'background' }],
+                            },
+                        },
+                    ],
+                },
+            ],
             order: db.sequelize.random(),
             limit,
         });
@@ -102,6 +144,13 @@ const UserModel = {
             where: {
                 userId,
             },
+            include: [
+                {
+                    model: db.PostFile,
+                    attributes: ['postId', 'fileId'],
+                    include: [{ model: db.File, attributes: ['url'], where: { category: 'post' } }],
+                },
+            ],
         });
     },
     // 로그인한 유저가 참여한 게시글 찾기
@@ -110,6 +159,23 @@ const UserModel = {
             where: {
                 userId,
             },
+            include: [
+                {
+                    model: db.Post,
+                    where: {
+                        userId: {
+                            [Op.not]: userId,
+                        },
+                    },
+                    include: [
+                        {
+                            model: db.PostFile,
+                            attributes: ['fileId'],
+                            include: [{ model: db.File, attributes: ['url'], where: { category: 'post' } }],
+                        },
+                    ],
+                },
+            ],
         });
     },
     // 유저 정보 업데이트
@@ -142,6 +208,31 @@ const UserModel = {
             },
         );
         return deleteUser;
+    },
+    findProfileById: async userId => {
+        const user = await db.User.findOne({
+            attributes: ['userId', 'nickname'],
+            where: {
+                userId,
+                isDeleted: 0,
+            },
+            include: [
+                {
+                    model: db.UserFile,
+                    attributes: ['userId', 'fileId'],
+                    include: [
+                        {
+                            model: db.File,
+                            attributes: ['url'],
+                            where: {
+                                category: 'profile',
+                            },
+                        },
+                    ],
+                },
+            ],
+        });
+        return user;
     },
 };
 

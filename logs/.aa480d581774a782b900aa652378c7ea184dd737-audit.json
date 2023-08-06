@@ -24,6 +24,36 @@
             "date": 1690511923329,
             "name": "/Users/jay/개발/knockknock/knockknock_back/logs/2023-07-28.exception.log",
             "hash": "6f98af7a41d51f9a141f98495d9cf661afd80fd5423f881e2e3aebc7b01e716f"
+        },
+        {
+            "date": 1690640769111,
+            "name": "/Users/jay/개발/knockknock/knockknock_back/logs/2023-07-29.exception.log",
+            "hash": "a7d6f32d972f78b1ddcf3ba127298e1cc05d837b2cfea99d9066018363186a47"
+        },
+        {
+            "date": 1690644604049,
+            "name": "/Users/jay/개발/knockknock/knockknock_back/logs/2023-07-30.exception.log",
+            "hash": "c7fec160a83d808fdf6901c37d12dc7fd70f7029a3b1c58a8a9b2e569966bde5"
+        },
+        {
+            "date": 1690729487539,
+            "name": "/Users/jay/개발/knockknock/knockknock_back/logs/2023-07-31.exception.log",
+            "hash": "b1d0ffdc21b114c652716185ad93e3063c0c2c69cac11eada8894a8d1f964ec7"
+        },
+        {
+            "date": 1690864690939,
+            "name": "/Users/jay/개발/knockknock/knockknock_back/logs/2023-08-01.exception.log",
+            "hash": "5e6b85be6c0661aeecf10367cf551595d44e811c1ff0c71f173e4561c06e3c98"
+        },
+        {
+            "date": 1690955426898,
+            "name": "/Users/jay/개발/knockknock/knockknock_back/logs/2023-08-02.exception.log",
+            "hash": "9fd3075a3f2e65cfb624262dd097f5724f4b680468c3600ba7f57f895957342e"
+        },
+        {
+            "date": 1690990039831,
+            "name": "/Users/jay/개발/knockknock/knockknock_back/logs/2023-08-03.exception.log",
+            "hash": "af96754191f507924bafb15cb263736b8855cd9fcd97b84f64b01e4f2fbbf736"
         }
     ],
     "hashType": "sha256"
