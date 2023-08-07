@@ -4,9 +4,7 @@ import { db } from '../index.js';
 const CommentModel = {
     // 댓글 생성
     create: async ({ userId, postId, content }) => {
-        console.log({ userId, postId, content });
         const createComment = await db.Comment.create({ userId, postId, content });
-        console.log(createComment);
         return createComment;
     },
 
