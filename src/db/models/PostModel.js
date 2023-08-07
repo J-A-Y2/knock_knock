@@ -9,6 +9,7 @@ const PostModel = {
         const { count, rows: posts } = await db.Post.findAndCountAll({
             offset,
             limit,
+            distinct: true,
             include: [
                 {
                     model: db.User,
@@ -35,6 +36,7 @@ const PostModel = {
             where: { type },
             offset,
             limit,
+            distinct: true,
             include: [
                 {
                     model: db.User,
