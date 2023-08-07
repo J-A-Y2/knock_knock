@@ -63,26 +63,6 @@ const getIdealAndPersonality = async user => {
     return { hobby, ideal, personality };
 };
 
-const getParticipantsList = async participants => {
-    const participantsList = participants.map(participant => {
-        const personality = participant.User.UserTags.map(userTag => userTag.Tag.tagName);
-
-        return {
-            participationId: participant.participantId,
-            canceled: participant.canceled,
-            matchingCount: participant.matchingCount,
-            userId: participant.User.userId,
-            status: participant.status,
-            nickname: participant.User.nickname,
-            gender: participant.User.gender,
-            age: participant.User.age,
-            job: participant.User.job,
-            personality,
-        };
-    });
-    return participantsList;
-};
-
 const getMatchingCount = async (firstUser, secondUser) => {
     const { ideal } = await getIdealAndPersonality(firstUser);
     const { personality } = await getIdealAndPersonality(secondUser);
@@ -91,4 +71,9 @@ const getMatchingCount = async (firstUser, secondUser) => {
     return matchingCount;
 };
 
-export { checkParticipationStatus, updateRecruitedValue, getIdealAndPersonality, getParticipantsList, getMatchingCount };
+const hasReachedLimit = (participants, gender) => {
+    const filteredParticipants = participants.filter(participant => participant.User.gender === gender);
+    return filteredParticipants.length >= 10;
+};
+
+export { checkParticipationStatus, updateRecruitedValue, getIdealAndPersonality, getMatchingCount, hasReachedLimit };

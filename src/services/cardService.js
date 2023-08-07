@@ -5,36 +5,18 @@ import { throwNotFoundError } from '../utils/commonFunctions.js';
 import { db } from '../db/index.js';
 
 const cardService = {
-    // getAllCards: async () => {
-    //     try {
-    //         const cards = await CardModel.getAllCards();
-    //         cards.forEach(card => {
-    //             card.content = card.content.split('/');
-    //         });
-    //         return {
-    //             message: '카드 불러오기에 성공했습니다.',
-    //             cards,
-    //         };
-    //     } catch (error) {
-    //         if (error instanceof NotFoundError) {
-    //             throw error;
-    //         } else {
-    //             throw new InternalServerError('카드 불러오기를 실패했습니다.');
-    //         }
-    //     }
-    // },
     saveCard: async ({ userId, cardId }) => {
         const transaction = await db.sequelize.transaction({ autocommit: false });
         try {
+            console.log(userId);
             const card = await CardModel.getCardById(cardId);
             throwNotFoundError(card, '카드');
             card.content = card.content.split('/');
-
             await CardModel.saveCard({ userId, cardId, transaction });
 
             const currentMonth = new Date().getMonth() + 1;
             const checked = await CardModel.checkPlayed(userId);
-
+            console.log(checked);
             if (checked.length > 0 && currentMonth == checked.pop().createdAt.getMonth() + 1) {
                 throw new ConflictError('이미 게임에 참가한 유저입니다.');
             }
@@ -55,7 +37,7 @@ const cardService = {
             const user = await UserModel.findById(userId);
             throwNotFoundError(user, '유저');
 
-            let genderToFind; // 로그인 유저가 남자면 여자를 보여기 그 반대도 마찬가지
+            let genderToFind; // 로그인 유저가 남자면 여자를 보이고 그 반대도 마찬가지
             if (user.gender === '남') {
                 genderToFind = '여';
             } else {
@@ -66,24 +48,36 @@ const cardService = {
             const cards = await CardModel.checkPlayed(userId);
 
             if (cards.length == 0) {
-                throw new NotFoundError('카드를 뽑은 내역이 없습니다.');
+                // throw new NotFoundError('카드를 뽑은 내역이 없습니다.');
+                return { message: '카드를 뽑은 내역이 없습니다.', randomLovers: [] };
             }
 
             const currentCard = cards.pop();
 
             if (currentMonth !== currentCard.createdAt.getMonth() + 1) {
-                throw new NotFoundError('이번 달에 카드를 뽑은 내역이 없습니다.');
+                // throw new NotFoundError('이번 달에 카드를 뽑은 내역이 없습니다.');
+                return { message: '이번 달에 카드를 뽑은 내역이 없습니다.', randomLovers: [] };
             }
 
-            const randomLovers = await CardModel.findRandomLovers({ cardId: currentCard.cardId, gender: genderToFind, limit });
+            const randomLovers = await CardModel.findRandomLovers({
+                cardId: currentCard.cardId,
+                gender: genderToFind,
+                limit,
+                currentMonth,
+            });
+
+            const card = await CardModel.getCardById(currentCard.cardId);
+            card.content = card.content.split('/');
 
             if (!randomLovers || randomLovers.length === 0) {
-                throw new NotFoundError('같은 카드를 뽑은 다른 유저가 없습니다.');
+                // throw new NotFoundError('같은 카드를 뽑은 다른 유저가 없습니다.');
+                return { message: '이번 달에 같은 카드를 뽑은 다른 유저가 없습니다.', card, randomLovers: [] };
             }
 
             return {
                 message: '랜덤으로 유저 3명 조회하기 성공!',
                 cardId: currentCard.cardId,
+                card,
                 randomLovers,
             };
         } catch (error) {

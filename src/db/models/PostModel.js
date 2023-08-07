@@ -9,6 +9,7 @@ const PostModel = {
         const { count, rows: posts } = await db.Post.findAndCountAll({
             offset,
             limit,
+            distinct: true,
             include: [
                 {
                     model: db.User,
@@ -35,6 +36,7 @@ const PostModel = {
             where: { type },
             offset,
             limit,
+            distinct: true,
             include: [
                 {
                     model: db.User,
@@ -50,7 +52,7 @@ const PostModel = {
                 {
                     model: db.PostFile,
                     attributes: ['postId', 'fileId'],
-                    include: [{ model: db.File, attributes: ['url'], where: { category: 'post' } }],
+                    include: [{ model: db.File, attributes: ['url'] }],
                 },
             ],
             order: [

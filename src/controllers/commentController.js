@@ -11,7 +11,7 @@ const commentController = {
             const createComment = await commentService.createComment({ userId, postId, content });
 
             statusCode.setResponseCode201(res);
-            return res.send({ message: createComment.message });
+            return res.send({ message: createComment.message, commentId: createComment.commentId });
         } catch (error) {
             next(error);
         }

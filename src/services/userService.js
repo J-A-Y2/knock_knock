@@ -20,14 +20,13 @@ const userService = {
             transaction = await db.sequelize.transaction();
             const { hobby, personality, ideal, profileImage, ...userInfo } = newUser;
 
-            //이메일 중복 확인
+            // 이메일 중복 확인
             const userByEmail = await UserModel.findByEmail(newUser.email);
-            const userByNickname = await UserModel.findByNickname(newUser.nickname);
-
             if (userByEmail) {
                 throw new ConflictError('이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요.');
             }
-
+            // 닉네임 중복 확인
+            const userByNickname = await UserModel.findByNickname(newUser.nickname);
             if (userByNickname) {
                 throw new ConflictError('이 닉네임은 현재 사용중입니다. 다른 닉네임을 입력해 주세요.');
             }
@@ -196,6 +195,7 @@ const userService = {
                 age: user.age,
                 job: user.job,
                 region: user.region,
+                mbti: user.mbti,
                 height: user.height,
                 introduce: user.introduce,
                 hobby,
@@ -270,7 +270,6 @@ const userService = {
             if (!participants) {
                 throw new NotFoundError('내가 참여한 게시글을 찾을 수 없습니다.');
             }
-
             return {
                 message: '내가 참여한 게시글 조회 성공!',
                 participants,
@@ -292,6 +291,8 @@ const userService = {
 
             const { hobby, personality, ideal, profileImage, backgroundImage, ...updateData } = updateUserInfo;
 
+            const profileFileExtension = extensionSplit(profileImage[1]);
+            const backgroundFileExtension = extensionSplit(backgroundImage[1]);
             const user = await UserModel.findById(userId);
 
             if (!user || user.isDeleted === true) {
@@ -326,45 +327,45 @@ const userService = {
             let file = await FileModel.findFileByUserId(userId, profileImage[0]);
 
             if (file && profileImage) {
-                const fileExtension = extensionSplit(profileImage[1]);
-
                 await FileModel.updateUserImage(
                     file.fileId,
                     profileImage[0], // category
                     profileImage[1], // url
-                    fileExtension,
+                    profileFileExtension,
                     transaction,
                 );
             } else if (!file) {
-                const fileExtension = extensionSplit(profileImage[1]);
                 await FileModel.createUserImage(
                     profileImage[0], // category
                     profileImage[1], // url
-                    fileExtension,
+                    profileFileExtension,
                     userId,
                     transaction,
                 );
+            } else {
+                throw new NotFoundError('유저의 프로필 이미지를 수정하는 데 실패했습니다.');
             }
 
             file = await FileModel.findFileByUserId(userId, backgroundImage[0]);
+
             if (file && backgroundImage) {
-                const fileExtension = extensionSplit(backgroundImage[1]);
                 await FileModel.updateUserImage(
                     file.fileId,
                     backgroundImage[0], // category
                     backgroundImage[1], // url
-                    fileExtension,
+                    backgroundFileExtension,
                     transaction,
                 );
             } else if (!file) {
-                const fileExtension = extensionSplit(backgroundImage[1]);
                 await FileModel.createUserImage(
                     backgroundImage[0], // category
                     backgroundImage[1], // url
-                    fileExtension,
+                    backgroundFileExtension,
                     userId,
                     transaction,
                 );
+            } else {
+                throw new NotFoundError('유저의 배경 이미지를 수정하는 데 실패했습니다.');
             }
 
             await transaction.commit();

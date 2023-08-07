@@ -1,5 +1,5 @@
-import { Op } from 'sequelize';
 import { db } from '../index.js';
+import { Op } from 'sequelize';
 
 const ParticipantModel = {
     // 참가 신청
@@ -10,9 +10,9 @@ const ParticipantModel = {
 
     // 참가 신청자 리스트
     getParticipants: async postId => {
+        //
         const { rows: participants } = await db.Participant.findAndCountAll({
-            attributes: ['participantId', 'canceled', 'status', 'matchingCount'],
-            where: { postId, canceled: 0, status: 'pending' },
+            where: { postId },
             include: [
                 {
                     model: db.User,
@@ -64,48 +64,31 @@ const ParticipantModel = {
             ],
             order: [
                 ['matchingCount', 'DESC'],
-                ['participantId', 'ASC'],
+                ['userId', 'DESC'],
             ],
         });
-        // 필요한 정보만 추출하여 반환하고 인덱스 추가
-        const processedParticipants = participants.map((participant, index) => ({
-            index: index + 1,
-            participantId: participant.participantId,
-            canceled: participant.canceled,
-            status: participant.status,
-            matchingCount: participant.matchingCount,
-            user: {
-                userId: participant.User.userId,
-                nickname: participant.User.nickname,
-                gender: participant.User.gender,
-                age: participant.User.age,
-                job: participant.User.job,
-                // 필요한 경우 더 많은 사용자 정보 추가 가능
-            },
-        }));
-
-        console.log(count);
-        return processedParticipants;
+        return participants;
     },
-    // 참가 신청자 리스트 (커서 X)
-    getUpdatedParticipants: async ({ postId, limit }) => {
+    // 유저 성별에 따른 참가자 리스트 조회
+    getParticipantsByGender: async ({ postId, userWhere }) => {
         const { rows: participants } = await db.Participant.findAndCountAll({
-            attributes: ['participantId', 'canceled', 'status', 'matchingCount'],
-            where: { postId, canceled: 0, status: 'pending' },
-            limit: limit,
+            where: { postId, status: 'pending', canceled: 0 },
             include: [
                 {
                     model: db.User,
-                    attributes: ['userId', 'nickname', 'gender', 'age', 'job'],
+                    where: userWhere,
+                    attributes: ['nickname', 'gender', 'age', 'job'],
                     include: [
                         {
-                            model: db.UserTag,
-                            attributes: ['userId'],
+                            model: db.UserFile,
+                            attributes: ['fileId'],
                             include: [
                                 {
-                                    model: db.Tag,
-                                    attributes: ['tagName', 'tagCategoryId'],
-                                    where: { tagCategoryId: 2 },
+                                    model: db.File,
+                                    attributes: ['url'],
+                                    where: {
+                                        category: 'profile',
+                                    },
                                 },
                             ],
                         },
@@ -142,10 +125,7 @@ const ParticipantModel = {
         });
         return participation;
     },
-    // matchingCount 수정
-    updateMatchingCount: async ({ participantId, matchingCount }) => {
-        await db.Participant.update({ matchingCount }, { where: { participantId } });
-    },
+
     // 참가 신청 변경
     update: async ({ transaction, participantId, updateField, newValue }) => {
         await db.Participant.update(
@@ -156,17 +136,35 @@ const ParticipantModel = {
             },
         );
     },
-    getAcceptedUsers: async postId => {
+    getAcceptedUsers: async ({ postId, writerId }) => {
         const acceptedUsers = await db.Participant.findAll({
             attributes: ['participantId'],
             where: {
                 postId,
                 status: 'accepted',
+                userId: {
+                    [Op.not]: writerId,
+                },
             },
             include: [
                 {
                     model: db.User,
-                    attributes: ['nickname', 'gender', 'age', 'job'],
+                    attributes: ['userId', 'nickname', 'gender', 'age', 'job'],
+                    include: [
+                        {
+                            model: db.UserFile,
+                            attributes: ['fileId'],
+                            include: [
+                                {
+                                    model: db.File,
+                                    attributes: ['url'],
+                                    where: {
+                                        category: 'profile',
+                                    },
+                                },
+                            ],
+                        },
+                    ],
                 },
             ],
         });

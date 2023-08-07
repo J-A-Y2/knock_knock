@@ -112,6 +112,26 @@ const UserModel = {
                 gender,
                 isDeleted: 0,
             },
+            include: [
+                {
+                    model: db.UserTag,
+                    attributes: ['userId'],
+                    include: [{ model: db.Tag, attributes: ['tagName', 'tagCategoryId'] }],
+                },
+                {
+                    model: db.UserFile,
+                    attributes: ['userId', 'fileId'],
+                    include: [
+                        {
+                            model: db.File,
+                            attributes: ['url'],
+                            where: {
+                                [Op.or]: [{ category: 'profile' }, { category: 'background' }],
+                            },
+                        },
+                    ],
+                },
+            ],
             order: db.sequelize.random(),
             limit,
         });
@@ -124,6 +144,13 @@ const UserModel = {
             where: {
                 userId,
             },
+            include: [
+                {
+                    model: db.PostFile,
+                    attributes: ['postId', 'fileId'],
+                    include: [{ model: db.File, attributes: ['url'], where: { category: 'post' } }],
+                },
+            ],
         });
     },
     // 로그인한 유저가 참여한 게시글 찾기
@@ -132,6 +159,23 @@ const UserModel = {
             where: {
                 userId,
             },
+            include: [
+                {
+                    model: db.Post,
+                    where: {
+                        userId: {
+                            [Op.not]: userId,
+                        },
+                    },
+                    include: [
+                        {
+                            model: db.PostFile,
+                            attributes: ['fileId'],
+                            include: [{ model: db.File, attributes: ['url'], where: { category: 'post' } }],
+                        },
+                    ],
+                },
+            ],
         });
     },
     // 유저 정보 업데이트

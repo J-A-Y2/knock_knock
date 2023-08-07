@@ -1,15 +1,14 @@
 import { ParticipantModel } from '../db/models/ParticipantModel.js';
-import { ConflictError, InternalServerError, NotFoundError, UnauthorizedError } from '../middlewares/errorMiddleware.js';
+import { ConflictError, InternalServerError, NotFoundError } from '../middlewares/errorMiddleware.js';
 import { db } from '../db/index.js';
 import { PostModel } from '../db/models/PostModel.js';
 import { UserModel } from '../db/models/UserModel.js';
 import { checkAccess, throwNotFoundError } from '../utils/commonFunctions.js';
 import {
     checkParticipationStatus,
-    getIdealAndPersonality,
     updateRecruitedValue,
-    getParticipantsList,
     getMatchingCount,
+    hasReachedLimit,
 } from '../utils/participantFunctions.js';
 
 const participantService = {
@@ -22,6 +21,15 @@ const participantService = {
 
             if (post.userId === userId) {
                 throw new ConflictError('게시글의 작성자는 참가 신청을 할 수 없습니다.');
+            }
+
+            // 참여자 리스트를 불러오고 성별에 따라 10명 제한하기
+            const participants = await ParticipantModel.getParticipants(postId);
+
+            if (hasReachedLimit(participants, participant.gender)) {
+                throw new ConflictError(
+                    `현재 게시물에 ${participant.gender === '남' ? '남자' : '여자'}는 더이상 참여 신청을 할 수 없습니다.`,
+                );
             }
 
             const matchingCount = await getMatchingCount(writer, participant);
@@ -93,52 +101,25 @@ const participantService = {
             }
         }
     },
-    getParticipants: async ({ userId, postId, cursor, limit }) => {
+    getParticipants: async ({ userId, postId, gender }) => {
         try {
             const post = await PostModel.getPostById(postId);
             throwNotFoundError(post, '게시글');
 
             const user = await UserModel.findById(userId);
             throwNotFoundError(user, '유저');
-
             checkAccess(post.userId, userId, '참가자 리스트 조회');
 
-            const participants = await ParticipantModel.getParticipants(postId);
-
-            const { ideal } = await getIdealAndPersonality(user);
-
-            for (const participant of participants) {
-                const { personality } = await getIdealAndPersonality(participant.User);
-                const matchingCount = ideal.filter(tag => personality.includes(tag)).length;
-                await ParticipantModel.updateMatchingCount({
-                    participantId: participant.participantId,
-                    matchingCount,
-                });
+            let userWhere = {};
+            if (gender) {
+                userWhere.gender = gender;
             }
-
-            let updatedparticipants = await ParticipantModel.getParticipants(postId);
-
-            let startIndex = 0;
-            if (cursor) {
-                const participantIndex = updatedparticipants.findIndex(participant => participant.participantId == cursor);
-                startIndex = participantIndex !== -1 ? participantIndex + 1 : 0;
-            }
-
-            // limit 적용
-            const paginatedList = updatedparticipants.slice(startIndex, startIndex + limit);
-
-            // 다음 페이지를 위한 커서를 사용할 맨 마지막 id 추출
-            let nextCursor = null;
-            if (paginatedList.length > 0) {
-                nextCursor = paginatedList[paginatedList.length - 1].participationId;
-            }
+            const participantsList = await ParticipantModel.getParticipantsByGender({ postId, userWhere });
 
             return {
                 message: '참가자 리스트 조회를 성공했습니다.',
-                ideal,
                 isFulled: post.isCompleted,
-                participantsList: paginatedList,
-                nextCursor,
+                participantsList,
             };
         } catch (error) {
             if (error instanceof NotFoundError || error instanceof ConflictError) {
@@ -167,7 +148,7 @@ const participantService = {
                 recruitedF,
                 recruitedM,
             );
-            console.log(isCompleted, '모집완료');
+
             await ParticipantModel.update({ transaction, participantId, updateField: 'status', newValue: 'accepted' });
             await PostModel.update({ transaction, postId, fieldToUpdate, newValue });
             if (isCompleted) {
@@ -215,8 +196,7 @@ const participantService = {
             const post = await PostModel.getPostById(postId);
             throwNotFoundError(post, '게시글');
             checkAccess(userId, post.userId, '수락한 유저 리스트 조회');
-
-            const acceptedUsers = await ParticipantModel.getAcceptedUsers(postId);
+            const acceptedUsers = await ParticipantModel.getAcceptedUsers({ postId, writerId: post.userId });
 
             return { message: '수락한 유저 리스트 조회를 성공했습니다.', acceptedUsers };
         } catch (error) {
