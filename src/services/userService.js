@@ -142,7 +142,7 @@ const userService = {
         try {
             transaction = await db.sequelize.transaction();
             const user = await UserModel.findById(userId);
-            console.log(user);
+
             if (!user || user.isDeleted === true) {
                 throw new NotFoundError('회원의 정보를 찾을 수 없습니다.');
             }

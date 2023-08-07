@@ -8,7 +8,6 @@ const cardService = {
     saveCard: async ({ userId, cardId }) => {
         const transaction = await db.sequelize.transaction({ autocommit: false });
         try {
-            console.log(userId);
             const card = await CardModel.getCardById(cardId);
             throwNotFoundError(card, '카드');
             card.content = card.content.split('/');
@@ -16,7 +15,7 @@ const cardService = {
 
             const currentMonth = new Date().getMonth() + 1;
             const checked = await CardModel.checkPlayed(userId);
-            console.log(checked);
+
             if (checked.length > 0 && currentMonth == checked.pop().createdAt.getMonth() + 1) {
                 throw new ConflictError('이미 게임에 참가한 유저입니다.');
             }
