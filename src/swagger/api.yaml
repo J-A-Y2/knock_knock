@@ -443,7 +443,7 @@ paths:
     /users/mypage/password:
         put:
             tags:
-                - users
+                - user
             description: 유저 비밀번호 검증, 변경
 
             requestBody:
@@ -461,6 +461,13 @@ paths:
             response:
                 '200':
                     description: '회원 비밀번호 변경에 성공했습니다.'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
 
     /users/mypage/posts:
         get:
