@@ -426,6 +426,35 @@ const userService = {
             }
         }
     },
+    // 유저 비밀번호 검증 후 변경
+    updatePassword: async ({ userId, currentPassword, newPassword }) => {
+        try {
+            const user = await UserModel.findById(userId);
+
+            if (!user || user.isDeleted === true) {
+                throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
+            }
+
+            const { password } = await UserModel.findPassword(userId); // DB에 있는 현재 Hash 비밀번호
+            const isPasswordCorrect = await bcrypt.compare(currentPassword, password); // 현재 비밀번호와 현재 해쉬 비밀번호 비교
+            if (!isPasswordCorrect) {
+                throw new UnauthorizedError('현재 비밀번호와 일치하지 않습니다. 다시 한 번 확인해주세요.');
+            }
+
+            // 비밀번호 암호화
+            const hashedPassword = await bcrypt.hash(newPassword, parseInt(process.env.PW_HASH_COUNT));
+            const updateData = { password: hashedPassword };
+            await UserModel.update({ userId, updateData });
+
+            return { message: '회원 비밀번호 변경에 성공했습니다.' };
+        } catch (error) {
+            if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
+                throw error;
+            } else {
+                throw new InternalServerError('회원 비밀번호 변경에 실패했습니다.');
+            }
+        }
+    },
 };
 
 export { userService };

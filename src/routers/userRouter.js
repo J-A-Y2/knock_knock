@@ -3,6 +3,7 @@ import { userController } from '../controllers/userController.js';
 import { loginValidate, loginValidationRules } from '../middlewares/loginValidate.js';
 import { loginRequired } from '../middlewares/loginRequired.js';
 import { RegisterValidationRules, registerValidate } from '../middlewares/registerValidate.js';
+import { setPasswordValidationRules, setPasswordValidate } from '../middlewares/setPasswodValidate.js';
 
 const userRouter = Router();
 
@@ -26,6 +27,9 @@ userRouter.put('/mypage', userController.update);
 
 // 유저 정보 삭제하기
 userRouter.delete('/mypage', userController.delete);
+
+// 유저 비밀번호 확인, 변경
+userRouter.put('/mypage/password', setPasswordValidationRules, setPasswordValidate, userController.updatePassword);
 
 // 현재 로그인한 유저가 작성한 게시글 모두 불러오기
 userRouter.get('/mypage/posts', userController.getCurrentUserPosts);

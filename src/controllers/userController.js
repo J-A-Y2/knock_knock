@@ -55,7 +55,7 @@ const userController = {
     getRandomUsersInfo: async (req, res, next) => {
         try {
             const userId = req.currentUserId;
-            console.log('유저 컨트롤러 userId:', userId);
+
             const users = await userService.getRandomUsers(userId);
 
             statusCode.setResponseCode200(res);
@@ -129,6 +129,19 @@ const userController = {
 
             statusCode.setResponseCode200(res);
             return res.send(deletedUser.message);
+        } catch (error) {
+            next(error);
+        }
+    },
+    updatePassword: async (req, res, next) => {
+        try {
+            const userId = req.currentUserId;
+            const { currentPassword, newPassword } = req.body;
+
+            const updatedPassword = await userService.updatePassword({ userId, currentPassword, newPassword });
+
+            statusCode.setResponseCode200(res);
+            return res.send(updatedPassword.message);
         } catch (error) {
             next(error);
         }
