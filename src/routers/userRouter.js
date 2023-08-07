@@ -4,6 +4,7 @@ import { loginValidate, loginValidationRules } from '../middlewares/loginValidat
 import { loginRequired } from '../middlewares/loginRequired.js';
 import { RegisterValidationRules, registerValidate } from '../middlewares/registerValidate.js';
 import { setPasswordValidationRules, setPasswordValidate } from '../middlewares/setPasswodValidate.js';
+import { userParamsValidate } from '../middlewares/userParamsValidate.js';
 
 const userRouter = Router();
 
@@ -40,10 +41,7 @@ userRouter.get('/mypage/participants', userController.getCurrentUserParticipants
 // 오늘의 낙낙(네트워크)페이지 - 랜덤으로 6명 유저 정보 불러오기
 userRouter.get('/network', userController.getRandomUsersInfo);
 
-// 오늘의 낙낙 랜덤 유저의 마이페이지 불러오기
-userRouter.get('/yourpage/:userId', userController.getRandomUserPage);
-
 // 유저 정보 불러오기
-userRouter.get('/:userId', userController.getOtherUserInfo);
+userRouter.get('/:userId', userParamsValidate, userController.getOtherUserInfo); // yourpage 였던 API모두 여기 사용하세요
 
 export { userRouter };
