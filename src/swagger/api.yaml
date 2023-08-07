@@ -177,7 +177,7 @@ paths:
                                         type: string
                                     nickname:
                                         type: string
-                                    url
+                                    url:
                                         type: string
 
                 '405':
