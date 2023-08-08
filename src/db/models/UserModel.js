@@ -234,6 +234,19 @@ const UserModel = {
         });
         return user;
     },
+    findPassword: async userId => {
+        try {
+            return await db.User.findOne({
+                attributes: ['password'],
+                where: {
+                    userId,
+                    isDeleted: 0,
+                },
+            });
+        } catch (e) {
+            console.error(e);
+        }
+    },
 };
 
 export { UserModel };

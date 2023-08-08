@@ -33,7 +33,7 @@ const messageService = {
             const findChat = await ChatModel.findChatRoomByChatId(chatId);
             throwNotFoundError(findChat, '채팅방');
             const chat = await MessageModel.getAllMessage(chatId);
-            console.log(chat);
+
             if (chat == 0) {
                 messageList = '';
             } else {
