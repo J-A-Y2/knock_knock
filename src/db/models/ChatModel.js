@@ -4,7 +4,6 @@ import { Op } from 'sequelize';
 const ChatModel = {
     create: async ({ userId, anotherId }) => {
         const createChat = await db.ChatRoom.create({ firstId: userId, secondId: anotherId });
-        console.log(createChat);
         return createChat;
     },
 
