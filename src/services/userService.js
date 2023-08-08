@@ -441,6 +441,10 @@ const userService = {
                 throw new UnauthorizedError('현재 비밀번호와 일치하지 않습니다. 다시 한 번 확인해주세요.');
             }
 
+            if (currentPassword === newPassword) {
+                throw new ConflictError('현재 비밀번호와 새로운 비밀번호가 같습니다.');
+            }
+
             // 비밀번호 암호화
             const hashedPassword = await bcrypt.hash(newPassword, parseInt(process.env.PW_HASH_COUNT));
             const updateData = { password: hashedPassword };
