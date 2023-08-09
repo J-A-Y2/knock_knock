@@ -452,7 +452,7 @@ const userService = {
 
             return { message: '회원 비밀번호 변경에 성공했습니다.' };
         } catch (error) {
-            if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
+            if (error instanceof UnauthorizedError || error instanceof NotFoundError || error instanceof ConflictError) {
                 throw error;
             } else {
                 throw new InternalServerError('회원 비밀번호 변경에 실패했습니다.');
