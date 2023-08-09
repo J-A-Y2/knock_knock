@@ -36,8 +36,11 @@ const userService = {
             userInfo.password = hashedPassword;
 
             userInfo.age = calculateKoreanAge(userInfo.birthday); // birthday로 한국 나이 계산하기
+            if (20 > userInfo.age || userInfo.age > 40) {
+                throw new ConflictError('20세부터 40세까지만 가입 가능합니다.');
+            }
 
-            const createdUser = await UserModel.create(userInfo);
+            const createdUser = await UserModel.create(userInfo, transaction);
 
             const tagsCreate = async (tag, tagCategoryId) => {
                 // 태그 생성
@@ -166,7 +169,6 @@ const userService = {
     getUserById: async ({ userId }) => {
         try {
             const user = await UserModel.findById(userId);
-            console.log(user);
 
             if (!user || user.isDeleted === true) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
