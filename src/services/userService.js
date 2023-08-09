@@ -166,6 +166,7 @@ const userService = {
     getUserById: async ({ userId }) => {
         try {
             const user = await UserModel.findById(userId);
+            console.log(user);
 
             if (!user || user.isDeleted === true) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
@@ -201,7 +202,7 @@ const userService = {
                 hobby,
                 personality,
                 ideal,
-                profileImage: user.UserFiles[0].File.url,
+                profileImage: user.UserFiles?.[0]?.File?.url,
             };
         } catch (error) {
             if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
