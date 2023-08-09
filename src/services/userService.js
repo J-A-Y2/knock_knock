@@ -166,7 +166,6 @@ const userService = {
     getUserById: async ({ userId }) => {
         try {
             const user = await UserModel.findById(userId);
-            console.log(user);
 
             if (!user || user.isDeleted === true) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
