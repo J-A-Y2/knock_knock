@@ -69,6 +69,11 @@
             "date": 1691420416369,
             "name": "C:\\project\\3team_back\\logs\\2023-08-08.exception.log",
             "hash": "bec83ca709cc4e5ddd41ac0775cfdf07f71f84cd829889d690cb9396472a4bba"
+        },
+        {
+            "date": 1691510402245,
+            "name": "C:\\project\\3team_back\\logs\\2023-08-09.exception.log",
+            "hash": "5e3cef96f806fd5e9ca8c6830c78887cd22b4f93da5a88d14f41eeb8ae6e0b26"
         }
     ],
     "hashType": "sha256"
