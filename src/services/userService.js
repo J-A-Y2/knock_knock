@@ -305,6 +305,9 @@ const userService = {
             await UserModel.update({ userId, updateData });
 
             const tagsUpdate = async (tag, tagCategoryId) => {
+                if (tag.length == 0) {
+                    await UserModel.deleteTags(userId, tagCategoryId);
+                }
                 // 태그 수정
                 if (tag && tag.length > 0) {
                     // 태그 카테고리와 일치하는 태그들 삭제
