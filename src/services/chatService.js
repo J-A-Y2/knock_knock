@@ -42,7 +42,9 @@ const chatService = {
                 const chatId = chatIds[i];
                 const { currentUserInfo, recieverInfo } = await getSenderReciever(userId, chatId);
 
-                allChats.push({ currentUserInfo, recieverInfo });
+                if (recieverInfo) {
+                    allChats.push({ currentUserInfo, recieverInfo });
+                }
             }
 
             return {

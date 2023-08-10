@@ -14,6 +14,7 @@ const PostModel = {
                 {
                     model: db.User,
                     attributes: ['nickname'],
+                    where: { isDeleted: 0 },
                     include: [
                         {
                             model: db.UserFile,
@@ -41,6 +42,7 @@ const PostModel = {
                 {
                     model: db.User,
                     attributes: ['nickname'],
+                    where: { is_deleted: 0 },
                     include: [
                         {
                             model: db.UserFile,

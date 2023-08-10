@@ -60,7 +60,7 @@ const CommentModel = {
                 {
                     model: db.User,
                     attributes: ['nickname'],
-
+                    where: { isDeleted: 0 },
                     include: [
                         {
                             model: db.UserFile,
