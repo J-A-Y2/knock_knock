@@ -150,6 +150,7 @@ const UserModel = {
         return await db.Participant.findAll({
             where: {
                 userId,
+                status: 'accepted',
             },
             include: [
                 {
