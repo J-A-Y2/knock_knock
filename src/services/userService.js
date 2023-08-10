@@ -303,11 +303,12 @@ const userService = {
             }
 
             const userByNickname = await UserModel.findByNickname(updateData.nickname);
-            if (userByNickname) {
+            if (user.nickname !== updateData.nickname && userByNickname) {
                 throw new ConflictError('이 닉네임은 현재 사용중입니다. 다른 닉네임을 입력해 주세요.');
             }
 
             await UserModel.update({ userId, updateData });
+
             const updatedUser = await UserModel.findById(userId);
 
             const tagsUpdate = async (tag, tagCategoryId) => {
