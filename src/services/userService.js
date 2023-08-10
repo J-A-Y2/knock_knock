@@ -302,7 +302,13 @@ const userService = {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
+            const userByNickname = await UserModel.findByNickname(updateData.nickname);
+            if (userByNickname) {
+                throw new ConflictError('이 닉네임은 현재 사용중입니다. 다른 닉네임을 입력해 주세요.');
+            }
+
             await UserModel.update({ userId, updateData });
+            const updatedUser = await UserModel.findById(userId);
 
             const tagsUpdate = async (tag, tagCategoryId) => {
                 if (tag.length == 0) {
@@ -379,15 +385,15 @@ const userService = {
             return {
                 message: '회원 정보가 수정되었습니다.',
                 updatedUser: {
-                    nickname: user.nickname,
-                    age: user.age,
-                    job: user.job,
-                    region: user.region,
+                    nickname: updatedUser.nickname,
+                    age: updatedUser.age,
+                    job: updatedUser.job,
+                    region: updatedUser.region,
                     profileImage,
                     backgroundImage,
-                    mbti: user.mbti,
-                    height: user.height,
-                    introduce: user.introduce,
+                    mbti: updatedUser.mbti,
+                    height: updatedUser.height,
+                    introduce: updatedUser.introduce,
                     hobby,
                     personality,
                     ideal,
@@ -397,7 +403,7 @@ const userService = {
             if (transaction) {
                 await transaction.rollback();
             }
-            if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
+            if (error instanceof UnauthorizedError || error instanceof NotFoundError || error instanceof ConflictError) {
                 throw error;
             } else {
                 throw new InternalServerError('회원 정보를 수정하는 데 실패했습니다.');
