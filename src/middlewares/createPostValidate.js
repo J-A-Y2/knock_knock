@@ -7,8 +7,8 @@ const createPostValidationRules = [
     body('title')
         .notEmpty()
         .withMessage('제목을 입력하세요.')
-        .isLength({ max: 100 })
-        .withMessage('게시글 제목은 100자 이내로 작성해주세요.'),
+        .isLength({ max: 15 })
+        .withMessage('게시글 제목은 15자 이내로 작성해주세요.'),
     body('content')
         .notEmpty()
         .withMessage('내용을 입력하세요.')
