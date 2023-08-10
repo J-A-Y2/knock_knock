@@ -78,6 +78,7 @@ const ParticipantModel = {
                 {
                     model: db.User,
                     where: userWhere,
+                    where: { isDeleted: 0 },
                     attributes: ['userId', 'nickname', 'gender', 'age', 'job'],
                     include: [
                         {
@@ -150,6 +151,7 @@ const ParticipantModel = {
             include: [
                 {
                     model: db.User,
+                    where: { is_deleted: 0 },
                     attributes: ['userId', 'nickname', 'gender', 'age', 'job'],
                     include: [
                         {

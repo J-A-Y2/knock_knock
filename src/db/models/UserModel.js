@@ -165,6 +165,7 @@ const UserModel = {
                             attributes: ['fileId'],
                             include: [{ model: db.File, attributes: ['url'], where: { category: 'post' } }],
                         },
+                        { model: db.User, attributes: [], where: { isDeleted: 0 } },
                     ],
                 },
             ],
