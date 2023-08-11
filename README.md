@@ -2,9 +2,9 @@
 
 <br/>
 
-<!-- <img src="./public/logoshort.png" alt="logo" width="35%" /> -->
+<img src="./public/logo.png" alt="logo" width="35%" />
 
-이미지 넣기
+
 
 <br/>
 
@@ -16,7 +16,7 @@
 - 주제:같은 가치관을 공유하는, 진지한 연애를 원하는 사회 초년생과 안정적인 성인을 대상으로 하는 심층적인 만남의 기회를 제공하는 서비스
 - 목표:“낙낙은 두 사람을 특별한 시간과 공간으로 이끄는 재미있는 경험을 제공한다.”
 - API 문서: <!-- [바로가기](https://docs.google.com/spreadsheets/d/1t-DNUbVY4GI5NZWTBwCLrzPFFoJMj4t_p9wfY_jemhA/edit?usp=sharing) -->
-- 테스트 페이지: <!-- [바로가기](http://kdt-ai7-team07.elicecoding.com/) -->
+- 테스트 페이지: [바로가기](http://kdt-ai7-team03.elicecoding.com/)
 
 <br/>
 
@@ -25,8 +25,8 @@
 **정원석**
 
 - Front-End
-- email
-- Github: <!-- [@minluna](https://github.com/minluna) -->
+- wonsuk7950kr@gmail.com
+- Github: [@jeong1suk](https://github.com/jeong1suk)
 
 **정재훈**
 
@@ -37,14 +37,14 @@
 **허창원**
 
 - Back-End
-- email
-- Github: <!-- [0o0w0d2](https://github.com/0o0w0d2) -->
+- wonn22@gmail.com
+- Github: [@wonn23](https://github.com/wonn23)
 
 **이은석**
 
 - Back-End
-- email
-- Github:<!-- [@yyoungl](https://github.com/yyoungl) -->
+- zhes4593@naver.com
+- Github:[@enxxi](https://github.com/enxxi)
 
 **최우현**
 
@@ -54,9 +54,9 @@
 
 **정유진**
 
-- Back-End
-- email
-- Github: <!-- [@choiwoohyun123](https://github.com/choiwoohyun123) -->
+- Front-End
+- nanyoojinee@gmail.com
+- Github: [@nanyoojinee](https://github.com/nanyoojinee)
 
 <br/>
 
@@ -104,6 +104,9 @@
 
 <br />
 
+### 서비스 구조
+<img src="./public/sr.png" alt="logo" width="600px" />
+
 ### 프로젝트 기획
 
 <br/>
@@ -126,14 +129,25 @@
 
 <br/>
 
-- **IA 설계**
+- **IA**
+
+<img src="./public/IA.png" alt="IA" width="800px" />
+
+- **WBS**
+
+<img src="./public/wbs.png" alt="WBS" width="800px" />
+
+- **ERD**
+
+<img src="./public/erd1.png" alt="ERD" width="800px" />
+
+<img src="./public/erd2.png" alt="ERD" width="800px" />
+
+<img src="./public/erd3.png" alt="ERD" width="800px" />
+
 - **와이어 프레임**
-- **스토리 보드**
-<!-- <img src="./public/graph1.png" alt="graph" width="600px" />
 
-<!-- <img src="./public/graph1.png" alt="graph" width="600px" />
-
-<!-- <img src="./public/graph1.png" alt="graph" width="600px" />
+<img src="./public/wirdframe.png" alt="wireframe" width="800px" />
 
 
 ### 가공한 데이터
