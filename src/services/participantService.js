@@ -115,7 +115,6 @@ const participantService = {
                 userWhere.gender = gender;
             }
             const participantsList = await ParticipantModel.getParticipantsByGender({ postId, userWhere });
-
             return {
                 message: '참가자 리스트 조회를 성공했습니다.',
                 isFulled: post.isCompleted,

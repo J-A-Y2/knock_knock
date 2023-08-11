@@ -71,14 +71,14 @@ const ParticipantModel = {
     },
     // 유저 성별에 따른 참가자 리스트 조회
     getParticipantsByGender: async ({ postId, userWhere }) => {
+        console.log(userWhere);
         const { rows: participants } = await db.Participant.findAndCountAll({
             attributes: ['participantId', 'canceled', 'status', 'matchingCount'],
             where: { postId, status: 'pending', canceled: 0 },
             include: [
                 {
                     model: db.User,
-                    where: userWhere,
-                    where: { isDeleted: 0 },
+                    where: { ...userWhere, isDeleted: 0 },
                     attributes: ['userId', 'nickname', 'gender', 'age', 'job'],
                     include: [
                         {
