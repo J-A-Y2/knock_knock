@@ -131,7 +131,7 @@
 
 - **IA**
 
-<img src="./public/IA.png" alt="IA" width="800px" />
+<img src="./public/ia.png" alt="IA" width="500px" />
 
 - **WBS**
 
@@ -145,168 +145,217 @@
 
 <img src="./public/erd3.png" alt="ERD" width="800px" />
 
-- **와이어 프레임**
-
-<img src="./public/wirdframe.png" alt="wireframe" width="800px" />
-
-
-### 가공한 데이터
-
-<!-- <img src="./public/graph1.png" alt="graph" width="600px" />
-
-- 축산업이 탄소배출량에 미치는 영향에 대해 알아보았습니다. 1990년도부터 2020년까지 한국의 총 온실가스 배출량은 줄었지만, 축산업 분야에서 배출한 온실가스의 경우 증가했습니다.
-
-<img src="./public/graph2.png" alt="graph" width="600px" />
-
-- 전체 산업군 배출량 중 축산업의 온실가스 배출량은 20% 이상을 차지합니다.
-
-<img src="./public/graph3.png" alt="graph" width="600px" />
-
-- 음식을 채소류, 육류, 해산물, 기타로 분류해 탄소배출량의 평균을 확인해 보았습니다. <br/>
-이는 생산부터 유통까지 모든 과정에서 배출된 온실가스의 양을 의미합니다.<br/>
-채소류를 소비 과정에서 배출하는 탄소배출량은 육류 소비 과정에서 탄소배출량에 비해 무려 11배나 낮은 것을 확인할 수 있습니다!<br/> -->
-
 <br/>
-## 🔎 주요기능
-
-<!-- -   **회원가입, 로그인 기능**: 사용자의 회원 가입 및 로그인 기능 제공
-
--   **식단 업로드 기능**: 비건, 베지테리언 식단 업로드 가능
-
--   **피드 댓글, 대댓글 기능**: 식단 피드에서 댓글, 대댓글을 통해 유저들과 소통 가능
-
--   **탄소 배출 감소량에 따른 포인트 부여**: 식단 피드 업로드하면 포인트 부여
-
--   **마이페이지 기능**:
-    -   개인 정보, 포인트, 좋아요 등을 확인할 수 있는 마이페이지 기능 제공
-    -   개인 정보, 포인트, 좋아요 등
-    -   올린 식단 사진 archive
-    -   좋아요한 피드 archive
-
--   **개인정보수정 기능**: 닉네임, 프로필사진, 자기소개 수정 가능
-
--   **건강 배틀 sns**: 포인트 적립 순위 리스트(랭킹) 기능
-
--   **Infinite Scroll**: 스크롤을 통해 오래된 피드도 볼 수 있게 하여 사용자의 몰입도를 높이기 위한 기능
-
--   **게시물 검색 기능**: 검색한 내용과 일치하는 모든 피드들을 볼 수 있는 기능 -->
 
 ## 🗂 프로젝트 구조
 
 ### [Front-End ](#)
 
-<!-- ```
+```
 📦src
+ ┣ 📂api
+ ┃ ┣ 📜login.js
+ ┃ ┗ 📜todayknock.js
+ ┣ 📂assets
+ ┃ ┣ 📜.DS_Store
+ ┃ ┣ 📜alert.jsx
+ ┃ ┣ 📜fall.png
+ ┃ ┣ 📜favicon.png
+ ┃ ┣ 📜knock.png
+ ┃ ┣ 📜loading.gif
+ ┃ ┣ 📜react.svg
+ ┃ ┣ 📜spring.png
+ ┃ ┣ 📜summer.png
+ ┃ ┣ 📜wait.jpeg
+ ┃ ┗ 📜winter.png
  ┣ 📂components
- ┃ ┣ 📂datagraph
- ┃ ┃ ┣ 📂data
- ┃ ┃ ┃ ┣ 📜co2bargarphdata.js
- ┃ ┃ ┃ ┣ 📜linegraphdata.js
- ┃ ┃ ┃ ┗ 📜piegraphdata.js
- ┃ ┃ ┗ 📂graph
- ┃ ┃ ┃ ┣ 📜bargraph.jsx
- ┃ ┃ ┃ ┣ 📜co2bargraph.jsx
- ┃ ┃ ┃ ┣ 📜linegraph.css
- ┃ ┃ ┃ ┣ 📜linegraph.jsx
- ┃ ┃ ┃ ┗ 📜piegraph.jsx
- ┃ ┣ 📂pointbar
- ┃ ┃ ┗ 📜pointbar.jsx
- ┃ ┣ 📂post
- ┃ ┃ ┣ 📜addpost.jsx
- ┃ ┃ ┣ 📜postcard.jsx
- ┃ ┃ ┣ 📜postdetail.jsx
- ┃ ┃ ┗ 📜postedit.jsx
- ┃ ┣ 📂rankcard
- ┃ ┃ ┗ 📜rankcard.jsx
- ┃ ┣ 📂rankpagesentence
- ┃ ┃ ┗ 📜rankpagesentence.jsx
+ ┃ ┣ 📂commons
+ ┃ ┃ ┗ 📜Pagenation.jsx
+ ┃ ┣ 📂hooks
+ ┃ ┃ ┣ 📜UseImageUpload.js
+ ┃ ┃ ┣ 📜useIsMobile.js
+ ┃ ┃ ┗ 📜useToggle.js
+ ┃ ┣ 📂layout
+ ┃ ┃ ┣ 📜Layout.jsx
+ ┃ ┃ ┗ 📜breakpoint.js
+ ┃ ┣ 📂modal
+ ┃ ┃ ┣ 📜DropdownMenu.jsx
+ ┃ ┃ ┣ 📜Modal.jsx
+ ┃ ┃ ┗ 📜Toast.jsx
+ ┃ ┣ 📂play
+ ┃ ┃ ┣ 📜GenderInfo.jsx
+ ┃ ┃ ┣ 📜ParticipantList.jsx
+ ┃ ┃ ┣ 📜ParticipantUserModal.jsx
+ ┃ ┃ ┗ 📜PostCard.jsx
+ ┃ ┣ 📂sections
+ ┃ ┃ ┣ 📜DesktopMenu.jsx
+ ┃ ┃ ┣ 📜Footer.jsx
+ ┃ ┃ ┣ 📜Header.jsx
+ ┃ ┃ ┣ 📜Layout.jsx
+ ┃ ┃ ┗ 📜MobileMenu.jsx
+ ┃ ┗ 📜.DS_Store
+ ┣ 📂constants
+ ┃ ┣ 📜CategoryConstants.js
+ ┃ ┗ 📜registerConstants.js
+ ┣ 📂context
  ┃ ┗ 📂user
- ┃ ┃ ┣ 📜usercard.jsx
- ┃ ┃ ┣ 📜userdetail.jsx
- ┃ ┃ ┗ 📜useredit.jsx
+ ┃ ┃ ┗ 📜UserProvider.jsx
  ┣ 📂pages
+ ┃ ┣ 📂ai
+ ┃ ┃ ┣ 📜Ai.jsx
+ ┃ ┃ ┗ 📜style.js
  ┃ ┣ 📂login
- ┃ ┃ ┗ 📜loginform.jsx
+ ┃ ┃ ┣ 📜LoginPage.jsx
+ ┃ ┃ ┗ 📜style.js
  ┃ ┣ 📂mainpage
- ┃ ┃ ┗ 📜mainpage.jsx
- ┃ ┣ 📂rank
- ┃ ┃ ┗ 📜rank.jsx
+ ┃ ┃ ┣ 📜Carousel.jsx
+ ┃ ┃ ┗ 📜MainPage.jsx
+ ┃ ┣ 📂mypage
+ ┃ ┃ ┣ 📜ChatService.jsx
+ ┃ ┃ ┣ 📜MyPage.jsx
+ ┃ ┃ ┣ 📜UserNewPwdandOut.jsx
+ ┃ ┃ ┣ 📜UserPostAndParticipants.jsx
+ ┃ ┃ ┣ 📜UserProfileEdit.jsx
+ ┃ ┃ ┣ 📜UserProfileLarge.jsx
+ ┃ ┃ ┗ 📜style.js
+ ┃ ┣ 📂play
+ ┃ ┃ ┣ 📜Play.jsx
+ ┃ ┃ ┣ 📜PlayAdd.jsx
+ ┃ ┃ ┣ 📜PlayDetail.jsx
+ ┃ ┃ ┗ 📜PlayEdit.jsx
  ┃ ┣ 📂register
- ┃ ┃ ┗ 📜registerform.jsx
- ┃ ┣ 📂story
- ┃ ┃ ┣ 📜searchpost.jsx
- ┃ ┃ ┗ 📜story.jsx
- ┃ ┣ 📜loading.jsx
- ┃ ┗ 📜notfound.jsx
- ┣ 📂sections
- ┃ ┣ 📜header.jsx
- ┃ ┗ 📜headerlogout.jsx
- ┗ 📂utils
- ┃ ┣ 📂conts
- ┃ ┃ ┗ 📜bucket.js
- ┃ ┣ 📜chunkArray.js
- ┃ ┣ 📜getdays.js
- ┃ ┣ 📜gethours.js
- ┃ ┣ 📜gettime.js
- ┃ ┗ 📜tierdecision.js> `
-``` -->
+ ┃ ┃ ┣ 📜ModalHobby.jsx
+ ┃ ┃ ┣ 📜ModalIdeal.jsx
+ ┃ ┃ ┣ 📜ModalPersonality.jsx
+ ┃ ┃ ┣ 📜OptionalInputs.jsx
+ ┃ ┃ ┣ 📜RegisterForm.jsx
+ ┃ ┃ ┣ 📜RegisterPage.jsx
+ ┃ ┃ ┣ 📜RequiredInputs.jsx
+ ┃ ┃ ┣ 📜ValidationFields.jsx
+ ┃ ┃ ┗ 📜style.js
+ ┃ ┣ 📂todayknock
+ ┃ ┃ ┣ 📜TodayGame.jsx
+ ┃ ┃ ┣ 📜TodayKnock.jsx
+ ┃ ┃ ┣ 📜UserModal.jsx
+ ┃ ┃ ┗ 📜UserProfile.jsx
+ ┃ ┗ 📜.DS_Store
+ ┣ 📂routes
+ ┃ ┣ 📜Router.jsx
+ ┃ ┗ 📜routes.jsx
+ ┣ 📂util
+ ┃ ┣ 📜TimeAgo.js
+ ┃ ┣ 📜arrayUtils.js
+ ┃ ┣ 📜checkGender.js
+ ┃ ┣ 📜common.js
+ ┃ ┣ 📜currentDateTime.js
+ ┃ ┣ 📜formatDate.js
+ ┃ ┣ 📜handleTimeChange.js
+ ┃ ┣ 📜handleTotalChange.js
+ ┃ ┣ 📜imageCheck.js
+ ┃ ┣ 📜isWriter.js
+ ┃ ┗ 📜validateTotal.js
+ ┣ 📜.DS_Store
+ ┣ 📜App.jsx
+ ┣ 📜api.js
+ ┣ 📜index.css
+ ┣ 📜main.jsx
+ ┗ 📜reducer.jsx
+ ```
 
 ### [Back-End](#)
 
-<!-- ```
+```
 📦src
+ ┣ 📂config
+ ┃ ┗ 📜config.js
  ┣ 📂controllers
+ ┃ ┣ 📜cardController.js
+ ┃ ┣ 📜chatController.js
  ┃ ┣ 📜commentController.js
- ┃ ┣ 📜likeController.js
+ ┃ ┣ 📜fileController.js
+ ┃ ┣ 📜messageController.js
+ ┃ ┣ 📜participantController.js
  ┃ ┣ 📜postController.js
- ┃ ┣ 📜rankController.js
- ┃ ┣ 📜searchController.js
  ┃ ┗ 📜userController.js
  ┣ 📂db
  ┃ ┣ 📂models
- ┃ ┃ ┣ 📜Comment.js
- ┃ ┃ ┣ 📜Like.js
- ┃ ┃ ┣ 📜Post.js
- ┃ ┃ ┣ 📜Rank.js
- ┃ ┃ ┣ 📜Search.js
- ┃ ┃ ┗ 📜User.js
- ┃ ┗ 📜index.js
+ ┃ ┃ ┣ 📜CardModel.js
+ ┃ ┃ ┣ 📜ChatModel.js
+ ┃ ┃ ┣ 📜CommentModel.js
+ ┃ ┃ ┣ 📜FileModel.js
+ ┃ ┃ ┣ 📜MessageModel.js
+ ┃ ┃ ┣ 📜ParticipantModel.js
+ ┃ ┃ ┣ 📜PostModel.js
+ ┃ ┃ ┗ 📜UserModel.js
+ ┃ ┣ 📂schemas
+ ┃ ┃ ┣ 📜card.js
+ ┃ ┃ ┣ 📜cardFile.js
+ ┃ ┃ ┣ 📜chatRoom.js
+ ┃ ┃ ┣ 📜comment.js
+ ┃ ┃ ┣ 📜file.js
+ ┃ ┃ ┣ 📜message.js
+ ┃ ┃ ┣ 📜participant.js
+ ┃ ┃ ┣ 📜post.js
+ ┃ ┃ ┣ 📜postFile.js
+ ┃ ┃ ┣ 📜tag.js
+ ┃ ┃ ┣ 📜tagCategory.js
+ ┃ ┃ ┣ 📜user.js
+ ┃ ┃ ┣ 📜userCard.js
+ ┃ ┃ ┣ 📜userFile.js
+ ┃ ┃ ┗ 📜userTag.js
+ ┃ ┣ 📜.DS_Store
+ ┃ ┣ 📜index.js
+ ┃ ┗ 📜knockknock.sql
  ┣ 📂middlewares
- ┃ ┣ 📜addComment_validate.js
- ┃ ┣ 📜addPost_validate.js
- ┃ ┣ 📜commentParams_validate.js
+ ┃ ┣ 📜commentParamsValidate.js
+ ┃ ┣ 📜commentVaildate.js
+ ┃ ┣ 📜createPostValidate.js
  ┃ ┣ 📜errorMiddleware.js
- ┃ ┣ 📜getComment_validate.js
- ┃ ┣ 📜getPost_vaildate.js
- ┃ ┣ 📜login_required.js
- ┃ ┣ 📜login_validate.js
- ┃ ┣ 📜postParams_validate.js
- ┃ ┣ 📜register_validate.js
- ┃ ┣ 📜search_validate.js
- ┃ ┣ 📜setComment_validate.js
- ┃ ┣ 📜setPost_validate.js
- ┃ ┣ 📜setUser_validate.js
- ┃ ┗ 📜userParams_validate.js
+ ┃ ┣ 📜getCommentValidate.js
+ ┃ ┣ 📜getPostValidate.js
+ ┃ ┣ 📜loginRequired.js
+ ┃ ┣ 📜loginValidate.js
+ ┃ ┣ 📜morgan.js
+ ┃ ┣ 📜participantParamsValidate.js
+ ┃ ┣ 📜postParamsValidate.js
+ ┃ ┣ 📜registerValidate.js
+ ┃ ┣ 📜setPasswodValidate.js
+ ┃ ┣ 📜setPostValidate.js
+ ┃ ┣ 📜updateCommentValidate.js
+ ┃ ┗ 📜userParamsValidate.js
  ┣ 📂routers
+ ┃ ┣ 📜cardRouter.js
+ ┃ ┣ 📜chatRouter.js
  ┃ ┣ 📜commentRouter.js
- ┃ ┣ 📜likeRouter.js
+ ┃ ┣ 📜fileRouter.js
+ ┃ ┣ 📜messageRouter.js
+ ┃ ┣ 📜participantRouter.js
  ┃ ┣ 📜postRouter.js
- ┃ ┣ 📜rankRouter.js
- ┃ ┣ 📜searchRouter.js
  ┃ ┗ 📜userRouter.js
  ┣ 📂services
+ ┃ ┣ 📜cardService.js
+ ┃ ┣ 📜chatService.js
  ┃ ┣ 📜commentService.js
- ┃ ┣ 📜likeService.js
+ ┃ ┣ 📜messageService.js
+ ┃ ┣ 📜participantService.js
  ┃ ┣ 📜postService.js
- ┃ ┣ 📜rankService.js
- ┃ ┣ 📜searchService.js
  ┃ ┗ 📜userService.js
+ ┣ 📂swagger
+ ┃ ┣ 📜api.yaml
+ ┃ ┗ 📜swagger.js
  ┣ 📂utils
- ┃ ┗ 📜statusCode.js
- ┣ 📜app.js
- ┣ 📜aws.config.js
- ┗ 📜babel.config.json
-``` -->
+ ┃ ┣ 📜chatFunctions.js
+ ┃ ┣ 📜commonFunctions.js
+ ┃ ┣ 📜logger.js
+ ┃ ┣ 📜participantFunctions.js
+ ┃ ┣ 📜postFunctions.js
+ ┃ ┣ 📜statusCode.js
+ ┃ ┣ 📜upload.js
+ ┃ ┗ 📜userFunction.js
+ ┣ 📜.DS_Store
+ ┗ 📜app.js
+ ```
+
 
 <br/>
 
@@ -314,32 +363,32 @@
 
 ---
 
-<!-- 1. 해당 프로젝트를 clone 합니다.
+1. 해당 프로젝트를 clone 합니다.
 
     ```
-    git clone https://github.com/J-A-Y2/project2.git
+    git clone 리포주소
     ```
 
 2. 프로젝트 실행에 필요한 패키지를 설치합니다.
 
    ```
-    cd vegcom_front
+    cd knock_front
     yarn install
     ```
 
     ```
-    cd vegcom_back
+    cd knock_back
     yarn install
     ```
 
 4. 프론트와 백엔드를 실행합니다.
 
     ```
-    cd vegcom_front
+    cd knock_front
     yarn dev
     ```
 
     ```
-    cd vegcom_back
+    cd knock_back
     yarn start
-    ``` -->
+    ```
