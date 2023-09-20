@@ -11,7 +11,6 @@ const cardService = {
             const card = await CardModel.getCardById(cardId);
             throwNotFoundError(card, '카드');
             card.content = card.content.split('/');
-
             await CardModel.saveCard({ userId, cardId, transaction });
 
             const currentMonth = new Date().getMonth() + 1;
@@ -48,14 +47,12 @@ const cardService = {
             const cards = await CardModel.checkPlayed(userId);
 
             if (cards.length == 0) {
-                // throw new NotFoundError('카드를 뽑은 내역이 없습니다.');
                 return { message: '카드를 뽑은 내역이 없습니다.', randomLovers: [] };
             }
 
             const currentCard = cards.pop();
 
             if (currentMonth !== currentCard.createdAt.getMonth() + 1) {
-                // throw new NotFoundError('이번 달에 카드를 뽑은 내역이 없습니다.');
                 return { message: '이번 달에 카드를 뽑은 내역이 없습니다.', randomLovers: [] };
             }
 
@@ -66,13 +63,12 @@ const cardService = {
                 currentMonth,
             });
 
-            if (!randomLovers || randomLovers.length === 0) {
-                // throw new NotFoundError('같은 카드를 뽑은 다른 유저가 없습니다.');
-                return { message: '이번 달에 같은 카드를 뽑은 다른 유저가 없습니다.', randomLovers: [] };
-            }
-
             const card = await CardModel.getCardById(currentCard.cardId);
             card.content = card.content.split('/');
+
+            if (!randomLovers || randomLovers.length === 0) {
+                return { message: '이번 달에 같은 카드를 뽑은 다른 유저가 없습니다.', card, randomLovers: [] };
+            }
 
             return {
                 message: '랜덤으로 유저 3명 조회하기 성공!',

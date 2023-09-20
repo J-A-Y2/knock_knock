@@ -20,14 +20,13 @@ const userService = {
             transaction = await db.sequelize.transaction();
             const { hobby, personality, ideal, profileImage, ...userInfo } = newUser;
 
-            //이메일 중복 확인
+            // 이메일 중복 확인
             const userByEmail = await UserModel.findByEmail(newUser.email);
-            const userByNickname = await UserModel.findByNickname(newUser.nickname);
-
             if (userByEmail) {
                 throw new ConflictError('이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요.');
             }
-
+            // 닉네임 중복 확인
+            const userByNickname = await UserModel.findByNickname(newUser.nickname);
             if (userByNickname) {
                 throw new ConflictError('이 닉네임은 현재 사용중입니다. 다른 닉네임을 입력해 주세요.');
             }
@@ -37,8 +36,11 @@ const userService = {
             userInfo.password = hashedPassword;
 
             userInfo.age = calculateKoreanAge(userInfo.birthday); // birthday로 한국 나이 계산하기
+            if (20 > userInfo.age || userInfo.age > 40) {
+                throw new ConflictError('20세부터 40세까지만 가입 가능합니다.');
+            }
 
-            const createdUser = await UserModel.create(userInfo);
+            const createdUser = await UserModel.create(userInfo, transaction);
 
             const tagsCreate = async (tag, tagCategoryId) => {
                 // 태그 생성
@@ -143,7 +145,7 @@ const userService = {
         try {
             transaction = await db.sequelize.transaction();
             const user = await UserModel.findById(userId);
-            console.log(user);
+
             if (!user || user.isDeleted === true) {
                 throw new NotFoundError('회원의 정보를 찾을 수 없습니다.');
             }
@@ -202,7 +204,7 @@ const userService = {
                 hobby,
                 personality,
                 ideal,
-                profileImage: user.UserFiles[0].File.url,
+                profileImage: user.UserFiles?.[0]?.File?.url,
             };
         } catch (error) {
             if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
@@ -292,15 +294,27 @@ const userService = {
 
             const { hobby, personality, ideal, profileImage, backgroundImage, ...updateData } = updateUserInfo;
 
+            const profileFileExtension = extensionSplit(profileImage[1]);
+            const backgroundFileExtension = extensionSplit(backgroundImage[1]);
             const user = await UserModel.findById(userId);
 
             if (!user || user.isDeleted === true) {
                 throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
             }
 
+            const userByNickname = await UserModel.findByNickname(updateData.nickname);
+            if (user.nickname !== updateData.nickname && userByNickname) {
+                throw new ConflictError('이 닉네임은 현재 사용중입니다. 다른 닉네임을 입력해 주세요.');
+            }
+
             await UserModel.update({ userId, updateData });
 
+            const updatedUser = await UserModel.findById(userId);
+
             const tagsUpdate = async (tag, tagCategoryId) => {
+                if (tag.length == 0) {
+                    await UserModel.deleteTags(userId, tagCategoryId);
+                }
                 // 태그 수정
                 if (tag && tag.length > 0) {
                     // 태그 카테고리와 일치하는 태그들 삭제
@@ -326,45 +340,45 @@ const userService = {
             let file = await FileModel.findFileByUserId(userId, profileImage[0]);
 
             if (file && profileImage) {
-                const fileExtension = extensionSplit(profileImage[1]);
-
                 await FileModel.updateUserImage(
                     file.fileId,
                     profileImage[0], // category
                     profileImage[1], // url
-                    fileExtension,
+                    profileFileExtension,
                     transaction,
                 );
             } else if (!file) {
-                const fileExtension = extensionSplit(profileImage[1]);
                 await FileModel.createUserImage(
                     profileImage[0], // category
                     profileImage[1], // url
-                    fileExtension,
+                    profileFileExtension,
                     userId,
                     transaction,
                 );
+            } else {
+                throw new NotFoundError('유저의 프로필 이미지를 수정하는 데 실패했습니다.');
             }
 
             file = await FileModel.findFileByUserId(userId, backgroundImage[0]);
+
             if (file && backgroundImage) {
-                const fileExtension = extensionSplit(backgroundImage[1]);
                 await FileModel.updateUserImage(
                     file.fileId,
                     backgroundImage[0], // category
                     backgroundImage[1], // url
-                    fileExtension,
+                    backgroundFileExtension,
                     transaction,
                 );
             } else if (!file) {
-                const fileExtension = extensionSplit(backgroundImage[1]);
                 await FileModel.createUserImage(
                     backgroundImage[0], // category
                     backgroundImage[1], // url
-                    fileExtension,
+                    backgroundFileExtension,
                     userId,
                     transaction,
                 );
+            } else {
+                throw new NotFoundError('유저의 배경 이미지를 수정하는 데 실패했습니다.');
             }
 
             await transaction.commit();
@@ -372,15 +386,15 @@ const userService = {
             return {
                 message: '회원 정보가 수정되었습니다.',
                 updatedUser: {
-                    nickname: user.nickname,
-                    age: user.age,
-                    job: user.job,
-                    region: user.region,
+                    nickname: updatedUser.nickname,
+                    age: updatedUser.age,
+                    job: updatedUser.job,
+                    region: updatedUser.region,
                     profileImage,
                     backgroundImage,
-                    mbti: user.mbti,
-                    height: user.height,
-                    introduce: user.introduce,
+                    mbti: updatedUser.mbti,
+                    height: updatedUser.height,
+                    introduce: updatedUser.introduce,
                     hobby,
                     personality,
                     ideal,
@@ -390,7 +404,7 @@ const userService = {
             if (transaction) {
                 await transaction.rollback();
             }
-            if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
+            if (error instanceof UnauthorizedError || error instanceof NotFoundError || error instanceof ConflictError) {
                 throw error;
             } else {
                 throw new InternalServerError('회원 정보를 수정하는 데 실패했습니다.');
@@ -422,6 +436,39 @@ const userService = {
                 throw error;
             } else {
                 throw new InternalServerError('회원 탈퇴하는 데 실패했습니다.');
+            }
+        }
+    },
+    // 유저 비밀번호 검증 후 변경
+    updatePassword: async ({ userId, currentPassword, newPassword }) => {
+        try {
+            const user = await UserModel.findById(userId);
+
+            if (!user || user.isDeleted === true) {
+                throw new NotFoundError('회원 정보를 찾을 수 없습니다.');
+            }
+
+            const { password } = await UserModel.findPassword(userId); // DB에 있는 현재 Hash 비밀번호
+            const isPasswordCorrect = await bcrypt.compare(currentPassword, password); // 현재 비밀번호와 현재 해쉬 비밀번호 비교
+            if (!isPasswordCorrect) {
+                throw new UnauthorizedError('현재 비밀번호와 일치하지 않습니다. 다시 한 번 확인해주세요.');
+            }
+
+            if (currentPassword === newPassword) {
+                throw new ConflictError('현재 비밀번호와 새로운 비밀번호가 같습니다.');
+            }
+
+            // 비밀번호 암호화
+            const hashedPassword = await bcrypt.hash(newPassword, parseInt(process.env.PW_HASH_COUNT));
+            const updateData = { password: hashedPassword };
+            await UserModel.update({ userId, updateData });
+
+            return { message: '회원 비밀번호 변경에 성공했습니다.' };
+        } catch (error) {
+            if (error instanceof UnauthorizedError || error instanceof NotFoundError || error instanceof ConflictError) {
+                throw error;
+            } else {
+                throw new InternalServerError('회원 비밀번호 변경에 실패했습니다.');
             }
         }
     },

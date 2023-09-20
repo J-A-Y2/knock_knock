@@ -2,8 +2,8 @@ import { db } from '../index.js';
 import { Op } from 'sequelize';
 const UserModel = {
     // 유저 생성
-    create: async newUser => {
-        return await db.User.create(newUser);
+    create: async (newUser, transaction) => {
+        return await db.User.create(newUser, { transaction });
     },
     // 유저 태그 생성
     bulkCreateTags: async (newTags, transaction) => {
@@ -11,27 +11,23 @@ const UserModel = {
     },
     // 유저 태그 삭제
     deleteTags: async (userId, tagCategoryId) => {
-        try {
-            // 모든 UserTag의 id들을 찾아서 userId, tag_categoryId와 일치하는 데이터 삭제
-            const userTags = await db.UserTag.findAll({
-                where: {
-                    userId,
-                    tagCategoryId,
-                },
-            });
-            // 태그아이디만 뽑아서 배열 만들기 [1,2]
-            const userTagIds = userTags.map(userTag => userTag.id);
-            // UserTag 행들 삭제
-            const deleteCount = await db.UserTag.destroy({
-                where: {
-                    id: userTagIds,
-                },
-            });
+        // 모든 UserTag의 id들을 찾아서 userId, tag_categoryId와 일치하는 데이터 삭제
+        const userTags = await db.UserTag.findAll({
+            where: {
+                userId,
+                tagCategoryId,
+            },
+        });
+        // 태그아이디만 뽑아서 배열 만들기 [1,2]
+        const userTagIds = userTags.map(userTag => userTag.id);
+        // UserTag 행들 삭제
+        const deleteCount = await db.UserTag.destroy({
+            where: {
+                id: userTagIds,
+            },
+        });
 
-            return deleteCount;
-        } catch (error) {
-            console.error(error);
-        }
+        return deleteCount;
     },
     // tagId 찾아내기
     findTagId: async (tagName, tagCategoryId) => {
@@ -44,16 +40,12 @@ const UserModel = {
     },
     // UserTag 매핑 테이블의 tagId 찾아내기
     findByUserId: async userId => {
-        try {
-            return await db.UserTag.findAll({
-                where: {
-                    userId,
-                    tagCategoryId,
-                },
-            });
-        } catch (error) {
-            console.error(error);
-        }
+        return await db.UserTag.findAll({
+            where: {
+                userId,
+                tagCategoryId,
+            },
+        });
     },
     // email로 유저 찾아내기(email 중복 확인)
     findByEmail: async email => {
@@ -158,6 +150,7 @@ const UserModel = {
         return await db.Participant.findAll({
             where: {
                 userId,
+                status: 'accepted',
             },
             include: [
                 {
@@ -173,6 +166,7 @@ const UserModel = {
                             attributes: ['fileId'],
                             include: [{ model: db.File, attributes: ['url'], where: { category: 'post' } }],
                         },
+                        { model: db.User, attributes: [], where: { isDeleted: 0 } },
                     ],
                 },
             ],
@@ -233,6 +227,15 @@ const UserModel = {
             ],
         });
         return user;
+    },
+    findPassword: async userId => {
+        return await db.User.findOne({
+            attributes: ['password'],
+            where: {
+                userId,
+                isDeleted: 0,
+            },
+        });
     },
 };
 

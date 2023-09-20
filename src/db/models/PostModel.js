@@ -9,10 +9,12 @@ const PostModel = {
         const { count, rows: posts } = await db.Post.findAndCountAll({
             offset,
             limit,
+            distinct: true,
             include: [
                 {
                     model: db.User,
                     attributes: ['nickname'],
+                    where: { isDeleted: 0 },
                     include: [
                         {
                             model: db.UserFile,
@@ -35,10 +37,12 @@ const PostModel = {
             where: { type },
             offset,
             limit,
+            distinct: true,
             include: [
                 {
                     model: db.User,
                     attributes: ['nickname'],
+                    where: { is_deleted: 0 },
                     include: [
                         {
                             model: db.UserFile,

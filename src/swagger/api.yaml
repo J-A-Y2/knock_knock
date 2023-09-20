@@ -162,6 +162,24 @@ paths:
             description: 유저 로그인 여부 확인하기
 
             responses:
+                '200':
+                    description: 정상적인 유저입니다
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    userId:
+                                        type: integer
+                                    email:
+                                        type: string
+                                    nickname:
+                                        type: string
+                                    url:
+                                        type: string
+
                 '405':
                     description: Invalid input
                     content:
@@ -422,6 +440,35 @@ paths:
                 '400':
                     description: Invalid tag value
 
+    /users/mypage/password:
+        put:
+            tags:
+                - user
+            description: 유저 비밀번호 검증, 변경
+
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                currentPassword:
+                                    type: string
+                                newPassword:
+                                    type: string
+                required: true
+
+            response:
+                '200':
+                    description: '회원 비밀번호 변경에 성공했습니다.'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+
     /users/mypage/posts:
         get:
             tags:
@@ -451,7 +498,7 @@ paths:
                                                 place:
                                                     type: string
                                                 meetingTime:
-                                                    type: string
+                                                    type: datetime
                                                 content:
                                                     type: string
                                                 isCompleted:
@@ -465,9 +512,9 @@ paths:
                                                 recruitedF:
                                                     type: integer
                                                 createdAt:
-                                                    type: string
+                                                    type: datetime
                                                 updatedAt:
-                                                    type: string
+                                                    type: datetime
                                                 userId:
                                                     type: integer
 
@@ -500,9 +547,9 @@ paths:
                                                 matchingCount:
                                                     type: integer
                                                 createdAt:
-                                                    type: string
+                                                    type: datetime
                                                 updatedAt:
-                                                    type: string
+                                                    type: datetime
                                                 userId:
                                                     type: integer
                                                 postId:
@@ -537,6 +584,8 @@ paths:
                                                     type: string
                                                 nickname:
                                                     type: string
+                                                password:
+                                                    type: string
                                                 gender:
                                                     type: string
                                                 birthday:
@@ -546,93 +595,49 @@ paths:
                                                     type: string
                                                 region:
                                                     type: string
-                                                profileImage:
-                                                    type: string
                                                 mbti:
                                                     type: string
                                                 height:
                                                     type: string
-                                                hobby:
-                                                    type: array
-                                                    items:
-                                                        type: string
-                                                presonality:
-                                                    type: array
-                                                    items:
-                                                        type: string
-                                                ideal:
-                                                    type: array
-                                                    items:
-                                                        type: string
                                                 introduce:
                                                     type: string
+                                                isDeleted:
+                                                    type: boolean
+                                                createdAt:
+                                                    type: datetime
+                                                deletedAt:
+                                                    type: datetime
+                                                UserTags:
+                                                    type: array
+                                                    items:
+                                                        type: object
+                                                        properties:
+                                                            userId:
+                                                                type: integer
+                                                            Tag:
+                                                                type: object
+                                                                properties:
+                                                                    tagName:
+                                                                        type: string
+                                                                    tagCategoryId:
+                                                                        type: integer
+                                                UserFiles:
+                                                    type: array
+                                                    items:
+                                                        type: object
+                                                        properties:
+                                                            userId:
+                                                                type: integer
+                                                            fileId:
+                                                                type: integer
+                                                            File:
+                                                                type: object
+                                                                properties:
+                                                                    url:
+                                                                        type: string
+
                 '400':
                     description: Invalid value
-
-    /users/yourpage/{userId}:
-        get:
-            tags:
-                - user
-            description: 오늘의 낙낙 랜덤 유저의 마이페이지 불러오기
-            parameters:
-                - name: userId
-                  in: path
-                  description: 유저 고유 아이디
-                  required: true
-            responses:
-                '200':
-                    descruption: 회원정보 조회를 성공했습니다.
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                    userId:
-                                        type: integer
-                                    email:
-                                        type: string
-                                    name:
-                                        type: string
-                                    nickname:
-                                        type: string
-                                    gender:
-                                        type: string
-                                    birthday:
-                                        type: string
-                                        format: date
-                                    age:
-                                        type: integer
-                                    job:
-                                        type: string
-                                    region:
-                                        type: string
-                                    mbti:
-                                        type: string
-                                    height:
-                                        type: integer
-                                    introduce:
-                                        type: string
-                                    hobby:
-                                        type: array
-                                        items:
-                                            type: string
-                                    presonality:
-                                        type: array
-                                        items:
-                                            type: string
-                                    ideal:
-                                        type: array
-                                        items:
-                                            type: string
-                                    profileImage:
-                                        type: string
-                                    backgroundImage:
-                                        type: string
-
-                '400':
-                    description: Invalid tag value
 
     /posts:
         get:
@@ -706,10 +711,10 @@ paths:
                                                     type: integer
                                                 createdAt:
                                                     type: string
-                                                    format: date-time
+                                                    format: datetime
                                                 updatedAt:
                                                     type: string
-                                                    format: date-time
+                                                    format: datetime
                                                 userId:
                                                     type: integer
                                                 User:
@@ -822,10 +827,10 @@ paths:
                                                 type: integer
                                             createdAt:
                                                 type: string
-                                                format: date-time
+                                                format: datetime
                                             updatedAt:
                                                 type: string
-                                                format: date-time
+                                                format: datetime
                                             userId:
                                                 type: integer
                                             User:

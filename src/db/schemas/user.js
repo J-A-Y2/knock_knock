@@ -13,7 +13,7 @@ const User = (sequelize, DataTypes) => {
                 unique: true,
             },
             name: {
-                type: DataTypes.STRING(5),
+                type: DataTypes.STRING(20),
                 allowNull: false,
             },
             nickname: {
@@ -41,7 +41,21 @@ const User = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             region: {
-                type: DataTypes.STRING(20),
+                type: DataTypes.ENUM(
+                    '서울특별시',
+                    '부산광역시',
+                    '대구광역시',
+                    '인천광역시',
+                    '광주광역시',
+                    '울산광역시',
+                    '세종특별자치시',
+                    '경기도',
+                    '강원도',
+                    '충청도',
+                    '전라도',
+                    '경상도',
+                    '제주',
+                ),
                 allowNull: false,
             },
             mbti: {
@@ -70,7 +84,7 @@ const User = (sequelize, DataTypes) => {
                 allowNull: true,
             },
             introduce: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING(100),
                 allowNull: true,
             },
             isDeleted: {

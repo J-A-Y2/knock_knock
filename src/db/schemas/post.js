@@ -12,7 +12,7 @@ const Post = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             title: {
-                type: DataTypes.STRING(100),
+                type: DataTypes.STRING(30),
                 allowNull: false,
             },
             place: {
@@ -20,7 +20,7 @@ const Post = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             meetingTime: {
-                type: DataTypes.STRING(20),
+                type: DataTypes.DATE,
                 allowNull: false,
             },
             content: {
