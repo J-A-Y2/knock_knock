@@ -88,14 +88,14 @@
 
 ## 로드맵
 
-[ ] javascript -> Typescript 적용
-<br/>
-[ ] jenkins, Docker 등을 활용해 CI/CD 구축
-<br/>
-[ ] 보안 강화
-<br/>
-[ ] socket.io의 데이터베이스는 redis로 설계
-<br/>
+-   [ ] javascript -> Typescript 적용
+        <br/>
+-   [ ] jenkins, Docker 등을 활용해 CI/CD 구축
+        <br/>
+-   [ ] 보안 강화
+        <br/>
+-   [ ] socket.io의 데이터베이스는 redis로 설계
+        <br/>
 
 ## 기술 스택
 
