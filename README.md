@@ -13,8 +13,8 @@
 -   개발 기간: 2023.07.10 ~ 2023.08.11
 -   주제:같은 가치관을 공유하는, 진지한 연애를 원하는 사회 초년생과 안정적인 성인을 대상으로 하는 심층적인 만남의 기회를 제공하는 서비스
 -   목표:“낙낙은 두 사람을 특별한 시간과 공간으로 이끄는 재미있는 경험을 제공한다.”
--   API 문서: [KnockKnock API](http://kdt-ai7-team03.elicecoding.com:5001/api-docs)
--   테스트 페이지: [KnockKnock 웹사이트](http://kdt-ai7-team03.elicecoding.com/)
+-   API 문서: [KnockKnock API 링크](http://kdt-ai7-team03.elicecoding.com:5001/api-docs)
+-   프로젝트 배포: [KnockKnock 웹사이트 링크](http://kdt-ai7-team03.elicecoding.com/)
 
 ### 프로젝트 기획
 
@@ -195,6 +195,6 @@
 
 -   Back-End
 -   zhes4593@naver.com
--   Github:[@enxxi](https://github.com/enxxi)
+-   Github: [@enxxi](https://github.com/enxxi)
 
 <br/>
