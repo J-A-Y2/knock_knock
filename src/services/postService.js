@@ -1,6 +1,5 @@
 import { PostModel } from '../db/models/PostModel.js';
 import { UserModel } from '../db/models/UserModel.js';
-import { FileModel } from '../db/models/FileModel.js';
 import { ParticipantModel } from '../db/models/ParticipantModel.js';
 import { db } from '../db/index.js';
 import {

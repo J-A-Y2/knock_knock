@@ -30,7 +30,7 @@ const userController = {
             const checkUser = await userService.loginCheck({ userId });
 
             statusCode.setResponseCode200(res);
-            return res.send({
+            return res.send({ // 이렇게 객체로 보내는 것을 DTO(Data Transfer Object)
                 message: checkUser.message,
                 userId: checkUser.userId,
                 email: checkUser.email,

@@ -3,6 +3,7 @@ import specs from './swagger/swagger.js';
 import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
 import { db } from './db/index.js';
+import { logger } from '../src/utils/logger.js';
 import { fileRouter } from './routers/fileRouter.js';
 import { userRouter } from './routers/userRouter.js';
 import { postRouter } from './routers/postRouter.js';
@@ -11,7 +12,6 @@ import { commentRouter } from './routers/commentRouter.js';
 import { participantRouter } from './routers/participantRouter.js';
 import { chatRouter } from './routers/chatRouter.js';
 import { cardRouter } from './routers/cardRouter.js';
-import { logger } from '../src/utils/logger.js';
 import { morganMiddleware } from './middlewares/morgan.js';
 
 import { errorMiddleware } from './middlewares/errorMiddleware.js';
